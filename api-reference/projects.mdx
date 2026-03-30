@@ -1,0 +1,46 @@
+---
+title: Projects
+description: Manage your FinSEO projects.
+---
+
+## List projects
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token (e.g. `Bearer YOUR_API_KEY`)
+</ParamField>
+
+```bash
+GET /api/v1/projects
+```
+
+Returns all projects for the authenticated user.
+
+## Get project
+
+```bash
+GET /api/v1/projects/{projectId}
+```
+
+Returns details for a single project.
+
+## Create project
+
+```bash
+POST /api/v1/projects
+```
+
+<ParamField body="name" type="string" required>Project name</ParamField>
+<ParamField body="websiteUrl" type="string">Website URL</ParamField>
+<ParamField body="domain" type="string">Domain (auto-extracted from URL if not provided)</ParamField>
+<ParamField body="description" type="string">Project description</ParamField>
+
+## Update project
+
+```bash
+PUT /api/v1/projects/{projectId}
+```
+
+<ParamField body="name" type="string">New project name</ParamField>
+<ParamField body="websiteUrl" type="string">New website URL</ParamField>
+<ParamField body="domain" type="string">New domain</ParamField>
+<ParamField body="description" type="string">New description</ParamField>

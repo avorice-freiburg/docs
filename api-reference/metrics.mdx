@@ -1,0 +1,39 @@
+---
+title: Metrics
+description: Visibility metrics and time series data.
+---
+
+## Daily KPIs
+
+```bash
+GET /api/v1/projects/{projectId}/metrics
+```
+
+Returns current vs previous period metrics with changes.
+
+<ParamField query="timeframe" type="string" default="30d">Time window</ParamField>
+<ParamField query="model" type="string">AI model filter</ParamField>
+<ParamField query="language" type="string">Language filter</ParamField>
+<ParamField query="tags" type="string">Tag filter</ParamField>
+
+**Response includes:**
+- `current` - Current period: visible prompts, mentions, visibility rate, position, sentiment
+- `previous` - Previous period (same length)
+- `changes` - Differences between periods
+
+## Time series
+
+```bash
+GET /api/v1/projects/{projectId}/metrics/timeseries
+```
+
+Returns daily data points for charts.
+
+<ParamField query="timeframe" type="string" default="30d">Time window</ParamField>
+<ParamField query="startDate" type="string">Custom start date (YYYY-MM-DD)</ParamField>
+<ParamField query="endDate" type="string">Custom end date (YYYY-MM-DD)</ParamField>
+<ParamField query="model" type="string">AI model filter</ParamField>
+<ParamField query="language" type="string">Language filter</ParamField>
+<ParamField query="tags" type="string">Tag filter</ParamField>
+
+**Each data point includes:** `date`, `visible`, `notVisible`, `totalResults`, `mentions`, `position`, `sentiment`, `uniquePrompts`

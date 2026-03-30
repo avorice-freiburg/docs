@@ -1,0 +1,33 @@
+---
+title: Prompts
+description: Track and manage AI prompts.
+---
+
+## List prompts
+
+```bash
+GET /api/v1/projects/{projectId}/prompts
+```
+
+Returns tracked prompts with visibility metrics.
+
+<ParamField query="timeframe" type="string" default="30d">Time window (e.g. `7d`, `30d`, `90d`)</ParamField>
+<ParamField query="model" type="string">AI model filter (`chatgpt`, `claude`, `perplexity`)</ParamField>
+<ParamField query="language" type="string">Language code (`en`, `de`, `fr`)</ParamField>
+<ParamField query="tags" type="string">Comma-separated tags</ParamField>
+<ParamField query="search" type="string">Search prompt text</ParamField>
+<ParamField query="page" type="integer" default="1">Page number</ParamField>
+<ParamField query="limit" type="integer" default="50">Results per page (max 500)</ParamField>
+
+## Add prompt
+
+```bash
+POST /api/v1/projects/{projectId}/prompts
+```
+
+Requires `write` scope.
+
+<ParamField body="prompt" type="string" required>The AI prompt to track</ParamField>
+<ParamField body="models" type="string[]" default='["chatgpt", "claude", "perplexity"]'>AI models to track</ParamField>
+<ParamField body="language" type="string" default="en">Language code</ParamField>
+<ParamField body="tags" type="string[]">Tags to apply</ParamField>

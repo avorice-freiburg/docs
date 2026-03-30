@@ -1,0 +1,38 @@
+---
+title: MCP Integration
+description: Connect FinSEO to AI assistants like Claude Desktop and Cursor.
+---
+
+# MCP Integration
+
+FinSEO provides a Model Context Protocol (MCP) server that lets AI assistants query your visibility data directly.
+
+## What is MCP?
+
+MCP (Model Context Protocol) is a standard for connecting AI models to external data sources. With FinSEO's MCP server, you can ask Claude Desktop or Cursor natural questions about your AI visibility without writing code.
+
+**Example**: Open Claude Desktop and ask:
+
+> "How has my brand visibility changed in the last 30 days? Which competitors are ahead of me?"
+
+Claude automatically queries your FinSEO data and provides analysis.
+
+## Available tools
+
+| Tool | Description |
+|------|-------------|
+| `list_projects` | List all your projects |
+| `get_visibility_metrics` | Get visibility KPIs for a project |
+| `list_prompts` | List tracked prompts with metrics |
+| `get_competitor_ranking` | See competitor visibility rankings |
+| `get_top_sources` | Get most cited sources |
+| `get_tags` | List tags with prompt counts |
+
+## Endpoint
+
+```
+POST https://app.finseo.ai/api/v1/mcp
+Authorization: Bearer sk_live_YOUR_KEY
+```
+
+The server implements JSON-RPC 2.0 and supports `initialize`, `tools/list`, and `tools/call` methods.

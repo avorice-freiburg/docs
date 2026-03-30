@@ -1,0 +1,308 @@
+openapi: 3.1.0
+info:
+  title: FinSEO API
+  description: Access AI visibility tracking data for your brand across ChatGPT, Claude, Perplexity and other AI platforms.
+  version: 1.0.0
+  contact:
+    name: FinSEO Support
+    url: https://finseo.ai
+servers:
+  - url: https://app.finseo.ai/api/v1
+    description: Production
+
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: "API key starting with sk_live_ or sk_test_"
+
+  parameters:
+    projectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+    timeframe:
+      name: timeframe
+      in: query
+      schema:
+        type: string
+        default: "30d"
+        description: "Time window (e.g. 7d, 30d, 90d)"
+    model:
+      name: model
+      in: query
+      schema:
+        type: string
+        description: "AI model filter (chatgpt, claude, perplexity)"
+    language:
+      name: language
+      in: query
+      schema:
+        type: string
+        description: "Language code filter (en, de, fr)"
+    tags:
+      name: tags
+      in: query
+      schema:
+        type: string
+        description: "Comma-separated tags or JSON array"
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: 1
+        minimum: 1
+    limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        default: 50
+        minimum: 1
+        maximum: 500
+
+paths:
+  /projects:
+    get:
+      operationId: listProjects
+      summary: List projects
+      tags: [Projects]
+      responses:
+        "200":
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: { type: string }
+                        name: { type: string }
+                        domain: { type: string }
+                        websiteUrl: { type: string }
+                        isDefault: { type: boolean }
+    post:
+      operationId: createProject
+      summary: Create a project
+      tags: [Projects]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name: { type: string }
+                websiteUrl: { type: string, format: uri }
+                domain: { type: string }
+                description: { type: string }
+      responses:
+        "200":
+          description: Created project
+
+  /projects/{projectId}:
+    get:
+      operationId: getProject
+      summary: Get project details
+      tags: [Projects]
+      parameters:
+        - $ref: "#/components/parameters/projectId"
+      responses:
+        "200":
+          description: Project details
+    put:
+      operationId: updateProject
+      summary: Update a project
+      tags: [Projects]
+      parameters:
+        - $ref: "#/components/parameters/projectId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                websiteUrl: { type: string }
+                domain: { type: string }
+                description: { type: string }
+      responses:
+        "200":
+          description: Updated
+
+  /projects/{projectId}/prompts:
+    get:
+      operationId: listPrompts
+      summary: List prompts with metrics
+      tags: [Prompts]
+      parameters:
+        - $ref: "#/components/parameters/projectId"
+        - $ref: "#/components/parameters/timeframe"
+        - $ref: "#/components/parameters/model"
+        - $ref: "#/components/parameters/language"
+        - $ref: "#/components/parameters/tags"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/limit"
+        - name: search
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Paginated prompt list with visibility metrics
+    post:
+      operationId: addPrompt
+      summary: Add a prompt to track
+      tags: [Prompts]
+      parameters:
+        - $ref: "#/components/parameters/projectId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [prompt]
+              properties:
+                prompt: { type: string, description: "The AI prompt to track" }
+                models: { type: array, items: { type: string }, default: ["chatgpt", "claude", "perplexity"] }
+                language: { type: string, default: "en" }
+                tags: { type: array, items: { type: string } }
+      responses:
+        "200":
+          description: Created prompt
+
+  /projects/{projectId}/metrics:
+    get:
+      operationId: getDailyMetrics
+      summary: Get daily visibility KPIs
+      description: Returns current vs previous period metrics including visibility rate, mentions, position, and sentiment.
+      tags: [Metrics]
+      parameters:
+        - $ref: "#/components/parameters/projectId"
+        - $ref: "#/components/parameters/timeframe"
+        - $ref: "#/components/parameters/model"
+        - $ref: "#/components/parameters/language"
+        - $ref: "#/components/parameters/tags"
+      responses:
+        "200":
+          description: Current and previous period metrics with changes
+
+  /projects/{projectId}/metrics/timeseries:
+    get:
+      operationId: getTimeseries
+      summary: Get time series chart data
+      description: Returns daily data points for visibility, mentions, position, and sentiment.
+      tags: [Metrics]
+      parameters:
+        - $ref: "#/components/parameters/projectId"
+        - $ref: "#/components/parameters/timeframe"
+        - $ref: "#/components/parameters/model"
+        - $ref: "#/components/parameters/language"
+        - $ref: "#/components/parameters/tags"
+        - name: startDate
+          in: query
+          schema: { type: string, format: date }
+        - name: endDate
+          in: query
+          schema: { type: string, format: date }
+      responses:
+        "200":
+          description: Array of daily data points
+
+  /projects/{projectId}/competitors:
+    get:
+      operationId: getCompetitorRanking
+      summary: Get competitor visibility ranking
+      tags: [Competitors]
+      parameters:
+        - $ref: "#/components/parameters/projectId"
+        - $ref: "#/components/parameters/timeframe"
+        - $ref: "#/components/parameters/model"
+        - $ref: "#/components/parameters/language"
+        - $ref: "#/components/parameters/tags"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/limit"
+        - name: search
+          in: query
+          schema: { type: string }
+        - name: sortBy
+          in: query
+          schema: { type: string, enum: [visibility, mentions, position, sentiment, name], default: mentions }
+      responses:
+        "200":
+          description: Paginated competitor ranking
+
+  /projects/{projectId}/sources:
+    get:
+      operationId: getSourceRanking
+      summary: Get citation source ranking
+      tags: [Sources]
+      parameters:
+        - $ref: "#/components/parameters/projectId"
+        - $ref: "#/components/parameters/timeframe"
+        - $ref: "#/components/parameters/model"
+        - $ref: "#/components/parameters/language"
+        - $ref: "#/components/parameters/tags"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/limit"
+        - name: search
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Paginated source ranking
+
+  /projects/{projectId}/tags:
+    get:
+      operationId: listTags
+      summary: List tags
+      tags: [Tags]
+      parameters:
+        - $ref: "#/components/parameters/projectId"
+      responses:
+        "200":
+          description: Tag list with counts
+    post:
+      operationId: createTag
+      summary: Create and apply a tag
+      tags: [Tags]
+      parameters:
+        - $ref: "#/components/parameters/projectId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, promptIds]
+              properties:
+                name: { type: string }
+                promptIds: { type: array, items: { type: string } }
+      responses:
+        "200":
+          description: Tag created and applied
+
+  /projects/{projectId}/export:
+    get:
+      operationId: exportData
+      summary: Bulk export tracking data
+      description: Export all prompts with full results data. Requires 'export' scope.
+      tags: [Export]
+      parameters:
+        - $ref: "#/components/parameters/projectId"
+        - $ref: "#/components/parameters/timeframe"
+      responses:
+        "200":
+          description: Full export with prompts and results

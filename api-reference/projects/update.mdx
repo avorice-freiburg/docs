@@ -1,0 +1,67 @@
+---
+title: Update Project
+api: PUT /api/v1/projects/{projectId}
+---
+
+Updates an existing project. Send only the fields you want to change.
+
+<ParamField path="projectId" type="string" required>
+  Project identifier.
+</ParamField>
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token (`sk_live_...`). Requires `write` scope.
+</ParamField>
+
+<ParamField body="name" type="string">
+  New display name (1–200 characters).
+</ParamField>
+
+<ParamField body="websiteUrl" type="string">
+  Updated canonical URL.
+</ParamField>
+
+<ParamField body="domain" type="string">
+  Updated root domain.
+</ParamField>
+
+<ParamField body="description" type="string">
+  Updated description (max 500 characters).
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --request PUT \
+  --url https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx' \
+  --header 'Content-Type: application/json' \
+  --data '{"name": "Finseo — Growth", "description": "Primary Finseo GTM project"}'
+```
+
+```python Python
+import requests
+
+project_id = "67a1c2d3e4f5061728394a5b"
+r = requests.put(
+    f"https://app.finseo.ai/api/v1/projects/{project_id}",
+    headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
+    json={"name": "Finseo — Growth", "description": "Primary Finseo GTM project"},
+)
+print(r.json()["data"])
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json
+{
+  "data": {
+    "id": "67a1c2d3e4f5061728394a5b",
+    "updated": true
+  }
+}
+```
+
+</ResponseExample>

@@ -1,0 +1,59 @@
+---
+title: Get Project
+api: GET /api/v1/projects/{projectId}
+---
+
+Retrieves a single project by ID, including settings used for AI visibility tracking.
+
+<ParamField path="projectId" type="string" required>
+  MongoDB-style project identifier.
+</ParamField>
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token (`sk_live_...`). Requires `read` scope.
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx'
+```
+
+```python Python
+import requests
+
+project_id = "67a1c2d3e4f5061728394a5b"
+r = requests.get(
+    f"https://app.finseo.ai/api/v1/projects/{project_id}",
+    headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
+)
+print(r.json()["data"])
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json
+{
+  "data": {
+    "id": "67a1c2d3e4f5061728394a5b",
+    "name": "Finseo Marketing",
+    "domain": "finseo.ai",
+    "websiteUrl": "https://finseo.ai",
+    "description": "AI visibility tracking for Finseo",
+    "isDefault": true,
+    "tags": ["product", "b2b"],
+    "settings": {
+      "brandAliases": ["Finseo", "Fin SEO"],
+      "defaultLanguage": "en"
+    },
+    "createdAt": "2025-11-12T10:15:00.000Z",
+    "updatedAt": "2026-03-28T14:22:00.000Z"
+  }
+}
+```
+
+</ResponseExample>

@@ -1,0 +1,51 @@
+---
+title: List Tags
+api: GET /api/v1/projects/{projectId}/tags
+---
+
+Returns all unique tag names used on active prompts in the project. Tags help segment Finseo analytics (e.g. branded vs unbranded, or campaign labels).
+
+<ParamField path="projectId" type="string" required>
+  Project identifier.
+</ParamField>
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token (`sk_live_...`). Requires `read` scope.
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b/tags \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx'
+```
+
+```python Python
+import requests
+
+r = requests.get(
+    "https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b/tags",
+    headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
+)
+tags = r.json()["data"]
+print(tags)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json
+{
+  "data": [
+    "Finseo",
+    "branded",
+    "comparison",
+    "enterprise",
+    "product"
+  ]
+}
+```
+
+</ResponseExample>

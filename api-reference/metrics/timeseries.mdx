@@ -1,0 +1,101 @@
+---
+title: Metrics Timeseries
+api: GET /api/v1/projects/{projectId}/metrics/timeseries
+---
+
+Returns daily AI visibility metrics for charting. Each row corresponds to a calendar day within the timeframe derived from `timeframe`, or within `startDate` / `endDate` when both are provided. Ideal for trend lines for Finseo across ChatGPT, Claude, and Perplexity.
+
+<ParamField path="projectId" type="string" required>
+  Project identifier.
+</ParamField>
+
+<ParamField query="timeframe" type="string" default="30d">
+  Rolling window when `startDate` / `endDate` are not used.
+</ParamField>
+
+<ParamField query="startDate" type="string">
+  ISO date `YYYY-MM-DD` (use with `endDate`).
+</ParamField>
+
+<ParamField query="endDate" type="string">
+  ISO date `YYYY-MM-DD` (use with `startDate`).
+</ParamField>
+
+<ParamField query="model" type="string">
+  Filter to one model.
+</ParamField>
+
+<ParamField query="language" type="string">
+  Prompt language filter.
+</ParamField>
+
+<ParamField query="tags" type="string">
+  JSON array or comma-separated tags.
+</ParamField>
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token (`sk_live_...`). Requires `read` scope.
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url 'https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b/metrics/timeseries?timeframe=14d' \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx'
+```
+
+```python Python
+import requests
+
+r = requests.get(
+    "https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b/metrics/timeseries",
+    headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
+    params={"timeframe": "14d", "model": "chatgpt"},
+)
+series = r.json()["data"]
+print(series[-1]["mentions"], series[-1]["date"])
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json
+{
+  "data": [
+    {
+      "date": "2026-03-15",
+      "visible": 9,
+      "notVisible": 3,
+      "totalResults": 12,
+      "mentions": 24,
+      "position": 19.2,
+      "sentiment": 0.74,
+      "uniquePrompts": 12
+    },
+    {
+      "date": "2026-03-16",
+      "visible": 10,
+      "notVisible": 2,
+      "totalResults": 12,
+      "mentions": 31,
+      "position": 17.8,
+      "sentiment": 0.79,
+      "uniquePrompts": 12
+    },
+    {
+      "date": "2026-03-17",
+      "visible": 11,
+      "notVisible": 1,
+      "totalResults": 12,
+      "mentions": 28,
+      "position": 16.5,
+      "sentiment": 0.81,
+      "uniquePrompts": 12
+    }
+  ]
+}
+```
+
+</ResponseExample>

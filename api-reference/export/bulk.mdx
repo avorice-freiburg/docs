@@ -1,0 +1,97 @@
+---
+title: Bulk Export
+api: GET /api/v1/projects/{projectId}/export
+---
+
+Exports prompts with nested tracking results for the selected timeframe. Intended for offline analysis, BI tools, or backups of Finseo AI visibility data from ChatGPT, Claude, Perplexity, and other models.
+
+<ParamField path="projectId" type="string" required>
+  Project identifier.
+</ParamField>
+
+<ParamField query="timeframe" type="string" default="30d">
+  Rolling window of results to include (max 1000 prompts; results bounded by date range).
+</ParamField>
+
+<ParamField query="model" type="string">
+  Parsed on shared schema; export handler may include all models in results.
+</ParamField>
+
+<ParamField query="language" type="string">
+  Parsed on shared schema.
+</ParamField>
+
+<ParamField query="tags" type="string">
+  Parsed on shared schema.
+</ParamField>
+
+<ParamField query="page" type="integer">
+  Parsed on shared schema.
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Parsed on shared schema.
+</ParamField>
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token (`sk_live_...`). Requires `export` scope.
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url 'https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b/export?timeframe=30d' \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx'
+```
+
+```python Python
+import requests
+
+r = requests.get(
+    "https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b/export",
+    headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
+    params={"timeframe": "30d"},
+)
+export_payload = r.json()["data"]
+print(export_payload["timeframeDays"], len(export_payload["prompts"]))
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json
+{
+  "data": {
+    "exportedAt": "2026-03-29T16:45:00.000Z",
+    "timeframeDays": 30,
+    "prompts": [
+      {
+        "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "prompt": "Best AI visibility platforms including Finseo",
+        "domain": "finseo.ai",
+        "brandName": "finseo",
+        "language": "en",
+        "tags": ["branded", "comparison"],
+        "models": ["chatgpt", "claude", "perplexity"],
+        "resultCount": 6,
+        "results": [
+          {
+            "id": "r1e2s3u4-l5t6-7890-abcd-ef1234567890",
+            "model": "chatgpt",
+            "visible": true,
+            "mentions": 3,
+            "position": 2,
+            "percentageRank": 18.5,
+            "timestamp": "2026-03-28T14:02:11.000Z",
+            "fanOutQueries": ["AI SEO tools 2026", "Finseo reviews"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+</ResponseExample>

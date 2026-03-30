@@ -1,0 +1,103 @@
+---
+title: Project Metrics (Summary)
+api: GET /api/v1/projects/{projectId}/metrics
+---
+
+Returns aggregate AI visibility metrics for the current period vs the previous period of equal length. Use this for dashboards and KPIs for Finseo visibility across ChatGPT, Claude, Perplexity, and other tracked models.
+
+<ParamField path="projectId" type="string" required>
+  Project identifier.
+</ParamField>
+
+<ParamField query="timeframe" type="string" default="30d">
+  Rolling window, e.g. `7d`, `30d`, `90d`.
+</ParamField>
+
+<ParamField query="model" type="string">
+  Restrict metrics to a single model.
+</ParamField>
+
+<ParamField query="language" type="string">
+  Filter by prompt language.
+</ParamField>
+
+<ParamField query="tags" type="string">
+  JSON array or comma-separated tags to filter prompts.
+</ParamField>
+
+<ParamField query="page" type="integer">
+  Included for shared query parsing; metrics ignore pagination.
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Included for shared query parsing; metrics ignore pagination.
+</ParamField>
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token (`sk_live_...`). Requires `read` scope.
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url 'https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b/metrics?timeframe=30d' \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx'
+```
+
+```python Python
+import requests
+
+r = requests.get(
+    "https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b/metrics",
+    headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
+    params={"timeframe": "30d", "language": "en"},
+)
+metrics = r.json()["data"]
+print(metrics["current"]["visibilityRate"], metrics["changes"]["visibilityRateChange"])
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json
+{
+  "data": {
+    "current": {
+      "visible": 28,
+      "notVisible": 14,
+      "mentions": 156,
+      "totalResponses": 84,
+      "visibilityRate": 66.67,
+      "responseVisibilityRate": 52.38,
+      "position": 22.4,
+      "sentiment": 0.78,
+      "periodStart": "2026-02-27",
+      "periodEnd": "2026-03-28"
+    },
+    "previous": {
+      "visible": 22,
+      "notVisible": 20,
+      "mentions": 118,
+      "totalResponses": 76,
+      "visibilityRate": 52.38,
+      "responseVisibilityRate": 45.2,
+      "position": 28.1,
+      "sentiment": 0.71,
+      "periodStart": "2026-01-28",
+      "periodEnd": "2026-02-26"
+    },
+    "changes": {
+      "visibleChange": 6,
+      "visibilityRateChange": 14.29,
+      "responseVisibilityRateChange": 7.18,
+      "mentionsChange": 38,
+      "positionChange": -5.7,
+      "sentimentChange": 0.07
+    }
+  }
+}
+```
+
+</ResponseExample>

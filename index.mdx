@@ -1,20 +1,11 @@
 ---
 title: Introduction
-description: Get started with the Finseo API to access AI visibility data programmatically.
+description: The Finseo API gives you programmatic access to your AI visibility tracking data.
 ---
 
 # Finseo API
 
-The Finseo API gives you programmatic access to your AI visibility data. Track how your brand appears across ChatGPT, Claude, Perplexity, and other AI platforms.
-
-## What you can do
-
-- **Retrieve visibility metrics** - Get daily KPIs and time series data
-- **Track prompts** - List, add, and manage AI prompts you're monitoring
-- **Analyze competitors** - See how competitors rank in AI responses
-- **Monitor sources** - Understand which sources AI models cite
-- **Export data** - Bulk export all tracking data
-- **MCP integration** - Connect to Claude Desktop or Cursor for natural language queries
+Track how your brand appears across ChatGPT, Claude, Perplexity and other AI platforms. The Finseo Customer API lets you retrieve visibility metrics, manage prompts, analyze competitors, and export data.
 
 ## Base URL
 
@@ -22,81 +13,100 @@ The Finseo API gives you programmatic access to your AI visibility data. Track h
 https://app.finseo.ai/api/v1
 ```
 
-## Quick start
+## Quick example
 
 <CodeGroup>
 
 ```bash cURL
-curl -X GET https://app.finseo.ai/api/v1/projects \
-  -H "Authorization: Bearer YOUR_API_KEY"
+curl --request GET \
+  --url https://app.finseo.ai/api/v1/projects/YOUR_PROJECT_ID/metrics?timeframe=30d \
+  --header 'Authorization: Bearer YOUR_API_KEY'
 ```
 
 ```python Python
 import requests
 
 headers = {"Authorization": "Bearer YOUR_API_KEY"}
-response = requests.get("https://app.finseo.ai/api/v1/projects", headers=headers)
-projects = response.json()["data"]
+response = requests.get(
+    "https://app.finseo.ai/api/v1/projects/YOUR_PROJECT_ID/metrics",
+    headers=headers,
+    params={"timeframe": "30d"}
+)
+
+data = response.json()["data"]
+print(f"Visibility Rate: {data['current']['visibilityRate']}%")
+print(f"Mentions: {data['current']['mentions']}")
+print(f"Change: {data['changes']['visibilityRateChange']:+.1f}%")
 ```
 
 ```javascript Node.js
-const response = await fetch("https://app.finseo.ai/api/v1/projects", {
-  headers: { Authorization: "Bearer YOUR_API_KEY" },
-});
-const { data: projects } = await response.json();
+const response = await fetch(
+  "https://app.finseo.ai/api/v1/projects/YOUR_PROJECT_ID/metrics?timeframe=30d",
+  { headers: { Authorization: "Bearer YOUR_API_KEY" } }
+);
+
+const { data } = await response.json();
+console.log(`Visibility: ${data.current.visibilityRate}%`);
+console.log(`Mentions: ${data.current.mentions}`);
 ```
 
 </CodeGroup>
 
-## Response format
+**Response:**
 
-All responses follow a consistent envelope:
-
-<CodeGroup>
-
-```json Success
+```json
 {
-  "data": [
-    { "id": "abc123", "name": "My Brand", "domain": "mybrand.com" }
-  ],
-  "meta": { "page": 1, "limit": 50, "total": 3, "hasMore": false }
-}
-```
-
-```json Error
-{
-  "error": {
-    "code": "NOT_FOUND",
-    "message": "Project not found"
+  "data": {
+    "current": {
+      "visible": 28,
+      "notVisible": 14,
+      "mentions": 156,
+      "visibilityRate": 66.67,
+      "position": 22.4,
+      "sentiment": 0.78
+    },
+    "previous": {
+      "visible": 22,
+      "visibilityRate": 52.38
+    },
+    "changes": {
+      "visibilityRateChange": 14.29,
+      "mentionsChange": 38
+    }
   }
 }
 ```
 
-</CodeGroup>
+## Response format
+
+All endpoints return a consistent JSON envelope:
+
+| Field | Description |
+|-------|-------------|
+| `data` | The response payload |
+| `meta` | Pagination info (when applicable) |
+| `error` | Error details (only on failure) |
 
 ## Error codes
 
-| Code | HTTP Status | Description |
-|------|------------|-------------|
+| Code | Status | Description |
+|------|--------|-------------|
 | `UNAUTHORIZED` | 401 | Missing or invalid API key |
 | `FORBIDDEN` | 403 | Insufficient scopes |
 | `NOT_FOUND` | 404 | Resource not found |
 | `VALIDATION_ERROR` | 400 | Invalid parameters |
 | `RATE_LIMIT_EXCEEDED` | 429 | Too many requests |
-| `SCOPE_REQUIRED` | 403 | Endpoint requires specific scope |
 | `PROJECT_ACCESS_DENIED` | 403 | API key can't access this project |
 | `INTERNAL_ERROR` | 500 | Server error |
-
-## Next steps
 
 <CardGroup cols={2}>
   <Card title="Authentication" icon="key" href="/authentication">
     Create and manage API keys
   </Card>
   <Card title="Rate Limits" icon="gauge" href="/rate-limits">
-    Understand request limits per plan
+    Request limits per plan
   </Card>
-  <Card title="API Reference" icon="code" href="/api-reference/overview">
+  <Card title="Customer API" icon="code" href="/api-reference/projects/list">
     Explore all endpoints
   </Card>
   <Card title="MCP Integration" icon="robot" href="/mcp/overview">

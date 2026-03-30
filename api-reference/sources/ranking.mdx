@@ -1,0 +1,112 @@
+---
+title: Source Ranking
+api: GET /api/v1/projects/{projectId}/sources
+---
+
+Lists domains and URLs cited in AI answers for your tracked prompts—useful for understanding which sources drive visibility for Finseo-related queries across ChatGPT, Claude, and Perplexity.
+
+<ParamField path="projectId" type="string" required>
+  Project identifier.
+</ParamField>
+
+<ParamField query="timeframe" type="string" default="30d">
+  Rolling window for citations.
+</ParamField>
+
+<ParamField query="model" type="string">
+  Filter by answer model.
+</ParamField>
+
+<ParamField query="language" type="string">
+  Filter prompts by language.
+</ParamField>
+
+<ParamField query="tags" type="string">
+  JSON array or comma-separated prompt tags.
+</ParamField>
+
+<ParamField query="search" type="string">
+  Match domain or title substring.
+</ParamField>
+
+<ParamField query="sortBy" type="string" default="citations">
+  One of `citations`, `domain`, `type`.
+</ParamField>
+
+<ParamField query="sortDir" type="string" default="desc">
+  `asc` or `desc`.
+</ParamField>
+
+<ParamField query="page" type="integer" default="1">
+  Page number.
+</ParamField>
+
+<ParamField query="limit" type="integer" default="50">
+  Page size (1–500).
+</ParamField>
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token (`sk_live_...`). Requires `read` scope.
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url 'https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b/sources?timeframe=30d&sortBy=citations' \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx'
+```
+
+```python Python
+import requests
+
+r = requests.get(
+    "https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b/sources",
+    headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
+    params={"timeframe": "30d", "search": "finseo", "limit": 25},
+)
+print(r.json()["data"]["sources"][0]["domain"])
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json
+{
+  "data": {
+    "sources": [
+      {
+        "id": "e9f0a1b2-c3d4-4657-ef01-890123456cde",
+        "url": "https://finseo.ai/blog/ai-visibility",
+        "domain": "finseo.ai",
+        "title": "AI Visibility Benchmarks — Finseo",
+        "sourceType": "website",
+        "urlType": "content",
+        "citationCount": 89,
+        "promptCount": 34,
+        "averagePosition": 2.1
+      },
+      {
+        "id": "f0a1b2c3-d4e5-4768-f012-901234567def",
+        "url": "https://www.reddit.com/r/SEO/comments/example",
+        "domain": "reddit.com",
+        "title": "Discussion on AI SEO tools",
+        "sourceType": "community",
+        "urlType": "ugc",
+        "citationCount": 41,
+        "promptCount": 18,
+        "averagePosition": 4.6
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 25,
+      "total": 120,
+      "hasMore": true
+    }
+  }
+}
+```
+
+</ResponseExample>

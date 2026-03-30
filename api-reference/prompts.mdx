@@ -1,17 +1,46 @@
 ---
 title: Prompts
-description: Track and manage AI prompts.
+description: Track and manage AI prompts via the Finseo API.
 ---
+
+# Prompts
 
 ## List prompts
 
-```bash
-GET /api/v1/projects/{projectId}/prompts
+Returns tracked prompts with visibility metrics for a project.
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://app.finseo.ai/api/v1/projects/{projectId}/prompts?timeframe=30d&limit=20" \
+  -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
-Returns tracked prompts with visibility metrics.
+```python Python
+response = requests.get(
+    f"https://app.finseo.ai/api/v1/projects/{project_id}/prompts",
+    headers=headers,
+    params={"timeframe": "30d", "limit": 20}
+)
+prompts = response.json()["data"]["prompts"]
 
-<ParamField query="timeframe" type="string" default="30d">Time window (e.g. `7d`, `30d`, `90d`)</ParamField>
+for p in prompts:
+    status = "visible" if p["isVisible"] else "not visible"
+    print(f"{p['prompt'][:50]}... → {status}, {p['mentions']} mentions")
+```
+
+```javascript Node.js
+const res = await fetch(
+  `https://app.finseo.ai/api/v1/projects/${projectId}/prompts?timeframe=30d`,
+  { headers: { Authorization: "Bearer YOUR_API_KEY" } }
+);
+const { data } = await res.json();
+data.prompts.forEach(p => console.log(p.prompt, p.isVisible, p.mentions));
+```
+
+</CodeGroup>
+
+<ParamField query="timeframe" type="string" default="30d">Time window (`7d`, `30d`, `90d`)</ParamField>
 <ParamField query="model" type="string">AI model filter (`chatgpt`, `claude`, `perplexity`)</ParamField>
 <ParamField query="language" type="string">Language code (`en`, `de`, `fr`)</ParamField>
 <ParamField query="tags" type="string">Comma-separated tags</ParamField>
@@ -19,13 +48,56 @@ Returns tracked prompts with visibility metrics.
 <ParamField query="page" type="integer" default="1">Page number</ParamField>
 <ParamField query="limit" type="integer" default="50">Results per page (max 500)</ParamField>
 
+<ResponseExample>
+```json Response
+{
+  "data": {
+    "prompts": [
+      {
+        "id": "uuid-1",
+        "prompt": "What is the best CRM for startups?",
+        "isVisible": true,
+        "mentions": 3,
+        "averagePosition": 24.5,
+        "sentimentScore": 0.82,
+        "tags": ["crm", "high-intent"],
+        "models": ["chatgpt", "claude", "perplexity"],
+        "language": "en"
+      }
+    ],
+    "pagination": { "page": 1, "limit": 50, "total": 42, "hasMore": false }
+  }
+}
+```
+</ResponseExample>
+
 ## Add prompt
 
-```bash
-POST /api/v1/projects/{projectId}/prompts
+Requires `write` scope. Adds a new prompt to track across AI platforms.
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST "https://app.finseo.ai/api/v1/projects/{projectId}/prompts" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "Best project management tools for remote teams", "models": ["chatgpt", "claude"], "language": "en", "tags": ["pm"]}'
 ```
 
-Requires `write` scope.
+```python Python
+response = requests.post(
+    f"https://app.finseo.ai/api/v1/projects/{project_id}/prompts",
+    headers=headers,
+    json={
+        "prompt": "Best project management tools for remote teams",
+        "models": ["chatgpt", "claude"],
+        "language": "en",
+        "tags": ["pm"]
+    }
+)
+```
+
+</CodeGroup>
 
 <ParamField body="prompt" type="string" required>The AI prompt to track</ParamField>
 <ParamField body="models" type="string[]" default='["chatgpt", "claude", "perplexity"]'>AI models to track</ParamField>

@@ -1,39 +1,142 @@
 ---
 title: Metrics
-description: Visibility metrics and time series data.
+description: Visibility metrics and time series data from the Finseo API.
 ---
+
+# Metrics
 
 ## Daily KPIs
 
-```bash
-GET /api/v1/projects/{projectId}/metrics
+Returns current vs previous period metrics with changes.
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://app.finseo.ai/api/v1/projects/{projectId}/metrics?timeframe=30d" \
+  -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
-Returns current vs previous period metrics with changes.
+```python Python
+response = requests.get(
+    f"https://app.finseo.ai/api/v1/projects/{project_id}/metrics",
+    headers=headers,
+    params={"timeframe": "30d"}
+)
+metrics = response.json()["data"]
+
+print(f"Visibility: {metrics['current']['visibilityRate']}%")
+print(f"Change: {metrics['changes']['visibilityRateChange']:+.1f}%")
+print(f"Mentions: {metrics['current']['mentions']}")
+```
+
+```javascript Node.js
+const res = await fetch(
+  `https://app.finseo.ai/api/v1/projects/${projectId}/metrics?timeframe=30d`,
+  { headers: { Authorization: "Bearer YOUR_API_KEY" } }
+);
+const { data } = await res.json();
+console.log(`Visibility: ${data.current.visibilityRate}%`);
+console.log(`Change: ${data.changes.visibilityRateChange}%`);
+```
+
+</CodeGroup>
 
 <ParamField query="timeframe" type="string" default="30d">Time window</ParamField>
 <ParamField query="model" type="string">AI model filter</ParamField>
 <ParamField query="language" type="string">Language filter</ParamField>
 <ParamField query="tags" type="string">Tag filter</ParamField>
 
-**Response includes:**
-- `current` - Current period: visible prompts, mentions, visibility rate, position, sentiment
-- `previous` - Previous period (same length)
-- `changes` - Differences between periods
+<ResponseExample>
+```json Response
+{
+  "data": {
+    "current": {
+      "visible": 28,
+      "notVisible": 14,
+      "mentions": 156,
+      "totalResponses": 420,
+      "visibilityRate": 66.67,
+      "responseVisibilityRate": 37.14,
+      "position": 22.4,
+      "sentiment": 0.78,
+      "periodStart": "2026-03-01",
+      "periodEnd": "2026-03-29"
+    },
+    "previous": {
+      "visible": 22,
+      "notVisible": 20,
+      "mentions": 118,
+      "visibilityRate": 52.38,
+      "periodStart": "2026-01-30",
+      "periodEnd": "2026-02-28"
+    },
+    "changes": {
+      "visibleChange": 6,
+      "visibilityRateChange": 14.29,
+      "mentionsChange": 38,
+      "positionChange": -3.2,
+      "sentimentChange": 0.05
+    }
+  }
+}
+```
+</ResponseExample>
 
 ## Time series
 
-```bash
-GET /api/v1/projects/{projectId}/metrics/timeseries
+Returns daily data points for building charts.
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://app.finseo.ai/api/v1/projects/{projectId}/metrics/timeseries?timeframe=30d" \
+  -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
-Returns daily data points for charts.
+```python Python
+response = requests.get(
+    f"https://app.finseo.ai/api/v1/projects/{project_id}/metrics/timeseries",
+    headers=headers,
+    params={"timeframe": "30d", "model": "chatgpt"}
+)
+chart_data = response.json()["data"]
+
+for day in chart_data:
+    print(f"{day['date']}: {day['visible']} visible, {day['mentions']} mentions")
+```
+
+</CodeGroup>
 
 <ParamField query="timeframe" type="string" default="30d">Time window</ParamField>
 <ParamField query="startDate" type="string">Custom start date (YYYY-MM-DD)</ParamField>
 <ParamField query="endDate" type="string">Custom end date (YYYY-MM-DD)</ParamField>
 <ParamField query="model" type="string">AI model filter</ParamField>
-<ParamField query="language" type="string">Language filter</ParamField>
-<ParamField query="tags" type="string">Tag filter</ParamField>
 
-**Each data point includes:** `date`, `visible`, `notVisible`, `totalResults`, `mentions`, `position`, `sentiment`, `uniquePrompts`
+<ResponseExample>
+```json Response
+{
+  "data": [
+    {
+      "date": "2026-03-01",
+      "visible": 12,
+      "notVisible": 8,
+      "totalResults": 20,
+      "mentions": 7,
+      "position": 24.5,
+      "sentiment": 0.81,
+      "uniquePrompts": 15
+    },
+    {
+      "date": "2026-03-02",
+      "visible": 14,
+      "notVisible": 6,
+      "totalResults": 20,
+      "mentions": 9,
+      "position": 21.3,
+      "sentiment": 0.85,
+      "uniquePrompts": 15
+    }
+  ]
+}
+```
+</ResponseExample>

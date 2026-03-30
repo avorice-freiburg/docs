@@ -1,24 +1,85 @@
 ---
 title: Competitors
-description: Competitor visibility rankings.
+description: Competitor visibility rankings via the Finseo API.
 ---
+
+# Competitors
 
 ## Competitor ranking
 
-```bash
-GET /api/v1/projects/{projectId}/competitors
+Returns a paginated list of competitors ranked by AI visibility.
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://app.finseo.ai/api/v1/projects/{projectId}/competitors?timeframe=30d&limit=10&sortBy=mentions" \
+  -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
-Returns paginated competitor visibility ranking.
+```python Python
+response = requests.get(
+    f"https://app.finseo.ai/api/v1/projects/{project_id}/competitors",
+    headers=headers,
+    params={"timeframe": "30d", "limit": 10, "sortBy": "mentions"}
+)
+competitors = response.json()["data"]["competitors"]
+
+for i, comp in enumerate(competitors, 1):
+    brand = " (you)" if comp["isUserBrand"] else ""
+    print(f"{i}. {comp['name']}{brand} — {comp['totalMentions']} mentions")
+```
+
+```javascript Node.js
+const res = await fetch(
+  `https://app.finseo.ai/api/v1/projects/${projectId}/competitors?limit=10`,
+  { headers: { Authorization: "Bearer YOUR_API_KEY" } }
+);
+const { data } = await res.json();
+data.competitors.forEach((c, i) =>
+  console.log(`${i + 1}. ${c.name} — ${c.totalMentions} mentions`)
+);
+```
+
+</CodeGroup>
 
 <ParamField query="timeframe" type="string" default="30d">Time window</ParamField>
-<ParamField query="model" type="string">AI model filter</ParamField>
-<ParamField query="language" type="string">Language filter</ParamField>
-<ParamField query="tags" type="string">Tag filter</ParamField>
 <ParamField query="search" type="string">Search competitor name or domain</ParamField>
-<ParamField query="sortBy" type="string" default="mentions">Sort by: `visibility`, `mentions`, `position`, `sentiment`, `name`</ParamField>
+<ParamField query="sortBy" type="string" default="mentions">`visibility`, `mentions`, `position`, `sentiment`, `name`</ParamField>
 <ParamField query="sortDir" type="string" default="desc">`asc` or `desc`</ParamField>
 <ParamField query="page" type="integer" default="1">Page number</ParamField>
 <ParamField query="limit" type="integer" default="50">Results per page</ParamField>
 
-**Each competitor includes:** `id`, `name`, `domain`, `isUserBrand`, `isStarred`, `totalMentions`, `visibleResults`, `averagePosition`, `sentimentScore`, `promptCount`
+<ResponseExample>
+```json Response
+{
+  "data": {
+    "competitors": [
+      {
+        "id": "uuid-1",
+        "name": "Competitor A",
+        "domain": "competitor-a.com",
+        "isUserBrand": false,
+        "isStarred": true,
+        "totalMentions": 89,
+        "visibleResults": 156,
+        "averagePosition": 18.4,
+        "sentimentScore": 0.72,
+        "promptCount": 38
+      },
+      {
+        "id": "uuid-2",
+        "name": "Your Brand",
+        "domain": "yourbrand.com",
+        "isUserBrand": true,
+        "totalMentions": 64,
+        "visibleResults": 112,
+        "averagePosition": 24.1,
+        "sentimentScore": 0.85,
+        "promptCount": 35
+      }
+    ],
+    "pagination": { "page": 1, "limit": 10, "total": 24, "hasMore": true }
+  }
+}
+```
+</ResponseExample>

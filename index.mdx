@@ -1,19 +1,20 @@
 ---
 title: Introduction
-description: Get started with the FinSEO API to access AI visibility data programmatically.
+description: Get started with the Finseo API to access AI visibility data programmatically.
 ---
 
-# FinSEO API
+# Finseo API
 
-The FinSEO API gives you programmatic access to your AI visibility data. Track how your brand appears across ChatGPT, Claude, Perplexity, and other AI platforms.
+The Finseo API gives you programmatic access to your AI visibility data. Track how your brand appears across ChatGPT, Claude, Perplexity, and other AI platforms.
 
 ## What you can do
 
-- **Retrieve visibility metrics** - Get daily KPIs and time series data for your brand's AI visibility
-- **Track prompts** - List, add, and manage the AI prompts you're monitoring
+- **Retrieve visibility metrics** - Get daily KPIs and time series data
+- **Track prompts** - List, add, and manage AI prompts you're monitoring
 - **Analyze competitors** - See how competitors rank in AI responses
-- **Monitor sources** - Understand which sources AI models cite for your industry
-- **Export data** - Bulk export all tracking data for your own analysis
+- **Monitor sources** - Understand which sources AI models cite
+- **Export data** - Bulk export all tracking data
+- **MCP integration** - Connect to Claude Desktop or Cursor for natural language queries
 
 ## Base URL
 
@@ -23,28 +24,46 @@ https://app.finseo.ai/api/v1
 
 ## Quick start
 
-```bash
-# List your projects
-curl -H "Authorization: Bearer YOUR_API_KEY" \
-  https://app.finseo.ai/api/v1/projects
+<CodeGroup>
 
-# Get visibility metrics for a project
-curl -H "Authorization: Bearer YOUR_API_KEY" \
-  https://app.finseo.ai/api/v1/projects/PROJECT_ID/metrics?timeframe=30d
+```bash cURL
+curl -X GET https://app.finseo.ai/api/v1/projects \
+  -H "Authorization: Bearer YOUR_API_KEY"
 ```
+
+```python Python
+import requests
+
+headers = {"Authorization": "Bearer YOUR_API_KEY"}
+response = requests.get("https://app.finseo.ai/api/v1/projects", headers=headers)
+projects = response.json()["data"]
+```
+
+```javascript Node.js
+const response = await fetch("https://app.finseo.ai/api/v1/projects", {
+  headers: { Authorization: "Bearer YOUR_API_KEY" },
+});
+const { data: projects } = await response.json();
+```
+
+</CodeGroup>
 
 ## Response format
 
 All responses follow a consistent envelope:
 
-```json
-// Success
-{
-  "data": { ... },
-  "meta": { "page": 1, "limit": 50, "total": 142, "hasMore": true }
-}
+<CodeGroup>
 
-// Error
+```json Success
+{
+  "data": [
+    { "id": "abc123", "name": "My Brand", "domain": "mybrand.com" }
+  ],
+  "meta": { "page": 1, "limit": 50, "total": 3, "hasMore": false }
+}
+```
+
+```json Error
 {
   "error": {
     "code": "NOT_FOUND",
@@ -52,6 +71,21 @@ All responses follow a consistent envelope:
   }
 }
 ```
+
+</CodeGroup>
+
+## Error codes
+
+| Code | HTTP Status | Description |
+|------|------------|-------------|
+| `UNAUTHORIZED` | 401 | Missing or invalid API key |
+| `FORBIDDEN` | 403 | Insufficient scopes |
+| `NOT_FOUND` | 404 | Resource not found |
+| `VALIDATION_ERROR` | 400 | Invalid parameters |
+| `RATE_LIMIT_EXCEEDED` | 429 | Too many requests |
+| `SCOPE_REQUIRED` | 403 | Endpoint requires specific scope |
+| `PROJECT_ACCESS_DENIED` | 403 | API key can't access this project |
+| `INTERNAL_ERROR` | 500 | Server error |
 
 ## Next steps
 

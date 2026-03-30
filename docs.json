@@ -7,12 +7,12 @@
   "logo": { "light": "/logo/light.svg", "dark": "/logo/dark.svg" },
   "navbar": {
     "links": [{ "label": "Dashboard", "href": "https://app.finseo.ai" }],
-    "primary": { "type": "button", "label": "Get API Key", "href": "https://app.finseo.ai/settings/api" }
+    "primary": { "type": "button", "label": "Get API Key", "href": "https://app.finseo.ai/developer" }
   },
   "navigation": {
     "tabs": [
-      { "tab": "Documentation", "groups": [{ "group": "Overview", "pages": ["index", "authentication", "rate-limits", "changelog"] }] },
-      { "tab": "Customer API", "groups": [
+      { "tab": "Docs", "groups": [{ "group": "Overview", "pages": ["index", "authentication", "rate-limits", "changelog"] }] },
+      { "tab": "API", "groups": [
         { "group": "Projects", "pages": ["api-reference/projects/list", "api-reference/projects/get", "api-reference/projects/create", "api-reference/projects/update"] },
         { "group": "Prompts", "pages": ["api-reference/prompts/list", "api-reference/prompts/add"] },
         { "group": "Metrics", "pages": ["api-reference/metrics/daily", "api-reference/metrics/timeseries"] },

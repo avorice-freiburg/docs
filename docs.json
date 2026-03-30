@@ -24,6 +24,15 @@
       { "tab": "MCP", "groups": [{ "group": "MCP Integration", "pages": ["mcp/overview", "mcp/claude-desktop", "mcp/cursor"] }] }
     ]
   },
-  "api": { "baseUrl": "https://app.finseo.ai", "auth": { "method": "bearer", "name": "Authorization" }, "playground": { "mode": "simple" } },
+  "api": {
+    "baseUrl": "https://app.finseo.ai",
+    "auth": {
+      "method": "bearer",
+      "inputPrefix": "sk_live_"
+    },
+    "playground": {
+      "mode": "simple"
+    }
+  },
   "footer": { "socials": { "website": "https://finseo.ai", "linkedin": "https://linkedin.com/company/finseo" } }
 }

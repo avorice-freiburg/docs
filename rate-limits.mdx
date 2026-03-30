@@ -5,15 +5,33 @@ description: API rate limits per pricing plan.
 
 # Rate Limits
 
-Rate limits protect the API and ensure fair usage. Limits are applied per API key.
+Rate limits protect the API and ensure fair usage. Limits are applied per API key based on your plan.
+
+<Note>
+  API access requires a paid plan (Creator or higher). Free accounts cannot create API keys.
+</Note>
 
 ## Limits by plan
 
-| Plan | Requests / Minute | Requests / Day |
-|------|-------------------|----------------|
-| Starter | 60 | 5,000 |
-| Pro | 180 | 50,000 |
-| Enterprise | 600 | 200,000 |
+| Plan | Prompts | Requests / Minute | Requests / Day |
+|------|---------|-------------------|----------------|
+| Creator | 25 | 60 | 5,000 |
+| Business | 100 | 120 | 25,000 |
+| Agency | Unlimited | 300 | 100,000 |
+| Enterprise | 500 | 600 | 200,000 |
+
+## Prompt limits
+
+The number of prompts you can track via the API is limited by your plan. The API enforces the same limits as the dashboard. Attempting to add a prompt beyond your limit returns an error:
+
+```json
+{
+  "error": {
+    "code": "INTERNAL_ERROR",
+    "message": "Prompt limit reached (25/25). Upgrade your plan to add more prompts."
+  }
+}
+```
 
 ## Rate limit headers
 
@@ -42,7 +60,7 @@ The response includes a `Retry-After` header with seconds to wait.
 
 ## Best practices
 
-- Cache responses when possible - data updates once daily
-- Use webhooks (coming soon) instead of polling
-- Batch requests where the API supports pagination
+- Cache responses when possible — tracking data updates once daily
+- Use the export endpoint for bulk data instead of many individual requests
 - Implement exponential backoff on `429` responses
+- Use tags to filter data server-side instead of fetching everything

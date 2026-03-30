@@ -1,0 +1,54 @@
+---
+title: Authentication
+description: How to authenticate with the FinSEO API using API keys.
+---
+
+# Authentication
+
+All API requests require a valid API key passed in the `Authorization` header.
+
+## Getting your API key
+
+1. Go to [Settings > API](https://app.finseo.ai/settings/api) in the FinSEO dashboard
+2. Click **Create API Key**
+3. Choose a name, scopes, and optionally restrict to specific projects
+4. Copy the key immediately - it will only be shown once
+
+## Using your key
+
+Include the key in the `Authorization` header with every request:
+
+```bash
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  https://app.finseo.ai/api/v1/projects
+```
+
+## Key format
+
+```
+finseo_live_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+│      │    └─ 32 random characters
+│      └─ Environment: live or test
+└─ FinSEO key prefix
+```
+
+## Scopes
+
+API keys can have one or more scopes:
+
+| Scope | Description |
+|-------|-------------|
+| `read` | Read data (projects, prompts, metrics, competitors, sources) |
+| `write` | Modify data (create prompts, update tags, manage projects) |
+| `export` | Bulk export tracking data |
+
+## Project restrictions
+
+Optionally restrict a key to specific projects. A key with no project restrictions can access all projects owned by your account.
+
+## Key security
+
+- Keys are hashed with SHA-256 before storage - we never store the plaintext
+- Rotate keys regularly and revoke any compromised keys immediately
+- Use environment-specific keys (`sk_test_` for development, `sk_live_` for production)
+- Never expose keys in client-side code or public repositories

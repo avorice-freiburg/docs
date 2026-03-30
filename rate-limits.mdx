@@ -1,0 +1,48 @@
+---
+title: Rate Limits
+description: API rate limits per pricing plan.
+---
+
+# Rate Limits
+
+Rate limits protect the API and ensure fair usage. Limits are applied per API key.
+
+## Limits by plan
+
+| Plan | Requests / Minute | Requests / Day |
+|------|-------------------|----------------|
+| Starter | 60 | 5,000 |
+| Pro | 180 | 50,000 |
+| Enterprise | 600 | 200,000 |
+
+## Rate limit headers
+
+Every API response includes rate limit information:
+
+| Header | Description |
+|--------|-------------|
+| `X-RateLimit-Limit` | Maximum requests per minute for your plan |
+| `X-RateLimit-Remaining` | Remaining requests in current window |
+| `X-RateLimit-Reset` | Unix timestamp when the window resets |
+
+## Exceeding limits
+
+When rate limited, the API returns `429 Too Many Requests`:
+
+```json
+{
+  "error": {
+    "code": "RATE_LIMIT_EXCEEDED",
+    "message": "Rate limit exceeded. Try again in 23 seconds."
+  }
+}
+```
+
+The response includes a `Retry-After` header with seconds to wait.
+
+## Best practices
+
+- Cache responses when possible - data updates once daily
+- Use webhooks (coming soon) instead of polling
+- Batch requests where the API supports pagination
+- Implement exponential backoff on `429` responses

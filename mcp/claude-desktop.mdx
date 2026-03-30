@@ -1,0 +1,46 @@
+---
+title: Claude Desktop Setup
+description: Connect FinSEO MCP to Claude Desktop.
+---
+
+# Claude Desktop Setup
+
+Connect FinSEO to Claude Desktop to query your AI visibility data in natural language.
+
+## Prerequisites
+
+- Claude Desktop installed
+- A FinSEO API key with `read` scope ([get one here](https://app.finseo.ai/settings/api))
+
+## Configuration
+
+1. Open Claude Desktop settings
+2. Navigate to **Developer > MCP Servers**
+3. Add a new server with this configuration:
+
+```json
+{
+  "mcpServers": {
+    "finseo": {
+      "url": "https://app.finseo.ai/api/v1/mcp",
+      "headers": {
+        "Authorization": "Bearer sk_live_YOUR_API_KEY"
+      }
+    }
+  }
+}
+```
+
+4. Restart Claude Desktop
+
+## Usage
+
+Once connected, you can ask Claude questions like:
+
+- "List my FinSEO projects"
+- "What's my visibility rate for project X in the last 30 days?"
+- "Show me the top 10 competitors for my brand"
+- "Which sources are most cited in my industry?"
+- "How many prompts am I tracking and which ones perform best?"
+
+Claude will automatically use the FinSEO MCP tools to fetch the data and provide analysis.

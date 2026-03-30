@@ -25,13 +25,14 @@
     ]
   },
   "api": {
-    "baseUrl": "https://app.finseo.ai",
-    "auth": {
-      "method": "bearer",
-      "inputPrefix": "sk_live_"
+    "mdx": {
+      "server": "https://app.finseo.ai",
+      "auth": {
+        "method": "bearer"
+      }
     },
     "playground": {
-      "mode": "simple"
+      "display": "interactive"
     }
   },
   "footer": { "socials": { "website": "https://finseo.ai", "linkedin": "https://linkedin.com/company/finseo" } }

@@ -1,99 +1,29 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Finseo API",
-  "colors": {
-    "primary": "#0eca7b",
-    "light": "#0eca7b",
-    "dark": "#0a9956"
-  },
+  "name": "Finseo",
+  "colors": { "primary": "#0eca7b", "light": "#0eca7b", "dark": "#0a9956" },
   "favicon": "/favicon.svg",
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
+  "logo": { "light": "/logo/light.svg", "dark": "/logo/dark.svg" },
   "navbar": {
-    "links": [
-      {
-        "label": "Dashboard",
-        "href": "https://app.finseo.ai"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Get API Key",
-      "href": "https://app.finseo.ai/settings/api"
-    }
+    "links": [{ "label": "Dashboard", "href": "https://app.finseo.ai" }],
+    "primary": { "type": "button", "label": "Get API Key", "href": "https://app.finseo.ai/settings/api" }
   },
   "navigation": {
     "tabs": [
-      {
-        "tab": "Guides",
-        "groups": [
-          {
-            "group": "Getting Started",
-            "pages": ["index", "authentication", "rate-limits"]
-          }
-        ]
-      },
-      {
-        "tab": "API Reference",
-        "groups": [
-          {
-            "group": "Overview",
-            "pages": ["api-reference/overview"]
-          },
-          {
-            "group": "Projects",
-            "pages": ["api-reference/projects"]
-          },
-          {
-            "group": "Prompts",
-            "pages": ["api-reference/prompts"]
-          },
-          {
-            "group": "Metrics",
-            "pages": ["api-reference/metrics"]
-          },
-          {
-            "group": "Competitors",
-            "pages": ["api-reference/competitors"]
-          },
-          {
-            "group": "Sources",
-            "pages": ["api-reference/sources"]
-          },
-          {
-            "group": "Export",
-            "pages": ["api-reference/export"]
-          }
-        ]
-      },
-      {
-        "tab": "MCP",
-        "groups": [
-          {
-            "group": "MCP Integration",
-            "pages": ["mcp/overview", "mcp/claude-desktop", "mcp/cursor"]
-          }
-        ]
-      }
+      { "tab": "Documentation", "groups": [{ "group": "Overview", "pages": ["index", "authentication", "rate-limits", "changelog"] }] },
+      { "tab": "Customer API", "groups": [
+        { "group": "Projects", "pages": ["api-reference/projects/list", "api-reference/projects/get", "api-reference/projects/create", "api-reference/projects/update"] },
+        { "group": "Prompts", "pages": ["api-reference/prompts/list", "api-reference/prompts/add"] },
+        { "group": "Metrics", "pages": ["api-reference/metrics/daily", "api-reference/metrics/timeseries"] },
+        { "group": "Competitors", "pages": ["api-reference/competitors/ranking"] },
+        { "group": "Sources", "pages": ["api-reference/sources/ranking"] },
+        { "group": "Tags", "pages": ["api-reference/tags/list", "api-reference/tags/create"] },
+        { "group": "Export", "pages": ["api-reference/export/bulk"] }
+      ]},
+      { "tab": "MCP", "groups": [{ "group": "MCP Integration", "pages": ["mcp/overview", "mcp/claude-desktop", "mcp/cursor"] }] }
     ]
   },
-  "openapi": "openapi.yaml",
-  "api": {
-    "baseUrl": "https://app.finseo.ai",
-    "auth": {
-      "method": "bearer"
-    },
-    "playground": {
-      "mode": "simple"
-    }
-  },
-  "footer": {
-    "socials": {
-      "website": "https://finseo.ai",
-      "linkedin": "https://linkedin.com/company/finseo"
-    }
-  }
+  "api": { "baseUrl": "https://app.finseo.ai", "auth": { "method": "bearer", "name": "Authorization" }, "playground": { "mode": "simple" } },
+  "footer": { "socials": { "website": "https://finseo.ai", "linkedin": "https://linkedin.com/company/finseo" } }
 }

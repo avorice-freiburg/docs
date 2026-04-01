@@ -19,7 +19,8 @@
         { "group": "Competitors", "pages": ["api-reference/competitors/ranking"] },
         { "group": "Sources", "pages": ["api-reference/sources/ranking"] },
         { "group": "Tags", "pages": ["api-reference/tags/list", "api-reference/tags/create"] },
-        { "group": "Export", "pages": ["api-reference/export/bulk"] }
+        { "group": "Export", "pages": ["api-reference/export/bulk"] },
+        { "group": "Attribution", "pages": ["api-reference/attribution/list", "api-reference/attribution/submit", "api-reference/attribution/summary", "api-reference/attribution/bulk"] }
       ]},
       { "tab": "MCP", "groups": [{ "group": "MCP Integration", "pages": ["mcp/overview", "mcp/claude-desktop", "mcp/cursor"] }] }
     ]

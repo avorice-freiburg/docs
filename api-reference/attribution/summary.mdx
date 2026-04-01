@@ -1,0 +1,46 @@
+---
+title: Attribution Summary
+api: GET /projects/{projectId}/attribution/summary
+---
+
+Get aggregated attribution data showing channel breakdown, AI search percentage, and total attributed revenue. Use this to understand what percentage of your leads come from AI search vs other channels.
+
+<ParamField path="projectId" type="string" required>
+  The project ID.
+</ParamField>
+
+<ParamField query="days" type="integer" default="30">
+  Number of days to look back.
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl --request GET \
+  --url 'https://app.finseo.ai/api/v1/projects/PROJECT_ID/attribution/summary?days=30' \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx'
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "data": {
+    "total": 142,
+    "totalRevenue": 580000,
+    "aiSearchPercentage": 34.5,
+    "byCategory": [
+      { "category": "ai_search", "count": 49, "revenue": 245000, "percentage": 34.5 },
+      { "category": "organic_search", "count": 38, "revenue": 152000, "percentage": 26.8 },
+      { "category": "social", "count": 22, "revenue": 88000, "percentage": 15.5 },
+      { "category": "paid", "count": 18, "revenue": 54000, "percentage": 12.7 },
+      { "category": "referral", "count": 15, "revenue": 41000, "percentage": 10.6 }
+    ],
+    "bySource": [
+      { "source": "widget", "count": 68 },
+      { "source": "hubspot", "count": 42 },
+      { "source": "api", "count": 32 }
+    ]
+  }
+}
+```
+</ResponseExample>

@@ -1,0 +1,53 @@
+---
+title: Bulk Import Attribution
+api: POST /projects/{projectId}/attribution/bulk
+---
+
+Import up to 1000 attribution responses at once. Use this for historical data migration from your CRM or analytics tool.
+
+Requires `write` scope on your API key.
+
+<ParamField path="projectId" type="string" required>
+  The project ID.
+</ParamField>
+
+<ParamField body="responses" type="array" required>
+  Array of attribution responses (max 1000). Each item requires at least `channelId`.
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl --request POST \
+  --url https://app.finseo.ai/api/v1/projects/PROJECT_ID/attribution/bulk \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "responses": [
+      {
+        "channelId": "ai_search",
+        "respondentEmail": "jane@company.com",
+        "dealValue": 12000
+      },
+      {
+        "channelId": "google_search",
+        "respondentEmail": "john@corp.com",
+        "dealValue": 8500
+      },
+      {
+        "channelId": "social_media",
+        "respondentEmail": "alex@startup.io"
+      }
+    ]
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "data": {
+    "imported": 3
+  }
+}
+```
+</ResponseExample>

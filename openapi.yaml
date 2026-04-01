@@ -306,3 +306,107 @@ paths:
       responses:
         "200":
           description: Full export with prompts and results
+
+  /projects/{projectId}/attribution:
+    get:
+      operationId: listAttribution
+      summary: List attribution responses
+      description: Get paginated attribution survey responses with filters.
+      tags: [Attribution]
+      parameters:
+        - $ref: "#/components/parameters/projectId"
+        - name: days
+          in: query
+          schema: { type: integer, default: 30 }
+          description: "Number of days to look back"
+        - name: category
+          in: query
+          schema: { type: string }
+          description: "Filter by channel category (ai_search, organic_search, paid, social, referral, content, direct, other)"
+        - name: source
+          in: query
+          schema: { type: string }
+          description: "Filter by source (widget, hubspot, typeform, api, etc.)"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/limit"
+      responses:
+        "200":
+          description: Paginated attribution responses
+    post:
+      operationId: createAttribution
+      summary: Submit attribution response
+      description: Record a self-reported attribution response. Requires write scope.
+      tags: [Attribution]
+      parameters:
+        - $ref: "#/components/parameters/projectId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [channelId]
+              properties:
+                channelId:
+                  type: string
+                  description: "e.g. ai_search, ai_chatgpt, google_search, social_media, paid_ads, referral, content, other"
+                respondentEmail: { type: string }
+                respondentName: { type: string }
+                respondentExternalId: { type: string }
+                dealValue: { type: number }
+                dealCurrency: { type: string, default: "USD" }
+                formId: { type: string }
+                pageUrl: { type: string }
+                metadata: { type: object }
+      responses:
+        "200":
+          description: Attribution response created
+
+  /projects/{projectId}/attribution/summary:
+    get:
+      operationId: getAttributionSummary
+      summary: Attribution summary
+      description: Aggregated data by channel, category, and source. Shows AI search percentage and total revenue.
+      tags: [Attribution]
+      parameters:
+        - $ref: "#/components/parameters/projectId"
+        - name: days
+          in: query
+          schema: { type: integer, default: 30 }
+      responses:
+        "200":
+          description: Attribution summary with channel breakdown
+
+  /projects/{projectId}/attribution/bulk:
+    post:
+      operationId: bulkAttribution
+      summary: Bulk import attribution responses
+      description: Import up to 1000 attribution responses at once. Requires write scope.
+      tags: [Attribution]
+      parameters:
+        - $ref: "#/components/parameters/projectId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [responses]
+              properties:
+                responses:
+                  type: array
+                  maxItems: 1000
+                  items:
+                    type: object
+                    required: [channelId]
+                    properties:
+                      channelId: { type: string }
+                      respondentEmail: { type: string }
+                      respondentName: { type: string }
+                      dealValue: { type: number }
+                      dealCurrency: { type: string }
+                      formId: { type: string }
+                      pageUrl: { type: string }
+      responses:
+        "200":
+          description: Bulk import result

@@ -10,7 +10,7 @@ Use this endpoint to drill down from the aggregated fan-out list (`GET /fanouts`
 
 <ParamField path="projectId" type="string" required>The project ID</ParamField>
 <ParamField query="query" type="string" required>The exact fan-out query text (case-insensitive match)</ParamField>
-<ParamField query="timeframe" type="string" default="7d">Time window (`7d`, `30d`, `90d`)</ParamField>
+<ParamField query="timeframe" type="string" default="90d">Time window — `7d`, `30d`, `90d`, `365d`, or `all` to search across all fan-outs ever</ParamField>
 <ParamField query="startDate" type="string">Custom start date (YYYY-MM-DD)</ParamField>
 <ParamField query="endDate" type="string">Custom end date (YYYY-MM-DD)</ParamField>
 <ParamField query="tags" type="string">Comma-separated tags to filter source prompts</ParamField>

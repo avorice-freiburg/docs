@@ -1,0 +1,16 @@
+/* Make navbar logo smaller */
+nav img[alt*="logo" i],
+nav img[src*="/logo/"],
+header img[src*="/logo/"],
+a[href="/"] img,
+img.logo {
+  max-height: 18px !important;
+  width: auto !important;
+}
+
+/* Mintlify-specific selectors */
+[class*="logo"] img,
+[class*="Logo"] img {
+  max-height: 18px !important;
+  width: auto !important;
+}

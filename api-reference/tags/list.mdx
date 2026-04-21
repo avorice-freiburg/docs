@@ -1,6 +1,6 @@
 ---
 title: List Tags
-api: GET /api/v1/projects/{projectId}/tags
+api: GET /v1/projects/{projectId}/tags
 ---
 
 Returns all unique tag names used on active prompts in the project. Tags help segment Finseo analytics (e.g. branded vs unbranded, or campaign labels).
@@ -14,7 +14,7 @@ Returns all unique tag names used on active prompts in the project. Tags help se
 
 ```bash cURL
 curl --request GET \
-  --url https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b/tags \
+  --url https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/tags \
   --header 'Authorization: Bearer sk_live_xxxxxxxx'
 ```
 
@@ -22,7 +22,7 @@ curl --request GET \
 import requests
 
 r = requests.get(
-    "https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b/tags",
+    "https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/tags",
     headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
 )
 tags = r.json()["data"]

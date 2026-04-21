@@ -1,6 +1,6 @@
 ---
 title: List Attributions
-api: GET /projects/{projectId}/attribution
+api: GET /v1/projects/{projectId}/attribution
 ---
 
 Get paginated attribution survey responses for a project. Filter by channel category, source, and time range.
@@ -32,7 +32,7 @@ Get paginated attribution survey responses for a project. Filter by channel cate
 <RequestExample>
 ```bash cURL
 curl --request GET \
-  --url 'https://app.finseo.ai/api/v1/projects/PROJECT_ID/attribution?days=30&category=ai_search' \
+  --url 'https://api.finseo.ai/v1/projects/PROJECT_ID/attribution?days=30&category=ai_search' \
   --header 'Authorization: Bearer sk_live_xxxxxxxx'
 ```
 </RequestExample>

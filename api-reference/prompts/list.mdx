@@ -1,6 +1,6 @@
 ---
 title: List Prompts
-api: GET /api/v1/projects/{projectId}/prompts
+api: GET /v1/projects/{projectId}/prompts
 ---
 
 Lists tracked prompts for a project with visibility, mention counts, and sentiment for the selected timeframe. Finseo evaluates these prompts against ChatGPT, Claude, Perplexity, and other models.
@@ -42,7 +42,7 @@ Lists tracked prompts for a project with visibility, mention counts, and sentime
 
 ```bash cURL
 curl --request GET \
-  --url 'https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b/prompts?timeframe=30d&limit=10&page=1' \
+  --url 'https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/prompts?timeframe=30d&limit=10&page=1' \
   --header 'Authorization: Bearer sk_live_xxxxxxxx'
 ```
 
@@ -51,7 +51,7 @@ import requests
 
 params = {"timeframe": "30d", "limit": 10, "page": 1, "search": "Finseo"}
 r = requests.get(
-    "https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b/prompts",
+    "https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/prompts",
     headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
     params=params,
 )

@@ -32,7 +32,7 @@
   },
   "api": {
     "mdx": {
-      "server": "https://app.finseo.ai",
+      "server": "https://api.finseo.ai",
       "auth": {
         "method": "bearer"
       }

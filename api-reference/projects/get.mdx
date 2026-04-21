@@ -1,6 +1,6 @@
 ---
 title: Get Project
-api: GET /api/v1/projects/{projectId}
+api: GET /v1/projects/{projectId}
 ---
 
 Retrieves a single project by ID, including settings used for AI visibility tracking.
@@ -14,7 +14,7 @@ Retrieves a single project by ID, including settings used for AI visibility trac
 
 ```bash cURL
 curl --request GET \
-  --url https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b \
+  --url https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b \
   --header 'Authorization: Bearer sk_live_xxxxxxxx'
 ```
 
@@ -23,7 +23,7 @@ import requests
 
 project_id = "67a1c2d3e4f5061728394a5b"
 r = requests.get(
-    f"https://app.finseo.ai/api/v1/projects/{project_id}",
+    f"https://api.finseo.ai/v1/projects/{project_id}",
     headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
 )
 print(r.json()["data"])

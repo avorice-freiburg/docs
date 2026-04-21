@@ -1,6 +1,6 @@
 ---
 title: Create Project
-api: POST /api/v1/projects
+api: POST /v1/projects
 ---
 
 Creates a new project. Finseo will track AI visibility for the brand associated with this project across ChatGPT, Claude, Perplexity, and configured models.
@@ -26,7 +26,7 @@ Creates a new project. Finseo will track AI visibility for the brand associated 
 
 ```bash cURL
 curl --request POST \
-  --url https://app.finseo.ai/api/v1/projects \
+  --url https://api.finseo.ai/v1/projects \
   --header 'Authorization: Bearer sk_live_xxxxxxxx' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -45,7 +45,7 @@ payload = {
     "description": "Experimental prompts and benchmarks",
 }
 r = requests.post(
-    "https://app.finseo.ai/api/v1/projects",
+    "https://api.finseo.ai/v1/projects",
     headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
     json=payload,
 )

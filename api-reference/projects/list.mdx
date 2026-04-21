@@ -1,6 +1,6 @@
 ---
 title: List Projects
-api: GET /api/v1/projects
+api: GET /v1/projects
 ---
 
 Returns a list of projects your API key can access. Projects represent tracked brands or domains in Finseo for AI visibility across ChatGPT, Claude, Perplexity, and other models.
@@ -10,7 +10,7 @@ Returns a list of projects your API key can access. Projects represent tracked b
 
 ```bash cURL
 curl --request GET \
-  --url https://app.finseo.ai/api/v1/projects \
+  --url https://api.finseo.ai/v1/projects \
   --header 'Authorization: Bearer sk_live_xxxxxxxx'
 ```
 
@@ -18,7 +18,7 @@ curl --request GET \
 import requests
 
 response = requests.get(
-    "https://app.finseo.ai/api/v1/projects",
+    "https://api.finseo.ai/v1/projects",
     headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
 )
 projects = response.json()["data"]

@@ -1,6 +1,6 @@
 ---
 title: Create Attribution
-api: POST /projects/{projectId}/attribution
+api: POST /v1/projects/{projectId}/attribution
 ---
 
 Record a self-reported attribution response. Use this to track how customers discovered your brand — from AI search, organic, social, ads, referrals, or any custom channel.
@@ -50,7 +50,7 @@ Requires `write` scope on your API key.
 <RequestExample>
 ```bash cURL
 curl --request POST \
-  --url https://app.finseo.ai/api/v1/projects/PROJECT_ID/attribution \
+  --url https://api.finseo.ai/v1/projects/PROJECT_ID/attribution \
   --header 'Authorization: Bearer sk_live_xxxxxxxx' \
   --header 'Content-Type: application/json' \
   --data '{

@@ -1,6 +1,6 @@
 ---
 title: List Sources
-api: GET /api/v1/projects/{projectId}/sources
+api: GET /v1/projects/{projectId}/sources
 ---
 
 Lists domains and URLs cited in AI answers for your tracked prompts—useful for understanding which sources drive visibility for Finseo-related queries across ChatGPT, Claude, and Perplexity.
@@ -50,7 +50,7 @@ Lists domains and URLs cited in AI answers for your tracked prompts—useful for
 
 ```bash cURL
 curl --request GET \
-  --url 'https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b/sources?timeframe=30d&sortBy=citations' \
+  --url 'https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/sources?timeframe=30d&sortBy=citations' \
   --header 'Authorization: Bearer sk_live_xxxxxxxx'
 ```
 
@@ -58,7 +58,7 @@ curl --request GET \
 import requests
 
 r = requests.get(
-    "https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b/sources",
+    "https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/sources",
     headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
     params={"timeframe": "30d", "search": "finseo", "limit": 25},
 )

@@ -1,6 +1,6 @@
 ---
 title: Metrics Timeseries
-api: GET /api/v1/projects/{projectId}/metrics/timeseries
+api: GET /v1/projects/{projectId}/metrics/timeseries
 ---
 
 Returns daily AI visibility metrics for charting. Each row corresponds to a calendar day within the timeframe derived from `timeframe`, or within `startDate` / `endDate` when both are provided. Ideal for trend lines for Finseo across ChatGPT, Claude, and Perplexity.
@@ -38,7 +38,7 @@ Returns daily AI visibility metrics for charting. Each row corresponds to a cale
 
 ```bash cURL
 curl --request GET \
-  --url 'https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b/metrics/timeseries?timeframe=14d' \
+  --url 'https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/metrics/timeseries?timeframe=14d' \
   --header 'Authorization: Bearer sk_live_xxxxxxxx'
 ```
 
@@ -46,7 +46,7 @@ curl --request GET \
 import requests
 
 r = requests.get(
-    "https://app.finseo.ai/api/v1/projects/67a1c2d3e4f5061728394a5b/metrics/timeseries",
+    "https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/metrics/timeseries",
     headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
     params={"timeframe": "14d", "model": "chatgpt"},
 )

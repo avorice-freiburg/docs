@@ -1,6 +1,6 @@
 ---
 title: List Fan-outs
-api: GET /api/v1/projects/{projectId}/fanouts
+api: GET /v1/projects/{projectId}/fanouts
 description: Get the AI query fan-outs (related sub-queries that AI models generated while answering your tracked prompts), aggregated and ranked by frequency.
 ---
 
@@ -19,7 +19,7 @@ This is the same data shown on the Query Fan-outs page in the Finseo dashboard.
 <RequestExample>
 ```bash cURL
 curl --request GET \
-  --url 'https://app.finseo.ai/api/v1/projects/proj_abc123/fanouts?timeframe=30d&limit=20' \
+  --url 'https://api.finseo.ai/v1/projects/proj_abc123/fanouts?timeframe=30d&limit=20' \
   --header 'Authorization: Bearer YOUR_API_KEY'
 ```
 
@@ -27,7 +27,7 @@ curl --request GET \
 import requests
 
 response = requests.get(
-    f"https://app.finseo.ai/api/v1/projects/{project_id}/fanouts",
+    f"https://api.finseo.ai/v1/projects/{project_id}/fanouts",
     headers={"Authorization": "Bearer YOUR_API_KEY"},
     params={"timeframe": "30d", "limit": 20}
 )
@@ -39,7 +39,7 @@ for f in fanouts:
 
 ```javascript Node.js
 const res = await fetch(
-  `https://app.finseo.ai/api/v1/projects/${projectId}/fanouts?timeframe=30d`,
+  `https://api.finseo.ai/v1/projects/${projectId}/fanouts?timeframe=30d`,
   { headers: { Authorization: "Bearer YOUR_API_KEY" } }
 );
 const { data } = await res.json();

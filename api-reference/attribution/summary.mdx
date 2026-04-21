@@ -1,6 +1,6 @@
 ---
 title: Get Attribution Summary
-api: GET /projects/{projectId}/attribution/summary
+api: GET /v1/projects/{projectId}/attribution/summary
 ---
 
 Get aggregated attribution data showing channel breakdown, AI search percentage, and total attributed revenue. Use this to understand what percentage of your leads come from AI search vs other channels.
@@ -16,7 +16,7 @@ Get aggregated attribution data showing channel breakdown, AI search percentage,
 <RequestExample>
 ```bash cURL
 curl --request GET \
-  --url 'https://app.finseo.ai/api/v1/projects/PROJECT_ID/attribution/summary?days=30' \
+  --url 'https://api.finseo.ai/v1/projects/PROJECT_ID/attribution/summary?days=30' \
   --header 'Authorization: Bearer sk_live_xxxxxxxx'
 ```
 </RequestExample>

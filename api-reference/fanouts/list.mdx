@@ -1,0 +1,86 @@
+---
+title: List Query Fan-outs
+api: GET /api/v1/projects/{projectId}/fanouts
+description: Get the AI query fan-outs (related sub-queries that AI models generated while answering your tracked prompts), aggregated and ranked by frequency.
+---
+
+Query fan-outs are related sub-queries that AI models (ChatGPT, Claude, Perplexity, etc.) generate internally while answering your tracked prompts. This endpoint aggregates them across all tracking results in a timeframe and returns them ranked by occurrence count.
+
+This is the same data shown on the Query Fan-outs page in the Finseo dashboard.
+
+<ParamField path="projectId" type="string" required>The project ID</ParamField>
+<ParamField query="timeframe" type="string" default="7d">Time window (`7d`, `30d`, `90d`)</ParamField>
+<ParamField query="startDate" type="string">Custom start date (YYYY-MM-DD), overrides timeframe</ParamField>
+<ParamField query="endDate" type="string">Custom end date (YYYY-MM-DD), overrides timeframe</ParamField>
+<ParamField query="tags" type="string">Comma-separated tags to filter source prompts</ParamField>
+<ParamField query="page" type="integer" default="1">Page number</ParamField>
+<ParamField query="limit" type="integer" default="50">Results per page (max 500)</ParamField>
+
+<RequestExample>
+```bash cURL
+curl --request GET \
+  --url 'https://app.finseo.ai/api/v1/projects/proj_abc123/fanouts?timeframe=30d&limit=20' \
+  --header 'Authorization: Bearer YOUR_API_KEY'
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    f"https://app.finseo.ai/api/v1/projects/{project_id}/fanouts",
+    headers={"Authorization": "Bearer YOUR_API_KEY"},
+    params={"timeframe": "30d", "limit": 20}
+)
+fanouts = response.json()["data"]["fanouts"]
+
+for f in fanouts:
+    print(f"{f['query']} — {f['count']} occurrences across {f['promptCount']} prompts")
+```
+
+```javascript Node.js
+const res = await fetch(
+  `https://app.finseo.ai/api/v1/projects/${projectId}/fanouts?timeframe=30d`,
+  { headers: { Authorization: "Bearer YOUR_API_KEY" } }
+);
+const { data } = await res.json();
+data.fanouts.forEach(f => console.log(f.query, f.count));
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": {
+    "fanouts": [
+      {
+        "query": "best CRM for small business 2026",
+        "count": 47,
+        "promptCount": 12,
+        "models": ["chatgpt", "perplexity"],
+        "lastSeen": "2026-03-29T18:42:00Z",
+        "samplePrompt": "What CRM should I use for my startup?"
+      },
+      {
+        "query": "HubSpot vs Salesforce comparison",
+        "count": 32,
+        "promptCount": 8,
+        "models": ["chatgpt", "claude", "perplexity"],
+        "lastSeen": "2026-03-29T14:15:00Z",
+        "samplePrompt": "Compare HubSpot and Salesforce features"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 20,
+      "total": 156,
+      "hasMore": true
+    },
+    "meta": {
+      "totalResults": 420,
+      "totalPrompts": 42,
+      "timeframeDays": 30
+    }
+  }
+}
+```
+</ResponseExample>

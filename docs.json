@@ -19,6 +19,7 @@
         { "group": "Competitors", "pages": ["api-reference/competitors/ranking"] },
         { "group": "Sources", "pages": ["api-reference/sources/ranking"] },
         { "group": "Tags", "pages": ["api-reference/tags/list", "api-reference/tags/create"] },
+        { "group": "Fan-outs", "pages": ["api-reference/fanouts/list", "api-reference/fanouts/details"] },
         { "group": "Export", "pages": ["api-reference/export/bulk"] },
         { "group": "Attribution", "pages": ["api-reference/attribution/list", "api-reference/attribution/submit", "api-reference/attribution/summary", "api-reference/attribution/bulk"] }
       ]},

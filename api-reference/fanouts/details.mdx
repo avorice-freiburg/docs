@@ -1,0 +1,72 @@
+---
+title: Fan-out Details
+api: GET /api/v1/projects/{projectId}/fanouts/details
+description: Get per-occurrence details for a single fan-out query — every tracking result whose fan-out queries contain this exact text.
+---
+
+Returns every tracking result where this specific fan-out query was generated, including the source prompt, model, timestamp, visibility, and mentions.
+
+Use this endpoint to drill down from the aggregated fan-out list (`GET /fanouts`) into the individual occurrences.
+
+<ParamField path="projectId" type="string" required>The project ID</ParamField>
+<ParamField query="query" type="string" required>The exact fan-out query text (case-insensitive match)</ParamField>
+<ParamField query="timeframe" type="string" default="7d">Time window (`7d`, `30d`, `90d`)</ParamField>
+<ParamField query="startDate" type="string">Custom start date (YYYY-MM-DD)</ParamField>
+<ParamField query="endDate" type="string">Custom end date (YYYY-MM-DD)</ParamField>
+<ParamField query="tags" type="string">Comma-separated tags to filter source prompts</ParamField>
+
+<RequestExample>
+```bash cURL
+curl --request GET \
+  --url 'https://app.finseo.ai/api/v1/projects/proj_abc123/fanouts/details?query=best+CRM+for+small+business+2026&timeframe=30d' \
+  --header 'Authorization: Bearer YOUR_API_KEY'
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    f"https://app.finseo.ai/api/v1/projects/{project_id}/fanouts/details",
+    headers={"Authorization": "Bearer YOUR_API_KEY"},
+    params={"query": "best CRM for small business 2026", "timeframe": "30d"}
+)
+data = response.json()["data"]
+
+print(f"Found {data['totalOccurrences']} occurrences of '{data['query']}'")
+for occ in data["occurrences"]:
+    print(f"  {occ['model']} on {occ['timestamp']} — visible: {occ['visible']}")
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": {
+    "query": "best CRM for small business 2026",
+    "totalOccurrences": 47,
+    "occurrences": [
+      {
+        "resultId": "uuid-1",
+        "promptId": "prompt-uuid-1",
+        "promptText": "What CRM should I use for my startup?",
+        "brandName": "yourbrand",
+        "model": "chatgpt",
+        "timestamp": "2026-03-29T18:42:00Z",
+        "visible": true,
+        "mentions": 2
+      },
+      {
+        "resultId": "uuid-2",
+        "promptId": "prompt-uuid-2",
+        "promptText": "Best CRM for B2B SaaS",
+        "brandName": "yourbrand",
+        "model": "perplexity",
+        "timestamp": "2026-03-29T15:20:00Z",
+        "visible": false,
+        "mentions": 0
+      }
+    ]
+  }
+}
+```
+</ResponseExample>

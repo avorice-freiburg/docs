@@ -5,6 +5,10 @@
   "colors": { "primary": "#0eca7b", "light": "#0eca7b", "dark": "#0a9956" },
   "favicon": "/favicon.svg",
   "logo": { "light": "/logo/light.svg", "dark": "/logo/dark.svg" },
+  "styling": {
+    "codeblocks": "system"
+  },
+  "css": ["/style.css"],
   "navbar": {
     "links": [{ "label": "Dashboard", "href": "https://app.finseo.ai" }],
     "primary": { "type": "button", "label": "Get API Key", "href": "https://app.finseo.ai/developer" }

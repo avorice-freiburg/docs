@@ -1,0 +1,146 @@
+---
+title: Human Traffic
+description: Connect analytics data to measure visits, conversions, and revenue from AI platforms.
+---
+
+# Human Traffic
+
+Human Traffic shows real website sessions that came from AI platforms such as ChatGPT, Claude, Perplexity, Gemini, Copilot, DeepSeek, Mistral, Meta AI, Grok, You.com, and Poe.
+
+Use it to understand whether AI visibility turns into actual visitors, conversions, and revenue.
+
+## What Human Traffic measures
+
+Finseo reads your analytics data and filters sessions whose source looks like an AI platform.
+
+The dashboard can show:
+
+- Sessions from AI platforms
+- Users from AI platforms
+- Conversions
+- Revenue
+- Conversion rate
+- Top AI traffic sources
+- Trends over time
+- Event-specific conversion counts
+
+## Connect analytics
+
+1. Open **Human Traffic**.
+2. Select your project.
+3. Click **Connect Analytics**.
+4. Choose **Google Analytics 4** or **Piwik PRO**.
+5. Complete the provider authorization flow.
+6. Select the property or site that belongs to the project.
+
+After the connection is saved, Finseo queries analytics data for the selected date range and filters for AI-related sources.
+
+## Supported providers
+
+<CardGroup cols={2}>
+  <Card title="Google Analytics 4" icon="chart-line">
+    Uses the GA4 Data API to read sessions, users, conversions, and purchase revenue by source and date.
+  </Card>
+  <Card title="Piwik PRO" icon="chart-simple">
+    Uses Piwik PRO reports with the same AI-source filtering logic.
+  </Card>
+</CardGroup>
+
+## AI sources Finseo recognizes
+
+Finseo normalizes source names into readable model names. Examples:
+
+| Raw source contains | Displayed as |
+| --- | --- |
+| `chatgpt`, `openai`, `chat.openai` | ChatGPT |
+| `claude`, `anthropic` | Claude |
+| `perplexity`, `pplx` | Perplexity |
+| `gemini`, `bard` | Google Gemini |
+| `copilot`, `microsoft copilot` | Copilot |
+| `deepseek` | DeepSeek |
+| `mistral` | Mistral |
+| `llama`, `meta.ai`, `meta-ai` | Meta AI |
+| `grok`, `xai`, `x.ai` | Grok |
+| `you.com` | You.com |
+| `poe` | Poe |
+
+Regular Google organic traffic is excluded unless it appears as an AI-specific source such as Google AI Mode or Gemini.
+
+## Improve detection with UTM tags
+
+AI platforms do not always send perfect referrer data. If you control links that appear in AI-optimized content, use UTM parameters so analytics can classify the source cleanly.
+
+```text
+https://example.com/pricing?utm_source=chatgpt&utm_medium=ai&utm_campaign=ai_visibility
+```
+
+Recommended values:
+
+| Parameter | Example |
+| --- | --- |
+| `utm_source` | `chatgpt`, `perplexity`, `claude`, `gemini`, `copilot` |
+| `utm_medium` | `ai` |
+| `utm_campaign` | `ai_visibility`, `brand_mentions`, `comparison_pages` |
+
+## Track conversions
+
+Human Traffic can show conversions and event-specific conversion counts when your analytics property already records conversion events.
+
+In GA4, mark the important events as key events or conversions, for example:
+
+- `generate_lead`
+- `sign_up`
+- `purchase`
+- `book_demo`
+- `form_submit`
+
+Then use Human Traffic to filter or compare AI-attributed conversions by event.
+
+## Revenue
+
+Revenue is read from the connected analytics provider. For GA4, Finseo uses purchase revenue where available.
+
+If you do not see revenue:
+
+- Check that ecommerce revenue is configured in GA4 or Piwik PRO.
+- Check that purchase or deal events are connected to the same property.
+- Confirm that AI-attributed sessions exist in the selected date range.
+
+## Date ranges and metrics
+
+You can switch the dashboard metric between:
+
+- `sessions`
+- `conversions`
+- `revenue`
+
+You can also use preset or custom date ranges. Finseo compares periods to show changes over time.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="The page says no analytics connection found">
+    Connect Google Analytics 4 or Piwik PRO for the selected project. Connections are project-specific, so connecting one project does not automatically connect every project.
+  </Accordion>
+  <Accordion title="Analytics is connected but no AI traffic appears">
+    Expand the date range first. Then check whether your analytics source names contain values like `chatgpt`, `perplexity`, `claude`, `gemini`, `copilot`, `deepseek`, or `mistral`.
+  </Accordion>
+  <Accordion title="Conversions are zero">
+    Confirm that conversion events are configured in your analytics provider and that those events occurred in AI-attributed sessions.
+  </Accordion>
+  <Accordion title="Revenue is zero">
+    Confirm that ecommerce or purchase revenue is sent to your analytics provider. Finseo cannot infer revenue if the provider does not store it.
+  </Accordion>
+</AccordionGroup>
+
+## Human traffic vs bot traffic
+
+Human Traffic and Bot Analytics answer different questions.
+
+| Feature | What it measures | Data source |
+| --- | --- | --- |
+| Human Traffic | Real visitors, conversions, and revenue from AI platforms | GA4 or Piwik PRO |
+| Bot Analytics | AI crawler requests to your website | Server access logs |
+
+Use both together to see the full picture: crawlers show whether AI systems can access your content, and human traffic shows whether AI platforms send visitors and revenue.
+

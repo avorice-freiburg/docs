@@ -1,0 +1,136 @@
+---
+title: Integrations
+description: Connect forms, CRMs, analytics tools, and CMS platforms to Finseo.
+---
+
+# Integrations
+
+The **Integrations** page helps you connect data sources to Finseo. It includes CMS connections, analytics connections, and attribution integrations.
+
+For attribution, the main goal is simple: send the answer to "How did you find us?" into Finseo whenever a lead, form submission, booking, order, or deal is created.
+
+## Attribution integrations
+
+Attribution integrations use either:
+
+- A project webhook URL for forms and CRMs.
+- The Customer API for automation tools such as Zapier, Make, or n8n.
+
+Webhook URLs look like this:
+
+```text
+https://app.finseo.ai/api/attribution/webhook/PROJECT_ID?source=SOURCE&token=WEBHOOK_TOKEN
+```
+
+The `source` parameter helps Finseo choose the right parser. The `token` protects the endpoint.
+
+## Supported attribution sources
+
+| Source | Recommended path | Notes |
+| --- | --- | --- |
+| HubSpot | Workflow webhook | Requires a HubSpot workflow action that sends a webhook. Data Hub Pro/Enterprise may be required for native webhook actions. |
+| Salesforce | Flow HTTP Callout | Use JSON from Flow Builder. Native Salesforce Outbound Messages send XML and are not supported. |
+| Typeform | Native webhook | Add a "How did you find us?" question and send all responses to Finseo. |
+| Jotform | Native webhook | Finseo handles Jotform multipart/form-data and `rawRequest` payloads. |
+| Gravity Forms | Webhooks Add-On | Send JSON and map the attribution field if needed. |
+| Formstack | Native webhook | Send form submissions as JSON. |
+| Attio | Native webhook | Send record creation/update payloads with custom fields. |
+| Pipedrive | Automation webhook | Send deal and person fields from automations. |
+| Close | Native webhook | Send lead or contact events. |
+| Calendly | Webhook subscription | Send invitee answers from booking questions. |
+| Intercom | Native webhook | Send contact or conversation events with custom attributes. |
+| Zapier / Make / n8n | HTTP request | Use the Finseo API or generic webhook and map fields manually. |
+
+## HubSpot
+
+1. In Finseo, open **Integrations** and select **HubSpot**.
+2. Copy the webhook URL.
+3. In HubSpot, go to **Automations -> Workflows**.
+4. Create a workflow triggered by a form submission or contact creation.
+5. Add a **Send webhook** action.
+6. Paste the Finseo webhook URL.
+7. Submit a test lead and check **Attribution** in Finseo.
+
+Finseo looks for common fields such as `email`, `firstname`, `lastname`, `how_did_you_find_us`, `deal_amount`, and `amount`.
+
+## Salesforce
+
+Use **Flow HTTP Callout**, not native Outbound Messages.
+
+```json
+{
+  "LeadSource": "ChatGPT",
+  "Email": "buyer@example.com",
+  "Name": "Alex Buyer",
+  "Id": "00Qxx0000012345",
+  "Amount": 8500,
+  "CurrencyIsoCode": "USD"
+}
+```
+
+Finseo maps `LeadSource` to the attribution channel, `Email` to the respondent email, `Name` to respondent name, `Amount` to deal value, and `CurrencyIsoCode` to currency.
+
+## Typeform and Jotform
+
+For form tools, add a question like:
+
+```text
+How did you find us?
+```
+
+Good answer options:
+
+- ChatGPT
+- Perplexity
+- Claude
+- Google
+- Social media
+- Friend or colleague
+- Ads
+- Other
+
+Then add the Finseo webhook URL in the form's webhook settings. Finseo receives the full submission and extracts the attribution answer.
+
+## Zapier, Make, and n8n
+
+Use these when your source tool has no native webhook or when you want to transform fields before sending them to Finseo.
+
+```json
+{
+  "channelId": "{{how_did_you_find_us}}",
+  "respondentEmail": "{{email}}",
+  "respondentName": "{{name}}",
+  "respondentExternalId": "{{crm_id}}",
+  "dealValue": "{{amount}}",
+  "dealCurrency": "{{currency}}",
+  "metadata": {
+    "source_tool": "zapier",
+    "form": "{{form_name}}"
+  }
+}
+```
+
+You can send this to either the project webhook URL or the [Create Attribution API](/api-reference/attribution/submit).
+
+## Field mapping
+
+If a tool sends fields with unusual names, send one test payload first. Finseo creates an Attribution workflow from the incoming structure. Open **Attribution -> Workflows** and map the fields to:
+
+- Attribution answer
+- Email
+- Name
+- Deal value
+- Deal currency
+- Form ID
+
+Use rules when a source field needs translation. For example, map `utm_source contains chatgpt` to `AI Search`.
+
+## Testing checklist
+
+- Send a test submission from the source tool.
+- Confirm the response appears in **Attribution**.
+- Confirm the channel category is correct, especially for AI sources.
+- Add `dealValue` and `dealCurrency` if you want revenue reporting.
+- Add a stable `respondentExternalId` such as order ID, lead ID, or deal ID.
+- Keep field names consistent across markets and countries.
+

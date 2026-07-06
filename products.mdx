@@ -1,0 +1,129 @@
+---
+title: Products and AI Shopping
+description: Understand product mentions, AI shopping listings, stores, attributes, and product detail pages.
+---
+
+# Products and AI Shopping
+
+Products shows how products appear inside AI answers. It combines two related but different signals:
+
+- **Mentioned products**: products the AI names in the answer text.
+- **Shopping products**: products rendered in shopping blocks, product carousels, or shopping-style result blocks.
+
+This helps ecommerce, marketplace, and product-led brands understand which products AI recommends, compares, and sells through shopping surfaces.
+
+## Products vs AI Shopping
+
+| Signal | Meaning | Example |
+| --- | --- | --- |
+| Mentioned | The product was named in the AI response text. | "The Kärcher K5 is a good option for patios." |
+| Shopping | The product appeared in a shopping/product listing block. | A card with image, price, seller, and rating. |
+| Both | The product was named in text and also appeared in a shopping block. | Strongest signal: AI both recommends and displays the product. |
+
+Use the **Source** filter to switch between `All sources`, `Mentioned`, `Shopping`, and `In both`.
+
+## Products tab
+
+The Products tab lists every product found in AI answers for the selected project and timeframe.
+
+You can filter by:
+
+- Source: mentioned, shopping, both, or all.
+- Category.
+- Brand or competitor.
+- AI engine.
+- Tags.
+- Date range.
+
+You can sort by:
+
+- Appearances
+- Product name
+- Price
+- Rating
+- Last seen
+
+## Stores tab
+
+The Stores tab shows sellers and stores AI cites in shopping blocks.
+
+Use it to answer:
+
+- Which retailers are most visible in AI shopping results?
+- Are your products shown through your own store or third-party sellers?
+- Which marketplaces dominate product visibility?
+- Which stores should you optimize product feeds or listings for?
+
+## Product detail pages
+
+Click a product to open its detail page. Product detail pages can show:
+
+- Assigned brand or competitor.
+- Category.
+- Attributes the AI stated.
+- Use cases the AI associated with the product.
+- Products that appeared alongside it.
+- Explicit comparisons or relationships.
+- Price, rating, image, and store details where available.
+
+## Product attributes
+
+Finseo extracts attributes from AI answers and product blocks. Attributes can describe:
+
+- Price or value
+- Quality
+- Performance
+- Features
+- Reliability
+- Design
+- Availability
+- Use cases
+
+Example:
+
+```json
+{
+  "category": "pressure_washer",
+  "attributes": [
+    { "name": "pressure", "value": "180 bar" },
+    { "name": "use_case", "value": "patio cleaning" },
+    { "name": "positioning", "value": "premium home use" }
+  ]
+}
+```
+
+Use these attributes to see how AI systems position a product, not just whether it appears.
+
+## Brand assignment
+
+When a product is not mapped to a brand automatically, you can assign it to a competitor or your own brand from the product detail view.
+
+This makes reporting cleaner because Finseo can group products by brand and domain.
+
+## How products are discovered
+
+Products are extracted from tracked prompt results. To get useful product data:
+
+1. Track prompts with product or shopping intent.
+2. Enable models that produce shopping or product-rich answers.
+3. Use tags for product categories and markets.
+4. Review Products and Stores after prompt results are processed.
+
+Good prompts:
+
+```text
+Best pressure washer for patios
+Compare Kärcher vs Nilfisk pressure washers
+Which running shoes are best for marathon training?
+Best CRM software for a 50-person SaaS team
+```
+
+## Best practices
+
+- Track product-category prompts, not only brand prompts.
+- Use the **Shopping** filter to see product cards and seller visibility.
+- Use the **Mentioned** filter to see recommendations in answer text.
+- Use **In both** to find products with the strongest AI commerce presence.
+- Check stores to see where AI sends shoppers.
+- Review product attributes to identify wrong claims, missing specifications, or weak positioning.
+

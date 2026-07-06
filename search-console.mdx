@@ -1,0 +1,128 @@
+---
+title: Search Console
+description: Use Google Search Console and Bing Webmaster Tools to find real user prompts.
+---
+
+# Search Console
+
+Search Console connects real search query data to your AI visibility workflow. Instead of guessing which prompts to track, you can start from the questions people already type into Google and Bing.
+
+Finseo supports:
+
+- Google Search Console
+- Bing Webmaster Tools
+
+## Why this matters
+
+Search queries are often the closest available source of real user intent. Finseo analyzes those queries and identifies which ones behave like conversational AI prompts.
+
+Use this page to find:
+
+- Question-style searches
+- Comparison queries
+- Recommendation prompts
+- Provider and local intent prompts
+- Pages that already rank for prompt-like queries
+- Countries where certain prompts appear
+
+## Connect Google Search Console
+
+1. Open **Search Console** in Finseo.
+2. Choose **Google Search Console**.
+3. Click **Connect Search Console**.
+4. Complete the Google OAuth flow.
+5. Select the property for your project.
+
+After connecting, Finseo pulls search queries, pages, daily performance, countries, and query-page combinations.
+
+## Connect Bing Webmaster Tools
+
+1. Open **Search Console**.
+2. Switch to **Bing Webmaster**.
+3. Click **Connect Bing**.
+4. Authorize the connection and select the site.
+
+Bing supports query and page performance. Some Google-specific dimensions, such as query-country and query-page combinations, may not be available from Bing.
+
+## Find AI-style prompts
+
+Finseo categorizes queries into prompt-like patterns. A query is treated as a prompt when it has conversational structure, such as:
+
+- `what is...`
+- `how can I...`
+- `best X for Y`
+- `X vs Y`
+- `difference between X and Y`
+- `bester Anbieter für...`
+- `was ist der Unterschied zwischen...`
+
+Simple keyword stacks are usually not marked as prompts.
+
+<CodeGroup>
+
+```text Prompt-like
+What are the best AI visibility tools for agencies?
+Finseo vs Profound comparison
+How can I track ChatGPT traffic in GA4?
+Was ist der Unterschied zwischen GEO und SEO?
+```
+
+```text Keyword-like
+ai visibility software
+chatgpt traffic ga4
+geo seo
+seo tool agency
+```
+
+</CodeGroup>
+
+## Prompt categories
+
+Finseo categorizes detected prompts into:
+
+| Category | Meaning |
+| --- | --- |
+| `information` | Questions and explanations. |
+| `comparison` | Explicit comparisons such as `X vs Y`. |
+| `recommendation` | "Best X for Y" or advice-seeking prompts. |
+| `provider` | Queries looking for a provider or service. |
+| `action` | Transactional or ready-to-act queries. |
+
+## Add prompts to tracking
+
+When you find a useful query:
+
+1. Select the query in Search Console.
+2. Click **Add to tracker**.
+3. Choose the location and tags.
+4. Add it to AI Tracking.
+
+This turns real search behavior into AI visibility tracking. It is especially useful for long-tail queries that already have impressions but are not yet tracked as AI prompts.
+
+## Use query-page data
+
+Google Search Console can show which pages receive impressions for each query. Use this to decide:
+
+- Which existing pages already match AI-style prompts.
+- Which pages need more direct answers.
+- Which prompt clusters deserve new landing pages or FAQ sections.
+- Which pages should be checked in AI answers for mentions and citations.
+
+## Use country data
+
+For Google Search Console, Finseo can combine query and country data. This helps you find where prompt demand exists.
+
+Example:
+
+- A prompt appears in Germany and Austria, so track it with German-language locations.
+- A prompt appears mostly in the US, so track it separately with a US location.
+- A product prompt appears in several countries, so create localized prompt groups with tags.
+
+## Best practices
+
+- Start with queries that have high impressions but low clicks.
+- Prioritize prompt-like queries with commercial intent.
+- Add tags such as `gsc`, `bing`, `comparison`, `recommendation`, or market tags like `de` and `us`.
+- Track the same important query across multiple countries if the audience differs by market.
+- Use Search Console to discover prompts, then use AI Tracking to monitor visibility across ChatGPT, Perplexity, Claude, Google AI, and other models.
+

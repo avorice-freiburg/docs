@@ -55,9 +55,6 @@ The webhook does not need to run in real time. A daily batch is fine if that is 
   <Card title="Dashboard workflows" icon="workflow" href="#map-incoming-fields">
     Best when your source sends custom fields.
   </Card>
-  <Card title="Website widget" icon="message" href="#use-the-website-widget">
-    Best when you want to ask visitors directly on your site.
-  </Card>
   <Card title="Outbound webhook" icon="arrow-right" href="#receive-attribution-events">
     Best when your own system should receive saved responses.
   </Card>
@@ -231,32 +228,6 @@ curl --request POST \
 ```
 
 See the [Bulk Create Attributions API](/api-reference/attribution/bulk) for the full reference.
-
-## Use the website widget
-
-If you want to ask visitors directly on your website, embed the Attribution widget.
-
-```html
-<script src="https://app.finseo.ai/api/attribution/widget/PROJECT_ID" async></script>
-```
-
-The widget uses your project Attribution configuration, including the question text, enabled channels, style, delay, and placement.
-
-You can also load it manually:
-
-```html
-<script
-  src="https://app.finseo.ai/api/attribution/widget/PROJECT_ID"
-  data-trigger="manual"
-  async>
-</script>
-
-<button onclick="window.finseoAttribution.show()">
-  Tell us how you found us
-</button>
-```
-
-The widget posts responses to Finseo's attribution collector and stores one response per browser for the project.
 
 ## Receive attribution events
 

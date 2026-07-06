@@ -18,7 +18,7 @@
       { "tab": "Docs", "groups": [
         { "group": "Overview", "pages": ["index", "authentication", "rate-limits", "changelog"] },
         { "group": "Getting Started", "pages": ["getting-started/prompts", "getting-started/models"] },
-        { "group": "Analytics", "pages": ["bot-analytics", "human-traffic", "attribution"] }
+        { "group": "Analytics", "pages": ["bot-analytics", "human-traffic", "attribution", "integrations", "search-console", "products", "sentiment"] }
       ] },
       { "tab": "API", "groups": [
         { "group": "Projects", "pages": ["api-reference/projects/list", "api-reference/projects/get", "api-reference/projects/create", "api-reference/projects/update"] },

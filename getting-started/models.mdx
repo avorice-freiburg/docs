@@ -1,0 +1,123 @@
+---
+title: AI models
+description: Configure which AI models Finseo uses for prompt tracking.
+---
+
+# AI models
+
+AI model settings control where Finseo runs your tracking prompts. More models give broader coverage, but they also increase the number of AI answers generated per prompt.
+
+## Available models
+
+Finseo supports the following model channels in the dashboard:
+
+| Model ID | Description |
+| --- | --- |
+| `chatgpt` | ChatGPT GUI/UI-style tracking. |
+| `chatgpt_gui` | ChatGPT API-style tracking. |
+| `perplexity` | Perplexity answers and source citations. |
+| `ai_overview` | Google AI Overview-style result tracking. |
+| `google_ai_mode` | Google AI Mode-style result tracking where available. |
+| `claude` | Claude answers. |
+| `grok` | Grok answers. |
+| `mistral` | Mistral answers. |
+| `deepseek` | DeepSeek answers. |
+| `gemini` | Gemini answers. |
+
+## Default model selection
+
+New accounts start with these defaults:
+
+```json
+{
+  "chatgpt": true,
+  "perplexity": true,
+  "ai_overview": true,
+  "chatgpt_gui": false,
+  "google_ai_mode": false,
+  "claude": false,
+  "grok": false,
+  "mistral": false,
+  "deepseek": false,
+  "gemini": false
+}
+```
+
+This gives you coverage across ChatGPT, Perplexity, and Google-style AI search without running every possible model.
+
+## Account defaults vs project settings
+
+Finseo supports two levels of model settings:
+
+- **Account defaults** apply when a project has no custom model settings.
+- **Project-specific settings** override the account defaults for one project.
+
+Use project-specific settings when different brands, markets, or clients need different model coverage.
+
+## Change enabled models
+
+1. Open **Models**.
+2. Select the project if you want project-specific settings.
+3. Toggle the models you want to track.
+4. Save the settings.
+
+When you save project-specific settings, Finseo syncs existing tracking prompts in that project to the enabled model set. New prompts use the same enabled models by default.
+
+## Model limits
+
+Most plans can enable up to `3` models per prompt. Agency plans and custom enterprise quotes can allow more models.
+
+If you hit the model limit, disable one model before enabling another. The limit is enforced when saving model preferences and when adding new prompts.
+
+<Note>
+For agency accounts, model count affects projected monthly AI answers. Adding prompts across many models increases usage because each prompt is run once per enabled model.
+</Note>
+
+## How model count affects results
+
+The number of generated answers is roughly:
+
+```text
+tracked prompts × enabled models × scheduled runs
+```
+
+Example:
+
+```text
+100 prompts × 3 models = 300 AI answers per run
+100 prompts × 6 models = 600 AI answers per run
+```
+
+Use more models when you need broad market coverage. Use fewer models when you want focused tracking, faster analysis, or lower usage.
+
+## Choosing a model mix
+
+Start with:
+
+- `chatgpt` for broad assistant visibility.
+- `perplexity` for citation-heavy AI search behavior.
+- `ai_overview` for Google AI result visibility.
+
+Then add more models when they matter to your audience:
+
+- Add `claude` for B2B, enterprise, technical, or research-heavy markets.
+- Add `gemini` or `google_ai_mode` when Google AI surfaces are strategically important.
+- Add `grok`, `mistral`, or `deepseek` when your audience uses those platforms.
+
+## API behavior
+
+When you create prompts through the API, you can pass an explicit `models` array.
+
+```json
+{
+  "prompt": "Best AI visibility tracking tools for agencies",
+  "models": ["chatgpt", "perplexity", "ai_overview"],
+  "language": "us",
+  "tags": ["agency", "comparison"]
+}
+```
+
+If you omit `models`, Finseo uses the enabled project settings. If no project settings exist, it uses the account defaults.
+
+See the [Create Prompt API](/api-reference/prompts/add) for the full reference.
+

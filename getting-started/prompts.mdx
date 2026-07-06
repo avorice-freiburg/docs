@@ -1,0 +1,127 @@
+---
+title: Tracking prompts
+description: Learn how to choose and add prompts that measure your AI visibility.
+---
+
+# Tracking prompts
+
+Prompts are the questions Finseo runs across AI models to measure whether your brand appears, how it is described, which competitors are mentioned, and which sources are cited.
+
+Good prompts should sound like real customer questions, not SEO keywords.
+
+## Add a prompt
+
+1. Open **AI Tracking**.
+2. Click **Add Tracking Prompt**.
+3. Select a **Location**.
+4. Add one or more **Tags**.
+5. Enter one or more prompts. Use one line per prompt.
+6. Review the enabled AI models.
+7. Click **Add prompts**.
+
+Finseo saves the prompt and queues it for processing. Results appear after the worker pipeline finishes running the prompt across the enabled models.
+
+## Add multiple prompts at once
+
+Use line breaks to add several prompts from the same dialog.
+
+```text
+What are the best SEO tools for content optimization?
+List the top AI visibility platforms for B2B SaaS.
+Which companies help ecommerce brands get mentioned in ChatGPT?
+Compare Finseo alternatives for AI search tracking.
+```
+
+Each non-empty line is added as a separate prompt.
+
+## Choose the right location
+
+The **Location** controls the market context used for the AI search. AI responses can differ by country, language, and regional search behavior.
+
+Choose the location that matches the audience you care about:
+
+- Use `Germany` for German buyers and German-language visibility.
+- Use `United States` for US buyers and English commercial prompts.
+- Create separate prompts for separate markets if your product positioning differs by country.
+
+If no location is provided through the API, Finseo falls back to `en`.
+
+## Use tags
+
+Tags help segment your visibility reports. Add them when you create prompts so you can filter and compare groups later.
+
+Common tag patterns:
+
+- `branded` and `unbranded`
+- `top-of-funnel`, `comparison`, and `transactional`
+- `de`, `us`, `uk`, or other market labels
+- Product categories such as `crm`, `email-marketing`, or `pressure-washers`
+- Campaign or customer segment labels
+
+## Write better prompts
+
+Strong prompts describe a real decision a buyer is trying to make.
+
+<CodeGroup>
+
+```text Good
+What are the best tools to track brand visibility in ChatGPT?
+Which CRM is best for a 50-person B2B SaaS team?
+Compare Kärcher and Nilfisk pressure washers for home patios.
+What software helps ecommerce teams understand AI search traffic?
+```
+
+```text Weak
+AI visibility
+CRM
+Kärcher
+Best tool
+```
+
+</CodeGroup>
+
+## Recommended prompt mix
+
+Start with `20` to `50` prompts per important market. Cover the full buyer journey:
+
+| Type | Example | Why it matters |
+| --- | --- | --- |
+| Problem-aware | `How can I see if ChatGPT recommends my brand?` | Measures demand before users know your category. |
+| Category | `Best AI visibility tracking tools` | Shows whether you appear in shortlist-style answers. |
+| Comparison | `Finseo vs Profound for AI search tracking` | Reveals competitive positioning. |
+| Transactional | `Which AI SEO platform should an agency use?` | Captures bottom-funnel buying intent. |
+| Brand | `What is Finseo and who is it for?` | Checks brand understanding and sentiment. |
+
+## What happens after a prompt is added
+
+Finseo runs the prompt across the enabled models for the project. It stores:
+
+- Whether your brand was visible
+- Mentions and position
+- Competitor mentions
+- Sentiment and phrases
+- Cited sources
+- Query fan-outs and related searches where available
+- Product, claim, and comparison insights where available
+
+New prompts are processed asynchronously. The dashboard shows processing states while results are being generated.
+
+## API option
+
+You can also create prompts through the API.
+
+```bash
+curl --request POST \
+  --url https://api.finseo.ai/v1/projects/PROJECT_ID/prompts \
+  --header "Authorization: Bearer sk_live_xxxxxxxx" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "prompt": "What are the best AI visibility tracking tools?",
+    "models": ["chatgpt", "perplexity", "ai_overview"],
+    "language": "us",
+    "tags": ["unbranded", "comparison"]
+  }'
+```
+
+See the [Create Prompt API](/api-reference/prompts/add) for the full reference.
+

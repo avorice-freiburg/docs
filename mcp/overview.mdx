@@ -1,23 +1,40 @@
 ---
 title: MCP Integration
-description: Connect FinSEO to AI assistants like Claude Desktop and Cursor.
+description: Connect Finseo to AI assistants like Claude, ChatGPT and Cursor.
 ---
 
 # MCP Integration
 
-FinSEO provides a Model Context Protocol (MCP) server that lets AI assistants query your visibility data directly.
+Finseo provides a Model Context Protocol (MCP) server that lets AI assistants query your visibility data directly.
 
 ## What is MCP?
 
-MCP (Model Context Protocol) is a standard for connecting AI models to external data sources. With FinSEO's MCP server, you can ask Claude Desktop or Cursor natural questions about your AI visibility without writing code.
+MCP (Model Context Protocol) is a standard for connecting AI models to external data sources. With Finseo's MCP server, you can ask Claude, ChatGPT or Cursor natural questions about your AI visibility without writing code.
 
-**Example**: Open Claude Desktop and ask:
+**Example**: Open Claude and ask:
 
 > "How has my brand visibility changed in the last 30 days? Which competitors are ahead of me?"
 
-Claude automatically queries your FinSEO data and provides analysis.
+Claude automatically queries your Finseo data and provides analysis.
+
+## Setup guides
+
+- [Claude (claude.ai, Desktop, Code)](/mcp/claude-desktop) — OAuth, no API key needed
+- [ChatGPT (developer mode)](/mcp/chatgpt) — OAuth, no API key needed
+- [Cursor](/mcp/cursor) — API key via headers
+
+## Authentication
+
+The MCP server supports two authentication methods:
+
+| Method | Best for | How |
+|--------|----------|-----|
+| **OAuth 2.1** | Claude, ChatGPT | Add the server URL, sign in with your Finseo account — the server supports Dynamic Client Registration and PKCE |
+| **API key** | Cursor, custom clients | Send `Authorization: Bearer sk_live_...` ([create a key](https://app.finseo.ai/settings/api)) |
 
 ## Available tools
+
+All tools are **read-only** — they retrieve data and never modify it.
 
 | Tool | Description |
 |------|-------------|
@@ -33,7 +50,6 @@ Claude automatically queries your FinSEO data and provides analysis.
 
 ```
 POST https://api.finseo.ai/v1/mcp
-Authorization: Bearer sk_live_YOUR_KEY
 ```
 
-The server implements JSON-RPC 2.0 and supports `initialize`, `tools/list`, and `tools/call` methods.
+The server implements JSON-RPC 2.0 over Streamable HTTP and supports `initialize`, `tools/list`, and `tools/call`. Unauthenticated requests receive a `401` with OAuth discovery metadata per the MCP authorization spec (RFC 9728).

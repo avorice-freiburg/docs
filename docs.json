@@ -31,7 +31,7 @@
         { "group": "Export", "pages": ["api-reference/export/bulk"] },
         { "group": "Attribution", "pages": ["api-reference/attribution/list", "api-reference/attribution/submit", "api-reference/attribution/summary", "api-reference/attribution/bulk"] }
       ]},
-      { "tab": "MCP", "groups": [{ "group": "MCP Integration", "pages": ["mcp/overview", "mcp/claude-desktop", "mcp/cursor"] }] }
+      { "tab": "MCP", "groups": [{ "group": "MCP Integration", "pages": ["mcp/overview", "mcp/claude-desktop", "mcp/chatgpt", "mcp/cursor"] }] }
     ]
   },
   "api": {

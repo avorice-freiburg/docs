@@ -39,12 +39,23 @@ All tools are **read-only** — they retrieve data and never modify it.
 | Tool | Description |
 |------|-------------|
 | `list_projects` | List all your projects |
-| `get_visibility_metrics` | Get visibility KPIs for a project |
-| `list_prompts` | List tracked prompts with metrics |
-| `get_competitor_ranking` | See competitor visibility rankings |
-| `get_top_sources` | Get most cited sources |
+| `get_visibility_metrics` | Visibility KPIs incl. the dashboard "Visibility" rate and own-domain "Citations" KPI, with previous-period comparison |
+| `get_visibility_timeseries` | Per-day visibility, mentions, position and sentiment (same values as the dashboard chart) |
+| `list_prompts` | Tracked prompts with metrics, top competitors and per-prompt citations |
+| `get_competitor_ranking` | Competitor visibility ranking across AI models |
+| `get_top_sources` | Most cited sources with citation counts and source types |
 | `get_tags` | List tags with prompt counts |
-| `get_query_fanouts` | Get AI query fan-outs (sub-queries) ranked by frequency |
+| `get_query_fanouts` | AI query fan-outs (sub-queries) ranked by frequency |
+
+The analytics tools accept optional `model` (e.g. `chatgpt`, `perplexity`, `ai_overview`, `gemini`, `grok`) and `tags` filters — the same filters as the dashboard.
+
+### Metric definitions
+
+The tools return the same numbers as the Finseo dashboard and label them explicitly:
+
+- **`visibilityRatePercent`** — share of analyzed AI answers mentioning your brand (the dashboard "Visibility" KPI)
+- **`promptCoveragePercent`** — share of tracked prompts with at least one mention (a different, usually higher number)
+- **`ownDomainCitations.total`** — AI answers citing your own domain as a source (the dashboard "Citations" KPI)
 
 ## Endpoint
 

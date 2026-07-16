@@ -88,11 +88,21 @@
                   "human-traffic",
                   "attribution"
                 ]
+              }
+            ]
+          },
+          {
+            "tab": "Integrations",
+            "groups": [
+              {
+                "group": "Overview",
+                "pages": [
+                  "integrations"
+                ]
               },
               {
-                "group": "Integrations",
+                "group": "Connectors",
                 "pages": [
-                  "integrations",
                   "looker-studio",
                   "search-console",
                   "products",
@@ -228,11 +238,21 @@
                   "de/human-traffic",
                   "de/attribution"
                 ]
+              }
+            ]
+          },
+          {
+            "tab": "Integrationen",
+            "groups": [
+              {
+                "group": "Übersicht",
+                "pages": [
+                  "de/integrations"
+                ]
               },
               {
-                "group": "Integrationen",
+                "group": "Connectors",
                 "pages": [
-                  "de/integrations",
                   "de/looker-studio",
                   "de/search-console",
                   "de/products",

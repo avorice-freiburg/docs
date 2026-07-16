@@ -1,0 +1,128 @@
+---
+title: Produtos e AI Shopping
+description: Compreenda as menções de produtos, listagens de AI shopping, lojas, atributos e páginas de detalhe de produto.
+---
+
+# Produtos e AI Shopping
+
+O Products mostra como os produtos aparecem nas respostas de IA. Combina dois sinais relacionados mas diferentes:
+
+- **Produtos mencionados**: produtos que a IA nomeia no texto da resposta.
+- **Produtos de shopping**: produtos apresentados em blocos de shopping, carrosséis de produtos ou blocos de resultados ao estilo shopping.
+
+Isto ajuda marcas de e-commerce, de marketplace e orientadas para produto a perceber que produtos a IA recomenda, compara e vende através das superfícies de shopping.
+
+## Produtos vs AI Shopping
+
+| Sinal | Significado | Exemplo |
+| --- | --- | --- |
+| Mencionado | O produto foi nomeado no texto da resposta da IA. | "O Kärcher K5 é uma boa opção para pátios." |
+| Shopping | O produto apareceu num bloco de listagem de shopping/produto. | Um cartão com imagem, preço, vendedor e avaliação. |
+| Ambos | O produto foi nomeado no texto e também apareceu num bloco de shopping. | O sinal mais forte: a IA recomenda e apresenta o produto. |
+
+Use o filtro **Source** para alternar entre `All sources`, `Mentioned`, `Shopping` e `In both`.
+
+## Separador Products
+
+O separador Products lista todos os produtos encontrados nas respostas de IA para o projeto e período selecionados.
+
+Pode filtrar por:
+
+- Fonte: mencionado, shopping, ambos ou todos.
+- Categoria.
+- Marca ou concorrente.
+- Motor de IA.
+- Tags.
+- Intervalo de datas.
+
+Pode ordenar por:
+
+- Aparições
+- Nome do produto
+- Preço
+- Avaliação
+- Visto pela última vez
+
+## Separador Stores
+
+O separador Stores mostra os vendedores e lojas que a IA cita nos blocos de shopping.
+
+Use-o para responder a:
+
+- Que retalhistas são mais visíveis nos resultados de AI shopping?
+- Os seus produtos são mostrados através da sua própria loja ou de vendedores terceiros?
+- Que marketplaces dominam a visibilidade de produtos?
+- Para que lojas deve otimizar os feeds ou listagens de produtos?
+
+## Páginas de detalhe de produto
+
+Clique num produto para abrir a sua página de detalhe. As páginas de detalhe de produto podem mostrar:
+
+- Marca ou concorrente atribuído.
+- Categoria.
+- Atributos indicados pela IA.
+- Casos de uso que a IA associou ao produto.
+- Produtos que apareceram junto dele.
+- Comparações ou relações explícitas.
+- Preço, avaliação, imagem e detalhes da loja, quando disponíveis.
+
+## Atributos de produto
+
+A Finseo extrai atributos das respostas de IA e dos blocos de produto. Os atributos podem descrever:
+
+- Preço ou relação preço-qualidade
+- Qualidade
+- Desempenho
+- Funcionalidades
+- Fiabilidade
+- Design
+- Disponibilidade
+- Casos de uso
+
+Exemplo:
+
+```json
+{
+  "category": "pressure_washer",
+  "attributes": [
+    { "name": "pressure", "value": "180 bar" },
+    { "name": "use_case", "value": "patio cleaning" },
+    { "name": "positioning", "value": "premium home use" }
+  ]
+}
+```
+
+Use estes atributos para ver como os sistemas de IA posicionam um produto, não apenas se ele aparece.
+
+## Atribuição de marca
+
+Quando um produto não é mapeado a uma marca automaticamente, pode atribuí-lo a um concorrente ou à sua própria marca a partir da vista de detalhe do produto.
+
+Isto torna o reporting mais limpo, porque a Finseo consegue agrupar produtos por marca e domínio.
+
+## Como os produtos são descobertos
+
+Os produtos são extraídos dos resultados dos prompts rastreados. Para obter dados de produto úteis:
+
+1. Rastreie prompts com intenção de produto ou de shopping.
+2. Ative modelos que produzam respostas de shopping ou ricas em produtos.
+3. Use tags para categorias de produto e mercados.
+4. Reveja o Products e o Stores depois de os resultados dos prompts serem processados.
+
+Bons prompts:
+
+```text
+Best pressure washer for patios
+Compare Kärcher vs Nilfisk pressure washers
+Which running shoes are best for marathon training?
+Best CRM software for a 50-person SaaS team
+```
+
+## Boas práticas
+
+- Rastreie prompts de categoria de produto, não apenas prompts de marca.
+- Use o filtro **Shopping** para ver os cartões de produto e a visibilidade dos vendedores.
+- Use o filtro **Mentioned** para ver as recomendações no texto da resposta.
+- Use **In both** para encontrar os produtos com a presença de comércio de IA mais forte.
+- Verifique as lojas para ver para onde a IA envia os compradores.
+- Reveja os atributos de produto para identificar afirmações erradas, especificações em falta ou posicionamento fraco.

@@ -1,0 +1,35 @@
+---
+title: Configurar o ChatGPT
+description: Ligue a Finseo ao ChatGPT através do developer mode (apps MCP).
+---
+
+# Configurar o ChatGPT
+
+Ligue a Finseo ao ChatGPT como uma app MCP. Tal como o Claude, o ChatGPT usa OAuth — inicia sessão com a sua conta Finseo habitual.
+
+## Pré-requisitos
+
+- Uma conta Finseo num plano pago com pelo menos um projeto de tracking
+- ChatGPT Pro/Plus, Business ou Enterprise/Edu com o developer mode ativado
+
+## Configuração
+
+1. No ChatGPT, vá a **Settings → Security and login** e ative o **Developer mode** (se o toggle não estiver disponível, peça ao administrador do seu workspace)
+2. Abra **Settings → Plugins** (ou vá a [chatgpt.com/plugins](https://chatgpt.com/plugins))
+3. Clique em **+** para criar uma nova app em developer mode:
+   - **Name**: `Finseo`
+   - **Description**: `AI search visibility analytics from Finseo`
+   - **MCP server URL**: `https://api.finseo.ai/v1/mcp`
+4. Clique em **Create** — o ChatGPT deteta automaticamente o fluxo OAuth
+5. Complete o início de sessão na Finseo e clique em **Allow access**
+6. Aguarde que a análise das ferramentas termine — todas as ferramentas da Finseo aparecem
+
+## Utilização
+
+Ative a app Finseo numa conversa e depois pergunte:
+
+- "Qual é a visibilidade da minha marca na pesquisa de IA este mês?"
+- "Compara a visibilidade em IA dos meus concorrentes"
+- "Em que fontes devemos ser citados?"
+
+Todas as ferramentas são read-only.

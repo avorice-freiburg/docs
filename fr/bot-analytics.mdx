@@ -1,0 +1,167 @@
+---
+title: Bot Analytics
+description: Importe des logs serveur pour voir comment les crawlers IA accèdent à ton site web.
+---
+
+# Bot Analytics
+
+Bot Analytics montre quels crawlers IA visitent ton site, quelles pages ils demandent et si ces requêtes aboutissent. Utilise-le pour répondre à des questions concrètes :
+
+- ChatGPT, Claude, Perplexity, Google et d'autres crawlers IA peuvent-ils atteindre tes pages importantes ?
+- Quelles URLs sont crawlées le plus souvent ?
+- Les bots rencontrent-ils des redirections, des 404 ou des erreurs serveur ?
+- Un import a-t-il ajouté de nouvelles données, ou étaient-elles déjà importées auparavant ?
+
+## Ce dont tu as besoin
+
+Tu as besoin d'un log d'accès serveur du site web que tu veux analyser. Finseo accepte les fichiers `.log` et `.txt` et détecte automatiquement le format à partir des premières lignes.
+
+<Note>
+Le log doit inclure le User-Agent de la requête. Sans User-Agent, Finseo ne peut pas déterminer de façon fiable si une requête provient de ChatGPT, Claude, Perplexity, Googlebot ou d'un navigateur normal.
+</Note>
+
+## Importer un fichier de log
+
+1. Ouvre **Bot Analytics** dans le dashboard.
+2. Sélectionne le projet que tu veux analyser.
+3. Clique sur **Upload Logs**.
+4. Dépose un fichier `.log` ou `.txt` dans le dialogue d'import.
+5. Attends la fin du traitement.
+
+Finseo ne stocke que les visites de bots détectées. Les visites de bots en double sont ignorées automatiquement — tu peux donc réimporter des fichiers qui se chevauchent sans compter deux fois les mêmes requêtes.
+
+Les gros fichiers sont pris en charge jusqu'à `1GB`. Les fichiers de plus de `50MB` sont mis en file d'attente pour un traitement en arrière-plan.
+
+## Formats pris en charge
+
+Finseo détecte actuellement Nginx, les Apache combined access logs, les logs de style Cloudflare et un format de secours personnalisé.
+
+### Nginx combined access log
+
+```text
+23.98.142.45 - - [03/Oct/2025:14:23:11 +0000] "GET /blog/ai-seo-guide HTTP/1.1" 200 15234 "https://www.google.com/" "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; ChatGPT-User/1.0; +https://openai.com/bot"
+```
+
+Champs attendus :
+
+- Adresse IP
+- Horodatage au format `[DD/Mon/YYYY:HH:mm:ss +0000]`
+- Méthode HTTP et chemin
+- Code de statut HTTP
+- Taille de la réponse en octets
+- Referrer
+- User-Agent
+
+### Apache combined access log
+
+```text
+52.70.240.171 - - [03/Oct/2025:14:28:10 +0000] "GET /pricing HTTP/1.1" 200 18422 "-" "Mozilla/5.0 (compatible; ClaudeBot/1.0; +https://www.anthropic.com)"
+```
+
+Les logs Apache au format « common » sans User-Agent ne suffisent pas pour la classification des bots. Configure Apache au format combined log avant l'export.
+
+### Log de style Cloudflare
+
+```text
+2025-10-03T14:31:22Z 44.220.185.12 GET /docs 200 9310 "-" "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; PerplexityBot/1.0; +https://perplexity.ai/bot"
+```
+
+Ordre attendu :
+
+```text
+timestamp ip method path status bytes "referrer" "user-agent"
+```
+
+### Format de secours personnalisé
+
+Finseo peut aussi parser des lignes où l'IP apparaît en premier, suivie d'une requête entre guillemets, du statut, de la taille et d'un User-Agent entre guillemets.
+
+```text
+13.65.138.112 app "GET /features HTTP/1.1" 200 12482 "ChatGPT-User/1.0"
+```
+
+Si ton format est différent, exporte-le ou transforme-le dans l'un des exemples ci-dessus avant l'import.
+
+<Warning>
+Les formats Nginx personnalisés avec des champs supplémentaires, comme des champs de timing de requête entre le nombre d'octets et le referrer, peuvent ne pas être parsés. Exporte un combined access log standard quand c'est possible.
+</Warning>
+
+## Comment obtenir des logs
+
+<CodeGroup>
+
+```bash Nginx
+# Common locations
+ls /var/log/nginx/
+
+# Copy the current access log
+cp /var/log/nginx/access.log ./finseo-access.log
+
+# Optional: compress first, then extract locally before upload
+gzip -k ./finseo-access.log
+```
+
+```bash Apache
+# Debian/Ubuntu
+cp /var/log/apache2/access.log ./finseo-access.log
+
+# RHEL/CentOS/Amazon Linux
+cp /var/log/httpd/access_log ./finseo-access.log
+```
+
+```bash Docker
+# Replace container_name with your web server container
+docker logs container_name > finseo-access.log
+```
+
+</CodeGroup>
+
+Pour l'hébergement managé, cherche **Access logs**, **Raw logs**, **HTTP logs** ou **Web server logs** dans le dashboard de ton hébergeur. Télécharge le log d'accès non filtré, pas seulement les logs d'erreurs.
+
+## Fenêtre temporelle recommandée
+
+Importe d'abord les `30` à `90` derniers jours. C'est en général suffisant pour voir les schémas de crawl et les taux d'erreur. Après le premier import, tu peux ajouter de nouveaux logs chaque semaine ou chaque mois.
+
+## Ce que Finseo extrait
+
+Pour chaque requête de bot détectée, Finseo stocke :
+
+- La plateforme du bot et le nom du bot
+- L'adresse IP et le User-Agent
+- Le chemin de requête et les paramètres de query
+- Le code de statut HTTP
+- La taille de la réponse
+- Le referrer
+- L'horodatage de la visite
+
+Le dashboard regroupe ensuite ces données en :
+
+- **Visites de bots dans le temps** : tendance par bot et par date.
+- **Pages crawlées** : URLs que les bots IA ont atteintes le plus souvent.
+- **Performance** : schémas de statut de réponse et de taille de réponse.
+- **Codes de statut** : `2xx` réussis, redirections `3xx`, erreurs client `4xx` et erreurs serveur `5xx`.
+
+<Note>
+Le parser actuel d'import de logs se concentre sur le volume de crawl, les URLs, les tailles de réponse et les codes de statut HTTP. Il n'extrait pas actuellement les champs de temps de réponse des logs personnalisés.
+</Note>
+
+## Intégrations de synchronisation
+
+L'onglet **Sync** peut afficher des fournisseurs comme Cloudflare, Fastly, AWS CloudFront ou une synchronisation par API comme futures options d'ingestion. L'import manuel de fichiers `.log` et `.txt` est la voie de production actuelle.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="L'import se termine mais aucune visite de bot n'apparaît">
+    Vérifie que le fichier inclut des valeurs de User-Agent et que la fenêtre temporelle contient des requêtes de crawlers connus comme `ChatGPT-User`, `GPTBot`, `ClaudeBot`, `Claude-Web`, `PerplexityBot`, `Googlebot`, `Bingbot`, `Applebot`, `AhrefsBot` ou `SemrushBot`.
+  </Accordion>
+  <Accordion title="Mon log Apache n'est pas parsé">
+    Assure-toi d'avoir exporté le combined access log. Une ligne courte d'Apache common log manque généralement des champs referrer et User-Agent, requis pour la détection des bots.
+  </Accordion>
+  <Accordion title="Le même fichier a été importé deux fois">
+    Finseo déduplique les visites par bot, horodatage, IP et chemin de page. Réimporter des fichiers qui se chevauchent ne devrait pas gonfler tes chiffres.
+  </Accordion>
+  <Accordion title="Un gros fichier est encore en traitement">
+    Les fichiers de plus de `50MB` peuvent être traités en arrière-plan. Reviens après quelques minutes. Si le statut échoue, découpe le log en plages de dates plus petites et réimporte-le.
+  </Accordion>
+</AccordionGroup>

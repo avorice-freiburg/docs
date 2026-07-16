@@ -1,0 +1,38 @@
+---
+title: Configurar o Cursor
+description: Ligue o servidor MCP da Finseo ao Cursor IDE.
+---
+
+# Configurar o Cursor
+
+Use os dados da Finseo diretamente no Cursor para analisar a sua visibilidade em IA enquanto programa.
+
+## Pré-requisitos
+
+- Cursor IDE
+- Uma API key da Finseo com scope `read` ([obtenha uma aqui](https://app.finseo.ai/settings/api))
+
+## Configuração
+
+1. Abra as definições do Cursor
+2. Navegue até **MCP Servers**
+3. Adicione um novo servidor:
+
+```json
+{
+  "finseo": {
+    "url": "https://api.finseo.ai/v1/mcp",
+    "headers": {
+      "Authorization": "Bearer sk_live_YOUR_API_KEY"
+    }
+  }
+}
+```
+
+## Utilização
+
+No chat de IA do Cursor, pode perguntar:
+
+- "Usa a Finseo para verificar a visibilidade da minha marca"
+- "Quais são os principais concorrentes no meu projeto da Finseo?"
+- "Mostra os meus prompts rastreados e o seu desempenho"

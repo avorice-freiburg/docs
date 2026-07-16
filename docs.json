@@ -345,6 +345,606 @@
             ]
           }
         ]
+      },
+      {
+        "language": "fr",
+        "navbar": {
+          "links": [
+            {
+              "label": "Dashboard",
+              "href": "https://app.finseo.ai"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "Obtenir une clé API",
+            "href": "https://app.finseo.ai/developer"
+          }
+        },
+        "tabs": [
+          {
+            "tab": "Docs",
+            "groups": [
+              {
+                "group": "Vue d'ensemble",
+                "pages": [
+                  "fr/index",
+                  "fr/authentication",
+                  "fr/rate-limits",
+                  "fr/changelog"
+                ]
+              },
+              {
+                "group": "Prise en main",
+                "pages": [
+                  "fr/getting-started/prompts",
+                  "fr/getting-started/models"
+                ]
+              },
+              {
+                "group": "Analytics",
+                "pages": [
+                  "fr/bot-analytics",
+                  "fr/human-traffic",
+                  "fr/attribution"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Intégrations",
+            "groups": [
+              {
+                "group": "Vue d'ensemble",
+                "pages": [
+                  "fr/integrations"
+                ]
+              },
+              {
+                "group": "Connecteurs",
+                "pages": [
+                  "fr/looker-studio",
+                  "fr/search-console",
+                  "fr/products",
+                  "fr/sentiment"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "API",
+            "groups": [
+              {
+                "group": "Projects",
+                "pages": [
+                  "api-reference/projects/list",
+                  "api-reference/projects/get",
+                  "api-reference/projects/create",
+                  "api-reference/projects/update"
+                ]
+              },
+              {
+                "group": "Prompts",
+                "pages": [
+                  "api-reference/prompts/list",
+                  "api-reference/prompts/add"
+                ]
+              },
+              {
+                "group": "Metrics",
+                "pages": [
+                  "api-reference/metrics/daily",
+                  "api-reference/metrics/timeseries"
+                ]
+              },
+              {
+                "group": "Competitors",
+                "pages": [
+                  "api-reference/competitors/ranking"
+                ]
+              },
+              {
+                "group": "Sources",
+                "pages": [
+                  "api-reference/sources/ranking"
+                ]
+              },
+              {
+                "group": "Tags",
+                "pages": [
+                  "api-reference/tags/list",
+                  "api-reference/tags/create"
+                ]
+              },
+              {
+                "group": "Fan-outs",
+                "pages": [
+                  "api-reference/fanouts/list",
+                  "api-reference/fanouts/details"
+                ]
+              },
+              {
+                "group": "Export",
+                "pages": [
+                  "api-reference/export/bulk"
+                ]
+              },
+              {
+                "group": "Attribution",
+                "pages": [
+                  "api-reference/attribution/list",
+                  "api-reference/attribution/submit",
+                  "api-reference/attribution/summary",
+                  "api-reference/attribution/bulk"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "MCP",
+            "groups": [
+              {
+                "group": "Intégration MCP",
+                "pages": [
+                  "fr/mcp/overview",
+                  "fr/mcp/claude-desktop",
+                  "fr/mcp/chatgpt",
+                  "fr/mcp/cursor"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "language": "it",
+        "navbar": {
+          "links": [
+            {
+              "label": "Dashboard",
+              "href": "https://app.finseo.ai"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "Ottieni una chiave API",
+            "href": "https://app.finseo.ai/developer"
+          }
+        },
+        "tabs": [
+          {
+            "tab": "Docs",
+            "groups": [
+              {
+                "group": "Panoramica",
+                "pages": [
+                  "it/index",
+                  "it/authentication",
+                  "it/rate-limits",
+                  "it/changelog"
+                ]
+              },
+              {
+                "group": "Per iniziare",
+                "pages": [
+                  "it/getting-started/prompts",
+                  "it/getting-started/models"
+                ]
+              },
+              {
+                "group": "Analytics",
+                "pages": [
+                  "it/bot-analytics",
+                  "it/human-traffic",
+                  "it/attribution"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Integrazioni",
+            "groups": [
+              {
+                "group": "Panoramica",
+                "pages": [
+                  "it/integrations"
+                ]
+              },
+              {
+                "group": "Connettori",
+                "pages": [
+                  "it/looker-studio",
+                  "it/search-console",
+                  "it/products",
+                  "it/sentiment"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "API",
+            "groups": [
+              {
+                "group": "Projects",
+                "pages": [
+                  "api-reference/projects/list",
+                  "api-reference/projects/get",
+                  "api-reference/projects/create",
+                  "api-reference/projects/update"
+                ]
+              },
+              {
+                "group": "Prompts",
+                "pages": [
+                  "api-reference/prompts/list",
+                  "api-reference/prompts/add"
+                ]
+              },
+              {
+                "group": "Metrics",
+                "pages": [
+                  "api-reference/metrics/daily",
+                  "api-reference/metrics/timeseries"
+                ]
+              },
+              {
+                "group": "Competitors",
+                "pages": [
+                  "api-reference/competitors/ranking"
+                ]
+              },
+              {
+                "group": "Sources",
+                "pages": [
+                  "api-reference/sources/ranking"
+                ]
+              },
+              {
+                "group": "Tags",
+                "pages": [
+                  "api-reference/tags/list",
+                  "api-reference/tags/create"
+                ]
+              },
+              {
+                "group": "Fan-outs",
+                "pages": [
+                  "api-reference/fanouts/list",
+                  "api-reference/fanouts/details"
+                ]
+              },
+              {
+                "group": "Export",
+                "pages": [
+                  "api-reference/export/bulk"
+                ]
+              },
+              {
+                "group": "Attribution",
+                "pages": [
+                  "api-reference/attribution/list",
+                  "api-reference/attribution/submit",
+                  "api-reference/attribution/summary",
+                  "api-reference/attribution/bulk"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "MCP",
+            "groups": [
+              {
+                "group": "Integrazione MCP",
+                "pages": [
+                  "it/mcp/overview",
+                  "it/mcp/claude-desktop",
+                  "it/mcp/chatgpt",
+                  "it/mcp/cursor"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "language": "es",
+        "navbar": {
+          "links": [
+            {
+              "label": "Dashboard",
+              "href": "https://app.finseo.ai"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "Obtener clave API",
+            "href": "https://app.finseo.ai/developer"
+          }
+        },
+        "tabs": [
+          {
+            "tab": "Docs",
+            "groups": [
+              {
+                "group": "Descripción general",
+                "pages": [
+                  "es/index",
+                  "es/authentication",
+                  "es/rate-limits",
+                  "es/changelog"
+                ]
+              },
+              {
+                "group": "Primeros pasos",
+                "pages": [
+                  "es/getting-started/prompts",
+                  "es/getting-started/models"
+                ]
+              },
+              {
+                "group": "Analytics",
+                "pages": [
+                  "es/bot-analytics",
+                  "es/human-traffic",
+                  "es/attribution"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Integraciones",
+            "groups": [
+              {
+                "group": "Descripción general",
+                "pages": [
+                  "es/integrations"
+                ]
+              },
+              {
+                "group": "Conectores",
+                "pages": [
+                  "es/looker-studio",
+                  "es/search-console",
+                  "es/products",
+                  "es/sentiment"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "API",
+            "groups": [
+              {
+                "group": "Projects",
+                "pages": [
+                  "api-reference/projects/list",
+                  "api-reference/projects/get",
+                  "api-reference/projects/create",
+                  "api-reference/projects/update"
+                ]
+              },
+              {
+                "group": "Prompts",
+                "pages": [
+                  "api-reference/prompts/list",
+                  "api-reference/prompts/add"
+                ]
+              },
+              {
+                "group": "Metrics",
+                "pages": [
+                  "api-reference/metrics/daily",
+                  "api-reference/metrics/timeseries"
+                ]
+              },
+              {
+                "group": "Competitors",
+                "pages": [
+                  "api-reference/competitors/ranking"
+                ]
+              },
+              {
+                "group": "Sources",
+                "pages": [
+                  "api-reference/sources/ranking"
+                ]
+              },
+              {
+                "group": "Tags",
+                "pages": [
+                  "api-reference/tags/list",
+                  "api-reference/tags/create"
+                ]
+              },
+              {
+                "group": "Fan-outs",
+                "pages": [
+                  "api-reference/fanouts/list",
+                  "api-reference/fanouts/details"
+                ]
+              },
+              {
+                "group": "Export",
+                "pages": [
+                  "api-reference/export/bulk"
+                ]
+              },
+              {
+                "group": "Attribution",
+                "pages": [
+                  "api-reference/attribution/list",
+                  "api-reference/attribution/submit",
+                  "api-reference/attribution/summary",
+                  "api-reference/attribution/bulk"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "MCP",
+            "groups": [
+              {
+                "group": "Integración MCP",
+                "pages": [
+                  "es/mcp/overview",
+                  "es/mcp/claude-desktop",
+                  "es/mcp/chatgpt",
+                  "es/mcp/cursor"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "language": "pt",
+        "navbar": {
+          "links": [
+            {
+              "label": "Dashboard",
+              "href": "https://app.finseo.ai"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "Obter chave de API",
+            "href": "https://app.finseo.ai/developer"
+          }
+        },
+        "tabs": [
+          {
+            "tab": "Docs",
+            "groups": [
+              {
+                "group": "Visão geral",
+                "pages": [
+                  "pt/index",
+                  "pt/authentication",
+                  "pt/rate-limits",
+                  "pt/changelog"
+                ]
+              },
+              {
+                "group": "Primeiros passos",
+                "pages": [
+                  "pt/getting-started/prompts",
+                  "pt/getting-started/models"
+                ]
+              },
+              {
+                "group": "Analytics",
+                "pages": [
+                  "pt/bot-analytics",
+                  "pt/human-traffic",
+                  "pt/attribution"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Integrações",
+            "groups": [
+              {
+                "group": "Visão geral",
+                "pages": [
+                  "pt/integrations"
+                ]
+              },
+              {
+                "group": "Conectores",
+                "pages": [
+                  "pt/looker-studio",
+                  "pt/search-console",
+                  "pt/products",
+                  "pt/sentiment"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "API",
+            "groups": [
+              {
+                "group": "Projects",
+                "pages": [
+                  "api-reference/projects/list",
+                  "api-reference/projects/get",
+                  "api-reference/projects/create",
+                  "api-reference/projects/update"
+                ]
+              },
+              {
+                "group": "Prompts",
+                "pages": [
+                  "api-reference/prompts/list",
+                  "api-reference/prompts/add"
+                ]
+              },
+              {
+                "group": "Metrics",
+                "pages": [
+                  "api-reference/metrics/daily",
+                  "api-reference/metrics/timeseries"
+                ]
+              },
+              {
+                "group": "Competitors",
+                "pages": [
+                  "api-reference/competitors/ranking"
+                ]
+              },
+              {
+                "group": "Sources",
+                "pages": [
+                  "api-reference/sources/ranking"
+                ]
+              },
+              {
+                "group": "Tags",
+                "pages": [
+                  "api-reference/tags/list",
+                  "api-reference/tags/create"
+                ]
+              },
+              {
+                "group": "Fan-outs",
+                "pages": [
+                  "api-reference/fanouts/list",
+                  "api-reference/fanouts/details"
+                ]
+              },
+              {
+                "group": "Export",
+                "pages": [
+                  "api-reference/export/bulk"
+                ]
+              },
+              {
+                "group": "Attribution",
+                "pages": [
+                  "api-reference/attribution/list",
+                  "api-reference/attribution/submit",
+                  "api-reference/attribution/summary",
+                  "api-reference/attribution/bulk"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "MCP",
+            "groups": [
+              {
+                "group": "Integração MCP",
+                "pages": [
+                  "pt/mcp/overview",
+                  "pt/mcp/claude-desktop",
+                  "pt/mcp/chatgpt",
+                  "pt/mcp/cursor"
+                ]
+              }
+            ]
+          }
+        ]
       }
     ]
   }

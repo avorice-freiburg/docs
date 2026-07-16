@@ -1,0 +1,76 @@
+---
+title: Looker Studio Connector
+description: Verbinde deine Finseo-Daten zur KI-Suchsichtbarkeit mit Google Looker Studio.
+---
+
+# Looker Studio Connector
+
+Mit dem Finseo Community Connector importierst du deine Daten zur KI-Suchsichtbarkeit direkt in [Google Looker Studio](https://lookerstudio.google.com/). Baue eigene Dashboards und Kunden-Reports mit deinen Marken-Performance-Daten aus ChatGPT, Perplexity, Google AI Overviews, Gemini und Grok.
+
+## Was du brauchst
+
+- Einen Finseo-Account mit Bezahlplan und mindestens einem Tracking-Projekt
+- Einen Finseo-API-Key mit `read`-Scope — erstelle ihn im Dashboard unter **Settings → API → Create Key**
+- Einen Google-Account mit Zugriff auf Looker Studio
+
+## Setup-Anleitung
+
+<Steps>
+  <Step title="Finseo-Connector öffnen">
+    Öffne den [Finseo-Connector-Link](https://lookerstudio.google.com/datasources/create?connectorId=AKfycbwXSLOjOTGG-4Ftyfs0VPxExJ14Vgj5ry6Jl3MRq6o), während du mit deinem Google-Account angemeldet bist.
+  </Step>
+  <Step title="Connector autorisieren">
+    Google fragt einmalig nach einer Autorisierung, damit der Connector Daten in deinem Namen abrufen kann. Klicke auf **Authorize** und bestätige.
+  </Step>
+  <Step title="Finseo-API-Key eingeben">
+    Füge deinen API-Key ein (beginnt mit `sk_live_`) und klicke auf **Submit**. Falls du noch keinen hast, erstelle einen unter **Settings → API → Create Key**.
+  </Step>
+  <Step title="Datenquelle konfigurieren">
+    Wähle dein **Projekt**, einen **Report-Typ** und optional einen **KI-Modell-Filter** sowie einen **Tag-Filter** (kommagetrennt).
+  </Step>
+  <Step title="Verbinden und Report bauen">
+    Klicke auf **Connect**, prüfe die Feldliste und dann **Create Report**. Den Zeitraum steuerst du über die Datumsauswahl in Looker Studio.
+  </Step>
+</Steps>
+
+Dein API-Key wird von Looker Studio pro Google-Nutzer gespeichert. Über **Edit connection** kannst du ihn jederzeit ersetzen.
+
+## Report-Typen
+
+| Report-Typ | Zeilen | Ideal für |
+|---|---|---|
+| **Sichtbarkeit pro Tag** | Eine Zeile pro Tag: Sichtbarkeitsrate, Marken-Mentions, analysierte Antworten, durchschnittliche Position, Sentiment | Trend-Charts, Scorecards, Zeitraumvergleiche |
+| **Wettbewerber-Ranking** | Top 50 Wettbewerber im gewählten Zeitraum mit Mentions, Sichtbarkeitsrate, Position und Sentiment | Wettbewerber-Balkendiagramme und Tabellen |
+| **Meistzitierte Quellen** | Top 50 zitierte Quellen mit Citations, Citation-Rate und Quellentyp | Quellen-Tabellen, Citation-Share-Kreisdiagramme |
+| **Prompt-Performance** | Eine Zeile pro getracktem Prompt mit Sichtbarkeit, Mentions, Position, Sentiment, Citations der eigenen Domain und Top-Marke | Tabellen auf Prompt-Ebene, Tag-Auswertungen |
+| **Query-Fan-outs** | Suchanfragen, die KI-Modelle beim Beantworten deiner Prompts ausgeführt haben, mit Häufigkeit | Fan-out-Keyword-Tabellen |
+
+Die Datumsauswahl in Looker Studio steuert den Zeitraum (bis zu 90 Tage). Alle Report-Typen liefern dieselben Zahlen, die du im Finseo-Dashboard siehst.
+
+Der optionale **Tag-Filter** (kommagetrennt, z. B. `Nonbrand, Kaufberatung`) beschränkt jeden Report-Typ auf Prompts, die mindestens einen dieser Tags tragen — praktisch für getrennte Branded- vs. Non-Branded-Report-Seiten.
+
+## Verfügbare Felder
+
+**Sichtbarkeit pro Tag**: Datum, Sichtbarkeit % (Dashboard-KPI), Marken-Mentions, analysierte KI-Antworten, Ø Position %, Sentiment-Score, getrackte Prompts
+
+**Wettbewerber-Ranking**: Rang, Wettbewerber, Domain, Ist deine Marke, Mentions, Sichtbarkeitsrate %, Ø Position %, Sentiment-Score
+
+**Meistzitierte Quellen**: Rang, Quellen-Domain, Quellen-URL, Quellentyp, URL-Typ, Citations, zitierende Prompts, Citation-Rate %
+
+**Prompt-Performance**: Prompt, Tags, Sprache, Marke sichtbar, Top-Marke, Marken-Mentions, Ø Position %, Sentiment-Score, Citations der eigenen Domain, analysierte KI-Antworten, gefundene Wettbewerber, gefundene Quellen
+
+**Query-Fan-outs**: Fan-out-Query, Modelle, Beispiel-Prompt, zuletzt gesehen, Häufigkeit, auslösende Prompts
+
+## Tipps
+
+- Nutze eine Datenquelle pro Projekt und Report-Typ. Du kannst mehrere Datenquellen in einem Report kombinieren, etwa den Tagestrend mit dem Wettbewerber-Ranking.
+- Blende die Sichtbarkeits-Datenquelle mit deinen Search-Console-Daten, um klassische Suche und KI-Suche nebeneinander zu vergleichen.
+- Antworten werden fünf Minuten gecacht — ganz frische Tracking-Läufe können daher einen Moment brauchen, bis sie erscheinen.
+
+## Troubleshooting
+
+- **„Invalid credentials"** — dein API-Key wurde widerrufen, ist abgelaufen oder hat keinen `read`-Scope. Erstelle unter **Settings → API** einen neuen Key.
+- **Projekt fehlt im Dropdown** — der Key ist auf bestimmte Projekte beschränkt. Erstelle einen Key mit Zugriff auf alle Projekte oder füge das Projekt zum Key hinzu.
+- **Leerer Report** — prüfe den Zeitraum: Der Connector liefert Daten für Tage, an denen dein Projekt tatsächlich KI-Antworten gesammelt hat.
+
+Brauchst du Hilfe? Wende dich an den [Support](https://docs.finseo.ai) oder deinen Finseo Account Manager.

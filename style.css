@@ -1,3 +1,26 @@
+/* Finseo CI — matches finseo.ai (cream light mode, warm anthracite dark mode) */
+
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&display=swap");
+
+:root {
+  --finseo-green: #0eca7b;
+  --finseo-cream: #FAF9F5;
+  --finseo-cream-dark: #F1EEE9;
+  --finseo-anthracite: #1C1C1C;
+  --finseo-anthracite-card: #171717;
+  --finseo-anthracite-border: #232323;
+}
+
+/* Code in Geist Mono to match the site (falls back to Mintlify default if blocked) */
+code, kbd, pre, samp {
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* Brand-green text selection */
+::selection {
+  background: rgba(14, 202, 123, 0.25);
+}
+
 /* Make navbar logo smaller */
 nav img[alt*="logo" i],
 nav img[src*="/logo/"],

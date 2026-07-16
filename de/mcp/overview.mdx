@@ -1,0 +1,66 @@
+---
+title: MCP-Integration
+description: Verbinde Finseo mit KI-Assistenten wie Claude, ChatGPT und Cursor.
+---
+
+# MCP-Integration
+
+Finseo stellt einen Model-Context-Protocol-Server (MCP) bereit, über den KI-Assistenten deine Sichtbarkeitsdaten direkt abfragen können.
+
+## Was ist MCP?
+
+MCP (Model Context Protocol) ist ein Standard, um KI-Modelle mit externen Datenquellen zu verbinden. Mit dem Finseo MCP-Server stellst du Claude, ChatGPT oder Cursor natürliche Fragen zu deiner KI-Sichtbarkeit — ganz ohne Code.
+
+**Beispiel**: Öffne Claude und frag:
+
+> „Wie hat sich meine Markensichtbarkeit in den letzten 30 Tagen verändert? Welche Wettbewerber liegen vor mir?"
+
+Claude fragt automatisch deine Finseo-Daten ab und liefert die Analyse.
+
+## Setup-Guides
+
+- [Claude (claude.ai, Desktop, Code)](/de/mcp/claude-desktop) — OAuth, kein API-Key nötig
+- [ChatGPT (Developer Mode)](/de/mcp/chatgpt) — OAuth, kein API-Key nötig
+- [Cursor](/de/mcp/cursor) — API-Key via Header
+
+## Authentifizierung
+
+Der MCP-Server unterstützt zwei Authentifizierungsmethoden:
+
+| Methode | Am besten für | So geht's |
+|--------|----------|-----|
+| **OAuth 2.1** | Claude, ChatGPT | Server-URL hinzufügen und mit deinem Finseo-Account anmelden — der Server unterstützt Dynamic Client Registration und PKCE |
+| **API-Key** | Cursor, eigene Clients | Sende `Authorization: Bearer sk_live_...` ([Key erstellen](https://app.finseo.ai/settings/api)) |
+
+## Verfügbare Tools
+
+Alle Tools sind **read-only** — sie rufen Daten ab und ändern nie etwas.
+
+| Tool | Beschreibung |
+|------|-------------|
+| `list_projects` | Alle deine Projekte auflisten |
+| `get_visibility_metrics` | Sichtbarkeits-KPIs inkl. der Dashboard-„Visibility"-Rate und dem „Citations"-KPI für die eigene Domain, mit Vergleich zur Vorperiode |
+| `get_visibility_timeseries` | Sichtbarkeit, Mentions, Position und Sentiment pro Tag (dieselben Werte wie im Dashboard-Chart) |
+| `list_prompts` | Getrackte Prompts mit Metriken, Top-Wettbewerbern und Citations pro Prompt |
+| `get_competitor_ranking` | Sichtbarkeits-Ranking der Wettbewerber über alle KI-Modelle |
+| `get_top_sources` | Meistzitierte Quellen mit Citation-Anzahl und Quellentyp |
+| `get_tags` | Tags mit Prompt-Anzahl auflisten |
+| `get_query_fanouts` | KI-Query-Fan-outs (Sub-Queries), nach Häufigkeit sortiert |
+
+Die Analytics-Tools akzeptieren optionale Filter für `model` (z. B. `chatgpt`, `perplexity`, `ai_overview`, `gemini`, `grok`) und `tags` — dieselben Filter wie im Dashboard.
+
+### Metrik-Definitionen
+
+Die Tools liefern dieselben Zahlen wie das Finseo Dashboard und benennen sie explizit:
+
+- **`visibilityRatePercent`** — Anteil der analysierten KI-Antworten, die deine Marke erwähnen (der „Visibility"-KPI im Dashboard)
+- **`promptCoveragePercent`** — Anteil der getrackten Prompts mit mindestens einer Mention (eine andere, meist höhere Zahl)
+- **`ownDomainCitations.total`** — KI-Antworten, die deine eigene Domain als Quelle zitieren (der „Citations"-KPI im Dashboard)
+
+## Endpoint
+
+```
+POST https://api.finseo.ai/v1/mcp
+```
+
+Der Server implementiert JSON-RPC 2.0 über Streamable HTTP und unterstützt `initialize`, `tools/list` und `tools/call`. Nicht authentifizierte Requests erhalten eine `401` mit OAuth-Discovery-Metadaten gemäß der MCP-Authorization-Spec (RFC 9728).

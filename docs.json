@@ -2,36 +2,159 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Finseo",
-  "colors": { "primary": "#0eca7b", "light": "#0eca7b", "dark": "#0a9956" },
+  "colors": {
+    "primary": "#0eca7b",
+    "light": "#0eca7b",
+    "dark": "#0a9956"
+  },
   "favicon": "/favicon.svg",
-  "logo": { "light": "/logo/light.svg", "dark": "/logo/dark.svg" },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
   "styling": {
     "codeblocks": "system"
   },
-  "css": ["/style.css"],
+  "css": [
+    "/style.css"
+  ],
   "navbar": {
-    "links": [{ "label": "Dashboard", "href": "https://app.finseo.ai" }],
-    "primary": { "type": "button", "label": "Get API Key", "href": "https://app.finseo.ai/developer" }
+    "links": [
+      {
+        "label": "Dashboard",
+        "href": "https://app.finseo.ai"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Get API Key",
+      "href": "https://app.finseo.ai/developer"
+    }
   },
   "navigation": {
     "tabs": [
-      { "tab": "Docs", "groups": [
-        { "group": "Overview", "pages": ["index", "authentication", "rate-limits", "changelog"] },
-        { "group": "Getting Started", "pages": ["getting-started/prompts", "getting-started/models"] },
-        { "group": "Analytics", "pages": ["bot-analytics", "human-traffic", "attribution", "integrations", "looker-studio", "search-console", "products", "sentiment"] }
-      ] },
-      { "tab": "API", "groups": [
-        { "group": "Projects", "pages": ["api-reference/projects/list", "api-reference/projects/get", "api-reference/projects/create", "api-reference/projects/update"] },
-        { "group": "Prompts", "pages": ["api-reference/prompts/list", "api-reference/prompts/add"] },
-        { "group": "Metrics", "pages": ["api-reference/metrics/daily", "api-reference/metrics/timeseries"] },
-        { "group": "Competitors", "pages": ["api-reference/competitors/ranking"] },
-        { "group": "Sources", "pages": ["api-reference/sources/ranking"] },
-        { "group": "Tags", "pages": ["api-reference/tags/list", "api-reference/tags/create"] },
-        { "group": "Fan-outs", "pages": ["api-reference/fanouts/list", "api-reference/fanouts/details"] },
-        { "group": "Export", "pages": ["api-reference/export/bulk"] },
-        { "group": "Attribution", "pages": ["api-reference/attribution/list", "api-reference/attribution/submit", "api-reference/attribution/summary", "api-reference/attribution/bulk"] }
-      ]},
-      { "tab": "MCP", "groups": [{ "group": "MCP Integration", "pages": ["mcp/overview", "mcp/claude-desktop", "mcp/chatgpt", "mcp/cursor"] }] }
+      {
+        "tab": "Docs",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "index",
+              "authentication",
+              "rate-limits",
+              "changelog"
+            ]
+          },
+          {
+            "group": "Getting Started",
+            "pages": [
+              "getting-started/prompts",
+              "getting-started/models"
+            ]
+          },
+          {
+            "group": "Analytics",
+            "pages": [
+              "bot-analytics",
+              "human-traffic",
+              "attribution"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              "integrations",
+              "looker-studio",
+              "search-console",
+              "products",
+              "sentiment"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API",
+        "groups": [
+          {
+            "group": "Projects",
+            "pages": [
+              "api-reference/projects/list",
+              "api-reference/projects/get",
+              "api-reference/projects/create",
+              "api-reference/projects/update"
+            ]
+          },
+          {
+            "group": "Prompts",
+            "pages": [
+              "api-reference/prompts/list",
+              "api-reference/prompts/add"
+            ]
+          },
+          {
+            "group": "Metrics",
+            "pages": [
+              "api-reference/metrics/daily",
+              "api-reference/metrics/timeseries"
+            ]
+          },
+          {
+            "group": "Competitors",
+            "pages": [
+              "api-reference/competitors/ranking"
+            ]
+          },
+          {
+            "group": "Sources",
+            "pages": [
+              "api-reference/sources/ranking"
+            ]
+          },
+          {
+            "group": "Tags",
+            "pages": [
+              "api-reference/tags/list",
+              "api-reference/tags/create"
+            ]
+          },
+          {
+            "group": "Fan-outs",
+            "pages": [
+              "api-reference/fanouts/list",
+              "api-reference/fanouts/details"
+            ]
+          },
+          {
+            "group": "Export",
+            "pages": [
+              "api-reference/export/bulk"
+            ]
+          },
+          {
+            "group": "Attribution",
+            "pages": [
+              "api-reference/attribution/list",
+              "api-reference/attribution/submit",
+              "api-reference/attribution/summary",
+              "api-reference/attribution/bulk"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "MCP",
+        "groups": [
+          {
+            "group": "MCP Integration",
+            "pages": [
+              "mcp/overview",
+              "mcp/claude-desktop",
+              "mcp/chatgpt",
+              "mcp/cursor"
+            ]
+          }
+        ]
+      }
     ]
   },
   "api": {
@@ -45,5 +168,10 @@
       "display": "interactive"
     }
   },
-  "footer": { "socials": { "website": "https://finseo.ai", "linkedin": "https://linkedin.com/company/finseo" } }
+  "footer": {
+    "socials": {
+      "website": "https://finseo.ai",
+      "linkedin": "https://linkedin.com/company/finseo"
+    }
+  }
 }

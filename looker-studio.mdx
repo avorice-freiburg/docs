@@ -13,13 +13,25 @@ The Finseo community connector lets you import your AI search visibility data di
 - A Finseo API key with `read` scope — create one in the dashboard under **Settings → API → Create Key**
 - A Google account with access to Looker Studio
 
-## Set up the connector
+## Setup guide
 
-1. Open the [Finseo connector link](https://lookerstudio.google.com/datasources/create?connectorId=AKfycbwXSLOjOTGG-4Ftyfs0VPxExJ14Vgj5ry6Jl3MRq6o) (signed in with your Google account)
-2. Authorize the connector when Google asks (one time)
-3. Paste your Finseo API key and click **Submit**
-4. Choose your **project**, a **report type** and optionally an **AI model filter** and a **tag filter**
-5. Click **Connect**, then **Create Report**
+<Steps>
+  <Step title="Open the Finseo connector">
+    Open the [Finseo connector link](https://lookerstudio.google.com/datasources/create?connectorId=AKfycbwXSLOjOTGG-4Ftyfs0VPxExJ14Vgj5ry6Jl3MRq6o) while signed in with your Google account.
+  </Step>
+  <Step title="Authorize the connector">
+    Google asks for a one-time authorization so the connector can fetch data on your behalf. Click **Authorize** and confirm.
+  </Step>
+  <Step title="Enter your Finseo API key">
+    Paste your API key (starts with `sk_live_`) and click **Submit**. Create one under **Settings → API → Create Key** if you don't have one yet.
+  </Step>
+  <Step title="Configure the data source">
+    Choose your **project**, a **report type** and optionally an **AI model filter** and a **tag filter** (comma-separated).
+  </Step>
+  <Step title="Connect and build">
+    Click **Connect**, review the field list, then **Create Report**. Use the Looker Studio date range picker to control the timeframe.
+  </Step>
+</Steps>
 
 Your API key is stored per Google user by Looker Studio. You can replace it anytime via **Edit connection**.
 

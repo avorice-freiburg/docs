@@ -18,7 +18,7 @@ The Finseo community connector lets you import your AI search visibility data di
 1. Open the [Finseo connector link](https://lookerstudio.google.com/datasources/create?connectorId=AKfycbwXSLOjOTGG-4Ftyfs0VPxExJ14Vgj5ry6Jl3MRq6o) (signed in with your Google account)
 2. Authorize the connector when Google asks (one time)
 3. Paste your Finseo API key and click **Submit**
-4. Choose your **project**, a **report type** and optionally an **AI model filter**
+4. Choose your **project**, a **report type** and optionally an **AI model filter** and a **tag filter**
 5. Click **Connect**, then **Create Report**
 
 Your API key is stored per Google user by Looker Studio. You can replace it anytime via **Edit connection**.
@@ -30,8 +30,12 @@ Your API key is stored per Google user by Looker Studio. You can replace it anyt
 | **Visibility per day** | One row per day: visibility rate, brand mentions, answers analyzed, average position, sentiment | Trend charts, scorecards, period comparisons |
 | **Competitor ranking** | Top 50 competitors in the selected date range with mentions, visibility rate, position and sentiment | Competitor bar charts and tables |
 | **Top cited sources** | Top 50 cited sources with citations, citation rate and source type | Source tables, citation share pies |
+| **Prompt performance** | One row per tracked prompt with visibility, mentions, position, sentiment, own-domain citations and top brand | Prompt-level tables, tag breakdowns |
+| **Query fan-outs** | Search queries AI models ran while answering your prompts, with occurrences | Fan-out keyword tables |
 
 The date range picker in Looker Studio controls the timeframe (up to 90 days). All report types return the same numbers you see in the Finseo dashboard.
+
+The optional **tag filter** (comma-separated, e.g. `Nonbrand, Kaufberatung`) limits every report type to prompts carrying at least one of those tags — useful for separate branded vs. non-branded report pages.
 
 ## Available fields
 
@@ -40,6 +44,10 @@ The date range picker in Looker Studio controls the timeframe (up to 90 days). A
 **Competitor ranking**: Rank, Competitor, Domain, Is your brand, Mentions, Visibility rate %, Avg. position %, Sentiment score
 
 **Top cited sources**: Rank, Source domain, Source URL, Source type, URL type, Citations, Prompts citing, Citation rate %
+
+**Prompt performance**: Prompt, Tags, Language, Brand visible, Top brand, Brand mentions, Avg. position %, Sentiment score, Own domain citations, AI answers analyzed, Competitors found, Sources found
+
+**Query fan-outs**: Fan-out query, Models, Sample prompt, Last seen, Occurrences, Prompts triggering
 
 ## Tips
 

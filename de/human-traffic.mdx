@@ -1,0 +1,145 @@
+---
+title: Human Traffic
+description: Verbinde Analytics-Daten und miss Besuche, Conversions und Umsatz von KI-Plattformen.
+---
+
+# Human Traffic
+
+Human Traffic zeigt echte Website-Sessions, die von KI-Plattformen wie ChatGPT, Claude, Perplexity, Gemini, Copilot, DeepSeek, Mistral, Meta AI, Grok, You.com und Poe kamen.
+
+Damit siehst du, ob KI-Sichtbarkeit tatsächlich zu Besuchern, Conversions und Umsatz führt.
+
+## Was Human Traffic misst
+
+Finseo liest deine Analytics-Daten und filtert Sessions heraus, deren Quelle wie eine KI-Plattform aussieht.
+
+Das Dashboard kann anzeigen:
+
+- Sessions von KI-Plattformen
+- Nutzer von KI-Plattformen
+- Conversions
+- Umsatz
+- Conversion-Rate
+- Top-KI-Traffic-Quellen
+- Trends über Zeit
+- Conversion-Zahlen pro Event
+
+## Analytics verbinden
+
+1. Öffne **Human Traffic**.
+2. Wähle dein Projekt.
+3. Klicke auf **Connect Analytics**.
+4. Wähle **Google Analytics 4** oder **Piwik PRO**.
+5. Durchlaufe den Autorisierungs-Flow des Anbieters.
+6. Wähle die Property oder Website, die zum Projekt gehört.
+
+Sobald die Verbindung gespeichert ist, fragt Finseo die Analytics-Daten für den gewählten Zeitraum ab und filtert nach KI-bezogenen Quellen.
+
+## Unterstützte Anbieter
+
+<CardGroup cols={2}>
+  <Card title="Google Analytics 4" icon="chart-line">
+    Nutzt die GA4 Data API, um Sessions, Nutzer, Conversions und Kaufumsatz nach Quelle und Datum auszulesen.
+  </Card>
+  <Card title="Piwik PRO" icon="chart-simple">
+    Nutzt Piwik-PRO-Reports mit derselben Filterlogik für KI-Quellen.
+  </Card>
+</CardGroup>
+
+## KI-Quellen, die Finseo erkennt
+
+Finseo normalisiert Quellennamen zu lesbaren Modellnamen. Beispiele:
+
+| Rohquelle enthält | Angezeigt als |
+| --- | --- |
+| `chatgpt`, `openai`, `chat.openai` | ChatGPT |
+| `claude`, `anthropic` | Claude |
+| `perplexity`, `pplx` | Perplexity |
+| `gemini`, `bard` | Google Gemini |
+| `copilot`, `microsoft copilot` | Copilot |
+| `deepseek` | DeepSeek |
+| `mistral` | Mistral |
+| `llama`, `meta.ai`, `meta-ai` | Meta AI |
+| `grok`, `xai`, `x.ai` | Grok |
+| `you.com` | You.com |
+| `poe` | Poe |
+
+Normaler organischer Google-Traffic wird ausgeschlossen, außer er erscheint als KI-spezifische Quelle wie Google AI Mode oder Gemini.
+
+## Erkennung mit UTM-Tags verbessern
+
+KI-Plattformen senden nicht immer saubere Referrer-Daten. Wenn du Links kontrollierst, die in KI-optimierten Inhalten auftauchen, nutze UTM-Parameter, damit Analytics die Quelle eindeutig zuordnen kann.
+
+```text
+https://example.com/pricing?utm_source=chatgpt&utm_medium=ai&utm_campaign=ai_visibility
+```
+
+Empfohlene Werte:
+
+| Parameter | Beispiel |
+| --- | --- |
+| `utm_source` | `chatgpt`, `perplexity`, `claude`, `gemini`, `copilot` |
+| `utm_medium` | `ai` |
+| `utm_campaign` | `ai_visibility`, `brand_mentions`, `comparison_pages` |
+
+## Conversions tracken
+
+Human Traffic kann Conversions und Conversion-Zahlen pro Event anzeigen, sofern deine Analytics-Property bereits Conversion-Events erfasst.
+
+Markiere in GA4 die wichtigen Events als Key Events bzw. Conversions, zum Beispiel:
+
+- `generate_lead`
+- `sign_up`
+- `purchase`
+- `book_demo`
+- `form_submit`
+
+Nutze dann Human Traffic, um KI-attribuierte Conversions nach Event zu filtern oder zu vergleichen.
+
+## Umsatz
+
+Der Umsatz wird aus dem verbundenen Analytics-Anbieter gelesen. Bei GA4 nutzt Finseo den Kaufumsatz, sofern verfügbar.
+
+Wenn du keinen Umsatz siehst:
+
+- Prüfe, ob E-Commerce-Umsatz in GA4 oder Piwik PRO konfiguriert ist.
+- Prüfe, ob Kauf- oder Deal-Events mit derselben Property verbunden sind.
+- Stelle sicher, dass es im gewählten Zeitraum KI-attribuierte Sessions gibt.
+
+## Zeiträume und Metriken
+
+Du kannst die Dashboard-Metrik umschalten zwischen:
+
+- `sessions`
+- `conversions`
+- `revenue`
+
+Außerdem stehen dir voreingestellte oder eigene Zeiträume zur Verfügung. Finseo vergleicht Zeiträume, um Veränderungen über Zeit zu zeigen.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Die Seite meldet, dass keine Analytics-Verbindung gefunden wurde">
+    Verbinde Google Analytics 4 oder Piwik PRO für das gewählte Projekt. Verbindungen sind projektspezifisch — ein verbundenes Projekt verbindet nicht automatisch alle anderen.
+  </Accordion>
+  <Accordion title="Analytics ist verbunden, aber es erscheint kein KI-Traffic">
+    Erweitere zuerst den Zeitraum. Prüfe dann, ob deine Analytics-Quellennamen Werte wie `chatgpt`, `perplexity`, `claude`, `gemini`, `copilot`, `deepseek` oder `mistral` enthalten.
+  </Accordion>
+  <Accordion title="Conversions sind null">
+    Stelle sicher, dass Conversion-Events bei deinem Analytics-Anbieter konfiguriert sind und dass diese Events in KI-attribuierten Sessions stattgefunden haben.
+  </Accordion>
+  <Accordion title="Umsatz ist null">
+    Stelle sicher, dass E-Commerce- oder Kaufumsatz an deinen Analytics-Anbieter gesendet wird. Finseo kann keinen Umsatz ableiten, wenn der Anbieter ihn nicht speichert.
+  </Accordion>
+</AccordionGroup>
+
+## Human Traffic vs. Bot-Traffic
+
+Human Traffic und Bot Analytics beantworten unterschiedliche Fragen.
+
+| Feature | Was es misst | Datenquelle |
+| --- | --- | --- |
+| Human Traffic | Echte Besucher, Conversions und Umsatz von KI-Plattformen | GA4 oder Piwik PRO |
+| Bot Analytics | KI-Crawler-Anfragen an deine Website | Server-Access-Logs |
+
+Nutze beides zusammen für das Gesamtbild: Crawler zeigen, ob KI-Systeme auf deine Inhalte zugreifen können, und Human Traffic zeigt, ob KI-Plattformen Besucher und Umsatz liefern.

@@ -12,151 +12,21 @@
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
   },
+  "fonts": {
+    "family": "Geist"
+  },
+  "background": {
+    "color": {
+      "light": "#FAF9F5",
+      "dark": "#1C1C1C"
+    }
+  },
   "styling": {
     "codeblocks": "system"
   },
   "css": [
     "/style.css"
   ],
-  "navbar": {
-    "links": [
-      {
-        "label": "Dashboard",
-        "href": "https://app.finseo.ai"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Get API Key",
-      "href": "https://app.finseo.ai/developer"
-    }
-  },
-  "navigation": {
-    "tabs": [
-      {
-        "tab": "Docs",
-        "groups": [
-          {
-            "group": "Overview",
-            "pages": [
-              "index",
-              "authentication",
-              "rate-limits",
-              "changelog"
-            ]
-          },
-          {
-            "group": "Getting Started",
-            "pages": [
-              "getting-started/prompts",
-              "getting-started/models"
-            ]
-          },
-          {
-            "group": "Analytics",
-            "pages": [
-              "bot-analytics",
-              "human-traffic",
-              "attribution"
-            ]
-          },
-          {
-            "group": "Integrations",
-            "pages": [
-              "integrations",
-              "looker-studio",
-              "search-console",
-              "products",
-              "sentiment"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API",
-        "groups": [
-          {
-            "group": "Projects",
-            "pages": [
-              "api-reference/projects/list",
-              "api-reference/projects/get",
-              "api-reference/projects/create",
-              "api-reference/projects/update"
-            ]
-          },
-          {
-            "group": "Prompts",
-            "pages": [
-              "api-reference/prompts/list",
-              "api-reference/prompts/add"
-            ]
-          },
-          {
-            "group": "Metrics",
-            "pages": [
-              "api-reference/metrics/daily",
-              "api-reference/metrics/timeseries"
-            ]
-          },
-          {
-            "group": "Competitors",
-            "pages": [
-              "api-reference/competitors/ranking"
-            ]
-          },
-          {
-            "group": "Sources",
-            "pages": [
-              "api-reference/sources/ranking"
-            ]
-          },
-          {
-            "group": "Tags",
-            "pages": [
-              "api-reference/tags/list",
-              "api-reference/tags/create"
-            ]
-          },
-          {
-            "group": "Fan-outs",
-            "pages": [
-              "api-reference/fanouts/list",
-              "api-reference/fanouts/details"
-            ]
-          },
-          {
-            "group": "Export",
-            "pages": [
-              "api-reference/export/bulk"
-            ]
-          },
-          {
-            "group": "Attribution",
-            "pages": [
-              "api-reference/attribution/list",
-              "api-reference/attribution/submit",
-              "api-reference/attribution/summary",
-              "api-reference/attribution/bulk"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "MCP",
-        "groups": [
-          {
-            "group": "MCP Integration",
-            "pages": [
-              "mcp/overview",
-              "mcp/claude-desktop",
-              "mcp/chatgpt",
-              "mcp/cursor"
-            ]
-          }
-        ]
-      }
-    ]
-  },
   "api": {
     "mdx": {
       "server": "https://api.finseo.ai",
@@ -173,5 +43,289 @@
       "website": "https://finseo.ai",
       "linkedin": "https://linkedin.com/company/finseo"
     }
+  },
+  "navigation": {
+    "languages": [
+      {
+        "language": "en",
+        "navbar": {
+          "links": [
+            {
+              "label": "Dashboard",
+              "href": "https://app.finseo.ai"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "Get API Key",
+            "href": "https://app.finseo.ai/developer"
+          }
+        },
+        "tabs": [
+          {
+            "tab": "Docs",
+            "groups": [
+              {
+                "group": "Overview",
+                "pages": [
+                  "index",
+                  "authentication",
+                  "rate-limits",
+                  "changelog"
+                ]
+              },
+              {
+                "group": "Getting Started",
+                "pages": [
+                  "getting-started/prompts",
+                  "getting-started/models"
+                ]
+              },
+              {
+                "group": "Analytics",
+                "pages": [
+                  "bot-analytics",
+                  "human-traffic",
+                  "attribution"
+                ]
+              },
+              {
+                "group": "Integrations",
+                "pages": [
+                  "integrations",
+                  "looker-studio",
+                  "search-console",
+                  "products",
+                  "sentiment"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "API",
+            "groups": [
+              {
+                "group": "Projects",
+                "pages": [
+                  "api-reference/projects/list",
+                  "api-reference/projects/get",
+                  "api-reference/projects/create",
+                  "api-reference/projects/update"
+                ]
+              },
+              {
+                "group": "Prompts",
+                "pages": [
+                  "api-reference/prompts/list",
+                  "api-reference/prompts/add"
+                ]
+              },
+              {
+                "group": "Metrics",
+                "pages": [
+                  "api-reference/metrics/daily",
+                  "api-reference/metrics/timeseries"
+                ]
+              },
+              {
+                "group": "Competitors",
+                "pages": [
+                  "api-reference/competitors/ranking"
+                ]
+              },
+              {
+                "group": "Sources",
+                "pages": [
+                  "api-reference/sources/ranking"
+                ]
+              },
+              {
+                "group": "Tags",
+                "pages": [
+                  "api-reference/tags/list",
+                  "api-reference/tags/create"
+                ]
+              },
+              {
+                "group": "Fan-outs",
+                "pages": [
+                  "api-reference/fanouts/list",
+                  "api-reference/fanouts/details"
+                ]
+              },
+              {
+                "group": "Export",
+                "pages": [
+                  "api-reference/export/bulk"
+                ]
+              },
+              {
+                "group": "Attribution",
+                "pages": [
+                  "api-reference/attribution/list",
+                  "api-reference/attribution/submit",
+                  "api-reference/attribution/summary",
+                  "api-reference/attribution/bulk"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "MCP",
+            "groups": [
+              {
+                "group": "MCP Integration",
+                "pages": [
+                  "mcp/overview",
+                  "mcp/claude-desktop",
+                  "mcp/chatgpt",
+                  "mcp/cursor"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "language": "de",
+        "navbar": {
+          "links": [
+            {
+              "label": "Dashboard",
+              "href": "https://app.finseo.ai"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "API-Key holen",
+            "href": "https://app.finseo.ai/developer"
+          }
+        },
+        "tabs": [
+          {
+            "tab": "Docs",
+            "groups": [
+              {
+                "group": "Übersicht",
+                "pages": [
+                  "de/index",
+                  "de/authentication",
+                  "de/rate-limits",
+                  "de/changelog"
+                ]
+              },
+              {
+                "group": "Erste Schritte",
+                "pages": [
+                  "de/getting-started/prompts",
+                  "de/getting-started/models"
+                ]
+              },
+              {
+                "group": "Analytics",
+                "pages": [
+                  "de/bot-analytics",
+                  "de/human-traffic",
+                  "de/attribution"
+                ]
+              },
+              {
+                "group": "Integrationen",
+                "pages": [
+                  "de/integrations",
+                  "de/looker-studio",
+                  "de/search-console",
+                  "de/products",
+                  "de/sentiment"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "API",
+            "groups": [
+              {
+                "group": "Projekte",
+                "pages": [
+                  "de/api-reference/projects/list",
+                  "de/api-reference/projects/get",
+                  "de/api-reference/projects/create",
+                  "de/api-reference/projects/update"
+                ]
+              },
+              {
+                "group": "Prompts",
+                "pages": [
+                  "de/api-reference/prompts/list",
+                  "de/api-reference/prompts/add"
+                ]
+              },
+              {
+                "group": "Metriken",
+                "pages": [
+                  "de/api-reference/metrics/daily",
+                  "de/api-reference/metrics/timeseries"
+                ]
+              },
+              {
+                "group": "Wettbewerber",
+                "pages": [
+                  "de/api-reference/competitors/ranking"
+                ]
+              },
+              {
+                "group": "Quellen",
+                "pages": [
+                  "de/api-reference/sources/ranking"
+                ]
+              },
+              {
+                "group": "Tags",
+                "pages": [
+                  "de/api-reference/tags/list",
+                  "de/api-reference/tags/create"
+                ]
+              },
+              {
+                "group": "Fan-outs",
+                "pages": [
+                  "de/api-reference/fanouts/list",
+                  "de/api-reference/fanouts/details"
+                ]
+              },
+              {
+                "group": "Export",
+                "pages": [
+                  "de/api-reference/export/bulk"
+                ]
+              },
+              {
+                "group": "Attribution",
+                "pages": [
+                  "de/api-reference/attribution/list",
+                  "de/api-reference/attribution/submit",
+                  "de/api-reference/attribution/summary",
+                  "de/api-reference/attribution/bulk"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "MCP",
+            "groups": [
+              {
+                "group": "MCP-Integration",
+                "pages": [
+                  "de/mcp/overview",
+                  "de/mcp/claude-desktop",
+                  "de/mcp/chatgpt",
+                  "de/mcp/cursor"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 }

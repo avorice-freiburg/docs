@@ -1,0 +1,72 @@
+---
+title: Fan-out-Details abrufen
+api: GET /v1/projects/{projectId}/fanouts/details
+description: Hol dir die Details zu jedem einzelnen Vorkommen einer Fan-out-Query — jedes Tracking-Ergebnis, dessen Fan-out-Queries genau diesen Text enthalten.
+---
+
+Gibt jedes Tracking-Ergebnis zurück, bei dem diese spezifische Fan-out-Query erzeugt wurde — inklusive Quell-Prompt, Modell, Zeitstempel, Sichtbarkeit und Mentions.
+
+Nutze diesen Endpoint, um von der aggregierten Fan-out-Liste (`GET /fanouts`) in die einzelnen Vorkommen einzutauchen.
+
+<ParamField path="projectId" type="string" required>Die Projekt-ID</ParamField>
+<ParamField query="query" type="string" required>Der exakte Text der Fan-out-Query (Groß-/Kleinschreibung wird ignoriert)</ParamField>
+<ParamField query="timeframe" type="string" default="90d">Zeitfenster — `7d`, `30d`, `90d`, `365d` oder `all`, um alle jemals erfassten Fan-outs zu durchsuchen</ParamField>
+<ParamField query="startDate" type="string">Eigenes Startdatum (YYYY-MM-DD)</ParamField>
+<ParamField query="endDate" type="string">Eigenes Enddatum (YYYY-MM-DD)</ParamField>
+<ParamField query="tags" type="string">Kommaseparierte Tags, um die Quell-Prompts zu filtern</ParamField>
+
+<RequestExample>
+```bash cURL
+curl --request GET \
+  --url 'https://api.finseo.ai/v1/projects/proj_abc123/fanouts/details?query=best+CRM+for+small+business+2026&timeframe=30d' \
+  --header 'Authorization: Bearer YOUR_API_KEY'
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    f"https://api.finseo.ai/v1/projects/{project_id}/fanouts/details",
+    headers={"Authorization": "Bearer YOUR_API_KEY"},
+    params={"query": "best CRM for small business 2026", "timeframe": "30d"}
+)
+data = response.json()["data"]
+
+print(f"Found {data['totalOccurrences']} occurrences of '{data['query']}'")
+for occ in data["occurrences"]:
+    print(f"  {occ['model']} on {occ['timestamp']} — visible: {occ['visible']}")
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": {
+    "query": "best CRM for small business 2026",
+    "totalOccurrences": 47,
+    "occurrences": [
+      {
+        "resultId": "uuid-1",
+        "promptId": "prompt-uuid-1",
+        "promptText": "What CRM should I use for my startup?",
+        "brandName": "yourbrand",
+        "model": "chatgpt",
+        "timestamp": "2026-03-29T18:42:00Z",
+        "visible": true,
+        "mentions": 2
+      },
+      {
+        "resultId": "uuid-2",
+        "promptId": "prompt-uuid-2",
+        "promptText": "Best CRM for B2B SaaS",
+        "brandName": "yourbrand",
+        "model": "perplexity",
+        "timestamp": "2026-03-29T15:20:00Z",
+        "visible": false,
+        "mentions": 0
+      }
+    ]
+  }
+}
+```
+</ResponseExample>

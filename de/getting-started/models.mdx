@@ -1,0 +1,122 @@
+---
+title: KI-Modelle
+description: Konfiguriere, welche KI-Modelle Finseo für das Prompt-Tracking nutzt.
+---
+
+# KI-Modelle
+
+Die Modell-Einstellungen steuern, wo Finseo deine Tracking-Prompts ausführt. Mehr Modelle bedeuten breitere Abdeckung, erhöhen aber auch die Anzahl der KI-Antworten pro Prompt.
+
+## Verfügbare Modelle
+
+Finseo unterstützt im Dashboard die folgenden Modell-Kanäle:
+
+| Modell-ID | Beschreibung |
+| --- | --- |
+| `chatgpt` | Tracking im ChatGPT-GUI/UI-Stil. |
+| `chatgpt_gui` | Tracking im ChatGPT-API-Stil. |
+| `perplexity` | Perplexity-Antworten und Quellen-Citations. |
+| `ai_overview` | Tracking von Ergebnissen im Google-AI-Overview-Stil. |
+| `google_ai_mode` | Tracking von Ergebnissen im Google-AI-Mode-Stil, sofern verfügbar. |
+| `claude` | Claude-Antworten. |
+| `grok` | Grok-Antworten. |
+| `mistral` | Mistral-Antworten. |
+| `deepseek` | DeepSeek-Antworten. |
+| `gemini` | Gemini-Antworten. |
+
+## Standard-Modellauswahl
+
+Neue Accounts starten mit diesen Defaults:
+
+```json
+{
+  "chatgpt": true,
+  "perplexity": true,
+  "ai_overview": true,
+  "chatgpt_gui": false,
+  "google_ai_mode": false,
+  "claude": false,
+  "grok": false,
+  "mistral": false,
+  "deepseek": false,
+  "gemini": false
+}
+```
+
+Damit deckst du ChatGPT, Perplexity und die Google-KI-Suche ab, ohne jedes verfügbare Modell laufen zu lassen.
+
+## Account-Defaults vs. Projekt-Einstellungen
+
+Finseo unterstützt zwei Ebenen von Modell-Einstellungen:
+
+- **Account-Defaults** gelten, wenn ein Projekt keine eigenen Modell-Einstellungen hat.
+- **Projektspezifische Einstellungen** überschreiben die Account-Defaults für ein einzelnes Projekt.
+
+Nutze projektspezifische Einstellungen, wenn verschiedene Marken, Märkte oder Kunden unterschiedliche Modell-Abdeckung brauchen.
+
+## Aktivierte Modelle ändern
+
+1. Öffne **Models**.
+2. Wähle das Projekt, wenn du projektspezifische Einstellungen willst.
+3. Aktiviere die Modelle, die du tracken möchtest.
+4. Speichere die Einstellungen.
+
+Wenn du projektspezifische Einstellungen speicherst, synchronisiert Finseo die bestehenden Tracking-Prompts des Projekts mit dem aktivierten Modell-Set. Neue Prompts nutzen standardmäßig dieselben aktivierten Modelle.
+
+## Modell-Limits
+
+Die meisten Pläne erlauben bis zu `3` Modelle pro Prompt. Agency-Pläne und individuelle Enterprise-Angebote können mehr Modelle freischalten.
+
+Wenn du das Modell-Limit erreichst, deaktiviere erst ein Modell, bevor du ein anderes aktivierst. Das Limit greift beim Speichern der Modell-Einstellungen und beim Hinzufügen neuer Prompts.
+
+<Note>
+Bei Agency-Accounts beeinflusst die Modellanzahl die prognostizierten monatlichen KI-Antworten. Prompts über viele Modelle hinweg erhöhen den Verbrauch, weil jeder Prompt einmal pro aktiviertem Modell ausgeführt wird.
+</Note>
+
+## Wie die Modellanzahl die Ergebnisse beeinflusst
+
+Die Anzahl generierter Antworten ist ungefähr:
+
+```text
+getrackte Prompts × aktivierte Modelle × geplante Läufe
+```
+
+Beispiel:
+
+```text
+100 Prompts × 3 Modelle = 300 KI-Antworten pro Lauf
+100 Prompts × 6 Modelle = 600 KI-Antworten pro Lauf
+```
+
+Nutze mehr Modelle, wenn du breite Marktabdeckung brauchst. Nutze weniger Modelle für fokussiertes Tracking, schnellere Analysen oder geringeren Verbrauch.
+
+## Den richtigen Modell-Mix wählen
+
+Starte mit:
+
+- `chatgpt` für breite Assistant-Sichtbarkeit.
+- `perplexity` für Citation-lastiges AI-Search-Verhalten.
+- `ai_overview` für Sichtbarkeit in Google-KI-Ergebnissen.
+
+Füge weitere Modelle hinzu, wenn sie für deine Zielgruppe relevant sind:
+
+- `claude` für B2B-, Enterprise-, Tech- oder Research-lastige Märkte.
+- `gemini` oder `google_ai_mode`, wenn Google-KI-Oberflächen strategisch wichtig sind.
+- `grok`, `mistral` oder `deepseek`, wenn deine Zielgruppe diese Plattformen nutzt.
+
+## API-Verhalten
+
+Wenn du Prompts über die API anlegst, kannst du ein explizites `models`-Array übergeben.
+
+```json
+{
+  "prompt": "Best AI visibility tracking tools for agencies",
+  "models": ["chatgpt", "perplexity", "ai_overview"],
+  "language": "us",
+  "tags": ["agency", "comparison"]
+}
+```
+
+Lässt du `models` weg, nutzt Finseo die aktivierten Projekt-Einstellungen. Gibt es keine Projekt-Einstellungen, greifen die Account-Defaults.
+
+Die vollständige Referenz findest du in der [Create Prompt API](/de/api-reference/prompts/add).

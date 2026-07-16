@@ -1,0 +1,142 @@
+---
+title: Einführung
+description: Die Finseo API gibt dir programmatischen Zugriff auf deine KI-Sichtbarkeitsdaten.
+---
+
+# Finseo API
+
+Tracke, wie deine Marke in ChatGPT, Claude, Perplexity und anderen KI-Plattformen erscheint. Mit der Finseo Customer API rufst du Sichtbarkeitsmetriken ab, verwaltest Prompts, analysierst Wettbewerber und exportierst Daten.
+
+## Base URL
+
+```
+https://api.finseo.ai/v1
+```
+
+## Schnelles Beispiel
+
+<CodeGroup>
+
+```bash cURL
+curl --request GET \
+  --url https://api.finseo.ai/v1/projects/YOUR_PROJECT_ID/metrics?timeframe=30d \
+  --header 'Authorization: Bearer YOUR_API_KEY'
+```
+
+```python Python
+import requests
+
+headers = {"Authorization": "Bearer YOUR_API_KEY"}
+response = requests.get(
+    "https://api.finseo.ai/v1/projects/YOUR_PROJECT_ID/metrics",
+    headers=headers,
+    params={"timeframe": "30d"}
+)
+
+data = response.json()["data"]
+print(f"Visibility Rate: {data['current']['visibilityRate']}%")
+print(f"Mentions: {data['current']['mentions']}")
+print(f"Change: {data['changes']['visibilityRateChange']:+.1f}%")
+```
+
+```javascript Node.js
+const response = await fetch(
+  "https://api.finseo.ai/v1/projects/YOUR_PROJECT_ID/metrics?timeframe=30d",
+  { headers: { Authorization: "Bearer YOUR_API_KEY" } }
+);
+
+const { data } = await response.json();
+console.log(`Visibility: ${data.current.visibilityRate}%`);
+console.log(`Mentions: ${data.current.mentions}`);
+```
+
+</CodeGroup>
+
+**Response:**
+
+```json
+{
+  "data": {
+    "current": {
+      "visible": 28,
+      "notVisible": 14,
+      "mentions": 156,
+      "visibilityRate": 66.67,
+      "position": 22.4,
+      "sentiment": 0.78
+    },
+    "previous": {
+      "visible": 22,
+      "visibilityRate": 52.38
+    },
+    "changes": {
+      "visibilityRateChange": 14.29,
+      "mentionsChange": 38
+    }
+  }
+}
+```
+
+## Response-Format
+
+Alle Endpoints liefern ein einheitliches JSON-Envelope:
+
+| Feld | Beschreibung |
+|-------|-------------|
+| `data` | Die Response-Payload |
+| `meta` | Pagination-Infos (falls zutreffend) |
+| `error` | Fehlerdetails (nur bei Fehlern) |
+
+## Fehlercodes
+
+| Code | Status | Beschreibung |
+|------|--------|-------------|
+| `UNAUTHORIZED` | 401 | Fehlender oder ungültiger API-Key |
+| `FORBIDDEN` | 403 | Unzureichende Scopes |
+| `NOT_FOUND` | 404 | Ressource nicht gefunden |
+| `VALIDATION_ERROR` | 400 | Ungültige Parameter |
+| `RATE_LIMIT_EXCEEDED` | 429 | Zu viele Requests |
+| `PROJECT_ACCESS_DENIED` | 403 | API-Key hat keinen Zugriff auf dieses Projekt |
+| `INTERNAL_ERROR` | 500 | Serverfehler |
+
+<CardGroup cols={2}>
+  <Card title="Tracking-Prompts" icon="message" href="/de/getting-started/prompts">
+    Füge die richtigen Fragen hinzu, um deine KI-Sichtbarkeit zu messen
+  </Card>
+  <Card title="KI-Modelle" icon="sparkles" href="/de/getting-started/models">
+    Konfiguriere, wo Finseo deine Prompts ausführt
+  </Card>
+  <Card title="Bot Analytics" icon="bot" href="/de/bot-analytics">
+    Lade Server-Logs hoch und überwache KI-Crawler-Zugriffe
+  </Card>
+  <Card title="Human Traffic" icon="users" href="/de/human-traffic">
+    Miss Besuche, Conversions und Umsatz aus KI-Plattformen
+  </Card>
+  <Card title="Attribution" icon="webhook" href="/de/attribution">
+    Sende Formular-, CRM- und Bestell-Attribution an Finseo
+  </Card>
+  <Card title="Integrationen" icon="plug" href="/de/integrations">
+    Verbinde Formulare, CRMs, Analytics und Attributionsquellen
+  </Card>
+  <Card title="Search Console" icon="search" href="/de/search-console">
+    Extrahiere echte Nutzer-Prompts aus Google- und Bing-Suchdaten
+  </Card>
+  <Card title="Produkte und AI Shopping" icon="shopping-bag" href="/de/products">
+    Analysiere erwähnte Produkte, Shopping-Listings, Stores und Attribute
+  </Card>
+  <Card title="Sentiment" icon="heart" href="/de/sentiment">
+    Tracke Markendarstellung, Kritik, Auszeichnungen und Aspekt-Scores
+  </Card>
+  <Card title="Authentifizierung" icon="key" href="/de/authentication">
+    Erstelle und verwalte API-Keys
+  </Card>
+  <Card title="Rate Limits" icon="gauge" href="/de/rate-limits">
+    Request-Limits pro Plan
+  </Card>
+  <Card title="Customer API" icon="code" href="/de/api-reference/projects/list">
+    Alle Endpoints entdecken
+  </Card>
+  <Card title="MCP-Integration" icon="robot" href="/de/mcp/overview">
+    Mit Claude Desktop oder Cursor verbinden
+  </Card>
+</CardGroup>

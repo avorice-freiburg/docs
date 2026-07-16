@@ -1,0 +1,98 @@
+---
+title: Metriken-Zeitreihe
+api: GET /v1/projects/{projectId}/metrics/timeseries
+---
+
+Gibt tägliche KI-Sichtbarkeits-Metriken für Charts zurück. Jede Zeile entspricht einem Kalendertag innerhalb des über `timeframe` abgeleiteten Zeitraums — oder innerhalb von `startDate` / `endDate`, wenn beide angegeben sind. Ideal für Trendlinien zu Finseo in ChatGPT, Claude und Perplexity.
+
+<ParamField path="projectId" type="string" required>
+  Projekt-ID.
+</ParamField>
+
+<ParamField query="timeframe" type="string" default="30d">
+  Rollierendes Zeitfenster, wenn `startDate` / `endDate` nicht verwendet werden.
+</ParamField>
+
+<ParamField query="startDate" type="string">
+  ISO-Datum `YYYY-MM-DD` (zusammen mit `endDate` verwenden).
+</ParamField>
+
+<ParamField query="endDate" type="string">
+  ISO-Datum `YYYY-MM-DD` (zusammen mit `startDate` verwenden).
+</ParamField>
+
+<ParamField query="model" type="string">
+  Filter auf ein Modell.
+</ParamField>
+
+<ParamField query="language" type="string">
+  Filter nach Prompt-Sprache.
+</ParamField>
+
+<ParamField query="tags" type="string">
+  JSON-Array oder kommaseparierte Tags.
+</ParamField>
+
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url 'https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/metrics/timeseries?timeframe=14d' \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx'
+```
+
+```python Python
+import requests
+
+r = requests.get(
+    "https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/metrics/timeseries",
+    headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
+    params={"timeframe": "14d", "model": "chatgpt"},
+)
+series = r.json()["data"]
+print(series[-1]["mentions"], series[-1]["date"])
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json
+{
+  "data": [
+    {
+      "date": "2026-03-15",
+      "visible": 9,
+      "notVisible": 3,
+      "totalResults": 12,
+      "mentions": 24,
+      "position": 19.2,
+      "sentiment": 0.74,
+      "uniquePrompts": 12
+    },
+    {
+      "date": "2026-03-16",
+      "visible": 10,
+      "notVisible": 2,
+      "totalResults": 12,
+      "mentions": 31,
+      "position": 17.8,
+      "sentiment": 0.79,
+      "uniquePrompts": 12
+    },
+    {
+      "date": "2026-03-17",
+      "visible": 11,
+      "notVisible": 1,
+      "totalResults": 12,
+      "mentions": 28,
+      "position": 16.5,
+      "sentiment": 0.81,
+      "uniquePrompts": 12
+    }
+  ]
+}
+```
+
+</ResponseExample>

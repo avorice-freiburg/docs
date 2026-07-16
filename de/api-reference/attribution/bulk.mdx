@@ -1,0 +1,53 @@
+---
+title: Attributionen im Bulk erstellen
+api: POST /v1/projects/{projectId}/attribution/bulk
+---
+
+Importiere bis zu 1000 Attributionsantworten auf einmal. Nutze das für die Migration historischer Daten aus deinem CRM oder Analytics-Tool.
+
+Benötigt den `write`-Scope auf deinem API-Key.
+
+<ParamField path="projectId" type="string" required>
+  Die Projekt-ID.
+</ParamField>
+
+<ParamField body="responses" type="array" required>
+  Array von Attributionsantworten (max. 1000). Jeder Eintrag benötigt mindestens `channelId`.
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl --request POST \
+  --url https://api.finseo.ai/v1/projects/PROJECT_ID/attribution/bulk \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "responses": [
+      {
+        "channelId": "ai_search",
+        "respondentEmail": "jane@company.com",
+        "dealValue": 12000
+      },
+      {
+        "channelId": "google_search",
+        "respondentEmail": "john@corp.com",
+        "dealValue": 8500
+      },
+      {
+        "channelId": "social_media",
+        "respondentEmail": "alex@startup.io"
+      }
+    ]
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "data": {
+    "imported": 3
+  }
+}
+```
+</ResponseExample>

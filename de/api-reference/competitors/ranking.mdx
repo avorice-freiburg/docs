@@ -1,0 +1,114 @@
+---
+title: Wettbewerber auflisten
+api: GET /v1/projects/{projectId}/competitors
+---
+
+Gibt Wettbewerber nach KI-Sichtbarkeit gerankt zurück: Mentions, Sichtbarkeit, durchschnittliche Position und Sentiment. So siehst du, wie sich Finseo gegen andere Brands in den Antworten von ChatGPT, Claude und Perplexity schlägt.
+
+<ParamField path="projectId" type="string" required>
+  Projekt-ID.
+</ParamField>
+
+<ParamField query="timeframe" type="string" default="30d">
+  Analysezeitraum, z. B. `7d`, `30d`.
+</ParamField>
+
+<ParamField query="model" type="string">
+  Filtert die Tracking-Ergebnisse auf ein Modell.
+</ParamField>
+
+<ParamField query="language" type="string">
+  Filtert Prompts nach Sprache.
+</ParamField>
+
+<ParamField query="tags" type="string">
+  JSON-Array oder kommaseparierte Prompt-Tags.
+</ParamField>
+
+<ParamField query="search" type="string">
+  Filter nach Substring im Wettbewerber-Namen oder in der Domain.
+</ParamField>
+
+<ParamField query="sortBy" type="string" default="mentions">
+  Einer der Werte `visibility`, `mentions`, `position`, `sentiment`, `name`.
+</ParamField>
+
+<ParamField query="sortDir" type="string" default="desc">
+  `asc` oder `desc`.
+</ParamField>
+
+<ParamField query="page" type="integer" default="1">
+  Seitennummer.
+</ParamField>
+
+<ParamField query="limit" type="integer" default="50">
+  Seitengröße (1–500).
+</ParamField>
+
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url 'https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/competitors?timeframe=30d&sortBy=mentions&limit=20' \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx'
+```
+
+```python Python
+import requests
+
+r = requests.get(
+    "https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/competitors",
+    headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
+    params={"timeframe": "30d", "sortBy": "visibility", "limit": 20},
+)
+competitors = r.json()["data"]["competitors"]
+print([c["name"] for c in competitors if c["isUserBrand"]])
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json
+{
+  "data": {
+    "competitors": [
+      {
+        "id": "c7d8e9f0-a1b2-4345-cdef-678901234abc",
+        "name": "Finseo",
+        "domain": "finseo.ai",
+        "baseDomain": "finseo.ai",
+        "isStarred": true,
+        "isUserBrand": true,
+        "totalMentions": 412,
+        "visibleResults": 186,
+        "averagePosition": 17.3,
+        "sentimentScore": 0.77,
+        "promptCount": 42
+      },
+      {
+        "id": "d8e9f0a1-b2c3-4456-def0-789012345bcd",
+        "name": "Competitor A",
+        "domain": "competitor-a.com",
+        "baseDomain": "competitor-a.com",
+        "isStarred": false,
+        "isUserBrand": false,
+        "totalMentions": 389,
+        "visibleResults": 172,
+        "averagePosition": 21.4,
+        "sentimentScore": 0.62,
+        "promptCount": 42
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 20,
+      "total": 15,
+      "hasMore": false
+    }
+  }
+}
+```
+
+</ResponseExample>

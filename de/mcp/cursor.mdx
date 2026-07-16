@@ -1,0 +1,38 @@
+---
+title: Cursor einrichten
+description: Verbinde den Finseo MCP-Server mit der Cursor IDE.
+---
+
+# Cursor einrichten
+
+Nutze Finseo-Daten direkt in Cursor, um deine KI-Sichtbarkeit beim Coden zu analysieren.
+
+## Voraussetzungen
+
+- Cursor IDE
+- Ein Finseo API-Key mit `read`-Scope ([hier erstellen](https://app.finseo.ai/settings/api))
+
+## Konfiguration
+
+1. Öffne die Cursor-Einstellungen
+2. Navigiere zu **MCP Servers**
+3. Füge einen neuen Server hinzu:
+
+```json
+{
+  "finseo": {
+    "url": "https://api.finseo.ai/v1/mcp",
+    "headers": {
+      "Authorization": "Bearer sk_live_YOUR_API_KEY"
+    }
+  }
+}
+```
+
+## Nutzung
+
+Im AI-Chat von Cursor kannst du fragen:
+
+- „Nutze Finseo, um meine Markensichtbarkeit zu prüfen"
+- „Was sind die Top-Wettbewerber in meinem Finseo-Projekt?"
+- „Zeig meine getrackten Prompts und ihre Performance"

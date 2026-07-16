@@ -1,0 +1,65 @@
+---
+title: Tag auf Prompts anwenden
+api: POST /v1/projects/{projectId}/tags
+---
+
+Fügt einem oder mehreren Prompts einen Tag hinzu. Der Tag wird mit den bestehenden Prompt-Tags zusammengeführt — so kannst du deine Finseo-Tracking-Kohorten organisieren, ohne andere Labels zu überschreiben.
+
+<ParamField path="projectId" type="string" required>
+  Projekt-ID.
+</ParamField>
+
+
+<ParamField body="name" type="string" required>
+  Tag-Name (1–100 Zeichen).
+</ParamField>
+
+<ParamField body="promptIds" type="array" required>
+  Nicht-leere Liste von Prompt-UUIDs, die aktualisiert werden sollen.
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/tags \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "name": "Q1-2026",
+    "promptIds": ["a1b2c3d4-e5f6-7890-abcd-ef1234567890", "b2c3d4e5-f6a7-8901-bcde-f12345678901"]
+  }'
+```
+
+```python Python
+import requests
+
+payload = {
+    "name": "Q1-2026",
+    "promptIds": [
+        "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+    ],
+}
+r = requests.post(
+    "https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/tags",
+    headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
+    json=payload,
+)
+print(r.json()["data"])
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json
+{
+  "data": {
+    "tag": "Q1-2026",
+    "appliedTo": 2
+  }
+}
+```
+
+</ResponseExample>

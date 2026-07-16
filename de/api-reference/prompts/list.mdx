@@ -1,0 +1,100 @@
+---
+title: Prompts auflisten
+api: GET /v1/projects/{projectId}/prompts
+---
+
+Listet die getrackten Prompts eines Projekts auf — mit Sichtbarkeit, Mention-Zahlen und Sentiment für den gewählten Zeitraum. Finseo wertet diese Prompts gegen ChatGPT, Claude, Perplexity und weitere Modelle aus.
+
+<ParamField path="projectId" type="string" required>
+  Projekt-ID.
+</ParamField>
+
+<ParamField query="timeframe" type="string" default="30d">
+  Länge des rollierenden Zeitfensters, z. B. `7d`, `30d`, `90d`.
+</ParamField>
+
+<ParamField query="model" type="string">
+  Filtert die Ergebnisse auf ein einzelnes Modell (z. B. `chatgpt`).
+</ParamField>
+
+<ParamField query="language" type="string">
+  Filter nach ISO-Sprachcode (z. B. `en`, `de`).
+</ParamField>
+
+<ParamField query="tags" type="string">
+  JSON-Array als String oder kommaseparierte Tag-Namen, um Prompts zu filtern.
+</ParamField>
+
+<ParamField query="search" type="string">
+  Case-insensitive Substring-Suche im Prompt-Text.
+</ParamField>
+
+<ParamField query="page" type="integer" default="1">
+  Seitennummer (beginnend bei 1).
+</ParamField>
+
+<ParamField query="limit" type="integer" default="50">
+  Seitengröße (1–500).
+</ParamField>
+
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url 'https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/prompts?timeframe=30d&limit=10&page=1' \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx'
+```
+
+```python Python
+import requests
+
+params = {"timeframe": "30d", "limit": 10, "page": 1, "search": "Finseo"}
+r = requests.get(
+    "https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/prompts",
+    headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
+    params=params,
+)
+body = r.json()["data"]
+print(body["pagination"], body["prompts"][0]["prompt"])
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json
+{
+  "data": {
+    "prompts": [
+      {
+        "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "prompt": "What are the best AI SEO tools including Finseo?",
+        "domain": "finseo.ai",
+        "brandName": "finseo",
+        "language": "en",
+        "tags": ["branded", "comparison"],
+        "models": ["chatgpt", "claude", "perplexity"],
+        "intentScores": { "commercial": 0.82, "informational": 0.64 },
+        "searchIntents": ["compare", "evaluate"],
+        "isVisible": true,
+        "mentions": 14,
+        "averagePosition": 18.2,
+        "sentimentScore": 0.76,
+        "sentimentCategory": "positive",
+        "competitorCount": 6,
+        "sourceCount": 22,
+        "createdAt": "2026-02-10T12:00:00.000Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 10,
+      "total": 48,
+      "hasMore": true
+    }
+  }
+}
+```
+
+</ResponseExample>

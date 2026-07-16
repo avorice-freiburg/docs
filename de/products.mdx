@@ -1,0 +1,128 @@
+---
+title: Produkte und AI Shopping
+description: Verstehe Produkt-Mentions, AI-Shopping-Listings, Stores, Attribute und Produktdetailseiten.
+---
+
+# Produkte und AI Shopping
+
+Produkte zeigt, wie Produkte in KI-Antworten auftauchen. Dabei kombiniert Finseo zwei verwandte, aber unterschiedliche Signale:
+
+- **Erwähnte Produkte**: Produkte, die die KI im Antworttext nennt.
+- **Shopping-Produkte**: Produkte, die in Shopping-Blöcken, Produkt-Karussells oder Shopping-Ergebnisblöcken dargestellt werden.
+
+Das hilft E-Commerce-, Marktplatz- und produktgetriebenen Marken zu verstehen, welche Produkte die KI empfiehlt, vergleicht und über Shopping-Oberflächen verkauft.
+
+## Produkte vs. AI Shopping
+
+| Signal | Bedeutung | Beispiel |
+| --- | --- | --- |
+| Erwähnt | Das Produkt wurde im KI-Antworttext genannt. | „Der Kärcher K5 ist eine gute Wahl für Terrassen." |
+| Shopping | Das Produkt erschien in einem Shopping-/Produkt-Listing-Block. | Eine Karte mit Bild, Preis, Verkäufer und Bewertung. |
+| Beides | Das Produkt wurde im Text genannt und erschien zusätzlich in einem Shopping-Block. | Stärkstes Signal: Die KI empfiehlt das Produkt und zeigt es an. |
+
+Nutze den **Source**-Filter, um zwischen `All sources`, `Mentioned`, `Shopping` und `In both` zu wechseln.
+
+## Products-Tab
+
+Der Products-Tab listet jedes Produkt, das in KI-Antworten für das gewählte Projekt und den Zeitraum gefunden wurde.
+
+Du kannst filtern nach:
+
+- Quelle: erwähnt, Shopping, beides oder alle.
+- Kategorie.
+- Marke oder Wettbewerber.
+- KI-Engine.
+- Tags.
+- Zeitraum.
+
+Du kannst sortieren nach:
+
+- Auftreten
+- Produktname
+- Preis
+- Bewertung
+- Zuletzt gesehen
+
+## Stores-Tab
+
+Der Stores-Tab zeigt Verkäufer und Stores, die die KI in Shopping-Blöcken zitiert.
+
+Damit beantwortest du:
+
+- Welche Händler sind in KI-Shopping-Ergebnissen am sichtbarsten?
+- Werden deine Produkte über deinen eigenen Store oder über Drittanbieter angezeigt?
+- Welche Marktplätze dominieren die Produktsichtbarkeit?
+- Für welche Stores solltest du Produkt-Feeds oder Listings optimieren?
+
+## Produktdetailseiten
+
+Klicke auf ein Produkt, um seine Detailseite zu öffnen. Produktdetailseiten können zeigen:
+
+- Zugewiesene Marke oder Wettbewerber.
+- Kategorie.
+- Attribute, die die KI genannt hat.
+- Use Cases, die die KI mit dem Produkt verknüpft hat.
+- Produkte, die zusammen mit ihm auftauchten.
+- Explizite Vergleiche oder Beziehungen.
+- Preis, Bewertung, Bild und Store-Details, sofern verfügbar.
+
+## Produktattribute
+
+Finseo extrahiert Attribute aus KI-Antworten und Produkt-Blöcken. Attribute können beschreiben:
+
+- Preis oder Preis-Leistung
+- Qualität
+- Performance
+- Features
+- Zuverlässigkeit
+- Design
+- Verfügbarkeit
+- Use Cases
+
+Beispiel:
+
+```json
+{
+  "category": "pressure_washer",
+  "attributes": [
+    { "name": "pressure", "value": "180 bar" },
+    { "name": "use_case", "value": "patio cleaning" },
+    { "name": "positioning", "value": "premium home use" }
+  ]
+}
+```
+
+Nutze diese Attribute, um zu sehen, wie KI-Systeme ein Produkt positionieren — nicht nur, ob es auftaucht.
+
+## Markenzuordnung
+
+Wenn ein Produkt nicht automatisch einer Marke zugeordnet wird, kannst du es in der Produktdetailansicht einem Wettbewerber oder deiner eigenen Marke zuweisen.
+
+Das macht das Reporting sauberer, weil Finseo Produkte nach Marke und Domain gruppieren kann.
+
+## Wie Produkte entdeckt werden
+
+Produkte werden aus den Ergebnissen getrackter Prompts extrahiert. So bekommst du brauchbare Produktdaten:
+
+1. Tracke Prompts mit Produkt- oder Shopping-Intention.
+2. Aktiviere Modelle, die Shopping- oder produktreiche Antworten liefern.
+3. Nutze Tags für Produktkategorien und Märkte.
+4. Prüfe Products und Stores, nachdem die Prompt-Ergebnisse verarbeitet wurden.
+
+Gute Prompts:
+
+```text
+Best pressure washer for patios
+Compare Kärcher vs Nilfisk pressure washers
+Which running shoes are best for marathon training?
+Best CRM software for a 50-person SaaS team
+```
+
+## Best Practices
+
+- Tracke Produktkategorie-Prompts, nicht nur Marken-Prompts.
+- Nutze den **Shopping**-Filter, um Produktkarten und Verkäufer-Sichtbarkeit zu sehen.
+- Nutze den **Mentioned**-Filter, um Empfehlungen im Antworttext zu sehen.
+- Nutze **In both**, um Produkte mit der stärksten KI-Commerce-Präsenz zu finden.
+- Prüfe die Stores, um zu sehen, wohin die KI Käufer schickt.
+- Prüfe Produktattribute, um falsche Aussagen, fehlende Spezifikationen oder schwache Positionierung zu erkennen.

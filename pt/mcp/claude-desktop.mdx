@@ -1,0 +1,68 @@
+---
+title: Configurar o Claude
+description: Ligue a Finseo ao claude.ai e ao Claude Desktop como custom connector.
+---
+
+# Configurar o Claude
+
+Ligue a Finseo ao Claude para consultar os seus dados de visibilidade em IA em linguagem natural. O servidor MCP da Finseo suporta OAuth — inicia sessão com a sua conta Finseo habitual, sem necessidade de API key ou configuração JSON.
+
+Funciona no **claude.ai (web)**, no **Claude Desktop** e no **Claude mobile**.
+
+## Pré-requisitos
+
+- Uma conta Finseo num plano pago com pelo menos um projeto de tracking
+- O Claude num plano Free, Pro, Max, Team ou Enterprise (os custom connectors estão em beta)
+
+## Configuração (claude.ai & Claude Desktop)
+
+1. No Claude, vá a **Settings → Connectors**
+2. Clique em **Add custom connector**
+3. Introduza:
+   - **Name**: `Finseo`
+   - **Remote MCP Server URL**: `https://api.finseo.ai/v1/mcp`
+   - Deixe os campos OAuth Client ID e Client Secret **vazios** — a Finseo suporta Dynamic Client Registration, por isso o Claude regista-se automaticamente
+4. Clique em **Add** e depois em **Connect**
+5. É redirecionado para o início de sessão da Finseo. Inicie sessão e clique em **Allow access**
+6. Pronto — todas as ferramentas da Finseo estão agora disponíveis nas suas conversas
+
+<Note>
+Nos planos Team e Enterprise, um Owner da organização adiciona primeiro o connector em **Organization settings → Connectors**. Depois os membros ligam-se individualmente em **Customize → Connectors**.
+</Note>
+
+## Configuração (Claude Code)
+
+O Claude Code suporta servidores MCP remotos com autenticação por header. Se preferir uma API key ([crie uma aqui](https://app.finseo.ai/settings/api)):
+
+```bash
+claude mcp add --transport http finseo https://api.finseo.ai/v1/mcp \
+  --header "Authorization: Bearer sk_live_YOUR_API_KEY"
+```
+
+Ou ligue-se sem key — o Claude Code deteta automaticamente o fluxo OAuth:
+
+```bash
+claude mcp add --transport http finseo https://api.finseo.ai/v1/mcp
+```
+
+## Utilização
+
+Depois de ligado, pode fazer perguntas ao Claude como:
+
+- "Lista os meus projetos da Finseo"
+- "Qual é a minha taxa de visibilidade para o projeto X nos últimos 30 dias?"
+- "Mostra-me os 10 principais concorrentes da minha marca"
+- "Que fontes são mais citadas no meu setor?"
+- "Quantos prompts estou a rastrear e quais têm melhor desempenho?"
+
+Todas as ferramentas da Finseo são read-only — o Claude pode analisar os seus dados mas nunca os modifica.
+
+## Revogar o acesso
+
+Desligue o connector nas definições do Claude a qualquer momento. Isto invalida imediatamente os tokens emitidos. Também pode revogar o acesso do lado da Finseo contactando o suporte.
+
+## Resolução de problemas
+
+- **"Couldn't reach the MCP server"** — verifique se introduziu o URL exato `https://api.finseo.ai/v1/mcp` (incluindo o caminho).
+- **Ciclo de login ou página de consentimento que não carrega** — certifique-se primeiro de que consegue iniciar sessão em [app.finseo.ai](https://app.finseo.ai) no mesmo browser.
+- **Nenhum projeto devolvido** — a sua conta precisa de pelo menos um projeto de tracking com dados.

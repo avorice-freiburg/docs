@@ -1,0 +1,76 @@
+---
+title: Looker Studio Connector
+description: Collega i tuoi dati Finseo sulla visibilità nella ricerca AI a Google Looker Studio.
+---
+
+# Looker Studio Connector
+
+Il community connector di Finseo ti permette di importare i tuoi dati sulla visibilità nella ricerca AI direttamente in [Google Looker Studio](https://lookerstudio.google.com/). Crea dashboard personalizzate e report per i clienti con i dati di performance del tuo brand da ChatGPT, Perplexity, Google AI Overviews, Gemini e Grok.
+
+## Cosa ti serve
+
+- Un account Finseo con un piano a pagamento e almeno un progetto di tracking
+- Una API key Finseo con scope `read` — creane una nella dashboard in **Settings → API → Create Key**
+- Un account Google con accesso a Looker Studio
+
+## Guida al setup
+
+<Steps>
+  <Step title="Apri il connettore Finseo">
+    Apri il [link del connettore Finseo](https://lookerstudio.google.com/datasources/create?connectorId=AKfycbwXSLOjOTGG-4Ftyfs0VPxExJ14Vgj5ry6Jl3MRq6o) mentre sei connesso con il tuo account Google.
+  </Step>
+  <Step title="Autorizza il connettore">
+    Google richiede un'autorizzazione una tantum affinché il connettore possa recuperare i dati per tuo conto. Clicca su **Authorize** e conferma.
+  </Step>
+  <Step title="Inserisci la tua API key Finseo">
+    Incolla la tua API key (inizia con `sk_live_`) e clicca su **Submit**. Se non ne hai ancora una, creane una in **Settings → API → Create Key**.
+  </Step>
+  <Step title="Configura la sorgente dati">
+    Scegli il tuo **project**, un **report type** e, facoltativamente, un **AI model filter** e un **tag filter** (separati da virgola).
+  </Step>
+  <Step title="Connetti e crea">
+    Clicca su **Connect**, controlla l'elenco dei campi, poi **Create Report**. Usa il selettore di intervallo date di Looker Studio per controllare il periodo.
+  </Step>
+</Steps>
+
+La tua API key viene memorizzata per ogni utente Google da Looker Studio. Puoi sostituirla in qualsiasi momento tramite **Edit connection**.
+
+## Tipi di report
+
+| Tipo di report | Righe | Ideale per |
+|---|---|---|
+| **Visibilità per giorno** | Una riga per giorno: tasso di visibilità, menzioni del brand, risposte analizzate, posizione media, sentiment | Grafici di trend, scorecard, confronti tra periodi |
+| **Ranking dei competitor** | I 50 principali competitor nell'intervallo di date selezionato con menzioni, tasso di visibilità, posizione e sentiment | Grafici a barre e tabelle dei competitor |
+| **Fonti più citate** | Le 50 principali fonti citate con citazioni, tasso di citazione e tipo di fonte | Tabelle delle fonti, grafici a torta della quota di citazioni |
+| **Performance dei prompt** | Una riga per ogni prompt monitorato con visibilità, menzioni, posizione, sentiment, citazioni del proprio dominio e brand principale | Tabelle a livello di prompt, suddivisioni per tag |
+| **Query fan-out** | Le query di ricerca che i modelli AI hanno eseguito rispondendo ai tuoi prompt, con il numero di occorrenze | Tabelle di keyword fan-out |
+
+Il selettore di intervallo date in Looker Studio controlla il periodo (fino a 90 giorni). Tutti i tipi di report restituiscono gli stessi numeri che vedi nella dashboard di Finseo.
+
+Il **tag filter** opzionale (separato da virgola, es. `Nonbrand, Kaufberatung`) limita ogni tipo di report ai prompt che hanno almeno uno di quei tag — utile per pagine di report separate branded vs non-branded.
+
+## Campi disponibili
+
+**Visibilità per giorno**: Data, Visibilità % (KPI della dashboard), Menzioni del brand, Risposte AI analizzate, Posizione media %, Punteggio di sentiment, Prompt monitorati
+
+**Ranking dei competitor**: Posizione, Competitor, Dominio, È il tuo brand, Menzioni, Tasso di visibilità %, Posizione media %, Punteggio di sentiment
+
+**Fonti più citate**: Posizione, Dominio della fonte, URL della fonte, Tipo di fonte, Tipo di URL, Citazioni, Prompt che citano, Tasso di citazione %
+
+**Performance dei prompt**: Prompt, Tag, Lingua, Brand visibile, Brand principale, Menzioni del brand, Posizione media %, Punteggio di sentiment, Citazioni del proprio dominio, Risposte AI analizzate, Competitor trovati, Fonti trovate
+
+**Query fan-out**: Query fan-out, Modelli, Prompt di esempio, Ultima rilevazione, Occorrenze, Prompt che le attivano
+
+## Suggerimenti
+
+- Usa una sorgente dati per ogni progetto e tipo di report. Puoi aggiungere più sorgenti dati a un singolo report per combinare, ad esempio, il trend giornaliero con il ranking dei competitor.
+- Fondi la sorgente dati di visibilità con i tuoi dati di Search Console per confrontare fianco a fianco la ricerca classica e la ricerca AI.
+- Le risposte vengono messe in cache per cinque minuti, quindi le esecuzioni di tracking molto recenti possono impiegare un momento prima di comparire.
+
+## Risoluzione dei problemi
+
+- **"Invalid credentials"** — la tua API key è stata revocata, è scaduta o non ha lo scope `read`. Crea una nuova key in **Settings → API**.
+- **Progetto assente dal menu a tendina** — la key è limitata a progetti specifici. Crea una key con accesso a tutti i progetti o aggiungi il progetto alla key.
+- **Report vuoto** — controlla l'intervallo di date: il connettore restituisce i dati dei giorni in cui il tuo progetto ha effettivamente raccolto risposte AI.
+
+Hai bisogno di aiuto? Contatta il [supporto](https://docs.finseo.ai) o il tuo account manager Finseo.

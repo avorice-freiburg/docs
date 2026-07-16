@@ -1,0 +1,66 @@
+---
+title: Rate Limits
+description: Límites de tasa de la API por plan de precios.
+---
+
+# Rate Limits
+
+Los rate limits protegen la API y garantizan un uso justo. Los límites se aplican por API key según tu plan.
+
+<Note>
+  El acceso a la API requiere un plan de pago (Creator o superior). Las cuentas gratuitas no pueden crear API keys.
+</Note>
+
+## Límites por plan
+
+| Plan | Prompts | Solicitudes / minuto | Solicitudes / día |
+|------|---------|-------------------|----------------|
+| Creator | 25 | 60 | 5.000 |
+| Business | 100 | 120 | 25.000 |
+| Agency | Ilimitado | 300 | 100.000 |
+| Enterprise | 500 | 600 | 200.000 |
+
+## Límites de prompts
+
+El número de prompts que puedes trackear vía API está limitado por tu plan. La API aplica los mismos límites que el dashboard. Intentar añadir un prompt por encima de tu límite devuelve un error:
+
+```json
+{
+  "error": {
+    "code": "INTERNAL_ERROR",
+    "message": "Prompt limit reached (25/25). Upgrade your plan to add more prompts."
+  }
+}
+```
+
+## Headers de rate limit
+
+Cada respuesta de la API incluye información de rate limit:
+
+| Header | Descripción |
+|--------|-------------|
+| `X-RateLimit-Limit` | Máximo de solicitudes por minuto para tu plan |
+| `X-RateLimit-Remaining` | Solicitudes restantes en la ventana actual |
+| `X-RateLimit-Reset` | Timestamp Unix en el que se reinicia la ventana |
+
+## Superar los límites
+
+Cuando se alcanza el límite, la API devuelve `429 Too Many Requests`:
+
+```json
+{
+  "error": {
+    "code": "RATE_LIMIT_EXCEEDED",
+    "message": "Rate limit exceeded. Try again in 23 seconds."
+  }
+}
+```
+
+La respuesta incluye un header `Retry-After` con los segundos que debes esperar.
+
+## Buenas prácticas
+
+- Cachea las respuestas cuando sea posible: los datos de tracking se actualizan una vez al día
+- Usa el endpoint de exportación para datos masivos en lugar de muchas solicitudes individuales
+- Implementa exponential backoff ante respuestas `429`
+- Usa tags para filtrar datos del lado del servidor en lugar de obtenerlo todo

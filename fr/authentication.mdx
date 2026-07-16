@@ -1,0 +1,66 @@
+---
+title: Authentification
+description: Comment t'authentifier auprès de l'API Finseo à l'aide de clés API.
+---
+
+# Authentification
+
+Toutes les requêtes API nécessitent une clé API valide dans le header `Authorization`.
+
+## Obtenir ta clé API
+
+1. Va dans [Settings > API](https://app.finseo.ai/settings/api) dans le dashboard Finseo
+2. Clique sur **Create API Key**
+3. Choisis un nom, des scopes et, en option, une restriction à des projets spécifiques
+4. Copie la clé immédiatement — elle ne s'affiche qu'une seule fois
+
+## Utiliser ta clé
+
+<CodeGroup>
+
+```bash cURL
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  https://api.finseo.ai/v1/projects
+```
+
+```python Python
+import requests
+
+headers = {"Authorization": "Bearer YOUR_API_KEY"}
+response = requests.get(
+    "https://api.finseo.ai/v1/projects",
+    headers=headers
+)
+```
+
+```javascript Node.js
+const response = await fetch("https://api.finseo.ai/v1/projects", {
+  headers: { Authorization: "Bearer YOUR_API_KEY" },
+});
+```
+
+</CodeGroup>
+
+## Scopes
+
+Les clés API peuvent avoir un ou plusieurs scopes :
+
+| Scope | Description |
+|-------|-------------|
+| `read` | Lire les données (projets, prompts, métriques, concurrents, sources) |
+| `write` | Modifier les données (créer des prompts, mettre à jour des tags, gérer des projets) |
+| `export` | Export en masse des données de tracking |
+
+## Restrictions de projet
+
+Tu peux, en option, restreindre une clé à des projets spécifiques. Une clé sans restriction de projet peut accéder à tous les projets de ton compte.
+
+## Sécurité des clés
+
+<Warning>
+  N'expose jamais de clés API dans du code côté client ou des dépôts publics.
+</Warning>
+
+- Les clés sont hachées avec SHA-256 avant stockage — nous ne stockons jamais de texte en clair
+- Fais tourner tes clés régulièrement et révoque immédiatement les clés compromises
+- Utilise des clés de test pour le développement, des clés live pour la production

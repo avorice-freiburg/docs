@@ -1,0 +1,126 @@
+---
+title: Tracking de prompts
+description: Aprenda a escolher e adicionar prompts que medem a sua visibilidade em IA.
+---
+
+# Tracking de prompts
+
+Os prompts são as perguntas que a Finseo executa em vários modelos de IA para medir se a sua marca aparece, como é descrita, que concorrentes são mencionados e que fontes são citadas.
+
+Bons prompts devem soar como perguntas reais de clientes, não como keywords de SEO.
+
+## Adicionar um prompt
+
+1. Abra **AI Tracking**.
+2. Clique em **Add Tracking Prompt**.
+3. Selecione uma **Location**.
+4. Adicione uma ou mais **Tags**.
+5. Introduza um ou mais prompts. Use uma linha por prompt.
+6. Reveja os modelos de IA ativados.
+7. Clique em **Add prompts**.
+
+A Finseo guarda o prompt e coloca-o na fila de processamento. Os resultados aparecem depois de a pipeline de workers terminar a execução do prompt em todos os modelos ativados.
+
+## Adicionar vários prompts de uma vez
+
+Use quebras de linha para adicionar vários prompts a partir do mesmo diálogo.
+
+```text
+What are the best SEO tools for content optimization?
+List the top AI visibility platforms for B2B SaaS.
+Which companies help ecommerce brands get mentioned in ChatGPT?
+Compare Finseo alternatives for AI search tracking.
+```
+
+Cada linha não vazia é adicionada como um prompt separado.
+
+## Escolher a location certa
+
+A **Location** controla o contexto de mercado usado na pesquisa em IA. As respostas de IA podem variar consoante o país, o idioma e o comportamento de pesquisa regional.
+
+Escolha a location que corresponde ao público que lhe interessa:
+
+- Use `Germany` para compradores alemães e visibilidade em língua alemã.
+- Use `United States` para compradores dos EUA e prompts comerciais em inglês.
+- Crie prompts separados para mercados separados se o posicionamento do seu produto diferir por país.
+
+Se não for fornecida nenhuma location através da API, a Finseo recorre a `en` por defeito.
+
+## Usar tags
+
+As tags ajudam a segmentar os seus relatórios de visibilidade. Adicione-as ao criar os prompts para poder filtrar e comparar grupos mais tarde.
+
+Padrões de tags comuns:
+
+- `branded` e `unbranded`
+- `top-of-funnel`, `comparison` e `transactional`
+- `de`, `us`, `uk` ou outras etiquetas de mercado
+- Categorias de produto como `crm`, `email-marketing` ou `pressure-washers`
+- Etiquetas de campanha ou de segmento de cliente
+
+## Escrever melhores prompts
+
+Prompts fortes descrevem uma decisão real que um comprador está a tentar tomar.
+
+<CodeGroup>
+
+```text Good
+What are the best tools to track brand visibility in ChatGPT?
+Which CRM is best for a 50-person B2B SaaS team?
+Compare Kärcher and Nilfisk pressure washers for home patios.
+What software helps ecommerce teams understand AI search traffic?
+```
+
+```text Weak
+AI visibility
+CRM
+Kärcher
+Best tool
+```
+
+</CodeGroup>
+
+## Mistura de prompts recomendada
+
+Comece com `20` a `50` prompts por cada mercado importante. Cubra toda a buyer journey:
+
+| Tipo | Exemplo | Porque importa |
+| --- | --- | --- |
+| Problem-aware | `How can I see if ChatGPT recommends my brand?` | Mede a procura antes de os utilizadores conhecerem a sua categoria. |
+| Categoria | `Best AI visibility tracking tools` | Mostra se aparece em respostas do tipo shortlist. |
+| Comparação | `Finseo vs Profound for AI search tracking` | Revela o posicionamento competitivo. |
+| Transacional | `Which AI SEO platform should an agency use?` | Capta a intenção de compra de fundo de funil. |
+| Marca | `What is Finseo and who is it for?` | Verifica a compreensão da marca e o sentiment. |
+
+## O que acontece depois de adicionar um prompt
+
+A Finseo executa o prompt nos modelos ativados para o projeto. Guarda:
+
+- Se a sua marca estava visível
+- Menções e posição
+- Menções a concorrentes
+- Sentiment e frases
+- Fontes citadas
+- Query fan-outs e pesquisas relacionadas, quando disponíveis
+- Insights de produto, claim e comparação, quando disponíveis
+
+Os novos prompts são processados de forma assíncrona. O dashboard mostra os estados de processamento enquanto os resultados estão a ser gerados.
+
+## Opção via API
+
+Também pode criar prompts através da API.
+
+```bash
+curl --request POST \
+  --url https://api.finseo.ai/v1/projects/PROJECT_ID/prompts \
+  --header "Authorization: Bearer sk_live_xxxxxxxx" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "prompt": "What are the best AI visibility tracking tools?",
+    "models": ["chatgpt", "perplexity", "ai_overview"],
+    "language": "us",
+    "tags": ["unbranded", "comparison"]
+  }'
+```
+
+Consulte a [Create Prompt API](/api-reference/prompts/add) para a referência completa.

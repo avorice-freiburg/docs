@@ -1,0 +1,127 @@
+---
+title: Search Console
+description: Usa Google Search Console y Bing Webmaster Tools para encontrar prompts reales de usuarios.
+---
+
+# Search Console
+
+Search Console conecta datos reales de consultas de búsqueda con tu workflow de visibilidad en IA. En lugar de adivinar qué prompts trackear, puedes empezar por las preguntas que la gente ya escribe en Google y Bing.
+
+Finseo admite:
+
+- Google Search Console
+- Bing Webmaster Tools
+
+## Por qué importa
+
+Las consultas de búsqueda suelen ser la fuente disponible más cercana a la intención real del usuario. Finseo analiza esas consultas e identifica cuáles se comportan como prompts conversacionales de IA.
+
+Usa esta página para encontrar:
+
+- Búsquedas en formato de pregunta
+- Consultas de comparación
+- Prompts de recomendación
+- Prompts de proveedor e intención local
+- Páginas que ya rankean para consultas tipo prompt
+- Países donde aparecen determinados prompts
+
+## Conectar Google Search Console
+
+1. Abre **Search Console** en Finseo.
+2. Elige **Google Search Console**.
+3. Haz clic en **Connect Search Console**.
+4. Completa el flujo de Google OAuth.
+5. Selecciona la propiedad de tu proyecto.
+
+Tras conectar, Finseo extrae consultas de búsqueda, páginas, rendimiento diario, países y combinaciones de query y página.
+
+## Conectar Bing Webmaster Tools
+
+1. Abre **Search Console**.
+2. Cambia a **Bing Webmaster**.
+3. Haz clic en **Connect Bing**.
+4. Autoriza la conexión y selecciona el sitio.
+
+Bing admite el rendimiento de query y de página. Algunas dimensiones específicas de Google, como las combinaciones de query-país y query-página, pueden no estar disponibles en Bing.
+
+## Encontrar prompts al estilo IA
+
+Finseo categoriza las consultas según patrones tipo prompt. Una consulta se trata como un prompt cuando tiene una estructura conversacional, como:
+
+- `what is...`
+- `how can I...`
+- `best X for Y`
+- `X vs Y`
+- `difference between X and Y`
+- `bester Anbieter für...`
+- `was ist der Unterschied zwischen...`
+
+Las simples pilas de keywords normalmente no se marcan como prompts.
+
+<CodeGroup>
+
+```text Prompt-like
+What are the best AI visibility tools for agencies?
+Finseo vs Profound comparison
+How can I track ChatGPT traffic in GA4?
+Was ist der Unterschied zwischen GEO und SEO?
+```
+
+```text Keyword-like
+ai visibility software
+chatgpt traffic ga4
+geo seo
+seo tool agency
+```
+
+</CodeGroup>
+
+## Categorías de prompts
+
+Finseo clasifica los prompts detectados en:
+
+| Categoría | Significado |
+| --- | --- |
+| `information` | Preguntas y explicaciones. |
+| `comparison` | Comparaciones explícitas como `X vs Y`. |
+| `recommendation` | Prompts de tipo "Best X for Y" o que buscan consejo. |
+| `provider` | Consultas que buscan un proveedor o servicio. |
+| `action` | Consultas transaccionales o listas para actuar. |
+
+## Añadir prompts al tracking
+
+Cuando encuentres una consulta útil:
+
+1. Selecciona la consulta en Search Console.
+2. Haz clic en **Add to tracker**.
+3. Elige la location y los tags.
+4. Añádela a AI Tracking.
+
+Esto convierte el comportamiento de búsqueda real en tracking de visibilidad en IA. Es especialmente útil para consultas long-tail que ya tienen impresiones pero aún no se trackean como prompts de IA.
+
+## Usar datos de query-página
+
+Google Search Console puede mostrar qué páginas reciben impresiones para cada consulta. Úsalo para decidir:
+
+- Qué páginas existentes ya coinciden con prompts al estilo IA.
+- Qué páginas necesitan respuestas más directas.
+- Qué clústeres de prompts merecen nuevas landing pages o secciones de FAQ.
+- Qué páginas deberían revisarse en las respuestas de IA en busca de mentions y citations.
+
+## Usar datos por país
+
+Para Google Search Console, Finseo puede combinar datos de query y país. Esto te ayuda a encontrar dónde existe demanda de prompts.
+
+Ejemplo:
+
+- Un prompt aparece en Alemania y Austria, así que trackéalo con locations en idioma alemán.
+- Un prompt aparece sobre todo en EE. UU., así que trackéalo por separado con una location de EE. UU.
+- Un prompt de producto aparece en varios países, así que crea grupos de prompts localizados con tags.
+
+## Buenas prácticas
+
+- Empieza con consultas que tienen muchas impresiones pero pocos clics.
+- Prioriza las consultas tipo prompt con intención comercial.
+- Añade tags como `gsc`, `bing`, `comparison`, `recommendation` o tags de mercado como `de` y `us`.
+- Trackea la misma consulta importante en varios países si la audiencia difiere según el mercado.
+- Usa Search Console para descubrir prompts y luego usa AI Tracking para monitorear la visibilidad en ChatGPT, Perplexity, Claude, Google AI y otros modelos.

@@ -1,0 +1,66 @@
+---
+title: Rate Limits
+description: Limites de pedidos da API por plano de preços.
+---
+
+# Rate Limits
+
+Os rate limits protegem a API e garantem uma utilização justa. Os limites são aplicados por API key com base no seu plano.
+
+<Note>
+  O acesso à API requer um plano pago (Creator ou superior). Contas gratuitas não podem criar API keys.
+</Note>
+
+## Limites por plano
+
+| Plano | Prompts | Pedidos / Minuto | Pedidos / Dia |
+|------|---------|-------------------|----------------|
+| Creator | 25 | 60 | 5.000 |
+| Business | 100 | 120 | 25.000 |
+| Agency | Ilimitado | 300 | 100.000 |
+| Enterprise | 500 | 600 | 200.000 |
+
+## Limites de prompts
+
+O número de prompts que pode rastrear através da API depende do seu plano. A API aplica os mesmos limites que o dashboard. Tentar adicionar um prompt para além do seu limite devolve um erro:
+
+```json
+{
+  "error": {
+    "code": "INTERNAL_ERROR",
+    "message": "Prompt limit reached (25/25). Upgrade your plan to add more prompts."
+  }
+}
+```
+
+## Cabeçalhos de rate limit
+
+Cada resposta da API inclui informação de rate limit:
+
+| Cabeçalho | Descrição |
+|--------|-------------|
+| `X-RateLimit-Limit` | Número máximo de pedidos por minuto no seu plano |
+| `X-RateLimit-Remaining` | Pedidos restantes na janela atual |
+| `X-RateLimit-Reset` | Timestamp Unix de quando a janela é reiniciada |
+
+## Exceder os limites
+
+Quando o limite é excedido, a API devolve `429 Too Many Requests`:
+
+```json
+{
+  "error": {
+    "code": "RATE_LIMIT_EXCEEDED",
+    "message": "Rate limit exceeded. Try again in 23 seconds."
+  }
+}
+```
+
+A resposta inclui um cabeçalho `Retry-After` com os segundos a aguardar.
+
+## Boas práticas
+
+- Faça cache das respostas sempre que possível — os dados de rastreamento são atualizados uma vez por dia
+- Use o endpoint de exportação para dados em bloco em vez de muitos pedidos individuais
+- Implemente backoff exponencial em respostas `429`
+- Use tags para filtrar dados no servidor em vez de obter tudo

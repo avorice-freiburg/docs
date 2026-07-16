@@ -1,0 +1,66 @@
+---
+title: Rate Limits
+description: Rate limit dell'API per piano tariffario.
+---
+
+# Rate Limits
+
+I rate limit proteggono l'API e garantiscono un utilizzo equo. I limiti si applicano per API key in base al tuo piano.
+
+<Note>
+  L'accesso all'API richiede un piano a pagamento (Creator o superiore). Gli account Free non possono creare API key.
+</Note>
+
+## Limiti per piano
+
+| Piano | Prompt | Richieste / Minuto | Richieste / Giorno |
+|------|---------|-------------------|----------------|
+| Creator | 25 | 60 | 5.000 |
+| Business | 100 | 120 | 25.000 |
+| Agency | Illimitati | 300 | 100.000 |
+| Enterprise | 500 | 600 | 200.000 |
+
+## Limiti sui prompt
+
+Il numero di prompt che puoi monitorare tramite l'API dipende dal tuo piano. L'API applica gli stessi limiti della dashboard. Se provi ad aggiungere un prompt oltre il tuo limite, ottieni un errore:
+
+```json
+{
+  "error": {
+    "code": "INTERNAL_ERROR",
+    "message": "Prompt limit reached (25/25). Upgrade your plan to add more prompts."
+  }
+}
+```
+
+## Header dei rate limit
+
+Ogni risposta dell'API include informazioni sui rate limit:
+
+| Header | Descrizione |
+|--------|-------------|
+| `X-RateLimit-Limit` | Numero massimo di richieste al minuto per il tuo piano |
+| `X-RateLimit-Remaining` | Richieste rimanenti nella finestra corrente |
+| `X-RateLimit-Reset` | Timestamp Unix in cui la finestra si resetta |
+
+## Superamento dei limiti
+
+Quando viene applicato un rate limit, l'API restituisce `429 Too Many Requests`:
+
+```json
+{
+  "error": {
+    "code": "RATE_LIMIT_EXCEEDED",
+    "message": "Rate limit exceeded. Try again in 23 seconds."
+  }
+}
+```
+
+La risposta include un header `Retry-After` con i secondi di attesa.
+
+## Best practice
+
+- Metti in cache le risposte quando possibile: i dati di tracking si aggiornano una volta al giorno
+- Usa l'endpoint di export per i dati in blocco invece di molte richieste individuali
+- Implementa un exponential backoff sulle risposte `429`
+- Usa i tag per filtrare i dati lato server invece di recuperare tutto

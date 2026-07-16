@@ -1,0 +1,141 @@
+---
+title: Sentiment
+description: Analyse comment l'IA décrit ta marque, tes concurrents, les critiques et les récompenses.
+---
+
+# Sentiment
+
+Sentiment montre comment les systèmes IA décrivent les marques dans les résultats de tes prompts suivis. Cela va au-delà de la visibilité et répond à une autre question :
+
+```text
+When AI mentions us or our competitors, is the framing positive, neutral, or negative?
+```
+
+## Ce que Sentiment mesure
+
+Finseo analyse les mentions de concurrents et de marques dans les réponses IA et extrait :
+
+- Le score de sentiment
+- Le nombre de formulations positives, neutres et négatives
+- Des scores au niveau des aspects
+- Les critiques et les risques
+- Les récompenses et les affirmations « best for »
+- La tendance de réputation dans le temps
+- Le taux de victoire en comparaison, lorsque des affirmations comparatives sont disponibles
+
+## Onglet Brands
+
+L'onglet **Brands** est un leaderboard des marques mentionnées dans tes prompts suivis.
+
+Il montre :
+
+- Les mentions
+- Le score de sentiment moyen
+- La répartition positif/neutre/négatif
+- Les aspects les plus forts
+- Les aspects les plus faibles
+- Le marqueur de ta propre marque
+- La tendance de réputation, lorsqu'elle est disponible
+
+Utilise-le pour comparer ta marque aux concurrents dans le même ensemble de prompts.
+
+## Onglet Scorecard
+
+L'onglet **Scorecard** compare les marques selon des aspects tels que :
+
+- Qualité
+- Prix
+- Rapport qualité-prix
+- Performance
+- Fonctionnalités
+- Fiabilité
+- Design
+- Support
+- Service
+- Facilité d'utilisation
+- Disponibilité
+
+Les cellules vertes signifient que l'IA a présenté la marque de manière positive pour cet aspect. Les cellules rouges signifient une présentation négative. Les cellules neutres sont factuelles ou mitigées.
+
+## Onglet Criticism
+
+L'onglet **Criticism** fait remonter les formulations négatives trouvées dans les réponses IA.
+
+Chaque ligne peut inclure :
+
+- La marque
+- L'aspect
+- La formulation négative
+- Le score
+- Le modèle
+- Le domaine de la source, lorsqu'il est disponible
+- Le contexte du prompt/résultat
+
+Utilise-le pour repérer les risques de réputation et les objections récurrentes, par exemple :
+
+```text
+"expensive for smaller teams"
+"limited integrations"
+"poor availability"
+"not ideal for enterprise use"
+```
+
+## Onglet Awards
+
+L'onglet **Awards** montre les affirmations de style « best for » et les labels de recommandation extraits des réponses IA.
+
+Exemples :
+
+- Best for agencies
+- Best budget option
+- Best for enterprise
+- Best for ecommerce
+- Best for beginners
+
+Cela t'aide à voir quelles situations d'achat l'IA associe à chaque marque.
+
+## Filtres
+
+Sentiment prend en charge les mêmes filtres d'analyse que les autres vues de tracking :
+
+- Plage de dates
+- Modèle IA
+- Tags
+
+Utilise les tags pour comparer des groupes de prompts tels que :
+
+- `branded`
+- `unbranded`
+- `comparison`
+- `product-category`
+- `de`
+- `us`
+
+## D'où viennent les données
+
+Sentiment est généré à partir des résultats des prompts suivis. Quand un prompt s'exécute, Finseo analyse la réponse IA, extrait les mentions de marques et stocke les formulations de sentiment et les scores par aspect.
+
+Si un résultat de prompt n'a aucune formulation de sentiment extraite, il peut tout de même compter comme une mention, mais il contribuera moins aux vues de sentiment au niveau des aspects.
+
+## Comment améliorer la qualité des données de sentiment
+
+- Suis suffisamment de prompts dans chaque marché et catégorie.
+- Inclus des prompts de comparaison et de recommandation, pas seulement des prompts de marque.
+- Utilise des tags pour séparer les groupes de prompts.
+- Active les modèles que ton audience utilise réellement.
+- Consulte régulièrement l'onglet Criticism et mets à jour ton contenu pour répondre aux objections récurrentes.
+- Utilise Awards pour voir où ton positionnement est déjà fort.
+
+## Visibilité vs sentiment
+
+Visibilité et sentiment sont deux choses différentes :
+
+| Métrique | Question |
+| --- | --- |
+| Visibilité | L'IA mentionne-t-elle la marque ? |
+| Position | Où la marque apparaît-elle par rapport aux concurrents ? |
+| Sentiment | Avec quelle positivité ou négativité l'IA décrit-elle la marque ? |
+| Awards | Quels use cases ou labels « best for » l'IA attribue-t-elle ? |
+| Criticism | Quelles affirmations négatives ou objections apparaissent de façon répétée ? |
+
+Une marque peut être très visible mais présentée de manière négative. Elle peut aussi être mentionnée moins souvent mais avec un sentiment plus fort. Utilise les deux vues ensemble.

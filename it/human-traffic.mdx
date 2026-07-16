@@ -1,0 +1,145 @@
+---
+title: Human Traffic
+description: Collega i dati di analytics per misurare visite, conversioni e ricavi dalle piattaforme AI.
+---
+
+# Human Traffic
+
+Human Traffic mostra le sessioni reali del sito web provenienti da piattaforme AI come ChatGPT, Claude, Perplexity, Gemini, Copilot, DeepSeek, Mistral, Meta AI, Grok, You.com e Poe.
+
+Usalo per capire se la visibilità AI si traduce in visitatori, conversioni e ricavi reali.
+
+## Cosa misura Human Traffic
+
+Finseo legge i tuoi dati di analytics e filtra le sessioni la cui sorgente sembra essere una piattaforma AI.
+
+La dashboard può mostrare:
+
+- Sessioni dalle piattaforme AI
+- Utenti dalle piattaforme AI
+- Conversioni
+- Ricavi
+- Tasso di conversione
+- Principali sorgenti di traffico AI
+- Trend nel tempo
+- Conteggi di conversione specifici per evento
+
+## Collegare l'analytics
+
+1. Apri **Human Traffic**.
+2. Seleziona il tuo progetto.
+3. Clicca su **Connect Analytics**.
+4. Scegli **Google Analytics 4** o **Piwik PRO**.
+5. Completa il flusso di autorizzazione del provider.
+6. Seleziona la property o il sito che appartiene al progetto.
+
+Una volta salvata la connessione, Finseo interroga i dati di analytics per l'intervallo di date selezionato e filtra le sorgenti correlate all'AI.
+
+## Provider supportati
+
+<CardGroup cols={2}>
+  <Card title="Google Analytics 4" icon="chart-line">
+    Usa la GA4 Data API per leggere sessioni, utenti, conversioni e ricavi da acquisti per sorgente e data.
+  </Card>
+  <Card title="Piwik PRO" icon="chart-simple">
+    Usa i report di Piwik PRO con la stessa logica di filtro delle sorgenti AI.
+  </Card>
+</CardGroup>
+
+## Sorgenti AI riconosciute da Finseo
+
+Finseo normalizza i nomi delle sorgenti in nomi di modello leggibili. Esempi:
+
+| La sorgente grezza contiene | Visualizzata come |
+| --- | --- |
+| `chatgpt`, `openai`, `chat.openai` | ChatGPT |
+| `claude`, `anthropic` | Claude |
+| `perplexity`, `pplx` | Perplexity |
+| `gemini`, `bard` | Google Gemini |
+| `copilot`, `microsoft copilot` | Copilot |
+| `deepseek` | DeepSeek |
+| `mistral` | Mistral |
+| `llama`, `meta.ai`, `meta-ai` | Meta AI |
+| `grok`, `xai`, `x.ai` | Grok |
+| `you.com` | You.com |
+| `poe` | Poe |
+
+Il normale traffico organico di Google viene escluso, a meno che non compaia come sorgente specifica dell'AI come Google AI Mode o Gemini.
+
+## Migliorare il rilevamento con i tag UTM
+
+Le piattaforme AI non inviano sempre dati di referrer perfetti. Se controlli i link che appaiono in contenuti ottimizzati per l'AI, usa i parametri UTM in modo che l'analytics possa classificare la sorgente in modo pulito.
+
+```text
+https://example.com/pricing?utm_source=chatgpt&utm_medium=ai&utm_campaign=ai_visibility
+```
+
+Valori consigliati:
+
+| Parametro | Esempio |
+| --- | --- |
+| `utm_source` | `chatgpt`, `perplexity`, `claude`, `gemini`, `copilot` |
+| `utm_medium` | `ai` |
+| `utm_campaign` | `ai_visibility`, `brand_mentions`, `comparison_pages` |
+
+## Tracciare le conversioni
+
+Human Traffic può mostrare le conversioni e i conteggi di conversione specifici per evento quando la tua property di analytics registra già gli eventi di conversione.
+
+In GA4, contrassegna gli eventi importanti come eventi chiave o conversioni, per esempio:
+
+- `generate_lead`
+- `sign_up`
+- `purchase`
+- `book_demo`
+- `form_submit`
+
+Poi usa Human Traffic per filtrare o confrontare le conversioni attribuite all'AI per evento.
+
+## Ricavi
+
+I ricavi vengono letti dal provider di analytics collegato. Per GA4, Finseo usa i ricavi da acquisti quando disponibili.
+
+Se non vedi i ricavi:
+
+- Verifica che i ricavi ecommerce siano configurati in GA4 o Piwik PRO.
+- Verifica che gli eventi di acquisto o deal siano collegati alla stessa property.
+- Conferma che nell'intervallo di date selezionato esistano sessioni attribuite all'AI.
+
+## Intervalli di date e metriche
+
+Puoi cambiare la metrica della dashboard tra:
+
+- `sessions`
+- `conversions`
+- `revenue`
+
+Puoi anche usare intervalli di date preimpostati o personalizzati. Finseo confronta i periodi per mostrare le variazioni nel tempo.
+
+## Risoluzione dei problemi
+
+<AccordionGroup>
+  <Accordion title="La pagina dice che non è stata trovata alcuna connessione analytics">
+    Collega Google Analytics 4 o Piwik PRO per il progetto selezionato. Le connessioni sono specifiche del progetto, quindi collegare un progetto non collega automaticamente tutti i progetti.
+  </Accordion>
+  <Accordion title="L'analytics è collegato ma non compare traffico AI">
+    Prima amplia l'intervallo di date. Poi verifica se i nomi delle sorgenti del tuo analytics contengono valori come `chatgpt`, `perplexity`, `claude`, `gemini`, `copilot`, `deepseek` o `mistral`.
+  </Accordion>
+  <Accordion title="Le conversioni sono zero">
+    Conferma che gli eventi di conversione siano configurati nel tuo provider di analytics e che tali eventi si siano verificati in sessioni attribuite all'AI.
+  </Accordion>
+  <Accordion title="I ricavi sono zero">
+    Conferma che i ricavi ecommerce o da acquisti vengano inviati al tuo provider di analytics. Finseo non può dedurre i ricavi se il provider non li memorizza.
+  </Accordion>
+</AccordionGroup>
+
+## Human Traffic vs traffico dei bot
+
+Human Traffic e Bot Analytics rispondono a domande diverse.
+
+| Funzionalità | Cosa misura | Sorgente dati |
+| --- | --- | --- |
+| Human Traffic | Visitatori, conversioni e ricavi reali dalle piattaforme AI | GA4 o Piwik PRO |
+| Bot Analytics | Richieste dei crawler AI al tuo sito web | Access log del server |
+
+Usali entrambi insieme per avere il quadro completo: i crawler mostrano se i sistemi AI riescono ad accedere ai tuoi contenuti, e Human Traffic mostra se le piattaforme AI portano visitatori e ricavi.

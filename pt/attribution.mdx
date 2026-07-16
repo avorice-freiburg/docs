@@ -1,0 +1,265 @@
+---
+title: Attribution
+description: Envie dados de atribuição autodeclarados de formulários, CRMs e encomendas para a Finseo.
+---
+
+# Attribution
+
+A Attribution liga os seus dados de visibilidade em IA a leads e receita reais. Em vez de ver apenas se a sua marca aparece nas respostas de IA, consegue ver se os clientes realmente afirmam que o encontraram através do ChatGPT, Perplexity, Claude, Google, anúncios, referências ou outros canais.
+
+Use a Attribution quando faz perguntas como:
+
+- "Como é que ouviu falar de nós?"
+- "Onde nos encontrou primeiro?"
+- "Que fonte influenciou esta encomenda?"
+- "Quanto pipeline veio da pesquisa em IA?"
+
+## Configuração recomendada
+
+A configuração mais simples é enviar um webhook sempre que é criado um lead, registo, encomenda ou negócio.
+
+```json
+{
+  "channelId": "AI Search",
+  "respondentEmail": "kunde@example.com",
+  "respondentName": "Max Mustermann",
+  "respondentExternalId": "BESTELLUNG-12345",
+  "dealValue": 1234.56,
+  "dealCurrency": "EUR",
+  "metadata": {
+    "produkt": "Produkt XY",
+    "sku": "ABC-123",
+    "menge": 2
+  }
+}
+```
+
+A regra mais importante é a consistência. Use os mesmos nomes de campos entre países e lojas sempre que possível. A Finseo consegue mapear muitos formatos, mas payloads consistentes tornam os relatórios mais limpos.
+
+<Tip>
+O webhook não precisa de correr em tempo real. Um batch diário é suficiente, se isso for mais fácil para o seu CRM, loja ou data warehouse.
+</Tip>
+
+## Escolher como enviar dados
+
+<CardGroup cols={2}>
+  <Card title="Webhook" icon="webhook" href="#enviar-dados-com-um-webhook">
+    Ideal para formulários, CRMs, lojas e ferramentas de automação.
+  </Card>
+  <Card title="Customer API" icon="code" href="/api-reference/attribution/submit">
+    Ideal para integrações de backend e clientes de API diretos.
+  </Card>
+  <Card title="Importação em bloco" icon="database" href="/api-reference/attribution/bulk">
+    Ideal para importações históricas ou jobs de batch diários.
+  </Card>
+  <Card title="Workflows do dashboard" icon="workflow" href="#mapear-campos-recebidos">
+    Ideal quando a sua fonte envia campos personalizados.
+  </Card>
+  <Card title="Webhook de saída" icon="arrow-right" href="#receber-eventos-de-atribuição">
+    Ideal quando o seu próprio sistema deve receber as respostas guardadas.
+  </Card>
+</CardGroup>
+
+## Enviar dados com um webhook
+
+O endpoint de webhook do seu projeto tem esta forma:
+
+```text
+https://app.finseo.ai/api/attribution/webhook/PROJECT_ID?token=WEBHOOK_TOKEN
+```
+
+Pode encontrar ou regenerar o token do webhook nas definições de Attribution do projeto.
+
+Envie pedidos `POST` com `Content-Type: application/json`. Também são aceites submissões form-encoded e multipart form para ferramentas de formulários que não conseguem enviar JSON puro.
+
+```bash
+curl --request POST \
+  --url "https://app.finseo.ai/api/attribution/webhook/PROJECT_ID?token=wh_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "channelId": "AI Search",
+    "respondentEmail": "kunde@example.com",
+    "respondentName": "Max Mustermann",
+    "respondentExternalId": "BESTELLUNG-12345",
+    "dealValue": 1234.56,
+    "dealCurrency": "EUR",
+    "metadata": {
+      "produkt": "Produkt XY",
+      "sku": "ABC-123",
+      "menge": 2
+    }
+  }'
+```
+
+As respostas de webhook bem-sucedidas têm este aspeto:
+
+```json
+{
+  "success": true,
+  "id": "response-id",
+  "source": "raw"
+}
+```
+
+## Referência de campos
+
+| Campo | Obrigatório | Descrição |
+| --- | --- | --- |
+| `channelId` | Sim | A fonte selecionada pelo cliente, por exemplo `AI Search`, `ChatGPT`, `Google`, `Referral` ou `Paid Ads`. |
+| `channelLabel` | Não | Etiqueta legível, se quiser que difira de `channelId`. |
+| `channelCategory` | Não | Categoria opcional como `ai_search`, `organic_search`, `paid`, `social`, `referral`, `content`, `direct` ou `other`. |
+| `respondentEmail` | Não | Email do cliente ou lead. Também aceite como `email` em webhooks raw. |
+| `respondentName` | Não | Nome do cliente ou lead. Também aceite como `name` em webhooks raw. |
+| `respondentExternalId` | Não | ID do seu CRM, sistema de encomendas, checkout ou data warehouse. |
+| `dealValue` | Não | Valor numérico de receita ou pipeline. |
+| `dealCurrency` | Não | Código de moeda como `EUR`, `USD` ou `GBP`. Envie a moeda em que foi pago. |
+| `freetextResponse` | Não | Resposta de texto original, se o cliente usou um campo de texto livre. |
+| `formId` | Não | Identificador do formulário, questionário ou fonte. |
+| `pageUrl` | Não | Página onde ocorreu o formulário ou checkout. |
+| `metadata` | Não | Dados extra em pares chave-valor, como produto, SKU, país, plano ou quantidade. |
+
+A Finseo normaliza o texto do canal em categorias. Por exemplo, respostas que contêm `chatgpt`, `openai`, `claude`, `perplexity`, `gemini`, `copilot` ou `ai search` são categorizadas como `ai_search`.
+
+## Mapear campos recebidos
+
+Muitas ferramentas enviam payloads com os seus próprios nomes, como `LeadSource`, `how_did_you_find_us`, `q3_howDid` ou respostas aninhadas do Typeform. A Finseo consegue mapear estes campos em workflows de Attribution.
+
+1. Abra **Attribution**.
+2. Vá a **Workflows**.
+3. Envie um webhook de teste a partir do seu sistema de origem.
+4. Abra o workflow criado.
+5. Mapeie os campos recebidos para atribuição, email, nome, valor do negócio, moeda, ID do formulário ou regras.
+6. Guarde o mapeamento.
+
+Após o mapeamento, os webhooks futuros com a mesma estrutura são analisados automaticamente.
+
+```json
+{
+  "attribution": "lead.source",
+  "email": "lead.email",
+  "name": "lead.full_name",
+  "dealValue": "order.total",
+  "dealCurrency": "order.currency",
+  "formId": "form.id"
+}
+```
+
+Também pode usar regras quando um campo de origem precisa de ser traduzido. Por exemplo, se `utm_source` contém `chatgpt`, mapeie-o para `AI Search`.
+
+## Formatos de origem suportados
+
+A Finseo deteta automaticamente várias fontes comuns:
+
+- **HubSpot**: payloads legacy de webhook de contacto com `properties`, ou bodies JSON personalizados do Operations Hub.
+- **Typeform**: `form_response.answers`, incluindo campos de choice, choices, text e email.
+- **Tally**: payloads `data.fields`.
+- **Salesforce**: JSON do Flow HTTP Callout, por exemplo `LeadSource`, `Email`, `Name`, `Amount` e `CurrencyIsoCode`.
+- **Jotform**: multipart/form-data com `rawRequest` ou campos como `q3_howDid`, `formID` e `submissionID`.
+- **Raw JSON**: payloads diretos com campos como `channelId`, `respondentEmail`, `dealValue` e `metadata`.
+
+## Exemplos
+
+<CodeGroup>
+
+```json CRM lead
+{
+  "channelId": "ChatGPT",
+  "respondentEmail": "jane@company.com",
+  "respondentName": "Jane Smith",
+  "respondentExternalId": "lead_98421",
+  "dealValue": 12000,
+  "dealCurrency": "EUR",
+  "metadata": {
+    "country": "DE",
+    "plan": "Enterprise"
+  }
+}
+```
+
+```json Ecommerce order
+{
+  "channelId": "Perplexity",
+  "respondentEmail": "kunde@example.com",
+  "respondentExternalId": "ORDER-12345",
+  "dealValue": 1234.56,
+  "dealCurrency": "EUR",
+  "metadata": {
+    "produkt": "Produkt XY",
+    "sku": "ABC-123",
+    "menge": 2,
+    "shop": "DE"
+  }
+}
+```
+
+```json Salesforce Flow
+{
+  "LeadSource": "Claude",
+  "Email": "buyer@example.com",
+  "Name": "Alex Buyer",
+  "Id": "00Qxx0000012345",
+  "Amount": 8500,
+  "CurrencyIsoCode": "USD"
+}
+```
+
+</CodeGroup>
+
+## Importação em batch diária
+
+Se preferir um job diário, envie até `1000` respostas de uma vez com a API de bulk.
+
+```bash
+curl --request POST \
+  --url "https://api.finseo.ai/v1/projects/PROJECT_ID/attribution/bulk" \
+  --header "Authorization: Bearer sk_live_xxxxxxxx" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "responses": [
+      {
+        "channelId": "AI Search",
+        "respondentEmail": "kunde@example.com",
+        "respondentExternalId": "BESTELLUNG-12345",
+        "dealValue": 1234.56,
+        "dealCurrency": "EUR"
+      }
+    ]
+  }'
+```
+
+Consulte a [Bulk Create Attributions API](/api-reference/attribution/bulk) para a referência completa.
+
+## Receber eventos de atribuição
+
+Pode configurar um URL de webhook de saída nas definições de Attribution. A Finseo envia um evento para o seu URL sempre que uma nova resposta é guardada.
+
+```json
+{
+  "event": "attribution.response.created",
+  "data": {
+    "id": "response-id",
+    "channel_id": "ai_chatgpt",
+    "channel_label": "ChatGPT",
+    "channel_category": "ai_search",
+    "respondent_email": "kunde@example.com",
+    "respondent_name": "Max Mustermann",
+    "deal_value": 1234.56,
+    "deal_currency": "EUR",
+    "source": "webhook",
+    "created_at": "2026-07-07T10:00:00Z"
+  },
+  "project_id": "PROJECT_ID",
+  "timestamp": "2026-07-07T10:00:01Z"
+}
+```
+
+Se adicionar um secret de webhook de saída, a Finseo assina o body JSON com um cabeçalho `X-FinSEO-Signature` usando HMAC-SHA256.
+
+## Boas práticas
+
+- Coloque a pergunta de atribuição perto da conversão, como no registo, pedido de demo, checkout ou qualificação de lead.
+- Mantenha as opções de resposta estáveis entre países. Traduza as etiquetas para os utilizadores, se necessário, mas mantenha os valores do webhook consistentes.
+- Envie a moeda de pagamento original em `dealCurrency`; a Finseo continua a conseguir agregar e mapear os valores.
+- Inclua um `respondentExternalId` estável, como o ID da encomenda, ID do lead no CRM, ID do contacto ou ID do negócio.
+- Coloque produto, SKU, mercado, campanha e outro contexto de negócio em `metadata`.
+- Envie um evento por lead, encomenda ou negócio. Evite enviar cada visualização de página como atribuição.

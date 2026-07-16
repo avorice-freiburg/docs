@@ -1,0 +1,142 @@
+---
+title: Introduzione
+description: La Finseo API ti offre accesso programmatico ai tuoi dati di monitoraggio della visibilità AI.
+---
+
+# Finseo API
+
+Monitora come il tuo brand appare in ChatGPT, Claude, Perplexity e altre piattaforme AI. La Finseo Customer API ti permette di recuperare metriche di visibilità, gestire prompt, analizzare i competitor ed esportare dati.
+
+## Base URL
+
+```
+https://api.finseo.ai/v1
+```
+
+## Esempio rapido
+
+<CodeGroup>
+
+```bash cURL
+curl --request GET \
+  --url https://api.finseo.ai/v1/projects/YOUR_PROJECT_ID/metrics?timeframe=30d \
+  --header 'Authorization: Bearer YOUR_API_KEY'
+```
+
+```python Python
+import requests
+
+headers = {"Authorization": "Bearer YOUR_API_KEY"}
+response = requests.get(
+    "https://api.finseo.ai/v1/projects/YOUR_PROJECT_ID/metrics",
+    headers=headers,
+    params={"timeframe": "30d"}
+)
+
+data = response.json()["data"]
+print(f"Visibility Rate: {data['current']['visibilityRate']}%")
+print(f"Mentions: {data['current']['mentions']}")
+print(f"Change: {data['changes']['visibilityRateChange']:+.1f}%")
+```
+
+```javascript Node.js
+const response = await fetch(
+  "https://api.finseo.ai/v1/projects/YOUR_PROJECT_ID/metrics?timeframe=30d",
+  { headers: { Authorization: "Bearer YOUR_API_KEY" } }
+);
+
+const { data } = await response.json();
+console.log(`Visibility: ${data.current.visibilityRate}%`);
+console.log(`Mentions: ${data.current.mentions}`);
+```
+
+</CodeGroup>
+
+**Response:**
+
+```json
+{
+  "data": {
+    "current": {
+      "visible": 28,
+      "notVisible": 14,
+      "mentions": 156,
+      "visibilityRate": 66.67,
+      "position": 22.4,
+      "sentiment": 0.78
+    },
+    "previous": {
+      "visible": 22,
+      "visibilityRate": 52.38
+    },
+    "changes": {
+      "visibilityRateChange": 14.29,
+      "mentionsChange": 38
+    }
+  }
+}
+```
+
+## Formato della risposta
+
+Tutti gli endpoint restituiscono un envelope JSON uniforme:
+
+| Campo | Descrizione |
+|-------|-------------|
+| `data` | Il payload della risposta |
+| `meta` | Informazioni di paginazione (quando applicabile) |
+| `error` | Dettagli dell'errore (solo in caso di errore) |
+
+## Codici di errore
+
+| Code | Status | Descrizione |
+|------|--------|-------------|
+| `UNAUTHORIZED` | 401 | API key mancante o non valida |
+| `FORBIDDEN` | 403 | Scope insufficienti |
+| `NOT_FOUND` | 404 | Risorsa non trovata |
+| `VALIDATION_ERROR` | 400 | Parametri non validi |
+| `RATE_LIMIT_EXCEEDED` | 429 | Troppe richieste |
+| `PROJECT_ACCESS_DENIED` | 403 | L'API key non può accedere a questo progetto |
+| `INTERNAL_ERROR` | 500 | Errore del server |
+
+<CardGroup cols={2}>
+  <Card title="Prompt di tracking" icon="message" href="/it/getting-started/prompts">
+    Aggiungi le domande giuste per monitorare la visibilità AI
+  </Card>
+  <Card title="Modelli AI" icon="sparkles" href="/it/getting-started/models">
+    Configura dove Finseo esegue i tuoi prompt
+  </Card>
+  <Card title="Bot Analytics" icon="bot" href="/it/bot-analytics">
+    Carica i log del server e monitora l'accesso dei crawler AI
+  </Card>
+  <Card title="Human Traffic" icon="users" href="/it/human-traffic">
+    Misura visite, conversioni e ricavi dalle piattaforme AI
+  </Card>
+  <Card title="Attribution" icon="webhook" href="/it/attribution">
+    Invia a Finseo l'attribuzione di form, CRM e ordini
+  </Card>
+  <Card title="Integrazioni" icon="plug" href="/it/integrations">
+    Collega form, CRM, analytics e fonti di attribuzione
+  </Card>
+  <Card title="Search Console" icon="search" href="/it/search-console">
+    Estrai i prompt reali degli utenti dai dati delle query di Google e Bing
+  </Card>
+  <Card title="Prodotti e AI Shopping" icon="shopping-bag" href="/it/products">
+    Analizza prodotti menzionati, listing di shopping, store e attributi
+  </Card>
+  <Card title="Sentiment" icon="heart" href="/it/sentiment">
+    Monitora la percezione del brand, le critiche, i premi e i punteggi per aspetto
+  </Card>
+  <Card title="Autenticazione" icon="key" href="/it/authentication">
+    Crea e gestisci le API key
+  </Card>
+  <Card title="Rate Limits" icon="gauge" href="/it/rate-limits">
+    Limiti di richieste per piano
+  </Card>
+  <Card title="Customer API" icon="code" href="/api-reference/projects/list">
+    Esplora tutti gli endpoint
+  </Card>
+  <Card title="Integrazione MCP" icon="robot" href="/it/mcp/overview">
+    Connettiti a Claude Desktop o Cursor
+  </Card>
+</CardGroup>

@@ -1,0 +1,141 @@
+---
+title: Sentiment
+description: Analiza cómo la IA describe tu marca, competidores, críticas y premios.
+---
+
+# Sentiment
+
+Sentiment muestra cómo los sistemas de IA describen las marcas en los resultados de tus prompts trackeados. Va más allá de la visibilidad y responde una pregunta distinta:
+
+```text
+When AI mentions us or our competitors, is the framing positive, neutral, or negative?
+```
+
+## Qué mide Sentiment
+
+Finseo analiza las mentions de competidores y marca en las respuestas de IA y extrae:
+
+- Score de sentiment
+- Recuentos de frases positivas, neutrales y negativas
+- Scores a nivel de aspecto
+- Críticas y riesgos
+- Premios y claims de tipo "best for"
+- Tendencia de reputación en el tiempo
+- Win rate de comparación cuando hay claims comparativos disponibles
+
+## Pestaña Brands
+
+La pestaña **Brands** es un leaderboard de las marcas mencionadas en tus prompts trackeados.
+
+Muestra:
+
+- Mentions
+- Score de sentiment medio
+- Distribución positivo/neutral/negativo
+- Aspectos más fuertes
+- Aspectos más débiles
+- Marcador de tu propia marca
+- Tendencia de reputación cuando esté disponible
+
+Úsala para comparar tu marca con los competidores en el mismo conjunto de prompts.
+
+## Pestaña Scorecard
+
+La pestaña **Scorecard** compara marcas entre aspectos como:
+
+- Calidad
+- Precio
+- Relación calidad-precio
+- Performance
+- Características
+- Fiabilidad
+- Diseño
+- Support
+- Servicio
+- Facilidad de uso
+- Disponibilidad
+
+Las celdas verdes significan que la IA enmarcó la marca de forma positiva para ese aspecto. Las celdas rojas significan que el encuadre fue negativo. Las celdas neutrales son objetivas o mixtas.
+
+## Pestaña Criticism
+
+La pestaña **Criticism** saca a la luz las frases negativas encontradas en las respuestas de IA.
+
+Cada fila puede incluir:
+
+- Marca
+- Aspecto
+- Frase negativa
+- Score
+- Modelo
+- Dominio de la fuente cuando esté disponible
+- Contexto del prompt/resultado
+
+Úsala para encontrar riesgos de reputación y objeciones repetidas, por ejemplo:
+
+```text
+"expensive for smaller teams"
+"limited integrations"
+"poor availability"
+"not ideal for enterprise use"
+```
+
+## Pestaña Awards
+
+La pestaña **Awards** muestra los claims de tipo "best for" y las etiquetas de recomendación extraídos de las respuestas de IA.
+
+Ejemplos:
+
+- Best for agencies
+- Best budget option
+- Best for enterprise
+- Best for ecommerce
+- Best for beginners
+
+Esto te ayuda a ver qué situaciones de compra asocia la IA con cada marca.
+
+## Filtros
+
+Sentiment admite los mismos filtros de análisis que otras vistas de tracking:
+
+- Rango de fechas
+- Modelo de IA
+- Tags
+
+Usa tags para comparar grupos de prompts como:
+
+- `branded`
+- `unbranded`
+- `comparison`
+- `product-category`
+- `de`
+- `us`
+
+## De dónde vienen los datos
+
+Sentiment se genera a partir de los resultados de los prompts trackeados. Cuando un prompt se ejecuta, Finseo analiza la respuesta de IA, extrae las mentions de marca y almacena las frases de sentiment y los scores por aspecto.
+
+Si el resultado de un prompt no tiene frases de sentiment extraídas, puede contar igualmente como una mention, pero contribuirá menos a las vistas de sentiment a nivel de aspecto.
+
+## Cómo mejorar la calidad de los datos de sentiment
+
+- Trackea suficientes prompts en cada mercado y categoría.
+- Incluye prompts de comparación y recomendación, no solo prompts de marca.
+- Usa tags para separar grupos de prompts.
+- Activa los modelos que tu audiencia realmente usa.
+- Revisa la pestaña Criticism con regularidad y actualiza el contenido para abordar las objeciones repetidas.
+- Usa Awards para ver dónde tu posicionamiento ya es fuerte.
+
+## Visibilidad vs sentiment
+
+Visibilidad y sentiment son cosas distintas:
+
+| Métrica | Pregunta |
+| --- | --- |
+| Visibilidad | ¿Menciona la IA la marca? |
+| Posición | ¿Dónde aparece la marca comparada con los competidores? |
+| Sentiment | ¿Con qué grado de positividad o negatividad describe la IA la marca? |
+| Awards | ¿Qué casos de uso o etiquetas "best for" asigna la IA? |
+| Criticism | ¿Qué claims negativos u objeciones aparecen de forma repetida? |
+
+Una marca puede ser muy visible pero estar enmarcada de forma negativa. También puede mencionarse con menos frecuencia pero con un sentiment más fuerte. Usa ambas vistas en conjunto.

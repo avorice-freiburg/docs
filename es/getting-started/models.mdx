@@ -1,0 +1,122 @@
+---
+title: Modelos de IA
+description: Configura qué modelos de IA usa Finseo para el tracking de prompts.
+---
+
+# Modelos de IA
+
+La configuración de modelos de IA controla dónde ejecuta Finseo tus prompts de tracking. Más modelos ofrecen mayor cobertura, pero también aumentan el número de respuestas de IA generadas por prompt.
+
+## Modelos disponibles
+
+Finseo admite los siguientes canales de modelo en el dashboard:
+
+| Model ID | Descripción |
+| --- | --- |
+| `chatgpt` | Tracking al estilo GUI/UI de ChatGPT. |
+| `chatgpt_gui` | Tracking al estilo API de ChatGPT. |
+| `perplexity` | Respuestas y citas de fuentes de Perplexity. |
+| `ai_overview` | Tracking de resultados al estilo Google AI Overview. |
+| `google_ai_mode` | Tracking de resultados al estilo Google AI Mode donde esté disponible. |
+| `claude` | Respuestas de Claude. |
+| `grok` | Respuestas de Grok. |
+| `mistral` | Respuestas de Mistral. |
+| `deepseek` | Respuestas de DeepSeek. |
+| `gemini` | Respuestas de Gemini. |
+
+## Selección de modelos por defecto
+
+Las cuentas nuevas empiezan con estos valores por defecto:
+
+```json
+{
+  "chatgpt": true,
+  "perplexity": true,
+  "ai_overview": true,
+  "chatgpt_gui": false,
+  "google_ai_mode": false,
+  "claude": false,
+  "grok": false,
+  "mistral": false,
+  "deepseek": false,
+  "gemini": false
+}
+```
+
+Esto te da cobertura en ChatGPT, Perplexity y la búsqueda con IA al estilo de Google sin ejecutar todos los modelos posibles.
+
+## Defaults de cuenta vs. configuración de proyecto
+
+Finseo admite dos niveles de configuración de modelos:
+
+- **Los defaults de cuenta** aplican cuando un proyecto no tiene configuración de modelos personalizada.
+- **La configuración específica del proyecto** anula los defaults de cuenta para un proyecto.
+
+Usa la configuración específica de proyecto cuando distintas marcas, mercados o clientes necesiten distinta cobertura de modelos.
+
+## Cambiar los modelos activados
+
+1. Abre **Models**.
+2. Selecciona el proyecto si quieres una configuración específica de proyecto.
+3. Activa los modelos que quieras trackear.
+4. Guarda la configuración.
+
+Cuando guardas una configuración específica de proyecto, Finseo sincroniza los prompts de tracking existentes de ese proyecto con el conjunto de modelos activados. Los nuevos prompts usan por defecto los mismos modelos activados.
+
+## Límites de modelos
+
+La mayoría de los planes pueden activar hasta `3` modelos por prompt. Los planes Agency y las cotizaciones Enterprise personalizadas pueden permitir más modelos.
+
+Si alcanzas el límite de modelos, desactiva uno antes de activar otro. El límite se aplica al guardar las preferencias de modelos y al añadir nuevos prompts.
+
+<Note>
+Para las cuentas de agencia, el número de modelos afecta a las respuestas de IA mensuales previstas. Añadir prompts en muchos modelos aumenta el consumo, porque cada prompt se ejecuta una vez por cada modelo activado.
+</Note>
+
+## Cómo afecta el número de modelos a los resultados
+
+El número de respuestas generadas es aproximadamente:
+
+```text
+tracked prompts × enabled models × scheduled runs
+```
+
+Ejemplo:
+
+```text
+100 prompts × 3 models = 300 AI answers per run
+100 prompts × 6 models = 600 AI answers per run
+```
+
+Usa más modelos cuando necesites amplia cobertura de mercado. Usa menos modelos cuando quieras un tracking enfocado, análisis más rápidos o menor consumo.
+
+## Elegir una mezcla de modelos
+
+Empieza con:
+
+- `chatgpt` para una amplia visibilidad en asistentes.
+- `perplexity` para un comportamiento de búsqueda con IA con muchas citas.
+- `ai_overview` para visibilidad en resultados con IA de Google.
+
+Después añade más modelos cuando importen para tu audiencia:
+
+- Añade `claude` para mercados B2B, enterprise, técnicos o con mucha investigación.
+- Añade `gemini` o `google_ai_mode` cuando las superficies de IA de Google sean estratégicamente importantes.
+- Añade `grok`, `mistral` o `deepseek` cuando tu audiencia use esas plataformas.
+
+## Comportamiento de la API
+
+Cuando creas prompts a través de la API, puedes pasar un array `models` explícito.
+
+```json
+{
+  "prompt": "Best AI visibility tracking tools for agencies",
+  "models": ["chatgpt", "perplexity", "ai_overview"],
+  "language": "us",
+  "tags": ["agency", "comparison"]
+}
+```
+
+Si omites `models`, Finseo usa la configuración activada del proyecto. Si no existe configuración de proyecto, usa los defaults de cuenta.
+
+Consulta la [Create Prompt API](/api-reference/prompts/add) para ver la referencia completa.

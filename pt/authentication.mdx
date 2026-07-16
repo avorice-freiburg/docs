@@ -1,0 +1,66 @@
+---
+title: Autenticação
+description: Como autenticar na API da Finseo utilizando API keys.
+---
+
+# Autenticação
+
+Todos os pedidos à API requerem uma API key válida no cabeçalho `Authorization`.
+
+## Obter a sua API key
+
+1. Aceda a [Settings > API](https://app.finseo.ai/settings/api) no dashboard da Finseo
+2. Clique em **Create API Key**
+3. Escolha um nome, scopes e, opcionalmente, restrinja a projetos específicos
+4. Copie a key imediatamente — ela só será mostrada uma vez
+
+## Usar a sua key
+
+<CodeGroup>
+
+```bash cURL
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  https://api.finseo.ai/v1/projects
+```
+
+```python Python
+import requests
+
+headers = {"Authorization": "Bearer YOUR_API_KEY"}
+response = requests.get(
+    "https://api.finseo.ai/v1/projects",
+    headers=headers
+)
+```
+
+```javascript Node.js
+const response = await fetch("https://api.finseo.ai/v1/projects", {
+  headers: { Authorization: "Bearer YOUR_API_KEY" },
+});
+```
+
+</CodeGroup>
+
+## Scopes
+
+As API keys podem ter um ou mais scopes:
+
+| Scope | Descrição |
+|-------|-------------|
+| `read` | Ler dados (projetos, prompts, métricas, concorrentes, fontes) |
+| `write` | Modificar dados (criar prompts, atualizar tags, gerir projetos) |
+| `export` | Exportar dados de rastreamento em bloco |
+
+## Restrições de projeto
+
+Opcionalmente, pode restringir uma key a projetos específicos. Uma key sem restrições de projeto tem acesso a todos os projetos da sua conta.
+
+## Segurança da key
+
+<Warning>
+  Nunca exponha API keys em código do lado do cliente ou em repositórios públicos.
+</Warning>
+
+- As keys são cifradas com SHA-256 antes de serem armazenadas — nunca guardamos texto simples
+- Rode as keys regularmente e revogue imediatamente keys comprometidas
+- Use keys de teste no desenvolvimento e keys live em produção

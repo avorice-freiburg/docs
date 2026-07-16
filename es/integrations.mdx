@@ -1,0 +1,199 @@
+---
+title: Integraciones
+description: Conecta formularios, CRMs, herramientas de analítica y plataformas CMS con Finseo.
+---
+
+# Integraciones
+
+Finseo se conecta con tu CMS, tus herramientas de analítica, tu stack de reporting y tu CRM para que puedas optimizar contenido, medir el tráfico referido por IA y demostrar el impacto en los ingresos. Todos los conectores de abajo están disponibles en tu dashboard, en **Settings → Integrations**.
+
+## Todos los conectores
+
+### CMS y contenido
+
+<CardGroup cols={2}>
+  <Card title="Shopify" icon="https://www.google.com/s2/favicons?domain=shopify.com&sz=128" href="https://app.finseo.ai/integrations">
+    Optimiza títulos SEO de producto, descripciones y datos estructurados desde el agente.
+  </Card>
+  <Card title="WordPress" icon="https://www.google.com/s2/favicons?domain=wordpress.org&sz=128" href="https://app.finseo.ai/integrations">
+    Edita entradas, páginas y meta tags de Yoast/RankMath a través de la WordPress REST API.
+  </Card>
+  <Card title="Webflow" icon="https://www.google.com/s2/favicons?domain=webflow.com&sz=128" href="https://app.finseo.ai/integrations">
+    Actualiza items del CMS, ajustes SEO de página e inyecta datos estructurados JSON-LD.
+  </Card>
+  <Card title="Framer" icon="https://www.google.com/s2/favicons?domain=framer.com&sz=128" href="https://app.finseo.ai/integrations">
+    Edita entradas del CMS, inyecta schemas en el head y publica tu sitio.
+  </Card>
+</CardGroup>
+
+### Analítica
+
+<CardGroup cols={2}>
+  <Card title="Google Analytics" icon="https://www.google.com/s2/favicons?domain=analytics.google.com&sz=128" href="/es/human-traffic">
+    Trackea el tráfico referido por IA, las conversiones y los ingresos desde GA4.
+  </Card>
+  <Card title="Google Search Console" icon="https://www.google.com/s2/favicons?domain=search.google.com&sz=128" href="/es/search-console">
+    Consultas de búsqueda, páginas, CTR y posiciones junto a la visibilidad en IA.
+  </Card>
+  <Card title="Bing Webmaster Tools" icon="https://www.google.com/s2/favicons?domain=bing.com&sz=128" href="/es/search-console">
+    Monitorea el rendimiento en Bing para el tráfico de IA impulsado por Copilot.
+  </Card>
+</CardGroup>
+
+### Reporting y datos
+
+<CardGroup cols={2}>
+  <Card title="Looker Studio" icon="https://www.google.com/s2/favicons?domain=datastudio.google.com&sz=128" href="/es/looker-studio">
+    Crea dashboards para clientes y reportes white-label con el conector de la comunidad.
+  </Card>
+  <Card title="Finseo MCP" icon="https://www.google.com/s2/favicons?domain=finseo.ai&sz=128" href="/es/mcp/overview">
+    Usa tus datos de visibilidad en Claude, ChatGPT y Cursor a través del Model Context Protocol.
+  </Card>
+  <Card title="Finseo API" icon="https://www.google.com/s2/favicons?domain=finseo.ai&sz=128" href="/es">
+    Acceso REST programático a cada métrica del dashboard para tu propio stack.
+  </Card>
+</CardGroup>
+
+### Attribution y CRM
+
+Envía la respuesta a "¿Cómo nos encontraste?" a Finseo cada vez que se cree un lead, un envío de formulario, una reserva, un pedido o un deal.
+
+<CardGroup cols={3}>
+  <Card title="HubSpot" icon="https://www.google.com/s2/favicons?domain=hubspot.com&sz=128" href="#hubspot" />
+  <Card title="Salesforce" icon="https://www.google.com/s2/favicons?domain=salesforce.com&sz=128" href="#salesforce" />
+  <Card title="Typeform" icon="https://www.google.com/s2/favicons?domain=typeform.com&sz=128" href="#typeform-y-jotform" />
+  <Card title="Jotform" icon="https://www.google.com/s2/favicons?domain=jotform.com&sz=128" href="#typeform-y-jotform" />
+  <Card title="Gravity Forms" icon="https://www.google.com/s2/favicons?domain=gravityforms.com&sz=128" href="#fuentes-de-atribución-compatibles" />
+  <Card title="Formstack" icon="https://www.google.com/s2/favicons?domain=formstack.com&sz=128" href="#fuentes-de-atribución-compatibles" />
+  <Card title="Attio" icon="https://www.google.com/s2/favicons?domain=attio.com&sz=128" href="#fuentes-de-atribución-compatibles" />
+  <Card title="Pipedrive" icon="https://www.google.com/s2/favicons?domain=pipedrive.com&sz=128" href="#fuentes-de-atribución-compatibles" />
+  <Card title="Close" icon="https://www.google.com/s2/favicons?domain=close.com&sz=128" href="#fuentes-de-atribución-compatibles" />
+  <Card title="Calendly" icon="https://www.google.com/s2/favicons?domain=calendly.com&sz=128" href="#fuentes-de-atribución-compatibles" />
+  <Card title="Intercom" icon="https://www.google.com/s2/favicons?domain=intercom.com&sz=128" href="#fuentes-de-atribución-compatibles" />
+  <Card title="Zapier / Make / n8n" icon="https://www.google.com/s2/favicons?domain=zapier.com&sz=128" href="#zapier-make-y-n8n" />
+</CardGroup>
+
+## Integraciones de Attribution
+
+Las integraciones de Attribution usan una de estas dos opciones:
+
+- Una URL de webhook de proyecto para formularios y CRMs.
+- La Customer API para herramientas de automatización como Zapier, Make o n8n.
+
+Las URLs de webhook se ven así:
+
+```text
+https://app.finseo.ai/api/attribution/webhook/PROJECT_ID?source=SOURCE&token=WEBHOOK_TOKEN
+```
+
+El parámetro `source` ayuda a Finseo a elegir el parser correcto. El `token` protege el endpoint.
+
+## Fuentes de atribución compatibles
+
+| Fuente | Vía recomendada | Notas |
+| --- | --- | --- |
+| HubSpot | Webhook de workflow | Requiere una acción de workflow de HubSpot que envíe un webhook. Para acciones nativas de webhook puede requerirse Data Hub Pro/Enterprise. |
+| Salesforce | Flow HTTP Callout | Usa JSON de Flow Builder. Los Outbound Messages nativos de Salesforce envían XML y no son compatibles. |
+| Typeform | Webhook nativo | Añade una pregunta "¿Cómo nos encontraste?" y envía todas las respuestas a Finseo. |
+| Jotform | Webhook nativo | Finseo maneja las payloads multipart/form-data y `rawRequest` de Jotform. |
+| Gravity Forms | Webhooks Add-On | Envía JSON y mapea el campo de atribución si es necesario. |
+| Formstack | Webhook nativo | Envía los envíos de formulario como JSON. |
+| Attio | Webhook nativo | Envía payloads de creación/actualización de registros con campos personalizados. |
+| Pipedrive | Webhook de automatización | Envía campos de deal y persona desde automatizaciones. |
+| Close | Webhook nativo | Envía eventos de lead o contacto. |
+| Calendly | Suscripción de webhook | Envía las respuestas de los invitados desde las preguntas de reserva. |
+| Intercom | Webhook nativo | Envía eventos de contacto o conversación con atributos personalizados. |
+| Zapier / Make / n8n | Solicitud HTTP | Usa la Finseo API o un webhook genérico y mapea los campos manualmente. |
+
+## HubSpot
+
+1. En Finseo, abre **Integrations** y selecciona **HubSpot**.
+2. Copia la URL del webhook.
+3. En HubSpot, ve a **Automations -> Workflows**.
+4. Crea un workflow disparado por un envío de formulario o la creación de un contacto.
+5. Añade una acción **Send webhook**.
+6. Pega la URL del webhook de Finseo.
+7. Envía un lead de prueba y comprueba **Attribution** en Finseo.
+
+Finseo busca campos comunes como `email`, `firstname`, `lastname`, `how_did_you_find_us`, `deal_amount` y `amount`.
+
+## Salesforce
+
+Usa **Flow HTTP Callout**, no los Outbound Messages nativos.
+
+```json
+{
+  "LeadSource": "ChatGPT",
+  "Email": "buyer@example.com",
+  "Name": "Alex Buyer",
+  "Id": "00Qxx0000012345",
+  "Amount": 8500,
+  "CurrencyIsoCode": "USD"
+}
+```
+
+Finseo mapea `LeadSource` al canal de atribución, `Email` al email del respondente, `Name` al nombre del respondente, `Amount` al valor del deal y `CurrencyIsoCode` a la moneda.
+
+## Typeform y Jotform
+
+Para las herramientas de formularios, añade una pregunta como:
+
+```text
+How did you find us?
+```
+
+Buenas opciones de respuesta:
+
+- ChatGPT
+- Perplexity
+- Claude
+- Google
+- Redes sociales
+- Amigo o colega
+- Anuncios
+- Otro
+
+Después añade la URL del webhook de Finseo en la configuración de webhooks del formulario. Finseo recibe el envío completo y extrae la respuesta de atribución.
+
+## Zapier, Make y n8n
+
+Úsalos cuando tu herramienta de origen no tiene un webhook nativo o cuando quieres transformar campos antes de enviarlos a Finseo.
+
+```json
+{
+  "channelId": "{{how_did_you_find_us}}",
+  "respondentEmail": "{{email}}",
+  "respondentName": "{{name}}",
+  "respondentExternalId": "{{crm_id}}",
+  "dealValue": "{{amount}}",
+  "dealCurrency": "{{currency}}",
+  "metadata": {
+    "source_tool": "zapier",
+    "form": "{{form_name}}"
+  }
+}
+```
+
+Puedes enviar esto a la URL de webhook del proyecto o a la [Create Attribution API](/api-reference/attribution/submit).
+
+## Mapeo de campos
+
+Si una herramienta envía campos con nombres inusuales, envía primero una payload de prueba. Finseo crea un workflow de Attribution a partir de la estructura entrante. Abre **Attribution -> Workflows** y mapea los campos a:
+
+- Respuesta de atribución
+- Email
+- Nombre
+- Valor del deal
+- Moneda del deal
+- ID de formulario
+
+Usa reglas cuando un campo de origen necesite traducirse. Por ejemplo, mapea `utm_source contains chatgpt` a `AI Search`.
+
+## Checklist de pruebas
+
+- Envía un envío de prueba desde la herramienta de origen.
+- Confirma que la respuesta aparece en **Attribution**.
+- Confirma que la categoría del canal es correcta, especialmente para fuentes de IA.
+- Añade `dealValue` y `dealCurrency` si quieres reporting de ingresos.
+- Añade un `respondentExternalId` estable como el ID del pedido, el ID del lead o el ID del deal.
+- Mantén los nombres de campo consistentes entre mercados y países.

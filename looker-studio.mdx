@@ -1,0 +1,56 @@
+---
+title: Looker Studio Connector
+description: Connect your Finseo AI search visibility data to Google Looker Studio.
+---
+
+# Looker Studio Connector
+
+The Finseo community connector lets you import your AI search visibility data directly into [Google Looker Studio](https://lookerstudio.google.com/). Build custom dashboards and client reports with your brand performance data from ChatGPT, Perplexity, Google AI Overviews, Gemini and Grok.
+
+## What you need
+
+- A Finseo account on a paid plan with at least one tracking project
+- A Finseo API key with `read` scope — create one in the dashboard under **Settings → API → Create Key**
+- A Google account with access to Looker Studio
+
+## Set up the connector
+
+1. Open the [Finseo connector link](https://lookerstudio.google.com/datasources/create?connectorId=AKfycbwXSLOjOTGG-4Ftyfs0VPxExJ14Vgj5ry6Jl3MRq6o) (signed in with your Google account)
+2. Authorize the connector when Google asks (one time)
+3. Paste your Finseo API key and click **Submit**
+4. Choose your **project**, a **report type** and optionally an **AI model filter**
+5. Click **Connect**, then **Create Report**
+
+Your API key is stored per Google user by Looker Studio. You can replace it anytime via **Edit connection**.
+
+## Report types
+
+| Report type | Rows | Best for |
+|---|---|---|
+| **Visibility per day** | One row per day: visibility rate, brand mentions, answers analyzed, average position, sentiment | Trend charts, scorecards, period comparisons |
+| **Competitor ranking** | Top 50 competitors in the selected date range with mentions, visibility rate, position and sentiment | Competitor bar charts and tables |
+| **Top cited sources** | Top 50 cited sources with citations, citation rate and source type | Source tables, citation share pies |
+
+The date range picker in Looker Studio controls the timeframe (up to 90 days). All report types return the same numbers you see in the Finseo dashboard.
+
+## Available fields
+
+**Visibility per day**: Date, Visibility % (dashboard KPI), Brand mentions, AI answers analyzed, Avg. position %, Sentiment score, Prompts tracked
+
+**Competitor ranking**: Rank, Competitor, Domain, Is your brand, Mentions, Visibility rate %, Avg. position %, Sentiment score
+
+**Top cited sources**: Rank, Source domain, Source URL, Source type, URL type, Citations, Prompts citing, Citation rate %
+
+## Tips
+
+- Use one data source per project and report type. You can add multiple data sources to a single report to combine, for example, the daily trend with the competitor ranking.
+- Blend the visibility data source with your Search Console data to compare classic search and AI search side by side.
+- Responses are cached for five minutes, so very recent tracking runs can take a moment to appear.
+
+## Troubleshooting
+
+- **"Invalid credentials"** — your API key was revoked, expired or lacks the `read` scope. Create a fresh key under **Settings → API**.
+- **Project missing from the dropdown** — the key is restricted to specific projects. Create a key with access to all projects or add the project to the key.
+- **Empty report** — check the date range: the connector returns data for days on which your project actually collected AI answers.
+
+Need help? Contact [support](https://docs.finseo.ai) or your Finseo account manager.

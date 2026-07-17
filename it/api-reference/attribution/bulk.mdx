@@ -1,0 +1,53 @@
+---
+title: Creazione in blocco di attribuzioni
+api: POST /v1/projects/{projectId}/attribution/bulk
+---
+
+Importa fino a 1000 risposte di attribuzione in una volta sola. Usa questo Endpoint per migrare dati storici dal tuo CRM o dal tuo strumento di analytics.
+
+Richiede lo Scope `write` sulla tua API Key.
+
+<ParamField path="projectId" type="string" required>
+  L'ID del progetto.
+</ParamField>
+
+<ParamField body="responses" type="array" required>
+  Array di risposte di attribuzione (max 1000). Ogni elemento richiede almeno `channelId`.
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl --request POST \
+  --url https://api.finseo.ai/v1/projects/PROJECT_ID/attribution/bulk \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "responses": [
+      {
+        "channelId": "ai_search",
+        "respondentEmail": "jane@company.com",
+        "dealValue": 12000
+      },
+      {
+        "channelId": "google_search",
+        "respondentEmail": "john@corp.com",
+        "dealValue": 8500
+      },
+      {
+        "channelId": "social_media",
+        "respondentEmail": "alex@startup.io"
+      }
+    ]
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "data": {
+    "imported": 3
+  }
+}
+```
+</ResponseExample>

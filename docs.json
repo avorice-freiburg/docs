@@ -425,65 +425,65 @@
               {
                 "group": "Projects",
                 "pages": [
-                  "api-reference/projects/list",
-                  "api-reference/projects/get",
-                  "api-reference/projects/create",
-                  "api-reference/projects/update"
+                  "fr/api-reference/projects/list",
+                  "fr/api-reference/projects/get",
+                  "fr/api-reference/projects/create",
+                  "fr/api-reference/projects/update"
                 ]
               },
               {
                 "group": "Prompts",
                 "pages": [
-                  "api-reference/prompts/list",
-                  "api-reference/prompts/add"
+                  "fr/api-reference/prompts/list",
+                  "fr/api-reference/prompts/add"
                 ]
               },
               {
                 "group": "Metrics",
                 "pages": [
-                  "api-reference/metrics/daily",
-                  "api-reference/metrics/timeseries"
+                  "fr/api-reference/metrics/daily",
+                  "fr/api-reference/metrics/timeseries"
                 ]
               },
               {
                 "group": "Competitors",
                 "pages": [
-                  "api-reference/competitors/ranking"
+                  "fr/api-reference/competitors/ranking"
                 ]
               },
               {
                 "group": "Sources",
                 "pages": [
-                  "api-reference/sources/ranking"
+                  "fr/api-reference/sources/ranking"
                 ]
               },
               {
                 "group": "Tags",
                 "pages": [
-                  "api-reference/tags/list",
-                  "api-reference/tags/create"
+                  "fr/api-reference/tags/list",
+                  "fr/api-reference/tags/create"
                 ]
               },
               {
                 "group": "Fan-outs",
                 "pages": [
-                  "api-reference/fanouts/list",
-                  "api-reference/fanouts/details"
+                  "fr/api-reference/fanouts/list",
+                  "fr/api-reference/fanouts/details"
                 ]
               },
               {
                 "group": "Export",
                 "pages": [
-                  "api-reference/export/bulk"
+                  "fr/api-reference/export/bulk"
                 ]
               },
               {
                 "group": "Attribution",
                 "pages": [
-                  "api-reference/attribution/list",
-                  "api-reference/attribution/submit",
-                  "api-reference/attribution/summary",
-                  "api-reference/attribution/bulk"
+                  "fr/api-reference/attribution/list",
+                  "fr/api-reference/attribution/submit",
+                  "fr/api-reference/attribution/summary",
+                  "fr/api-reference/attribution/bulk"
                 ]
               }
             ]
@@ -575,65 +575,65 @@
               {
                 "group": "Projects",
                 "pages": [
-                  "api-reference/projects/list",
-                  "api-reference/projects/get",
-                  "api-reference/projects/create",
-                  "api-reference/projects/update"
+                  "it/api-reference/projects/list",
+                  "it/api-reference/projects/get",
+                  "it/api-reference/projects/create",
+                  "it/api-reference/projects/update"
                 ]
               },
               {
                 "group": "Prompts",
                 "pages": [
-                  "api-reference/prompts/list",
-                  "api-reference/prompts/add"
+                  "it/api-reference/prompts/list",
+                  "it/api-reference/prompts/add"
                 ]
               },
               {
                 "group": "Metrics",
                 "pages": [
-                  "api-reference/metrics/daily",
-                  "api-reference/metrics/timeseries"
+                  "it/api-reference/metrics/daily",
+                  "it/api-reference/metrics/timeseries"
                 ]
               },
               {
                 "group": "Competitors",
                 "pages": [
-                  "api-reference/competitors/ranking"
+                  "it/api-reference/competitors/ranking"
                 ]
               },
               {
                 "group": "Sources",
                 "pages": [
-                  "api-reference/sources/ranking"
+                  "it/api-reference/sources/ranking"
                 ]
               },
               {
                 "group": "Tags",
                 "pages": [
-                  "api-reference/tags/list",
-                  "api-reference/tags/create"
+                  "it/api-reference/tags/list",
+                  "it/api-reference/tags/create"
                 ]
               },
               {
                 "group": "Fan-outs",
                 "pages": [
-                  "api-reference/fanouts/list",
-                  "api-reference/fanouts/details"
+                  "it/api-reference/fanouts/list",
+                  "it/api-reference/fanouts/details"
                 ]
               },
               {
                 "group": "Export",
                 "pages": [
-                  "api-reference/export/bulk"
+                  "it/api-reference/export/bulk"
                 ]
               },
               {
                 "group": "Attribution",
                 "pages": [
-                  "api-reference/attribution/list",
-                  "api-reference/attribution/submit",
-                  "api-reference/attribution/summary",
-                  "api-reference/attribution/bulk"
+                  "it/api-reference/attribution/list",
+                  "it/api-reference/attribution/submit",
+                  "it/api-reference/attribution/summary",
+                  "it/api-reference/attribution/bulk"
                 ]
               }
             ]
@@ -725,65 +725,65 @@
               {
                 "group": "Projects",
                 "pages": [
-                  "api-reference/projects/list",
-                  "api-reference/projects/get",
-                  "api-reference/projects/create",
-                  "api-reference/projects/update"
+                  "es/api-reference/projects/list",
+                  "es/api-reference/projects/get",
+                  "es/api-reference/projects/create",
+                  "es/api-reference/projects/update"
                 ]
               },
               {
                 "group": "Prompts",
                 "pages": [
-                  "api-reference/prompts/list",
-                  "api-reference/prompts/add"
+                  "es/api-reference/prompts/list",
+                  "es/api-reference/prompts/add"
                 ]
               },
               {
                 "group": "Metrics",
                 "pages": [
-                  "api-reference/metrics/daily",
-                  "api-reference/metrics/timeseries"
+                  "es/api-reference/metrics/daily",
+                  "es/api-reference/metrics/timeseries"
                 ]
               },
               {
                 "group": "Competitors",
                 "pages": [
-                  "api-reference/competitors/ranking"
+                  "es/api-reference/competitors/ranking"
                 ]
               },
               {
                 "group": "Sources",
                 "pages": [
-                  "api-reference/sources/ranking"
+                  "es/api-reference/sources/ranking"
                 ]
               },
               {
                 "group": "Tags",
                 "pages": [
-                  "api-reference/tags/list",
-                  "api-reference/tags/create"
+                  "es/api-reference/tags/list",
+                  "es/api-reference/tags/create"
                 ]
               },
               {
                 "group": "Fan-outs",
                 "pages": [
-                  "api-reference/fanouts/list",
-                  "api-reference/fanouts/details"
+                  "es/api-reference/fanouts/list",
+                  "es/api-reference/fanouts/details"
                 ]
               },
               {
                 "group": "Export",
                 "pages": [
-                  "api-reference/export/bulk"
+                  "es/api-reference/export/bulk"
                 ]
               },
               {
                 "group": "Attribution",
                 "pages": [
-                  "api-reference/attribution/list",
-                  "api-reference/attribution/submit",
-                  "api-reference/attribution/summary",
-                  "api-reference/attribution/bulk"
+                  "es/api-reference/attribution/list",
+                  "es/api-reference/attribution/submit",
+                  "es/api-reference/attribution/summary",
+                  "es/api-reference/attribution/bulk"
                 ]
               }
             ]
@@ -875,65 +875,65 @@
               {
                 "group": "Projects",
                 "pages": [
-                  "api-reference/projects/list",
-                  "api-reference/projects/get",
-                  "api-reference/projects/create",
-                  "api-reference/projects/update"
+                  "pt/api-reference/projects/list",
+                  "pt/api-reference/projects/get",
+                  "pt/api-reference/projects/create",
+                  "pt/api-reference/projects/update"
                 ]
               },
               {
                 "group": "Prompts",
                 "pages": [
-                  "api-reference/prompts/list",
-                  "api-reference/prompts/add"
+                  "pt/api-reference/prompts/list",
+                  "pt/api-reference/prompts/add"
                 ]
               },
               {
                 "group": "Metrics",
                 "pages": [
-                  "api-reference/metrics/daily",
-                  "api-reference/metrics/timeseries"
+                  "pt/api-reference/metrics/daily",
+                  "pt/api-reference/metrics/timeseries"
                 ]
               },
               {
                 "group": "Competitors",
                 "pages": [
-                  "api-reference/competitors/ranking"
+                  "pt/api-reference/competitors/ranking"
                 ]
               },
               {
                 "group": "Sources",
                 "pages": [
-                  "api-reference/sources/ranking"
+                  "pt/api-reference/sources/ranking"
                 ]
               },
               {
                 "group": "Tags",
                 "pages": [
-                  "api-reference/tags/list",
-                  "api-reference/tags/create"
+                  "pt/api-reference/tags/list",
+                  "pt/api-reference/tags/create"
                 ]
               },
               {
                 "group": "Fan-outs",
                 "pages": [
-                  "api-reference/fanouts/list",
-                  "api-reference/fanouts/details"
+                  "pt/api-reference/fanouts/list",
+                  "pt/api-reference/fanouts/details"
                 ]
               },
               {
                 "group": "Export",
                 "pages": [
-                  "api-reference/export/bulk"
+                  "pt/api-reference/export/bulk"
                 ]
               },
               {
                 "group": "Attribution",
                 "pages": [
-                  "api-reference/attribution/list",
-                  "api-reference/attribution/submit",
-                  "api-reference/attribution/summary",
-                  "api-reference/attribution/bulk"
+                  "pt/api-reference/attribution/list",
+                  "pt/api-reference/attribution/submit",
+                  "pt/api-reference/attribution/summary",
+                  "pt/api-reference/attribution/bulk"
                 ]
               }
             ]

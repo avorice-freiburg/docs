@@ -1,0 +1,94 @@
+---
+title: Exportar datos del proyecto
+api: GET /v1/projects/{projectId}/export
+---
+
+Exporta los Prompts con sus resultados de Tracking anidados para el periodo seleccionado. Pensado para análisis offline, herramientas de BI o copias de seguridad de los datos de visibilidad en IA de Finseo procedentes de ChatGPT, Claude, Perplexity y otros modelos.
+
+<ParamField path="projectId" type="string" required>
+  Identificador del proyecto.
+</ParamField>
+
+<ParamField query="timeframe" type="string" default="30d">
+  Ventana móvil de resultados a incluir (máx. 1000 Prompts; los resultados están acotados por el rango de fechas).
+</ParamField>
+
+<ParamField query="model" type="string">
+  Se parsea con el esquema compartido; el handler de exportación puede incluir todos los modelos en los resultados.
+</ParamField>
+
+<ParamField query="language" type="string">
+  Se parsea con el esquema compartido.
+</ParamField>
+
+<ParamField query="tags" type="string">
+  Se parsea con el esquema compartido.
+</ParamField>
+
+<ParamField query="page" type="integer">
+  Se parsea con el esquema compartido.
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Se parsea con el esquema compartido.
+</ParamField>
+
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url 'https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/export?timeframe=30d' \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx'
+```
+
+```python Python
+import requests
+
+r = requests.get(
+    "https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/export",
+    headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
+    params={"timeframe": "30d"},
+)
+export_payload = r.json()["data"]
+print(export_payload["timeframeDays"], len(export_payload["prompts"]))
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json
+{
+  "data": {
+    "exportedAt": "2026-03-29T16:45:00.000Z",
+    "timeframeDays": 30,
+    "prompts": [
+      {
+        "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "prompt": "Best AI visibility platforms including Finseo",
+        "domain": "finseo.ai",
+        "brandName": "finseo",
+        "language": "en",
+        "tags": ["branded", "comparison"],
+        "models": ["chatgpt", "claude", "perplexity"],
+        "resultCount": 6,
+        "results": [
+          {
+            "id": "r1e2s3u4-l5t6-7890-abcd-ef1234567890",
+            "model": "chatgpt",
+            "visible": true,
+            "mentions": 3,
+            "position": 2,
+            "percentageRank": 18.5,
+            "timestamp": "2026-03-28T14:02:11.000Z",
+            "fanOutQueries": ["AI SEO tools 2026", "Finseo reviews"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+</ResponseExample>

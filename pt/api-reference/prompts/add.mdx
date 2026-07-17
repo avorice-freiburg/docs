@@ -1,0 +1,80 @@
+---
+title: Criar Prompt
+api: POST /v1/projects/{projectId}/prompts
+---
+
+Adiciona um novo Prompt de Tracking a um projeto. A Finseo executará este Prompt nos modelos especificados e registrará a visibilidade da sua marca em comparação com os concorrentes no ChatGPT, Claude e Perplexity.
+
+<ParamField path="projectId" type="string" required>
+  Identificador do projeto.
+</ParamField>
+
+
+<ParamField body="prompt" type="string" required>
+  Texto do Prompt (1–500 caracteres).
+</ParamField>
+
+<ParamField body="models" type="array">
+  Identificadores de modelos; padrão `["chatgpt", "claude", "perplexity"]`.
+</ParamField>
+
+<ParamField body="language" type="string" default="en">
+  Código de idioma do Prompt.
+</ParamField>
+
+<ParamField body="tags" type="array">
+  Tags de texto opcionais para filtragem nas análises.
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/prompts \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "prompt": "How does Finseo compare to traditional SEO suites?",
+    "models": ["chatgpt", "claude", "perplexity"],
+    "language": "en",
+    "tags": ["comparison", "Finseo"]
+  }'
+```
+
+```python Python
+import requests
+
+payload = {
+    "prompt": "How does Finseo compare to traditional SEO suites?",
+    "models": ["chatgpt", "claude", "perplexity"],
+    "language": "en",
+    "tags": ["comparison", "Finseo"],
+}
+r = requests.post(
+    "https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/prompts",
+    headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
+    json=payload,
+)
+print(r.json()["data"])
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json
+{
+  "data": {
+    "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+    "prompt": "How does Finseo compare to traditional SEO suites?",
+    "domain": "finseo.ai",
+    "brandName": "finseo",
+    "language": "en",
+    "models": ["chatgpt", "claude", "perplexity"],
+    "tags": ["comparison", "Finseo"],
+    "created": true
+  }
+}
+```
+
+</ResponseExample>

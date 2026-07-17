@@ -1,0 +1,114 @@
+---
+title: Elenca i concorrenti
+api: GET /v1/projects/{projectId}/competitors
+---
+
+Restituisce i concorrenti in classifica per visibilità AI: Mentions, visibilità, posizione media e Sentiment. Usa questo Endpoint per vedere come Finseo si posiziona rispetto agli altri brand nelle risposte di ChatGPT, Claude e Perplexity.
+
+<ParamField path="projectId" type="string" required>
+  Identificatore del progetto.
+</ParamField>
+
+<ParamField query="timeframe" type="string" default="30d">
+  Finestra di analisi, es. `7d`, `30d`.
+</ParamField>
+
+<ParamField query="model" type="string">
+  Filtra i risultati di Tracking su un singolo modello.
+</ParamField>
+
+<ParamField query="language" type="string">
+  Filtra i Prompt per lingua.
+</ParamField>
+
+<ParamField query="tags" type="string">
+  Array JSON o elenco di Tag dei Prompt separati da virgola.
+</ParamField>
+
+<ParamField query="search" type="string">
+  Filtra per sottostringa del nome o del dominio del concorrente.
+</ParamField>
+
+<ParamField query="sortBy" type="string" default="mentions">
+  Uno tra `visibility`, `mentions`, `position`, `sentiment`, `name`.
+</ParamField>
+
+<ParamField query="sortDir" type="string" default="desc">
+  `asc` o `desc`.
+</ParamField>
+
+<ParamField query="page" type="integer" default="1">
+  Numero di pagina.
+</ParamField>
+
+<ParamField query="limit" type="integer" default="50">
+  Dimensione della pagina (1–500).
+</ParamField>
+
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url 'https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/competitors?timeframe=30d&sortBy=mentions&limit=20' \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx'
+```
+
+```python Python
+import requests
+
+r = requests.get(
+    "https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/competitors",
+    headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
+    params={"timeframe": "30d", "sortBy": "visibility", "limit": 20},
+)
+competitors = r.json()["data"]["competitors"]
+print([c["name"] for c in competitors if c["isUserBrand"]])
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json
+{
+  "data": {
+    "competitors": [
+      {
+        "id": "c7d8e9f0-a1b2-4345-cdef-678901234abc",
+        "name": "Finseo",
+        "domain": "finseo.ai",
+        "baseDomain": "finseo.ai",
+        "isStarred": true,
+        "isUserBrand": true,
+        "totalMentions": 412,
+        "visibleResults": 186,
+        "averagePosition": 17.3,
+        "sentimentScore": 0.77,
+        "promptCount": 42
+      },
+      {
+        "id": "d8e9f0a1-b2c3-4456-def0-789012345bcd",
+        "name": "Competitor A",
+        "domain": "competitor-a.com",
+        "baseDomain": "competitor-a.com",
+        "isStarred": false,
+        "isUserBrand": false,
+        "totalMentions": 389,
+        "visibleResults": 172,
+        "averagePosition": 21.4,
+        "sentimentScore": 0.62,
+        "promptCount": 42
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 20,
+      "total": 15,
+      "hasMore": false
+    }
+  }
+}
+```
+
+</ResponseExample>

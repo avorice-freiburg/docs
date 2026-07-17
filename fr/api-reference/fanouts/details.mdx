@@ -1,0 +1,72 @@
+---
+title: Détails d'un fan-out
+api: GET /v1/projects/{projectId}/fanouts/details
+description: Récupérez les détails par occurrence d'une requête fan-out donnée — chaque résultat de tracking dont les requêtes fan-out contiennent exactement ce texte.
+---
+
+Renvoie chaque résultat de Tracking dans lequel cette requête fan-out spécifique a été générée, y compris le prompt source, le modèle, l'horodatage, la visibilité et les Mentions.
+
+Utilisez cet Endpoint pour passer de la liste agrégée des fan-outs (`GET /fanouts`) aux occurrences individuelles.
+
+<ParamField path="projectId" type="string" required>L'ID du projet</ParamField>
+<ParamField query="query" type="string" required>Le texte exact de la requête fan-out (correspondance insensible à la casse)</ParamField>
+<ParamField query="timeframe" type="string" default="90d">Fenêtre temporelle — `7d`, `30d`, `90d`, `365d`, ou `all` pour rechercher parmi tous les fan-outs jamais enregistrés</ParamField>
+<ParamField query="startDate" type="string">Date de début personnalisée (YYYY-MM-DD)</ParamField>
+<ParamField query="endDate" type="string">Date de fin personnalisée (YYYY-MM-DD)</ParamField>
+<ParamField query="tags" type="string">Tags séparés par des virgules pour filtrer les prompts sources</ParamField>
+
+<RequestExample>
+```bash cURL
+curl --request GET \
+  --url 'https://api.finseo.ai/v1/projects/proj_abc123/fanouts/details?query=best+CRM+for+small+business+2026&timeframe=30d' \
+  --header 'Authorization: Bearer YOUR_API_KEY'
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    f"https://api.finseo.ai/v1/projects/{project_id}/fanouts/details",
+    headers={"Authorization": "Bearer YOUR_API_KEY"},
+    params={"query": "best CRM for small business 2026", "timeframe": "30d"}
+)
+data = response.json()["data"]
+
+print(f"Found {data['totalOccurrences']} occurrences of '{data['query']}'")
+for occ in data["occurrences"]:
+    print(f"  {occ['model']} on {occ['timestamp']} — visible: {occ['visible']}")
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": {
+    "query": "best CRM for small business 2026",
+    "totalOccurrences": 47,
+    "occurrences": [
+      {
+        "resultId": "uuid-1",
+        "promptId": "prompt-uuid-1",
+        "promptText": "What CRM should I use for my startup?",
+        "brandName": "yourbrand",
+        "model": "chatgpt",
+        "timestamp": "2026-03-29T18:42:00Z",
+        "visible": true,
+        "mentions": 2
+      },
+      {
+        "resultId": "uuid-2",
+        "promptId": "prompt-uuid-2",
+        "promptText": "Best CRM for B2B SaaS",
+        "brandName": "yourbrand",
+        "model": "perplexity",
+        "timestamp": "2026-03-29T15:20:00Z",
+        "visible": false,
+        "mentions": 0
+      }
+    ]
+  }
+}
+```
+</ResponseExample>

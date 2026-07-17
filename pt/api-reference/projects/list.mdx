@@ -1,0 +1,62 @@
+---
+title: Listar Projetos
+api: GET /v1/projects
+---
+
+Retorna a lista de projetos que sua API Key pode acessar. Projetos representam marcas ou domínios monitorados na Finseo para visibilidade em IA no ChatGPT, Claude, Perplexity e outros modelos.
+
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://api.finseo.ai/v1/projects \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx'
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://api.finseo.ai/v1/projects",
+    headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
+)
+projects = response.json()["data"]
+for p in projects:
+    print(p["name"], p["id"])
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json
+{
+  "data": [
+    {
+      "id": "67a1c2d3e4f5061728394a5b",
+      "name": "Finseo Marketing",
+      "domain": "finseo.ai",
+      "websiteUrl": "https://finseo.ai",
+      "description": "AI visibility tracking for modern brands",
+      "isDefault": true,
+      "tags": ["product", "b2b"],
+      "createdAt": "2025-11-12T10:15:00.000Z",
+      "updatedAt": "2026-03-28T14:22:00.000Z"
+    },
+    {
+      "id": "67b2d3e4f5061728394a5c",
+      "name": "Acme Corp",
+      "domain": "acme.com",
+      "websiteUrl": "https://www.acme.com",
+      "description": "",
+      "isDefault": false,
+      "tags": [],
+      "createdAt": "2026-01-08T09:00:00.000Z",
+      "updatedAt": "2026-03-15T11:45:00.000Z"
+    }
+  ]
+}
+```
+
+</ResponseExample>

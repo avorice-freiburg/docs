@@ -1,0 +1,53 @@
+---
+title: Créer des attributions en masse
+api: POST /v1/projects/{projectId}/attribution/bulk
+---
+
+Importez jusqu'à 1000 réponses d'attribution en une seule fois. Utilisez cet Endpoint pour la migration de données historiques depuis votre CRM ou votre outil d'analytics.
+
+Nécessite le Scope `write` sur votre clé API.
+
+<ParamField path="projectId" type="string" required>
+  L'ID du projet.
+</ParamField>
+
+<ParamField body="responses" type="array" required>
+  Tableau de réponses d'attribution (max 1000). Chaque élément requiert au minimum `channelId`.
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl --request POST \
+  --url https://api.finseo.ai/v1/projects/PROJECT_ID/attribution/bulk \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "responses": [
+      {
+        "channelId": "ai_search",
+        "respondentEmail": "jane@company.com",
+        "dealValue": 12000
+      },
+      {
+        "channelId": "google_search",
+        "respondentEmail": "john@corp.com",
+        "dealValue": 8500
+      },
+      {
+        "channelId": "social_media",
+        "respondentEmail": "alex@startup.io"
+      }
+    ]
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "data": {
+    "imported": 3
+  }
+}
+```
+</ResponseExample>

@@ -1,0 +1,69 @@
+---
+title: Lister les attributions
+api: GET /v1/projects/{projectId}/attribution
+---
+
+Récupérez les réponses paginées de l'enquête d'attribution pour un projet. Filtrez par catégorie de canal, par source et par plage temporelle.
+
+<ParamField path="projectId" type="string" required>
+  L'ID du projet.
+</ParamField>
+
+<ParamField query="days" type="integer" default="30">
+  Nombre de jours d'antériorité.
+</ParamField>
+
+<ParamField query="category" type="string">
+  Filtre par catégorie de canal : `ai_search`, `organic_search`, `paid`, `social`, `referral`, `content`, `direct`, `other`.
+</ParamField>
+
+<ParamField query="source" type="string">
+  Filtre par source de données : `widget`, `hubspot`, `typeform`, `jotform`, `salesforce`, `api`, `api_bulk`.
+</ParamField>
+
+<ParamField query="page" type="integer" default="1">
+  Numéro de page.
+</ParamField>
+
+<ParamField query="limit" type="integer" default="50">
+  Résultats par page (max 500).
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl --request GET \
+  --url 'https://api.finseo.ai/v1/projects/PROJECT_ID/attribution?days=30&category=ai_search' \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx'
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "data": {
+    "responses": [
+      {
+        "id": "a1b2c3d4-...",
+        "channel_id": "ai_search",
+        "channel_label": "AI Search (ChatGPT, Perplexity, etc.)",
+        "channel_category": "ai_search",
+        "respondent_email": "jane@company.com",
+        "respondent_name": "Jane Smith",
+        "deal_value": 12000,
+        "deal_currency": "USD",
+        "source": "hubspot",
+        "page_url": "https://example.com/signup",
+        "form_id": "lT4Z3j",
+        "created_at": "2026-03-15T10:30:00Z"
+      }
+    ],
+    "meta": {
+      "page": 1,
+      "limit": 50,
+      "total": 142,
+      "hasMore": true
+    }
+  }
+}
+```
+</ResponseExample>

@@ -1,0 +1,46 @@
+---
+title: Riepilogo delle attribuzioni
+api: GET /v1/projects/{projectId}/attribution/summary
+---
+
+Ottieni i dati di attribuzione aggregati: ripartizione per canale, percentuale di AI search e ricavo totale attribuito. Usa questo Endpoint per capire quale percentuale dei tuoi lead arriva da AI search rispetto agli altri canali.
+
+<ParamField path="projectId" type="string" required>
+  L'ID del progetto.
+</ParamField>
+
+<ParamField query="days" type="integer" default="30">
+  Numero di giorni da considerare a ritroso.
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl --request GET \
+  --url 'https://api.finseo.ai/v1/projects/PROJECT_ID/attribution/summary?days=30' \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx'
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "data": {
+    "total": 142,
+    "totalRevenue": 580000,
+    "aiSearchPercentage": 34.5,
+    "byCategory": [
+      { "category": "ai_search", "count": 49, "revenue": 245000, "percentage": 34.5 },
+      { "category": "organic_search", "count": 38, "revenue": 152000, "percentage": 26.8 },
+      { "category": "social", "count": 22, "revenue": 88000, "percentage": 15.5 },
+      { "category": "paid", "count": 18, "revenue": 54000, "percentage": 12.7 },
+      { "category": "referral", "count": 15, "revenue": 41000, "percentage": 10.6 }
+    ],
+    "bySource": [
+      { "source": "widget", "count": 68 },
+      { "source": "hubspot", "count": 42 },
+      { "source": "api", "count": 32 }
+    ]
+  }
+}
+```
+</ResponseExample>

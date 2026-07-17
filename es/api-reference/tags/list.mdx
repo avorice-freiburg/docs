@@ -1,0 +1,48 @@
+---
+title: Listar Tags
+api: GET /v1/projects/{projectId}/tags
+---
+
+Devuelve todos los nombres de Tags únicos usados en los Prompts activos del proyecto. Los Tags te ayudan a segmentar las analíticas de Finseo (p. ej. branded vs unbranded, o etiquetas de campaña).
+
+<ParamField path="projectId" type="string" required>
+  Identificador del proyecto.
+</ParamField>
+
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/tags \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx'
+```
+
+```python Python
+import requests
+
+r = requests.get(
+    "https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b/tags",
+    headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
+)
+tags = r.json()["data"]
+print(tags)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json
+{
+  "data": [
+    "Finseo",
+    "branded",
+    "comparison",
+    "enterprise",
+    "product"
+  ]
+}
+```
+
+</ResponseExample>

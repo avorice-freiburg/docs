@@ -1,0 +1,53 @@
+---
+title: Criar Atribuições em Massa
+api: POST /v1/projects/{projectId}/attribution/bulk
+---
+
+Importe até 1000 respostas de atribuição de uma só vez. Use isto para migração de dados históricos do seu CRM ou ferramenta de analytics.
+
+Requer o Scope `write` na sua API Key.
+
+<ParamField path="projectId" type="string" required>
+  O ID do projeto.
+</ParamField>
+
+<ParamField body="responses" type="array" required>
+  Array de respostas de atribuição (máx. 1000). Cada item requer pelo menos `channelId`.
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl --request POST \
+  --url https://api.finseo.ai/v1/projects/PROJECT_ID/attribution/bulk \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "responses": [
+      {
+        "channelId": "ai_search",
+        "respondentEmail": "jane@company.com",
+        "dealValue": 12000
+      },
+      {
+        "channelId": "google_search",
+        "respondentEmail": "john@corp.com",
+        "dealValue": 8500
+      },
+      {
+        "channelId": "social_media",
+        "respondentEmail": "alex@startup.io"
+      }
+    ]
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "data": {
+    "imported": 3
+  }
+}
+```
+</ResponseExample>

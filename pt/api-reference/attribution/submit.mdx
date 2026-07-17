@@ -1,0 +1,83 @@
+---
+title: Criar Atribuição
+api: POST /v1/projects/{projectId}/attribution
+---
+
+Registre uma resposta de atribuição autodeclarada. Use isto para rastrear como os clientes descobriram sua marca — por busca com IA, busca orgânica, redes sociais, anúncios, indicações ou qualquer canal personalizado.
+
+Requer o Scope `write` na sua API Key.
+
+<ParamField path="projectId" type="string" required>
+  O ID do projeto.
+</ParamField>
+
+<ParamField body="channelId" type="string" required>
+  Identificador do canal de atribuição. Use IDs padrão como `ai_search`, `ai_chatgpt`, `ai_perplexity`, `google_search`, `social_media`, `paid_ads`, `referral`, `content`, ou qualquer string personalizada.
+</ParamField>
+
+<ParamField body="respondentEmail" type="string">
+  Endereço de e-mail do lead.
+</ParamField>
+
+<ParamField body="respondentName" type="string">
+  Nome completo do lead.
+</ParamField>
+
+<ParamField body="respondentExternalId" type="string">
+  ID externo do seu CRM ou sistema.
+</ParamField>
+
+<ParamField body="dealValue" type="number">
+  Valor de receita atribuído a este lead.
+</ParamField>
+
+<ParamField body="dealCurrency" type="string" default="USD">
+  Código de moeda ISO.
+</ParamField>
+
+<ParamField body="formId" type="string">
+  Identificador do formulário de origem (por exemplo, form_id do Typeform, ID de formulário do HubSpot).
+</ParamField>
+
+<ParamField body="pageUrl" type="string">
+  URL da página onde o formulário foi enviado.
+</ParamField>
+
+<ParamField body="metadata" type="object">
+  Dados personalizados adicionais como pares chave-valor.
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl --request POST \
+  --url https://api.finseo.ai/v1/projects/PROJECT_ID/attribution \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "channelId": "ai_search",
+    "respondentEmail": "jane@company.com",
+    "respondentName": "Jane Smith",
+    "dealValue": 12000,
+    "dealCurrency": "EUR",
+    "formId": "signup_form_v2",
+    "pageUrl": "https://example.com/signup"
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "data": {
+    "id": "a1b2c3d4-...",
+    "channel_id": "ai_search",
+    "channel_label": "AI Search (ChatGPT, Perplexity, etc.)",
+    "channel_category": "ai_search",
+    "respondent_email": "jane@company.com",
+    "deal_value": 12000,
+    "source": "api",
+    "created_at": "2026-03-15T10:30:00Z"
+  }
+}
+```
+</ResponseExample>

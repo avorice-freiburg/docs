@@ -1,0 +1,64 @@
+---
+title: Mettre à jour un projet
+api: PUT /v1/projects/{projectId}
+---
+
+Met à jour un projet existant. N'envoyez que les champs que vous souhaitez modifier.
+
+<ParamField path="projectId" type="string" required>
+  Identifiant du projet.
+</ParamField>
+
+
+<ParamField body="name" type="string">
+  Nouveau nom d'affichage (1–200 caractères).
+</ParamField>
+
+<ParamField body="websiteUrl" type="string">
+  URL canonique mise à jour.
+</ParamField>
+
+<ParamField body="domain" type="string">
+  Domaine racine mis à jour.
+</ParamField>
+
+<ParamField body="description" type="string">
+  Description mise à jour (500 caractères max).
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --request PUT \
+  --url https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b \
+  --header 'Authorization: Bearer sk_live_xxxxxxxx' \
+  --header 'Content-Type: application/json' \
+  --data '{"name": "Finseo — Growth", "description": "Primary Finseo GTM project"}'
+```
+
+```python Python
+import requests
+
+project_id = "67a1c2d3e4f5061728394a5b"
+r = requests.put(
+    f"https://api.finseo.ai/v1/projects/{project_id}",
+    headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
+    json={"name": "Finseo — Growth", "description": "Primary Finseo GTM project"},
+)
+print(r.json()["data"])
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json
+{
+  "data": {
+    "id": "67a1c2d3e4f5061728394a5b",
+    "updated": true
+  }
+}
+```
+
+</ResponseExample>

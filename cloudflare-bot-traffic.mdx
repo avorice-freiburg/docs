@@ -1,0 +1,137 @@
+---
+title: Cloudflare Bot Traffic
+description: Stream AI crawler visits from Cloudflare to Finseo in near real-time — via Worker (all plans) or Logpush (Enterprise).
+---
+
+# Cloudflare Bot Traffic
+
+Instead of uploading server logs manually, you can connect Cloudflare once and Finseo receives every AI and search crawler visit automatically, in near real-time. The connection lives in **Bot Analytics → Sync → Cloudflare**.
+
+There are two connection methods:
+
+| | Cloudflare Worker | Logpush |
+| --- | --- | --- |
+| Cloudflare plan | All plans (including Free) | Enterprise only |
+| Latency | Seconds | Minutes (batched) |
+| How it works | A lightweight Worker on your zone forwards bot requests | Cloudflare pushes `http_requests` log batches to a Finseo HTTP endpoint |
+| Recommended | Yes | If you are on Enterprise and prefer log pipelines |
+
+<Note>
+Both methods only transmit requests from known AI and search crawlers (matched by User-Agent). Regular visitor traffic is never sent to Finseo.
+</Note>
+
+## Which bots are tracked
+
+Finseo receives requests whose User-Agent matches one of these crawlers:
+
+`GPTBot`, `OAI-SearchBot`, `ChatGPT-User`, `ClaudeBot`, `Claude-Web`, `Claude-SearchBot`, `anthropic-ai`, `PerplexityBot`, `Perplexity-User`, `Google-Extended`, `GoogleOther`, `Googlebot`, `Bingbot`, `CCBot`, `Bytespider`, `Amazonbot`, `Applebot`, `meta-externalagent`, `FacebookBot`, `DuckAssistBot`, `cohere`, `MistralAI`, `YandexBot`, `DuckDuckBot`
+
+## Before you start
+
+For both methods you need your IDs from the Cloudflare dashboard. Open [dash.cloudflare.com](https://dash.cloudflare.com), select your domain, and find the **API** section on the **Overview** page (right sidebar):
+
+- **Zone ID** — always required.
+- **Account ID** — required for the Worker method.
+
+You also create a Cloudflare **API token** ([dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens) → **Create Token** → **Create Custom Token**). Finseo uses the token once during setup and never stores it.
+
+## Method 1: Cloudflare Worker (recommended)
+
+Works on every Cloudflare plan. Finseo deploys a small Worker named `finseo-bot-traffic` on your zone. The Worker passes every request through unchanged and — only when the User-Agent matches a known crawler — reports the visit to Finseo in the background. Visitor responses are never delayed or altered.
+
+### Quick setup
+
+1. Create a custom API token with these permissions:
+   - **Account → Workers Scripts → Edit**
+   - **Zone → Workers Routes → Edit**
+   - **Zone → Zone → Read**
+2. In Finseo, open **Bot Analytics → Sync → Cloudflare → Connect**.
+3. Select **Cloudflare Worker**.
+4. Paste the API token, your **Account ID**, and your **Zone ID**.
+5. Click **Deploy Worker**.
+
+Finseo uploads the Worker and adds a route covering your whole zone (`*yourdomain.com/*`, apex and subdomains). The integration shows **Awaiting first push** until the first bot visit arrives, then switches to **Connected**.
+
+### Manual setup
+
+If you prefer not to enter an API token, deploy the Worker yourself:
+
+1. In the Finseo connect dialog, select **Cloudflare Worker** and copy the **Worker script** (your ingest token is already included).
+2. In the Cloudflare dashboard, go to **Workers & Pages → Create → Worker**, paste the script, and deploy.
+3. Open the Worker's **Settings → Domains & Routes** and add the route `*yourdomain.com/*` for your zone.
+
+Refer to Cloudflare's [Workers dashboard guide](https://developers.cloudflare.com/workers/get-started/dashboard/) for details.
+
+### Worker limits
+
+The Workers Free plan includes `100,000` requests per day ([Cloudflare Workers pricing](https://developers.cloudflare.com/workers/platform/pricing/)). The route counts every request on your zone against this limit, not only bot requests. Above the limit, Cloudflare serves your traffic normally without running the Worker — your site is never affected, Finseo just stops receiving reports until the daily reset. High-traffic sites should use the Workers Paid plan or Logpush.
+
+## Method 2: Logpush (Enterprise)
+
+[Cloudflare Logpush](https://developers.cloudflare.com/logs/logpush/) streams the `http_requests` dataset to an HTTP endpoint. The dataset is only available on the **Enterprise plan**.
+
+### Quick setup
+
+1. Create a custom API token with the permission:
+   - **Zone → Logs → Edit**
+2. In Finseo, open **Bot Analytics → Sync → Cloudflare → Connect**.
+3. Select **Logpush**.
+4. Paste the API token and your **Zone ID**.
+5. Click **Create Logpush job**.
+
+Finseo creates the job via the Cloudflare API with these settings:
+
+- Dataset `http_requests` with an HTTP destination pointing at your project's ingest endpoint (authenticated via header token).
+- A filter so only requests from the crawlers listed above are pushed.
+- Timestamps in RFC 3339, batches of up to `5 MB` / `1,000` records.
+
+Cloudflare sends a test upload immediately after the job is created — the integration switches to **Connected** as soon as it arrives.
+
+### Manual setup
+
+1. In the Finseo connect dialog, select **Logpush** and copy the **HTTP destination** (`destination_conf`) — it contains your ingest endpoint and authentication header.
+2. In the Cloudflare dashboard, go to **Analytics & Logs → Logpush → Create a Logpush job**.
+3. Choose **HTTP destination** and paste the copied destination.
+4. Select the dataset **HTTP requests**.
+5. Optional but recommended: under **If logs match**, filter on `ClientRequestUserAgent contains` the crawler names above — otherwise Cloudflare pushes all requests and Finseo discards the non-bot lines.
+6. Submit the job.
+
+Refer to Cloudflare's [HTTP destination guide](https://developers.cloudflare.com/logs/logpush/logpush-job/enable-destinations/http/) for details.
+
+<Warning>
+Cloudflare allows a maximum of `4` Logpush jobs per zone. If job creation fails with `exceeded max jobs allowed`, delete an unused job first.
+</Warning>
+
+## What Finseo receives
+
+Both methods transmit the same fields per bot request:
+
+- IP address and User-Agent (used to verify the bot identity)
+- Host, method, path, and query string
+- Referrer
+- HTTP status code and response size
+- Country, city, and region
+- Timestamp and time to first byte
+
+Visits are deduplicated and appear in **Bot Analytics** alongside data from manual log uploads.
+
+## Disconnect
+
+Click **Manage → Disconnect** on the Cloudflare card. This invalidates the ingest token, so Cloudflare deliveries are rejected immediately. Also remove the Worker route (or the Worker itself) or the Logpush job in your Cloudflare dashboard to stop the pushes at the source.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Token error during quick setup">
+    Finseo verifies the token against the Cloudflare API before using it. Make sure the token is active and has exactly the permissions listed for your method — Worker: **Workers Scripts: Edit** (account), **Workers Routes: Edit** and **Zone: Read** (zone); Logpush: **Logs: Edit** (zone).
+  </Accordion>
+  <Accordion title="Logpush job creation is rejected">
+    The `http_requests` dataset requires the Enterprise plan. On other plans, Cloudflare rejects the job — use the Worker method instead. On Enterprise, check the 4-jobs-per-zone limit.
+  </Accordion>
+  <Accordion title="Status stays on 'Awaiting first push'">
+    Worker: the status switches on the first bot visit — depending on your crawl volume this can take a few hours. Check under **Workers & Pages** that the Worker is deployed and the route `*yourdomain.com/*` exists. Logpush: Cloudflare sends a test upload right away; if nothing arrives within minutes, check the job status under **Analytics & Logs → Logpush**.
+  </Accordion>
+  <Accordion title="A Worker route already exists on my zone">
+    If another Worker is already routed on `*yourdomain.com/*`, the deployment keeps the existing route. Route the `finseo-bot-traffic` Worker on a more specific pattern, or call the Finseo report from your existing Worker.
+  </Accordion>
+</AccordionGroup>

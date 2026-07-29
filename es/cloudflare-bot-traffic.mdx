@@ -1,0 +1,137 @@
+---
+title: Cloudflare Bot Traffic
+description: Transmite las visitas de crawlers de IA desde Cloudflare a Finseo casi en tiempo real — vía Worker (todos los planes) o Logpush (Enterprise).
+---
+
+# Cloudflare Bot Traffic
+
+En lugar de subir logs del servidor manualmente, conecta Cloudflare una sola vez — después Finseo recibe cada visita de crawlers de IA y de búsqueda automáticamente, casi en tiempo real. La conexión está en **Bot Analytics → Sync → Cloudflare**.
+
+Hay dos métodos de conexión:
+
+| | Cloudflare Worker | Logpush |
+| --- | --- | --- |
+| Plan de Cloudflare | Todos los planes (incluido Free) | Solo Enterprise |
+| Latencia | Segundos | Minutos (por lotes) |
+| Funcionamiento | Un Worker ligero en tu zona reenvía las peticiones de bots | Cloudflare envía lotes de logs `http_requests` a un endpoint HTTP de Finseo |
+| Recomendado | Sí | Si estás en Enterprise y prefieres pipelines de logs |
+
+<Note>
+Ambos métodos solo transmiten peticiones de crawlers de IA y de búsqueda conocidos (identificados por el User-Agent). El tráfico de visitantes normales nunca se envía a Finseo.
+</Note>
+
+## Qué bots se rastrean
+
+Finseo recibe las peticiones cuyo User-Agent coincide con uno de estos crawlers:
+
+`GPTBot`, `OAI-SearchBot`, `ChatGPT-User`, `ClaudeBot`, `Claude-Web`, `Claude-SearchBot`, `anthropic-ai`, `PerplexityBot`, `Perplexity-User`, `Google-Extended`, `GoogleOther`, `Googlebot`, `Bingbot`, `CCBot`, `Bytespider`, `Amazonbot`, `Applebot`, `meta-externalagent`, `FacebookBot`, `DuckAssistBot`, `cohere`, `MistralAI`, `YandexBot`, `DuckDuckBot`
+
+## Antes de empezar
+
+Para ambos métodos necesitas tus IDs del dashboard de Cloudflare. Abre [dash.cloudflare.com](https://dash.cloudflare.com), selecciona tu dominio y localiza la sección **API** en la página **Overview** (barra lateral derecha):
+
+- **Zone ID** — siempre requerido.
+- **Account ID** — requerido para el método Worker.
+
+También crearás un **token de API** de Cloudflare ([dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens) → **Create Token** → **Create Custom Token**). Finseo usa el token una sola vez durante la configuración y nunca lo almacena.
+
+## Método 1: Cloudflare Worker (recomendado)
+
+Funciona en todos los planes de Cloudflare. Finseo despliega un pequeño Worker llamado `finseo-bot-traffic` en tu zona. El Worker deja pasar cada petición sin cambios y — solo cuando el User-Agent coincide con un crawler conocido — reporta la visita a Finseo en segundo plano. Las respuestas a los visitantes nunca se retrasan ni se modifican.
+
+### Configuración rápida
+
+1. Crea un token de API personalizado con estos permisos:
+   - **Account → Workers Scripts → Edit**
+   - **Zone → Workers Routes → Edit**
+   - **Zone → Zone → Read**
+2. En Finseo, abre **Bot Analytics → Sync → Cloudflare → Connect**.
+3. Selecciona **Cloudflare Worker**.
+4. Pega el token de API, tu **Account ID** y tu **Zone ID**.
+5. Haz clic en **Deploy Worker**.
+
+Finseo sube el Worker y añade una ruta que cubre toda tu zona (`*tudominio.com/*`, apex y subdominios). La integración muestra **Awaiting first push** hasta que llega la primera visita de un bot, y luego cambia a **Connected**.
+
+### Configuración manual
+
+Si prefieres no introducir un token de API, despliega el Worker tú mismo:
+
+1. En el diálogo de conexión de Finseo, selecciona **Cloudflare Worker** y copia el **script del Worker** (tu token de ingesta ya está incluido).
+2. En el dashboard de Cloudflare, ve a **Workers & Pages → Create → Worker**, pega el script y despliégalo.
+3. Abre **Settings → Domains & Routes** del Worker y añade la ruta `*tudominio.com/*` para tu zona.
+
+Consulta la [guía de Workers de Cloudflare](https://developers.cloudflare.com/workers/get-started/dashboard/) para más detalles.
+
+### Límites del Worker
+
+El plan Workers Free incluye `100 000` peticiones por día ([precios de Cloudflare Workers](https://developers.cloudflare.com/workers/platform/pricing/)). La ruta cuenta cada petición de tu zona contra este límite, no solo las peticiones de bots. Por encima del límite, Cloudflare sirve tu tráfico con normalidad sin ejecutar el Worker — tu sitio nunca se ve afectado, Finseo simplemente deja de recibir reportes hasta el reinicio diario. Los sitios con mucho tráfico deberían usar el plan Workers Paid o Logpush.
+
+## Método 2: Logpush (Enterprise)
+
+[Cloudflare Logpush](https://developers.cloudflare.com/logs/logpush/) transmite el dataset `http_requests` a un endpoint HTTP. El dataset solo está disponible en el plan **Enterprise**.
+
+### Configuración rápida
+
+1. Crea un token de API personalizado con el permiso:
+   - **Zone → Logs → Edit**
+2. En Finseo, abre **Bot Analytics → Sync → Cloudflare → Connect**.
+3. Selecciona **Logpush**.
+4. Pega el token de API y tu **Zone ID**.
+5. Haz clic en **Create Logpush job**.
+
+Finseo crea el job a través de la API de Cloudflare con esta configuración:
+
+- Dataset `http_requests` con destino HTTP apuntando al endpoint de ingesta de tu proyecto (autenticado mediante token en el header).
+- Un filtro para que solo se envíen las peticiones de los crawlers listados arriba.
+- Timestamps en RFC 3339, lotes de hasta `5 MB` / `1000` registros.
+
+Cloudflare envía una subida de prueba inmediatamente después de crear el job — la integración cambia a **Connected** en cuanto llega.
+
+### Configuración manual
+
+1. En el diálogo de conexión de Finseo, selecciona **Logpush** y copia el **destino HTTP** (`destination_conf`) — contiene tu endpoint de ingesta y el header de autenticación.
+2. En el dashboard de Cloudflare, ve a **Analytics & Logs → Logpush → Create a Logpush job**.
+3. Elige **HTTP destination** y pega el destino copiado.
+4. Selecciona el dataset **HTTP requests**.
+5. Opcional pero recomendado: bajo **If logs match**, filtra por `ClientRequestUserAgent contains` con los nombres de crawlers de arriba — de lo contrario Cloudflare envía todas las peticiones y Finseo descarta las líneas que no son de bots.
+6. Confirma el job.
+
+Consulta la [guía de destino HTTP de Cloudflare](https://developers.cloudflare.com/logs/logpush/logpush-job/enable-destinations/http/) para más detalles.
+
+<Warning>
+Cloudflare permite un máximo de `4` jobs de Logpush por zona. Si la creación falla con `exceeded max jobs allowed`, elimina primero un job sin usar.
+</Warning>
+
+## Qué recibe Finseo
+
+Ambos métodos transmiten los mismos campos por cada petición de bot:
+
+- Dirección IP y User-Agent (usados para verificar la identidad del bot)
+- Host, método, ruta y query string
+- Referrer
+- Código de estado HTTP y tamaño de la respuesta
+- País, ciudad y región
+- Timestamp y time to first byte
+
+Las visitas se deduplican y aparecen en **Bot Analytics** junto a los datos de las subidas manuales de logs.
+
+## Desconexión
+
+Haz clic en **Manage → Disconnect** en la tarjeta de Cloudflare. Esto invalida el token de ingesta: las entregas de Cloudflare se rechazan de inmediato. Elimina también la ruta del Worker (o el propio Worker) o el job de Logpush en tu dashboard de Cloudflare para detener los envíos en origen.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Error de token durante la configuración rápida">
+    Finseo verifica el token con la API de Cloudflare antes de usarlo. Asegúrate de que el token esté activo y tenga exactamente los permisos de tu método — Worker: **Workers Scripts: Edit** (cuenta), **Workers Routes: Edit** y **Zone: Read** (zona); Logpush: **Logs: Edit** (zona).
+  </Accordion>
+  <Accordion title="La creación del job de Logpush es rechazada">
+    El dataset `http_requests` requiere el plan Enterprise. En otros planes, Cloudflare rechaza el job — usa el método Worker en su lugar. En Enterprise, revisa el límite de 4 jobs por zona.
+  </Accordion>
+  <Accordion title="El estado se queda en 'Awaiting first push'">
+    Worker: el estado cambia con la primera visita de un bot — según tu volumen de rastreo puede tardar unas horas. Comprueba en **Workers & Pages** que el Worker está desplegado y que existe la ruta `*tudominio.com/*`. Logpush: Cloudflare envía una subida de prueba de inmediato; si no llega nada en unos minutos, revisa el estado del job en **Analytics & Logs → Logpush**.
+  </Accordion>
+  <Accordion title="Ya existe una ruta de Worker en mi zona">
+    Si ya hay otro Worker enrutado en `*tudominio.com/*`, el despliegue mantiene la ruta existente. Enruta el Worker `finseo-bot-traffic` con un patrón más específico, o llama al reporte de Finseo desde tu Worker existente.
+  </Accordion>
+</AccordionGroup>

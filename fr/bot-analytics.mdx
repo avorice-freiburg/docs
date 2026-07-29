@@ -147,7 +147,13 @@ Le parser actuel d'import de logs se concentre sur le volume de crawl, les URLs,
 
 ## Intégrations de synchronisation
 
-L'onglet **Sync** peut afficher des fournisseurs comme Cloudflare, Fastly, AWS CloudFront ou une synchronisation par API comme futures options d'ingestion. L'import manuel de fichiers `.log` et `.txt` est la voie de production actuelle.
+Au lieu d'importer les logs manuellement, tu peux diffuser les visites de bots automatiquement. L'onglet **Sync** connecte ton CDN directement à Finseo :
+
+<Card title="Cloudflare" icon="https://www.google.com/s2/favicons?domain=cloudflare.com&sz=128" href="/fr/cloudflare-bot-traffic">
+  Diffuse les visites des crawlers IA quasiment en temps réel — via Worker (tous les plans) ou Logpush (Enterprise). Configuration unique, plus d'imports manuels.
+</Card>
+
+L'import manuel de fichiers `.log` et `.txt` reste disponible et peut être combiné avec une intégration de synchronisation — les visites en double sont ignorées automatiquement.
 
 ## Dépannage
 

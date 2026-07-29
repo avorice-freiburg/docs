@@ -1,0 +1,51 @@
+---
+title: Gravity Forms
+description: Sende WordPress-Gravity-Forms-Übermittlungen per Webhooks Add-On an die Finseo-Attribution.
+---
+
+# Gravity Forms
+
+Verbinde Gravity Forms (WordPress), um Formular-Übermittlungen fürs Attribution-Tracking an Finseo zu senden. Das Gravity Forms **Webhooks Add-On** POSTet jeden Eintrag als JSON an deine Finseo-Webhook-URL.
+
+## Voraussetzungen
+
+- Das Webhooks Add-On erfordert eine Gravity Forms **Elite**-Lizenz (oder Nonprofit) — in Basic oder Pro ist es nicht enthalten. Upgrades werden anteilig verrechnet.
+- Ein Formularfeld, das die Attributionsantwort erfasst (z. B. „Wie hast du uns gefunden?").
+
+## Webhook-URL holen
+
+1. Öffne in Finseo **Integrations → Gravity Forms → Connect**.
+2. Kopiere deine persönliche Webhook-URL (enthält deine Projekt-ID, `?source=gravity-forms` und einen geheimen Token):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=gravity-forms&token=•••
+```
+
+## Webhook-Feed einrichten
+
+1. Gehe in WordPress zu **Forms → Add-Ons**, installiere und aktiviere das **Webhooks Add-On**.
+2. Bearbeite dein Formular → **Settings → Webhooks → Add New**.
+3. Konfiguriere den Feed:
+   - **Request URL**: deine Finseo-Webhook-URL
+   - **Request Method**: `POST`
+   - **Request Format**: `JSON`
+   - **Request Body**: Alle Felder (oder nur die relevanten)
+4. Speichere den Feed.
+
+Details findest du in der [Gravity-Forms-Webhooks-Doku](https://docs.gravityforms.com/category/add-ons-gravity-forms/webhooks-add-on/).
+
+## Testen und Felder mappen
+
+- Nutze den **Live-Listener** im Finseo-Connect-Dialog: Sende eine Test-Übermittlung und sieh dir den empfangenen Payload an.
+- Gravity Forms sendet Felder unter numerischen IDs oder Labels — wähle dein Attributionsfeld unter **Field Mapping** im Dialog.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Das Webhooks Add-On erscheint nicht unter Add-Ons">
+    Deine Lizenz enthält es nicht — das Add-On erfordert eine Elite- oder Nonprofit-Lizenz. Alternativ leitest du Übermittlungen über Zapier, Make oder n8n.
+  </Accordion>
+  <Accordion title="Requests aus WordPress schlagen fehl">
+    Manche Security-Plugins blockieren ausgehende Requests. Setze `app.finseo.ai` auf die Whitelist oder prüfe die Logs des Webhook-Feeds unter Forms → Settings → Logging.
+  </Accordion>
+</AccordionGroup>

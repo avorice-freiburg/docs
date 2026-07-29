@@ -1,0 +1,47 @@
+---
+title: Monday.com
+description: Invia i task di visibilità di Finseo sulle tue board Monday come elementi.
+---
+
+# Monday.com
+
+Collega Monday.com per creare elementi sulle tue board a partire dai task Finseo. I dettagli del task, le evidenze e i passaggi vengono allegati come update su ogni elemento.
+
+## Cosa puoi fare
+
+- Esportare qualsiasi task Finseo su una board Monday con un clic.
+- Esportare automaticamente i nuovi task tramite regole di automazione (filtrati per categoria e impatto).
+- Assegnare gli elementi esportati ai membri Monday direttamente da Finseo.
+
+## Ottieni il tuo token API
+
+1. In Monday clicca sul tuo avatar nell'angolo in alto a destra.
+2. Seleziona **Developers** — si apre il developer center.
+3. Vai su **My access tokens** e copia il tuo token personale.
+
+Consulta la [documentazione sull'autenticazione](https://developer.monday.com/api-reference/docs/authentication) di Monday per i dettagli.
+
+## Connessione
+
+1. In Finseo apri **Integrations → Monday.com → Connect**.
+2. Incolla il token e salva.
+
+## Esporta i task
+
+- Nella pagina **Tasks**, apri un task e usa **Export → Monday**, poi scegli la board di destinazione.
+- Facoltativamente scegli un assegnatario Monday.
+
+## Regole di automazione
+
+Sotto **Tasks → Automation**, crea regole che inviano automaticamente i nuovi task Finseo su una board Monday — filtrati per categoria e impatto minimo, con un assegnatario predefinito opzionale.
+
+## Risoluzione dei problemi
+
+<AccordionGroup>
+  <Accordion title="Il token viene rifiutato">
+    Copia il token dal developer center (avatar → Developers → My access tokens). I token OAuth specifici delle app non sono supportati qui.
+  </Accordion>
+  <Accordion title="Una board non compare nel selettore">
+    Finseo elenca le board a cui il tuo utente Monday ha accesso. Chiedi al proprietario della board di invitarti, poi riapri il selettore.
+  </Accordion>
+</AccordionGroup>

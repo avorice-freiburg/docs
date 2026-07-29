@@ -1,0 +1,44 @@
+---
+title: Attio
+description: Sync attribution answers from Attio CRM records to Finseo via webhooks.
+---
+
+# Attio
+
+Connect Attio to receive attribution data when records are created. Attio's native webhooks fire on record events and send structured JSON with all attributes — including custom fields like "How did you find us?". Finseo scans the payload for the attribution answer and normalizes it into a channel.
+
+## Get your webhook URL
+
+1. In Finseo, open **Integrations → Attio → Connect**.
+2. Copy your personal webhook URL (contains your project ID, `?source=attio`, and a secret token):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=attio&token=•••
+```
+
+## Set up the Attio webhook
+
+1. In Attio, go to **Settings → Developers** and open (or create) an integration.
+2. Create a **webhook** inside the integration with your Finseo URL as the target.
+3. Subscribe to the event **`record.created`** for your People or Deals object (add `record.updated` if the attribution field is filled later).
+4. Save. Attio can send a **test event** to the target URL from the same page — use it to verify the connection.
+
+If your People object doesn't have an attribution attribute yet, add a custom attribute like "How did you find us?" first.
+
+See Attio's [webhook docs](https://docs.attio.com/rest-api/guides/webhooks) for details.
+
+## Test and map fields
+
+- Use the **live listener** in the Finseo connect dialog or Attio's "Send test event" feature and inspect the received payload.
+- If the attribution attribute isn't detected automatically, select it under **Field Mapping**.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="No events arrive">
+    Check that the webhook status in Attio is "active" and that the subscribed event matches how your records are created. Webhooks created via OAuth tokens are not visible in the developer settings page.
+  </Accordion>
+  <Accordion title="Responses arrive without a channel">
+    Attio sends all record attributes — use Field Mapping in Finseo to point at the attribute that holds the attribution answer.
+  </Accordion>
+</AccordionGroup>

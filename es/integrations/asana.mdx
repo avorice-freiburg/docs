@@ -1,0 +1,47 @@
+---
+title: Asana
+description: Envía tareas de Finseo a tus proyectos de Asana con la evidencia y los pasos de acción adjuntos.
+---
+
+# Asana
+
+Conecta Asana para enviar tareas de visibilidad de IA desde el módulo **Tasks** de Finseo a cualquier proyecto de Asana. Cada tarea exportada incluye la recomendación, la evidencia de datos que la respalda y pasos de acción concretos como notas.
+
+## Qué puedes hacer
+
+- Exportar cualquier tarea de Finseo a un proyecto de Asana con un clic.
+- Exportar automáticamente las tareas nuevas mediante reglas de automatización (filtradas por categoría e impacto).
+- Asignar las tareas exportadas a miembros de Asana directamente desde Finseo.
+
+## Obtén tu Personal Access Token
+
+1. Abre la [consola de desarrolladores de Asana](https://app.asana.com/0/my-apps) (My apps).
+2. Bajo **Personal access tokens**, haz clic en **Create new token**.
+3. Dale un nombre al token, acepta los términos de la API y copia el token — solo se muestra una vez.
+
+Consulta la [documentación de Personal Access Tokens de Asana](https://developers.asana.com/docs/personal-access-token) para más detalles.
+
+## Conexión
+
+1. En Finseo, abre **Integrations → Asana → Connect**.
+2. Pega el token y guarda.
+
+## Exportar tareas
+
+- En la página **Tasks**, abre una tarea y usa **Export → Asana**, luego elige el proyecto de destino.
+- Opcionalmente elige un responsable en Asana.
+
+## Reglas de automatización
+
+Bajo **Tasks → Automation**, crea reglas que envíen las nuevas tareas de Finseo a Asana automáticamente — filtradas por categoría e impacto mínimo, con un responsable por defecto opcional.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="El token es rechazado">
+    Los personal access tokens empiezan con un dígito seguido de una barra (p. ej. `1/...`). Copia el valor completo justo después de crearlo — Asana no lo vuelve a mostrar más tarde.
+  </Accordion>
+  <Accordion title="Falta un proyecto en el selector">
+    Finseo lista los proyectos de los que tu usuario de Asana es miembro. Únete al proyecto en Asana y vuelve a abrir el selector.
+  </Accordion>
+</AccordionGroup>

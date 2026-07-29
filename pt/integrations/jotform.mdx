@@ -1,0 +1,43 @@
+---
+title: Jotform
+description: Receba submissões de inquéritos do Jotform no Finseo para rastreio de atribuição.
+---
+
+# Jotform
+
+Ligue o Jotform para receber automaticamente respostas ao inquérito "Como nos encontrou?". O webhook nativo do Jotform envia cada submissão para o Finseo, que deteta automaticamente o campo de atribuição.
+
+## Obter o seu URL de webhook
+
+1. No Finseo, abra **Integrations → Jotform → Connect**.
+2. Copie o seu URL de webhook pessoal (contém o ID do seu projeto, `?source=jotform` e um token secreto):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=jotform&token=•••
+```
+
+## Configurar o webhook do Jotform
+
+1. No Jotform, abra o seu formulário e vá a **Settings → Integrations**.
+2. Procure **Webhooks** e adicione o seu URL do Finseo.
+3. Conclua a integração — cada nova submissão passa a ser encaminhada.
+
+O Jotform envia os dados do formulário como `multipart/form-data` com um campo JSON `rawRequest`. O Finseo trata ambos os formatos automaticamente e procura nos nomes dos campos palavras-chave de atribuição (`how_did`, `find_us`, `source`, `referral`).
+
+Consulte o [guia de webhooks do Jotform](https://www.jotform.com/help/245-how-to-setup-webhook-with-jotform) para mais detalhes.
+
+## Testar e mapear campos
+
+- Use o **live listener** na janela de ligação do Finseo: submeta uma entrada de teste e inspecione o payload recebido.
+- Se o seu campo tiver outro nome, selecione-o em **Field Mapping** na janela.
+
+## Resolução de problemas
+
+<AccordionGroup>
+  <Accordion title="As submissões não chegam">
+    Verifique que o webhook está listado em Settings → Integrations e que o URL contém a query string completa. O Jotform só tenta reenviar entregas falhadas durante pouco tempo.
+  </Accordion>
+  <Accordion title="A resposta de atribuição não é detetada">
+    As chaves de campos do Jotform são geradas automaticamente (p. ex. `q12_howDid`). Use o Field Mapping uma vez para selecionar o campo certo — o Finseo memoriza-o para todas as submissões futuras.
+  </Accordion>
+</AccordionGroup>

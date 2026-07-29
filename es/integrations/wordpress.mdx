@@ -1,0 +1,49 @@
+---
+title: WordPress
+description: Deja que el agente de Finseo optimice tus posts, páginas y meta tags de WordPress para la visibilidad en IA.
+---
+
+# WordPress
+
+Conecta tu sitio de WordPress para que el agente de Finseo edite posts, páginas, custom post types, meta tags de Yoast/RankMath y datos estructurados directamente desde el chat. El agente lee primero el contenido existente, pide tu aprobación y crea copias de seguridad automáticas antes de cada cambio — cualquier versión anterior puede restaurarse al instante.
+
+## Qué puede hacer el agente
+
+- Reescribir títulos, meta descripciones y contenido para la citabilidad en IA.
+- Actualizar los meta campos de Yoast SEO / RankMath.
+- Inyectar datos estructurados JSON-LD (FAQ, HowTo, Product, …).
+- Trabajar con posts, páginas y custom post types.
+
+## Crea una contraseña de aplicación
+
+Finseo se conecta a través de la REST API de WordPress con una contraseña de aplicación — tu contraseña normal nunca se almacena:
+
+1. En el admin de WordPress, ve a **Users → Profile** (tu propio perfil).
+2. Baja hasta **Application Passwords**, introduce un nombre (p. ej. "Finseo") y haz clic en **Add New Application Password**.
+3. Copia la contraseña generada — solo se muestra una vez.
+
+<Note>
+Las contraseñas de aplicación requieren WordPress 5.6+ y un sitio con HTTPS. Algunos plugins de seguridad las desactivan — revisa los ajustes del plugin si la sección no aparece.
+</Note>
+
+## Conexión
+
+1. En Finseo, abre **Integrations → WordPress → Connect**.
+2. Introduce la URL de tu sitio, tu nombre de usuario de WordPress y la contraseña de aplicación.
+3. Guarda — luego abre el **Agent** y empieza a optimizar, p. ej. "Optimiza las meta descripciones de mis 5 posts más citados".
+
+## Seguridad
+
+- Cada edición requiere tu confirmación antes de aplicarse.
+- Finseo crea una copia de seguridad de la versión anterior antes de cada cambio y puede restaurarla en cualquier momento.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="La conexión falla con 401/403">
+    Comprueba que el nombre de usuario coincide con el perfil bajo el que se creó la contraseña de aplicación, y que ningún plugin de seguridad (p. ej. Wordfence) esté bloqueando la REST API o las contraseñas de aplicación.
+  </Accordion>
+  <Accordion title="La REST API no es accesible">
+    Confirma que `https://your-site.com/wp-json/` devuelve JSON en el navegador. Algunos hostings o firewalls bloquean la ruta de la REST API.
+  </Accordion>
+</AccordionGroup>

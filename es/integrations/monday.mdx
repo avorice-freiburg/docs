@@ -1,0 +1,47 @@
+---
+title: Monday.com
+description: Envía las tareas de visibilidad de Finseo a tus tableros de Monday como items.
+---
+
+# Monday.com
+
+Conecta Monday.com para crear items en tus tableros a partir de tareas de Finseo. Los detalles de la tarea, la evidencia y los pasos se adjuntan como update en cada item.
+
+## Qué puedes hacer
+
+- Exportar cualquier tarea de Finseo a un tablero de Monday con un clic.
+- Exportar automáticamente las tareas nuevas mediante reglas de automatización (filtradas por categoría e impacto).
+- Asignar los items exportados a miembros de Monday directamente desde Finseo.
+
+## Obtén tu token de API
+
+1. En Monday, haz clic en tu avatar en la esquina superior derecha.
+2. Selecciona **Developers** — se abre el centro de desarrolladores.
+3. Ve a **My access tokens** y copia tu token personal.
+
+Consulta la [documentación de autenticación de Monday](https://developer.monday.com/api-reference/docs/authentication) para más detalles.
+
+## Conexión
+
+1. En Finseo, abre **Integrations → Monday.com → Connect**.
+2. Pega el token y guarda.
+
+## Exportar tareas
+
+- En la página **Tasks**, abre una tarea y usa **Export → Monday**, luego elige el tablero de destino.
+- Opcionalmente elige un responsable en Monday.
+
+## Reglas de automatización
+
+Bajo **Tasks → Automation**, crea reglas que envíen las nuevas tareas de Finseo a un tablero de Monday automáticamente — filtradas por categoría e impacto mínimo, con un responsable por defecto opcional.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="El token es rechazado">
+    Copia el token desde el centro de desarrolladores (avatar → Developers → My access tokens). Los tokens OAuth específicos de apps no están soportados aquí.
+  </Accordion>
+  <Accordion title="Falta un tablero en el selector">
+    Finseo lista los tableros a los que tu usuario de Monday puede acceder. Pide al propietario del tablero que te invite y vuelve a abrir el selector.
+  </Accordion>
+</AccordionGroup>

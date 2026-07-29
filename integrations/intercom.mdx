@@ -1,0 +1,48 @@
+---
+title: Intercom
+description: Capture attribution from Intercom contact events in Finseo.
+---
+
+# Intercom
+
+Connect Intercom to receive attribution data when contacts are created. An Intercom webhook sends the contact's attributes — including a "How did you find us?" custom attribute — to Finseo, which normalizes the answer into an attribution channel.
+
+## Requirements
+
+- Intercom webhooks are configured through a **Developer Hub app** (a free internal app for your workspace).
+- A custom attribute on contacts that captures the attribution answer.
+
+## Get your webhook URL
+
+1. In Finseo, open **Integrations → Intercom → Connect**.
+2. Copy your personal webhook URL (contains your project ID, `?source=intercom`, and a secret token):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=intercom&token=•••
+```
+
+## Set up the Intercom webhook
+
+1. Open the [Intercom Developer Hub](https://app.intercom.com/a/apps/_/developer-hub) and create an internal app (or open an existing one).
+2. Under **Configure → Webhooks**, paste your Finseo URL as the endpoint. Intercom validates the URL with a HEAD request.
+3. Subscribe to topics such as **`contact.user.created`** and **`contact.lead.created`** (add `conversation.admin.closed` if you capture the answer in conversations).
+4. On the app's **Authentication** page, enable the permission scopes the topics require (e.g. "Read and write users") — without them the webhook won't fire.
+5. Save.
+
+See Intercom's [webhook setup guide](https://developers.intercom.com/docs/webhooks/setting-up-webhooks) for details.
+
+## Test and map fields
+
+- Use the **live listener** in the Finseo connect dialog: create a test contact and inspect the received payload.
+- Select your attribution custom attribute under **Field Mapping** if it isn't detected automatically.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="No events arrive">
+    Check that the topic's required permission scopes are enabled on the app's Authentication page — topics without matching scopes are silently skipped.
+  </Accordion>
+  <Accordion title="Topics are missing from the dropdown">
+    The available topics depend on the API version your app uses. Update the app's API version in the Developer Hub if needed.
+  </Accordion>
+</AccordionGroup>

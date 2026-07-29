@@ -1,0 +1,47 @@
+---
+title: Monday.com
+description: Pousse les tâches de visibilité Finseo sur tes tableaux Monday sous forme d'items.
+---
+
+# Monday.com
+
+Connecte Monday.com pour créer des items sur tes tableaux à partir des tâches Finseo. Les détails de la tâche, les preuves et les étapes sont joints sous forme d'update sur chaque item.
+
+## Ce que tu peux faire
+
+- Exporter n'importe quelle tâche Finseo sur un tableau Monday en un clic.
+- Exporter automatiquement les nouvelles tâches via des règles d'automatisation (filtrées par catégorie et impact).
+- Assigner les items exportés à des membres Monday directement depuis Finseo.
+
+## Obtenir ton token API
+
+1. Dans Monday, clique sur ton avatar en haut à droite.
+2. Sélectionne **Developers** — le centre développeur s'ouvre.
+3. Va dans **My access tokens** et copie ton token personnel.
+
+Consulte la [documentation d'authentification de Monday](https://developer.monday.com/api-reference/docs/authentication) pour plus de détails.
+
+## Connexion
+
+1. Dans Finseo, ouvre **Integrations → Monday.com → Connect**.
+2. Colle le token et enregistre.
+
+## Exporter des tâches
+
+- Sur la page **Tasks**, ouvre une tâche et utilise **Export → Monday**, puis choisis le tableau cible.
+- Optionnellement, choisis un assigné Monday.
+
+## Règles d'automatisation
+
+Sous **Tasks → Automation**, crée des règles qui poussent automatiquement les nouvelles tâches Finseo sur un tableau Monday — filtrées par catégorie et impact minimum, avec un assigné par défaut optionnel.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="Le token est rejeté">
+    Copie le token depuis le centre développeur (avatar → Developers → My access tokens). Les tokens OAuth propres à une app ne sont pas pris en charge ici.
+  </Accordion>
+  <Accordion title="Un tableau est absent du sélecteur">
+    Finseo liste les tableaux accessibles à ton utilisateur Monday. Demande au propriétaire du tableau de t'inviter, puis rouvre le sélecteur.
+  </Accordion>
+</AccordionGroup>

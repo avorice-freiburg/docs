@@ -1,0 +1,43 @@
+---
+title: Jotform
+description: Recibe los envíos de encuestas de Jotform en Finseo para el seguimiento de atribución.
+---
+
+# Jotform
+
+Conecta Jotform para recibir automáticamente las respuestas de la encuesta "¿Cómo nos encontraste?". El webhook nativo de Jotform envía cada envío a Finseo, que detecta automáticamente el campo de atribución.
+
+## Obtén tu URL de webhook
+
+1. En Finseo, abre **Integrations → Jotform → Connect**.
+2. Copia tu URL de webhook personal (contiene el ID de tu proyecto, `?source=jotform` y un token secreto):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=jotform&token=•••
+```
+
+## Configura el webhook de Jotform
+
+1. En Jotform, abre tu formulario y ve a **Settings → Integrations**.
+2. Busca **Webhooks** y añade tu URL de Finseo.
+3. Completa la integración — cada nuevo envío se reenvía a partir de ahora.
+
+Jotform envía los datos del formulario como `multipart/form-data` con un campo JSON `rawRequest`. Finseo maneja ambos formatos automáticamente y escanea los nombres de los campos en busca de palabras clave de atribución (`how_did`, `find_us`, `source`, `referral`).
+
+Consulta la [guía de webhooks de Jotform](https://www.jotform.com/help/245-how-to-setup-webhook-with-jotform) para más detalles.
+
+## Prueba y mapea los campos
+
+- Usa el **live listener** en el diálogo de conexión de Finseo: envía una entrada de prueba e inspecciona el payload recibido.
+- Si tu campo se llama de otra manera, selecciónalo bajo **Field Mapping** en el diálogo.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Los envíos no llegan">
+    Verifica que el webhook aparece listado bajo Settings → Integrations y que la URL contiene la query string completa. Jotform solo reintenta las entregas fallidas durante un breve periodo.
+  </Accordion>
+  <Accordion title="No se detecta la respuesta de atribución">
+    Las claves de campo de Jotform se generan automáticamente (p. ej. `q12_howDid`). Usa Field Mapping para seleccionar el campo correcto una sola vez — Finseo lo recuerda para todos los envíos futuros.
+  </Accordion>
+</AccordionGroup>

@@ -1,0 +1,49 @@
+---
+title: Jira
+description: Exportiere Finseo-Tasks als Jira-Cloud-Issues mit formatierten Beschreibungen.
+---
+
+# Jira
+
+Verbinde Jira Cloud, um Finseo-Tasks als Jira-Issues in jedes Projekt zu exportieren. Die Beschreibungen kommen vollständig formatiert an — mit Daten-Nachweisen und Schritt-für-Schritt-Anleitung.
+
+## Was du damit machen kannst
+
+- Exportiere jeden Finseo-Task mit einem Klick als Jira-Issue.
+- Exportiere neue Tasks automatisch per Automatisierungsregeln (gefiltert nach Kategorie und Impact).
+- Weise exportierte Issues direkt aus Finseo Jira-Usern zu.
+
+## API-Token holen
+
+Finseo authentifiziert sich per Basic Auth: deine Atlassian-Konto-E-Mail plus ein API-Token.
+
+1. Gehe zu [id.atlassian.com → Security → API tokens](https://id.atlassian.com/manage-profile/security/api-tokens).
+2. Klicke auf **Create API token**, benenne ihn und kopiere den Wert.
+
+Details findest du in Atlassians [API-Token-Doku](https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/).
+
+## Verbinden
+
+1. Öffne in Finseo **Integrations → Jira → Connect**.
+2. Gib deine Site-URL (`your-team.atlassian.net`), deine Konto-E-Mail und den API-Token ein.
+3. Speichere.
+
+## Tasks exportieren
+
+- Öffne auf der **Tasks**-Seite einen Task und nutze **Export → Jira**, wähle dann das Ziel-Projekt.
+- Optional wählst du eine Jira-Zuweisung.
+
+## Automatisierungsregeln
+
+Unter **Tasks → Automation** erstellst du Regeln, die neue Finseo-Tasks automatisch nach Jira pushen — gefiltert nach Kategorie und Mindest-Impact, optional mit Standard-Zuweisung.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Authentifizierung schlägt fehl">
+    Nutze die E-Mail-Adresse des Atlassian-Kontos, das den Token erstellt hat, und die reine Site-Domain ohne `https://` (z. B. `acme.atlassian.net`). Tokens für eine andere Atlassian-Site funktionieren nicht.
+  </Accordion>
+  <Accordion title="Ein Projekt fehlt im Picker">
+    Finseo listet Projekte, in denen dein Jira-User Issues erstellen darf. Prüfe deine Projektberechtigungen in Jira und öffne den Picker erneut.
+  </Accordion>
+</AccordionGroup>

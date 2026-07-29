@@ -1,0 +1,43 @@
+---
+title: Jotform
+description: Reçois les soumissions d'enquêtes Jotform dans Finseo pour le suivi d'attribution.
+---
+
+# Jotform
+
+Connecte Jotform pour recevoir automatiquement les réponses aux enquêtes « Comment nous avez-vous trouvés ? ». Le webhook natif de Jotform envoie chaque soumission à Finseo, qui détecte automatiquement le champ d'attribution.
+
+## Obtenir ton URL de webhook
+
+1. Dans Finseo, ouvre **Integrations → Jotform → Connect**.
+2. Copie ton URL de webhook personnelle (elle contient ton ID de projet, `?source=jotform` et un token secret) :
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=jotform&token=•••
+```
+
+## Configurer le webhook Jotform
+
+1. Dans Jotform, ouvre ton formulaire et va dans **Settings → Integrations**.
+2. Recherche **Webhooks** et ajoute ton URL Finseo.
+3. Finalise l'intégration — chaque nouvelle soumission est désormais transmise.
+
+Jotform envoie les données de formulaire en `multipart/form-data` avec un champ JSON `rawRequest`. Finseo gère les deux formats automatiquement et analyse les noms de champs à la recherche de mots-clés d'attribution (`how_did`, `find_us`, `source`, `referral`).
+
+Consulte le [guide webhook de Jotform](https://www.jotform.com/help/245-how-to-setup-webhook-with-jotform) pour plus de détails.
+
+## Tester et mapper les champs
+
+- Utilise l'**écouteur en direct** dans la boîte de dialogue de connexion Finseo : soumets une entrée de test et inspecte le payload reçu.
+- Si ton champ porte un autre nom, sélectionne-le sous **Field Mapping** dans la boîte de dialogue.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="Les soumissions n'arrivent pas">
+    Vérifie que le webhook est listé sous Settings → Integrations et que l'URL contient la query string complète. Jotform ne réessaie les livraisons échouées que brièvement.
+  </Accordion>
+  <Accordion title="La réponse d'attribution n'est pas détectée">
+    Les clés de champs Jotform sont générées automatiquement (par ex. `q12_howDid`). Utilise le Field Mapping une fois pour sélectionner le bon champ — Finseo le mémorise pour toutes les soumissions futures.
+  </Accordion>
+</AccordionGroup>

@@ -1,0 +1,45 @@
+---
+title: Google Analytics (GA4)
+description: Traccia traffico, conversioni e fatturato provenienti dall'AI collegando GA4 a Finseo.
+---
+
+# Google Analytics (GA4)
+
+Collega Google Analytics 4 per vedere esattamente quanto traffico le piattaforme AI inviano al tuo sito. Finseo identifica nei tuoi dati GA4 le sessioni provenienti da ChatGPT, Perplexity, Claude, Gemini, Copilot e altre piattaforme AI, e mostra trend, landing page, conversioni e fatturato nella dashboard **AI Analytics**.
+
+## Cosa ottieni
+
+- **Trend del traffico AI** — sessioni giornaliere provenienti dalle piattaforme AI, suddivise per piattaforma.
+- **Top landing page AI** — su quali pagine atterrano i visitatori provenienti dall'AI.
+- **Conversioni e fatturato** — gli eventi di conversione GA4 e il fatturato d'acquisto attribuiti al traffico AI.
+- **Confronto** — quota di traffico AI rispetto all'organico e agli altri canali.
+
+## Requisiti
+
+- Una proprietà GA4 con i dati del tuo sito (Universal Analytics non è supportato).
+- Un account Google con almeno accesso **Viewer** a quella proprietà.
+
+## Connessione
+
+1. In Finseo apri **Integrations → Google Analytics → Connect** (o vai direttamente alla pagina **AI Analytics**).
+2. Accedi con Google e approva l'accesso in lettura — Finseo richiede solo scope Analytics in sola lettura.
+3. Seleziona la proprietà GA4 (e il data stream) per il tuo progetto.
+4. Fatto — la pagina AI Analytics si popola di dati. I dati storici sono disponibili fin dove la tua proprietà GA4 li conserva.
+
+## Come viene rilevato il traffico AI
+
+Finseo classifica le sessioni per referrer e source/medium: referral da domini come `chatgpt.com`, `perplexity.ai`, `gemini.google.com`, `copilot.microsoft.com` e parametri di campagna che identificano le piattaforme AI. Non è richiesto alcun tagging o modifica al codice del tuo sito.
+
+## Risoluzione dei problemi
+
+<AccordionGroup>
+  <Accordion title="Nessuna proprietà compare dopo l'OAuth">
+    Il tuo account Google non ha accesso a GA4. Chiedi all'amministratore della proprietà almeno l'accesso Viewer, poi riconnettiti.
+  </Accordion>
+  <Accordion title="Il traffico AI sembra più basso del previsto">
+    Alcune piattaforme AI aprono i link senza referrer (dark traffic). Finseo mostra ciò che è identificabile in GA4 — combinandolo con [Bot Analytics](/it/bot-analytics) e [Attribution](/it/attribution) ottieni un quadro più completo.
+  </Accordion>
+  <Accordion title="Le conversioni sono vuote">
+    Contrassegna gli eventi rilevanti come key event (conversioni) in GA4 — Finseo legge gli eventi di conversione definiti dalla tua proprietà.
+  </Accordion>
+</AccordionGroup>

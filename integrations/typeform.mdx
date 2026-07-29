@@ -1,0 +1,43 @@
+---
+title: Typeform
+description: Send "How did you find us?" survey answers from Typeform to Finseo.
+---
+
+# Typeform
+
+Connect Typeform to automatically receive "How did you find us?" survey responses. Add the question to any Typeform, register the Finseo webhook, and every submission flows into your attribution dashboard.
+
+## Get your webhook URL
+
+1. In Finseo, open **Integrations → Typeform → Connect**.
+2. Copy your personal webhook URL (contains your project ID, `?source=typeform`, and a secret token):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=typeform&token=•••
+```
+
+## Set up the Typeform webhook
+
+1. In Typeform, open your form and go to **Connect → Webhooks**.
+2. Click **Add a webhook** and paste your Finseo URL.
+3. Save and toggle the webhook on.
+
+Typeform sends every submission as JSON. Finseo extracts the attribution answer from the form answers automatically — field titles containing keywords like "how did", "find us", "source", or "hear about" are detected out of the box.
+
+See Typeform's [webhook docs](https://www.typeform.com/developers/webhooks/) for details.
+
+## Test and map fields
+
+- Use the **live listener** in the Finseo connect dialog: submit a test response and inspect the received payload.
+- If your question is phrased differently, select the right answer field under **Field Mapping**.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Submissions don't arrive">
+    Check that the webhook toggle in Typeform is on and the URL includes the full query string (`source` and `token`). Typeform's webhook view shows a delivery log with response codes.
+  </Accordion>
+  <Accordion title="Email is missing on responses">
+    Add an email question to your form so Finseo can associate the attribution answer with a respondent.
+  </Accordion>
+</AccordionGroup>

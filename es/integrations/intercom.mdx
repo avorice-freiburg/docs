@@ -1,0 +1,48 @@
+---
+title: Intercom
+description: Captura en Finseo la atribución desde los eventos de contactos de Intercom.
+---
+
+# Intercom
+
+Conecta Intercom para recibir datos de atribución cuando se crean contactos. Un webhook de Intercom envía los atributos del contacto — incluido un atributo personalizado "¿Cómo nos encontraste?" — a Finseo, que normaliza la respuesta en un canal de atribución.
+
+## Requisitos
+
+- Los webhooks de Intercom se configuran mediante una **app del Developer Hub** (una app interna gratuita para tu workspace).
+- Un atributo personalizado en los contactos que capture la respuesta de atribución.
+
+## Obtén tu URL de webhook
+
+1. En Finseo, abre **Integrations → Intercom → Connect**.
+2. Copia tu URL de webhook personal (contiene el ID de tu proyecto, `?source=intercom` y un token secreto):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=intercom&token=•••
+```
+
+## Configura el webhook de Intercom
+
+1. Abre el [Developer Hub de Intercom](https://app.intercom.com/a/apps/_/developer-hub) y crea una app interna (o abre una existente).
+2. Bajo **Configure → Webhooks**, pega tu URL de Finseo como endpoint. Intercom valida la URL con una petición HEAD.
+3. Suscríbete a topics como **`contact.user.created`** y **`contact.lead.created`** (añade `conversation.admin.closed` si capturas la respuesta en conversaciones).
+4. En la página **Authentication** de la app, habilita los permission scopes que requieren los topics (p. ej. "Read and write users") — sin ellos el webhook no se dispara.
+5. Guarda.
+
+Consulta la [guía de configuración de webhooks de Intercom](https://developers.intercom.com/docs/webhooks/setting-up-webhooks) para más detalles.
+
+## Prueba y mapea los campos
+
+- Usa el **live listener** en el diálogo de conexión de Finseo: crea un contacto de prueba e inspecciona el payload recibido.
+- Selecciona tu atributo personalizado de atribución bajo **Field Mapping** si no se detecta automáticamente.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="No llegan eventos">
+    Comprueba que los permission scopes que requiere el topic están habilitados en la página Authentication de la app — los topics sin scopes correspondientes se omiten silenciosamente.
+  </Accordion>
+  <Accordion title="Faltan topics en el desplegable">
+    Los topics disponibles dependen de la versión de la API que usa tu app. Actualiza la versión de la API de la app en el Developer Hub si es necesario.
+  </Accordion>
+</AccordionGroup>

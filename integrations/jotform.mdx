@@ -1,0 +1,43 @@
+---
+title: Jotform
+description: Receive Jotform survey submissions in Finseo for attribution tracking.
+---
+
+# Jotform
+
+Connect Jotform to automatically receive "How did you find us?" survey responses. Jotform's native webhook sends every submission to Finseo, which auto-detects the attribution field.
+
+## Get your webhook URL
+
+1. In Finseo, open **Integrations → Jotform → Connect**.
+2. Copy your personal webhook URL (contains your project ID, `?source=jotform`, and a secret token):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=jotform&token=•••
+```
+
+## Set up the Jotform webhook
+
+1. In Jotform, open your form and go to **Settings → Integrations**.
+2. Search for **Webhooks** and add your Finseo URL.
+3. Complete the integration — every new submission is now forwarded.
+
+Jotform sends form data as `multipart/form-data` with a `rawRequest` JSON field. Finseo handles both formats automatically and scans field names for attribution keywords (`how_did`, `find_us`, `source`, `referral`).
+
+See Jotform's [webhook guide](https://www.jotform.com/help/245-how-to-setup-webhook-with-jotform) for details.
+
+## Test and map fields
+
+- Use the **live listener** in the Finseo connect dialog: submit a test entry and inspect the received payload.
+- If your field is named differently, select it under **Field Mapping** in the dialog.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Submissions don't arrive">
+    Verify the webhook is listed under Settings → Integrations and the URL contains the full query string. Jotform retries failed deliveries only briefly.
+  </Accordion>
+  <Accordion title="The attribution answer isn't detected">
+    Jotform field keys are auto-generated (e.g. `q12_howDid`). Use Field Mapping to select the right field once — Finseo remembers it for all future submissions.
+  </Accordion>
+</AccordionGroup>

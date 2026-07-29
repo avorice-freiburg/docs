@@ -1,0 +1,50 @@
+---
+title: n8n
+description: Construis des workflows d'attribution personnalisés vers Finseo avec l'outil d'automatisation open source n8n.
+---
+
+# n8n
+
+Connecte n8n pour construire des workflows d'attribution personnalisés. n8n est une alternative open source à Zapier/Make — auto-hébergée ou cloud — qui peut acheminer n'importe quel formulaire, CRM ou source de données vers Finseo via un nœud HTTP Request, avec un contrôle total sur la transformation des données.
+
+## Ce dont tu as besoin
+
+- Une clé API Finseo avec le scope **write** : crée-la sous **Settings → API → Create Key**.
+- Ton ID de projet (visible dans la boîte de dialogue de connexion sous **Integrations → n8n**, ou via `GET /v1/projects`).
+
+## Configurer le workflow
+
+1. Dans n8n, crée un nouveau workflow avec le **déclencheur** de ton choix (soumission de formulaire, événement CRM, webhook, planification, …).
+2. Ajoute un nœud **HTTP Request** :
+   - **Method** : `POST`
+   - **URL** : `https://app.finseo.ai/api/v1/projects/YOUR_PROJECT_ID/attribution`
+   - **Authentication** : Generic → Header Auth avec `Authorization: Bearer YOUR_API_KEY`
+   - **Body Content Type** : JSON
+3. Mappe les champs :
+
+```json
+{
+  "channelId": "ai_perplexity",
+  "freetextResponse": "={{ $json.how_did_you_find_us }}",
+  "respondentEmail": "={{ $json.email }}",
+  "dealValue": 1200,
+  "dealCurrency": "USD"
+}
+```
+
+`channelId` est requis — passe un canal fixe ou transmets la réponse brute en `freetextResponse` et laisse Finseo la catégoriser. Champs optionnels : `channelLabel`, `subChannel`, `respondentName`, `pageUrl`, `formId`, `metadata`.
+
+4. Exécute le nœud une fois pour tester, puis active le workflow.
+
+Alternativement, tu peux envoyer un POST vers l'**URL de webhook** de ton projet (depuis la boîte de dialogue de connexion) au lieu de l'API v1 — utile si tu préfères ne pas gérer de clés API dans n8n.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="401 Unauthorized">
+    Vérifie la configuration Header Auth : le nom du header doit être `Authorization` et la valeur `Bearer YOUR_API_KEY` avec le scope write.
+  </Accordion>
+  <Accordion title="Les données arrivent mais le canal est 'unknown'">
+    Si tu envoies un `freetextResponse` sans `channelId` correspondant, Finseo catégorise le texte automatiquement — vérifie le texte brut de la réponse si la catégorisation semble incorrecte.
+  </Accordion>
+</AccordionGroup>

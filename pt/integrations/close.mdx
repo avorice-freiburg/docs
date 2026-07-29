@@ -1,0 +1,44 @@
+---
+title: Close
+description: Receba atribuição de leads dos webhooks do CRM Close no Finseo.
+---
+
+# Close
+
+Ligue o CRM Close para capturar a atribuição quando são criados leads. O Close dispara um webhook com os dados do lead, incluindo campos personalizados; o Finseo procura a resposta "Como nos encontrou?" e normaliza-a num canal de atribuição.
+
+## Requisitos
+
+- Os webhooks na interface do Close estão disponíveis no plano **Business** e superiores. Em planos inferiores pode criar subscrições de webhook através da [API do Close](https://developer.close.com/resources/webhook-subscriptions).
+- Um campo personalizado nos leads que capture a resposta de atribuição.
+
+## Obter o seu URL de webhook
+
+1. No Finseo, abra **Integrations → Close → Connect**.
+2. Copie o seu URL de webhook pessoal (contém o ID do seu projeto, `?source=close-crm` e um token secreto):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=close-crm&token=•••
+```
+
+## Configurar o webhook do Close
+
+1. No Close, vá a **Settings → Integrations → Webhooks** (ícone de engrenagem na barra lateral inferior esquerda).
+2. Clique em **Add Webhook** e cole o seu URL do Finseo.
+3. Selecione o evento **`lead.created`** (adicione `lead.updated` se o campo de atribuição for preenchido mais tarde).
+4. Guarde — o Close envia um ping de teste para verificar que o endpoint está acessível.
+
+Em alternativa via API: `POST https://api.close.com/api/v1/webhook/` com `url` e `events: [{"object_type": "lead", "action": "created"}]`.
+
+## Testar e mapear campos
+
+- Use o **live listener** na janela de ligação do Finseo: crie um lead de teste no Close e inspecione o payload recebido.
+- Se o campo personalizado de atribuição não for detetado automaticamente, selecione-o em **Field Mapping**.
+
+## Resolução de problemas
+
+<AccordionGroup>
+  <Accordion title="A opção Webhooks não aparece nas definições do Close">
+    Os webhooks geridos na interface exigem o plano Business. Faça upgrade, crie a subscrição via API, ou encaminhe os dados através de Zapier/Make/n8n.
+  </Accordion>
+</AccordionGroup>

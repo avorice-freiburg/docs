@@ -1,0 +1,43 @@
+---
+title: Piwik PRO
+description: Tracke KI-Traffic in Finseo mit deinen Piwik-PRO-Analytics-Daten.
+---
+
+# Piwik PRO
+
+Verbinde Piwik PRO als datenschutzfreundliche Alternative zu Google Analytics. Finseo liest deine Piwik-PRO-Session-Daten, um Traffic von KI-Plattformen (ChatGPT, Perplexity, Claude, Gemini, Copilot, …) zu identifizieren, und zeigt ihn im **AI Analytics**-Dashboard.
+
+## Was du bekommst
+
+- **KI-Traffic-Trend** — tägliche Sessions von KI-Plattformen, aufgeschlüsselt pro Plattform.
+- **Top KI-Landingpages** — auf welchen Seiten KI-Besucher landen.
+- **Kanalvergleich** — KI-Traffic-Anteil neben deinen anderen Kanälen.
+
+## API-Zugangsdaten erstellen
+
+Finseo authentifiziert sich mit Piwik-PRO-API-Zugangsdaten (OAuth Client Credentials):
+
+1. Melde dich bei Piwik PRO an und klicke auf **Menu → deine E-Mail-Adresse** (dein Profil).
+2. Öffne den Tab **API keys** und klicke auf **Create a key**.
+3. Benenne den Key und klicke auf **OK**.
+4. Kopiere **Client ID** und **Client secret** sofort — das Secret wird nach dem Schließen des Fensters nicht mehr angezeigt.
+
+Details findest du im [Piwik-PRO-Hilfeartikel](https://help.piwik.pro/support/questions/generate-api-credentials/).
+
+## Verbinden
+
+1. Öffne in Finseo die **AI Analytics**-Seite und wähle **Connect → Piwik PRO** (auch über **Integrations** erreichbar).
+2. Gib deine **Account-URL** (z. B. `yourcompany.piwik.pro`), die **Client ID** und das **Client secret** ein.
+3. Finseo validiert die Zugangsdaten und listet deine Sites — wähle die Site, die du tracken willst.
+4. Fertig — die KI-Traffic-Daten erscheinen im Dashboard.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Verbindung schlägt fehl">
+    Prüfe das Format der Account-URL (kein `https://`, nur `yourcompany.piwik.pro`) und ob die Zugangsdaten vollständig kopiert wurden. Gelöschte API-Keys funktionieren sofort nicht mehr.
+  </Accordion>
+  <Accordion title="Keine Sites erscheinen">
+    Der API-Key erbt die Berechtigungen deines Users. Stelle sicher, dass dein Piwik-PRO-User Zugriff auf die Site hat, die du verbinden willst.
+  </Accordion>
+</AccordionGroup>

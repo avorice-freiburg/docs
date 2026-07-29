@@ -1,0 +1,44 @@
+---
+title: Close
+description: Recibe en Finseo la atribución de leads desde los webhooks del CRM Close.
+---
+
+# Close
+
+Conecta Close CRM para capturar la atribución cuando se crean leads. Close dispara un webhook con los datos del lead, incluidos los campos personalizados; Finseo busca la respuesta a "¿Cómo nos encontraste?" y la normaliza en un canal de atribución.
+
+## Requisitos
+
+- Los webhooks en la interfaz de Close están disponibles en el plan **Business** y superiores. En planes inferiores puedes crear suscripciones de webhook mediante la [API de Close](https://developer.close.com/resources/webhook-subscriptions).
+- Un campo personalizado en los leads que capture la respuesta de atribución.
+
+## Obtén tu URL de webhook
+
+1. En Finseo, abre **Integrations → Close → Connect**.
+2. Copia tu URL de webhook personal (contiene el ID de tu proyecto, `?source=close-crm` y un token secreto):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=close-crm&token=•••
+```
+
+## Configura el webhook de Close
+
+1. En Close, ve a **Settings → Integrations → Webhooks** (icono de engranaje en la barra lateral inferior izquierda).
+2. Haz clic en **Add Webhook** y pega tu URL de Finseo.
+3. Selecciona el evento **`lead.created`** (añade `lead.updated` si el campo de atribución se rellena más tarde).
+4. Guarda — Close envía un ping de prueba para verificar que el endpoint es accesible.
+
+Alternativamente vía API: `POST https://api.close.com/api/v1/webhook/` con `url` y `events: [{"object_type": "lead", "action": "created"}]`.
+
+## Prueba y mapea los campos
+
+- Usa el **live listener** en el diálogo de conexión de Finseo: crea un lead de prueba en Close e inspecciona el payload recibido.
+- Si el campo personalizado de atribución no se detecta automáticamente, selecciónalo bajo **Field Mapping**.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="La opción Webhooks no aparece en los ajustes de Close">
+    Los webhooks gestionados desde la interfaz requieren el plan Business. Puedes hacer un upgrade, crear la suscripción vía API, o enrutar los datos a través de Zapier/Make/n8n.
+  </Accordion>
+</AccordionGroup>

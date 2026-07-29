@@ -1,0 +1,51 @@
+---
+title: Gravity Forms
+description: Send WordPress Gravity Forms submissions to Finseo attribution via the Webhooks Add-On.
+---
+
+# Gravity Forms
+
+Connect Gravity Forms (WordPress) to send form submissions to Finseo for attribution tracking. The Gravity Forms **Webhooks Add-On** POSTs each entry as JSON to your Finseo webhook URL.
+
+## Requirements
+
+- The Webhooks Add-On requires a Gravity Forms **Elite** (or Nonprofit) license — it is not included in Basic or Pro. Upgrades are prorated.
+- A form field that captures the attribution answer (e.g. "How did you find us?").
+
+## Get your webhook URL
+
+1. In Finseo, open **Integrations → Gravity Forms → Connect**.
+2. Copy your personal webhook URL (contains your project ID, `?source=gravity-forms`, and a secret token):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=gravity-forms&token=•••
+```
+
+## Set up the webhook feed
+
+1. In WordPress, go to **Forms → Add-Ons**, install and activate the **Webhooks Add-On**.
+2. Edit your form → **Settings → Webhooks → Add New**.
+3. Configure the feed:
+   - **Request URL**: your Finseo webhook URL
+   - **Request Method**: `POST`
+   - **Request Format**: `JSON`
+   - **Request Body**: All fields (or select the relevant ones)
+4. Save the feed.
+
+See the [Gravity Forms webhooks docs](https://docs.gravityforms.com/category/add-ons-gravity-forms/webhooks-add-on/) for details.
+
+## Test and map fields
+
+- Use the **live listener** in the Finseo connect dialog: submit a test entry and inspect the received payload.
+- Gravity Forms sends fields under numeric IDs or labels — select your attribution field under **Field Mapping** in the dialog.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="The Webhooks Add-On doesn't appear under Add-Ons">
+    Your license doesn't include it — the add-on requires an Elite or Nonprofit license. Alternatively, route submissions through Zapier, Make, or n8n.
+  </Accordion>
+  <Accordion title="Requests fail from WordPress">
+    Some security plugins block outgoing requests. Whitelist `app.finseo.ai` or check the webhook feed's logs under Forms → Settings → Logging.
+  </Accordion>
+</AccordionGroup>

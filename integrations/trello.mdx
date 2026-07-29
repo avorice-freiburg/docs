@@ -1,0 +1,50 @@
+---
+title: Trello
+description: Create Trello cards from Finseo visibility tasks with markdown descriptions.
+---
+
+# Trello
+
+Connect Trello to export Finseo tasks as cards into any list on your boards. Card descriptions include the evidence and recommended steps in markdown.
+
+## What you can do
+
+- Export any Finseo task as a Trello card with one click.
+- Auto-export new tasks via automation rules (filtered by category and impact).
+- Assign exported cards to Trello members directly from Finseo.
+
+## Get your API key and token
+
+Trello authenticates with an API key + token pair. The key is tied to a Power-Up:
+
+1. Go to the [Power-Ups admin portal](https://trello.com/power-ups/admin) and create a new Power-Up if you don't have one (name and email are enough — no code required).
+2. Open your Power-Up and switch to the **API Key** tab, then click **Generate a new API Key**.
+3. Click the **Token** link next to your API key, review the permissions, and click **Allow**. Trello shows a 64-character token.
+4. Copy both the API key and the token.
+
+See Trello's [REST API guide](https://support.atlassian.com/trello/docs/getting-started-with-trello-rest-api/) for details.
+
+## Connect
+
+1. In Finseo, open **Integrations → Trello → Connect**.
+2. Enter the API key and the token, then save.
+
+## Export tasks
+
+- On the **Tasks** page, open a task and use **Export → Trello**, then pick a board list.
+- Optionally choose a Trello assignee.
+
+## Automation rules
+
+Under **Tasks → Automation**, create rules that create Trello cards from new Finseo tasks automatically — filtered by category and minimum impact.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Authentication fails">
+    Key and token belong together: the token must have been generated via the Token link of the same API key. Regenerating the key invalidates old tokens.
+  </Accordion>
+  <Accordion title="A board or list is missing">
+    The token only grants access to boards your Trello user is a member of. Join the board, then reopen the picker.
+  </Accordion>
+</AccordionGroup>

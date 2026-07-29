@@ -1,0 +1,47 @@
+---
+title: Asana
+description: Envoie les tâches Finseo dans tes projets Asana avec les preuves et les étapes d'action jointes.
+---
+
+# Asana
+
+Connecte Asana pour envoyer les tâches de visibilité IA du module **Tasks** de Finseo vers n'importe quel projet Asana. Chaque tâche exportée inclut la recommandation, les données qui la justifient et des étapes d'action concrètes en notes.
+
+## Ce que tu peux faire
+
+- Exporter n'importe quelle tâche Finseo vers un projet Asana en un clic.
+- Exporter automatiquement les nouvelles tâches via des règles d'automatisation (filtrées par catégorie et impact).
+- Assigner les tâches exportées à des membres Asana directement depuis Finseo.
+
+## Obtenir ton Personal Access Token
+
+1. Ouvre la [console développeur Asana](https://app.asana.com/0/my-apps) (My apps).
+2. Sous **Personal access tokens**, clique sur **Create new token**.
+3. Nomme le token, accepte les conditions de l'API et copie le token — il n'est affiché qu'une seule fois.
+
+Consulte la [documentation Personal Access Token d'Asana](https://developers.asana.com/docs/personal-access-token) pour plus de détails.
+
+## Connexion
+
+1. Dans Finseo, ouvre **Integrations → Asana → Connect**.
+2. Colle le token et enregistre.
+
+## Exporter des tâches
+
+- Sur la page **Tasks**, ouvre une tâche et utilise **Export → Asana**, puis choisis le projet cible.
+- Optionnellement, choisis un assigné Asana.
+
+## Règles d'automatisation
+
+Sous **Tasks → Automation**, crée des règles qui poussent automatiquement les nouvelles tâches Finseo vers Asana — filtrées par catégorie et impact minimum, avec un assigné par défaut optionnel.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="Le token est rejeté">
+    Les personal access tokens commencent par un chiffre suivi d'un slash (par ex. `1/...`). Copie la valeur complète juste après sa création — Asana ne l'affiche plus par la suite.
+  </Accordion>
+  <Accordion title="Un projet est absent du sélecteur">
+    Finseo liste les projets dont ton utilisateur Asana est membre. Rejoins le projet dans Asana, puis rouvre le sélecteur.
+  </Accordion>
+</AccordionGroup>

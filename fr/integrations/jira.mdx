@@ -1,0 +1,49 @@
+---
+title: Jira
+description: Exporte les tâches Finseo en tickets Jira Cloud avec des descriptions formatées.
+---
+
+# Jira
+
+Connecte Jira Cloud pour exporter les tâches Finseo en tickets Jira dans n'importe quel projet. Les descriptions arrivent entièrement formatées avec les données justificatives et les instructions étape par étape.
+
+## Ce que tu peux faire
+
+- Exporter n'importe quelle tâche Finseo en ticket Jira en un clic.
+- Exporter automatiquement les nouvelles tâches via des règles d'automatisation (filtrées par catégorie et impact).
+- Assigner les tickets exportés à des utilisateurs Jira directement depuis Finseo.
+
+## Obtenir ton token API
+
+Finseo s'authentifie en Basic auth : l'email de ton compte Atlassian plus un token API.
+
+1. Va sur [id.atlassian.com → Security → API tokens](https://id.atlassian.com/manage-profile/security/api-tokens).
+2. Clique sur **Create API token**, nomme-le et copie la valeur.
+
+Consulte la [documentation des tokens API d'Atlassian](https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/) pour plus de détails.
+
+## Connexion
+
+1. Dans Finseo, ouvre **Integrations → Jira → Connect**.
+2. Saisis l'URL de ton site (`your-team.atlassian.net`), l'email de ton compte et le token API.
+3. Enregistre.
+
+## Exporter des tâches
+
+- Sur la page **Tasks**, ouvre une tâche et utilise **Export → Jira**, puis choisis le projet cible.
+- Optionnellement, choisis un assigné Jira.
+
+## Règles d'automatisation
+
+Sous **Tasks → Automation**, crée des règles qui poussent automatiquement les nouvelles tâches Finseo vers Jira — filtrées par catégorie et impact minimum, avec un assigné par défaut optionnel.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="L'authentification échoue">
+    Utilise l'adresse email du compte Atlassian qui a créé le token, et le domaine du site sans `https://` (par ex. `acme.atlassian.net`). Les tokens créés pour un autre site Atlassian ne fonctionneront pas.
+  </Accordion>
+  <Accordion title="Un projet est absent du sélecteur">
+    Finseo liste les projets dans lesquels ton utilisateur Jira peut créer des tickets. Vérifie tes permissions de projet dans Jira, puis rouvre le sélecteur.
+  </Accordion>
+</AccordionGroup>

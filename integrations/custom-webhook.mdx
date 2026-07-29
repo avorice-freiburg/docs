@@ -1,0 +1,57 @@
+---
+title: Custom Webhook
+description: Send attribution data to Finseo from any source via the generic webhook endpoint.
+---
+
+# Custom Webhook
+
+Use the generic webhook endpoint to send attribution data from any custom integration — your own backend, a form handler, or an internal tool. Finseo auto-detects known payload formats (HubSpot, Salesforce, Typeform, Jotform, …) and also accepts plain JSON.
+
+## Get your webhook URL
+
+1. In Finseo, open **Integrations → Custom Webhook → Connect**.
+2. Copy your personal webhook URL (contains your project ID and a secret token):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+## Send a request
+
+POST JSON with at minimum a `channelId` (or a `freetextResponse` that Finseo categorizes):
+
+```bash
+curl -X POST "https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "channelId": "ai_chatgpt",
+    "respondentEmail": "jane@example.com",
+    "respondentName": "Jane Doe",
+    "dealValue": 490,
+    "dealCurrency": "EUR",
+    "metadata": { "campaign": "spring-launch" }
+  }'
+```
+
+Supported fields: `channelId`, `channelLabel`, `channelCategory`, `subChannel`, `freetextResponse`, `respondentEmail`, `respondentName`, `respondentExternalId`, `dealValue`, `dealCurrency`, `pageUrl`, `formId`, `metadata`.
+
+## Test and map fields
+
+- The connect dialog has a **live listener**: turn it on, send a request, and Finseo shows the received payload with a parse result.
+- For non-standard payloads, use **Field Mapping** to tell Finseo which field holds the attribution answer.
+
+## Security
+
+- The `token` query parameter authenticates requests — treat the URL like a secret. You can regenerate the token in the connect dialog at any time (the old URL stops working immediately).
+- Optionally configure an outbound webhook in the Attribution settings to get notified about new responses in your own systems.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Requests are rejected">
+    Check that the URL includes the current `token` — after regenerating, old URLs are invalid. The body must be JSON (or form-encoded for known providers).
+  </Accordion>
+  <Accordion title="The response lands in the wrong channel">
+    Send an explicit `channelId` instead of relying on freetext categorization, or adjust the Field Mapping.
+  </Accordion>
+</AccordionGroup>

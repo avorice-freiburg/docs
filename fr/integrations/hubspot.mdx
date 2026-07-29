@@ -1,0 +1,49 @@
+---
+title: HubSpot
+description: Envoie les réponses « Comment avez-vous entendu parler de nous ? » des workflows HubSpot vers l'attribution Finseo.
+---
+
+# HubSpot
+
+Connecte HubSpot pour alimenter automatiquement Finseo avec les réponses d'enquête d'attribution. Quand un lead soumet un formulaire avec un champ « Comment avez-vous entendu parler de nous ? », un workflow HubSpot envoie le contact à Finseo via webhook. Finseo normalise la réponse en canaux d'attribution (ChatGPT, Perplexity, Google, referral, …) et la met en relation avec tes données de visibilité IA.
+
+## Prérequis
+
+- Un abonnement HubSpot qui inclut l'action de workflow **Send a webhook** — Operations Hub **Professional/Enterprise** ou Data Hub **Professional/Enterprise**. Elle n'est pas incluse dans les paliers Professional standards de Marketing/Sales/Service Hub.
+- Un formulaire (ou une propriété) qui capture la réponse d'attribution, par ex. un champ « Comment avez-vous entendu parler de nous ? ».
+
+## Obtenir ton URL de webhook
+
+1. Dans Finseo, ouvre **Integrations → HubSpot → Connect**.
+2. Copie ton URL de webhook personnelle. Elle contient déjà ton ID de projet, le marqueur `?source=hubspot` pour la détection automatique du payload, et un token secret :
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=hubspot&token=•••
+```
+
+## Configurer le workflow HubSpot
+
+1. Dans HubSpot, va dans **Automations → Workflows → Create workflow** (basé sur les contacts).
+2. Définis le déclencheur d'inscription sur **Form submission** pour ton formulaire d'inscription ou de contact.
+3. Ajoute l'action **Send a webhook** (dans la section Data ops), méthode **POST**.
+4. Colle ton URL de webhook Finseo.
+5. Inclus les propriétés du contact dans le corps de la requête — au minimum l'email, le nom et ton champ d'attribution.
+6. Active le workflow.
+
+Finseo parse automatiquement les payloads de contacts HubSpot et en extrait l'email, le nom et la réponse d'attribution.
+
+## Tester et mapper les champs
+
+- La boîte de dialogue de connexion Finseo dispose d'un **écouteur en direct** : active-le, déclenche une inscription de test dans HubSpot, et Finseo affiche le payload reçu.
+- Si la réponse d'attribution n'est pas détectée automatiquement, utilise le **Field Mapping** dans la boîte de dialogue pour indiquer à Finseo la bonne propriété.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="« Send a webhook » est absent de l'éditeur de workflow">
+    Ton abonnement HubSpot n'inclut pas l'action webhook (elle nécessite Operations Hub ou Data Hub Professional/Enterprise). Comme solution de contournement, fais transiter le formulaire par Zapier, Make ou n8n — voir l'[intégration Zapier / Make](/fr/integrations/zapier-make).
+  </Accordion>
+  <Accordion title="Les réponses arrivent mais sans canal d'attribution">
+    Finseo analyse les noms de champs à la recherche de mots-clés comme "how did", "find us", "source", "referral". Si ta propriété porte un autre nom, définis-la explicitement sous Field Mapping.
+  </Accordion>
+</AccordionGroup>

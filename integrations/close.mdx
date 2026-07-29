@@ -1,0 +1,44 @@
+---
+title: Close
+description: Receive lead attribution from Close CRM webhooks in Finseo.
+---
+
+# Close
+
+Connect Close CRM to capture attribution when leads are created. Close fires a webhook with the lead data including custom fields; Finseo scans for the "How did you find us?" answer and normalizes it into an attribution channel.
+
+## Requirements
+
+- Webhooks in the Close UI are available on the **Business** plan and higher. On lower plans you can create webhook subscriptions via the [Close API](https://developer.close.com/resources/webhook-subscriptions) instead.
+- A custom field on leads that captures the attribution answer.
+
+## Get your webhook URL
+
+1. In Finseo, open **Integrations → Close → Connect**.
+2. Copy your personal webhook URL (contains your project ID, `?source=close-crm`, and a secret token):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=close-crm&token=•••
+```
+
+## Set up the Close webhook
+
+1. In Close, go to **Settings → Integrations → Webhooks** (gear icon in the bottom-left sidebar).
+2. Click **Add Webhook** and paste your Finseo URL.
+3. Select the event **`lead.created`** (add `lead.updated` if the attribution field is filled later).
+4. Save — Close sends a test ping to verify the endpoint is reachable.
+
+Alternatively via API: `POST https://api.close.com/api/v1/webhook/` with `url` and `events: [{"object_type": "lead", "action": "created"}]`.
+
+## Test and map fields
+
+- Use the **live listener** in the Finseo connect dialog: create a test lead in Close and inspect the received payload.
+- If the attribution custom field isn't detected automatically, select it under **Field Mapping**.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="The Webhooks option is missing in Close settings">
+    UI-managed webhooks require the Business plan. Either upgrade, create the subscription via the API, or route the data through Zapier/Make/n8n.
+  </Accordion>
+</AccordionGroup>

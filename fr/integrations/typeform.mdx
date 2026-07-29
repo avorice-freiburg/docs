@@ -1,0 +1,43 @@
+---
+title: Typeform
+description: Envoie les réponses d'enquête « Comment nous avez-vous trouvés ? » de Typeform vers Finseo.
+---
+
+# Typeform
+
+Connecte Typeform pour recevoir automatiquement les réponses aux enquêtes « Comment nous avez-vous trouvés ? ». Ajoute la question à n'importe quel Typeform, enregistre le webhook Finseo, et chaque soumission arrive dans ton dashboard d'attribution.
+
+## Obtenir ton URL de webhook
+
+1. Dans Finseo, ouvre **Integrations → Typeform → Connect**.
+2. Copie ton URL de webhook personnelle (elle contient ton ID de projet, `?source=typeform` et un token secret) :
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=typeform&token=•••
+```
+
+## Configurer le webhook Typeform
+
+1. Dans Typeform, ouvre ton formulaire et va dans **Connect → Webhooks**.
+2. Clique sur **Add a webhook** et colle ton URL Finseo.
+3. Enregistre et active le webhook.
+
+Typeform envoie chaque soumission en JSON. Finseo extrait automatiquement la réponse d'attribution des réponses du formulaire — les titres de champs contenant des mots-clés comme "how did", "find us", "source" ou "hear about" sont détectés d'office.
+
+Consulte la [documentation webhooks de Typeform](https://www.typeform.com/developers/webhooks/) pour plus de détails.
+
+## Tester et mapper les champs
+
+- Utilise l'**écouteur en direct** dans la boîte de dialogue de connexion Finseo : soumets une réponse de test et inspecte le payload reçu.
+- Si ta question est formulée différemment, sélectionne le bon champ de réponse sous **Field Mapping**.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="Les soumissions n'arrivent pas">
+    Vérifie que le webhook est activé dans Typeform et que l'URL inclut la query string complète (`source` et `token`). La vue webhook de Typeform affiche un journal de livraison avec les codes de réponse.
+  </Accordion>
+  <Accordion title="L'email manque sur les réponses">
+    Ajoute une question email à ton formulaire pour que Finseo puisse associer la réponse d'attribution à un répondant.
+  </Accordion>
+</AccordionGroup>

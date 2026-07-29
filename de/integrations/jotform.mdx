@@ -1,0 +1,43 @@
+---
+title: Jotform
+description: Empfange Jotform-Übermittlungen in Finseo fürs Attribution-Tracking.
+---
+
+# Jotform
+
+Verbinde Jotform, um „Wie hast du uns gefunden?"-Umfrageantworten automatisch zu empfangen. Jotforms nativer Webhook sendet jede Übermittlung an Finseo, das das Attributionsfeld automatisch erkennt.
+
+## Webhook-URL holen
+
+1. Öffne in Finseo **Integrations → Jotform → Connect**.
+2. Kopiere deine persönliche Webhook-URL (enthält deine Projekt-ID, `?source=jotform` und einen geheimen Token):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=jotform&token=•••
+```
+
+## Jotform-Webhook einrichten
+
+1. Öffne dein Formular in Jotform und gehe zu **Settings → Integrations**.
+2. Suche nach **Webhooks** und füge deine Finseo-URL hinzu.
+3. Schließe die Integration ab — jede neue Übermittlung wird jetzt weitergeleitet.
+
+Jotform sendet Formulardaten als `multipart/form-data` mit einem `rawRequest`-JSON-Feld. Finseo verarbeitet beide Formate automatisch und scannt Feldnamen nach Attributions-Keywords (`how_did`, `find_us`, `source`, `referral`).
+
+Details findest du in Jotforms [Webhook-Guide](https://www.jotform.com/help/245-how-to-setup-webhook-with-jotform).
+
+## Testen und Felder mappen
+
+- Nutze den **Live-Listener** im Finseo-Connect-Dialog: Sende eine Test-Übermittlung und sieh dir den empfangenen Payload an.
+- Heißt dein Feld anders, wähle es unter **Field Mapping** im Dialog.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Übermittlungen kommen nicht an">
+    Prüfe, ob der Webhook unter Settings → Integrations gelistet ist und die URL den vollständigen Query-String enthält. Jotform wiederholt fehlgeschlagene Zustellungen nur kurz.
+  </Accordion>
+  <Accordion title="Die Attributionsantwort wird nicht erkannt">
+    Jotform-Feld-Keys werden automatisch generiert (z. B. `q12_howDid`). Wähle das richtige Feld einmalig über Field Mapping — Finseo merkt es sich für alle künftigen Übermittlungen.
+  </Accordion>
+</AccordionGroup>

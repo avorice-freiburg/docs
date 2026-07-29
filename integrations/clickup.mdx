@@ -1,0 +1,57 @@
+---
+title: ClickUp
+description: Export Finseo tasks into ClickUp lists and assign them to ClickUp members — manually or via automation rules.
+---
+
+# ClickUp
+
+Connect ClickUp to push tasks from the Finseo **Tasks** module directly into your ClickUp lists. Each exported task arrives with its title, the data evidence behind it, and step-by-step instructions. Once connected, ClickUp workspace members also appear in Finseo's assignee dropdowns, marked with the ClickUp icon.
+
+## What you can do
+
+- Export any Finseo task into a ClickUp list with one click.
+- Auto-export new tasks via automation rules (filtered by category and impact).
+- Assign exported tasks to ClickUp members directly from Finseo.
+
+## Get your API token
+
+Finseo authenticates with your personal ClickUp API token:
+
+1. Log in to ClickUp and click your avatar in the upper-right corner.
+2. Select **Settings**, then click **Apps** in the sidebar.
+3. Under **API Token**, click **Generate** (or **Regenerate**) and copy the token — it starts with `pk_`.
+
+See ClickUp's [authentication docs](https://developer.clickup.com/docs/authentication) for details.
+
+<Note>
+The token acts with your ClickUp permissions. Tasks are created in your name and can only target lists you can access.
+</Note>
+
+## Connect
+
+1. In Finseo, open **Integrations → ClickUp → Connect**.
+2. Paste the token and save.
+
+## Export tasks
+
+- On the **Tasks** page, open a task and use **Export → ClickUp**, then pick the destination list (Space → Folder → List).
+- Optionally choose a ClickUp assignee — the member list is loaded live from your workspace.
+
+## Automation rules
+
+Under **Tasks → Automation** you can create rules that run on every newly generated task:
+
+1. Choose filters: category (Content, Technical, Authority, …) and minimum impact.
+2. Enable **Create in PM tool → ClickUp** and select the target list.
+3. Optionally set **Assign in ClickUp** to a member — new tasks are then created and assigned automatically.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="The token is rejected">
+    Make sure you copied the full personal token starting with `pk_` from Settings → Apps. OAuth app client secrets do not work here.
+  </Accordion>
+  <Accordion title="A list is missing in the picker">
+    Finseo only shows lists your ClickUp user can access. Ask a ClickUp admin to share the Space or Folder with you, then reopen the picker.
+  </Accordion>
+</AccordionGroup>

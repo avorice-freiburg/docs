@@ -1,0 +1,47 @@
+---
+title: Asana
+description: Invia i task di Finseo nei tuoi progetti Asana con evidenze e passaggi operativi allegati.
+---
+
+# Asana
+
+Collega Asana per inviare i task di visibilità AI dal modulo **Tasks** di Finseo in qualsiasi progetto Asana. Ogni task esportato include la raccomandazione, le evidenze dei dati che la motivano e i passaggi operativi concreti come note.
+
+## Cosa puoi fare
+
+- Esportare qualsiasi task Finseo in un progetto Asana con un clic.
+- Esportare automaticamente i nuovi task tramite regole di automazione (filtrati per categoria e impatto).
+- Assegnare i task esportati ai membri Asana direttamente da Finseo.
+
+## Ottieni il tuo Personal Access Token
+
+1. Apri la [console per sviluppatori di Asana](https://app.asana.com/0/my-apps) (My apps).
+2. Sotto **Personal access tokens**, clicca su **Create new token**.
+3. Dai un nome al token, accetta i termini dell'API e copia il token — viene mostrato una sola volta.
+
+Consulta la [documentazione sui Personal Access Token](https://developers.asana.com/docs/personal-access-token) di Asana per i dettagli.
+
+## Connessione
+
+1. In Finseo apri **Integrations → Asana → Connect**.
+2. Incolla il token e salva.
+
+## Esporta i task
+
+- Nella pagina **Tasks**, apri un task e usa **Export → Asana**, poi scegli il progetto di destinazione.
+- Facoltativamente scegli un assegnatario Asana.
+
+## Regole di automazione
+
+Sotto **Tasks → Automation**, crea regole che inviano automaticamente i nuovi task Finseo in Asana — filtrati per categoria e impatto minimo, con un assegnatario predefinito opzionale.
+
+## Risoluzione dei problemi
+
+<AccordionGroup>
+  <Accordion title="Il token viene rifiutato">
+    I personal access token iniziano con una cifra seguita da una barra (ad es. `1/...`). Copia il valore completo subito dopo la creazione — Asana non lo mostra di nuovo in seguito.
+  </Accordion>
+  <Accordion title="Un progetto non compare nel selettore">
+    Finseo elenca i progetti di cui il tuo utente Asana è membro. Unisciti al progetto in Asana, poi riapri il selettore.
+  </Accordion>
+</AccordionGroup>

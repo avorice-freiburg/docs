@@ -1,0 +1,41 @@
+---
+title: Formstack
+description: Reçois les soumissions de formulaires Formstack dans Finseo pour le suivi d'attribution.
+---
+
+# Formstack
+
+Connecte Formstack pour envoyer les soumissions de formulaires à Finseo pour le suivi d'attribution. Les webhooks natifs de Formstack envoient un POST JSON avec les données des champs du formulaire à chaque soumission.
+
+## Obtenir ton URL de webhook
+
+1. Dans Finseo, ouvre **Integrations → Formstack → Connect**.
+2. Copie ton URL de webhook personnelle (elle contient ton ID de projet, `?source=formstack` et un token secret) :
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=formstack&token=•••
+```
+
+## Configurer le webhook Formstack
+
+1. Dans Formstack, ouvre ton formulaire et va dans **Settings → Integrations → Webhooks**.
+2. Ajoute ton URL de webhook Finseo comme endpoint.
+3. Choisis d'envoyer les données en JSON avec les libellés de champs si disponible, puis enregistre.
+
+Consulte l'[article d'aide webhook de Formstack](https://help.formstack.com/s/article/Webhook-integration) pour plus de détails.
+
+## Tester et mapper les champs
+
+- Utilise l'**écouteur en direct** dans la boîte de dialogue de connexion Finseo : soumets une entrée de test et inspecte le payload reçu.
+- Formstack mappe les IDs de champs vers des valeurs — sélectionne ton champ « Comment nous avez-vous trouvés ? » sous **Field Mapping** dans la boîte de dialogue.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="Les soumissions n'arrivent pas">
+    Vérifie que le webhook est actif sur le formulaire concerné (les webhooks se configurent par formulaire, pas au niveau du compte) et que l'URL inclut les paramètres `source` et `token`.
+  </Accordion>
+  <Accordion title="La réponse d'attribution n'est pas détectée">
+    Utilise le Field Mapping une fois pour sélectionner le bon champ — Finseo mémorise le mapping pour toutes les soumissions futures.
+  </Accordion>
+</AccordionGroup>

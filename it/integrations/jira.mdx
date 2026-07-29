@@ -1,0 +1,49 @@
+---
+title: Jira
+description: Esporta i task di Finseo come issue Jira Cloud con descrizioni formattate.
+---
+
+# Jira
+
+Collega Jira Cloud per esportare i task Finseo come issue Jira in qualsiasi progetto. Le descrizioni arrivano completamente formattate con le evidenze dei dati e le istruzioni passo dopo passo.
+
+## Cosa puoi fare
+
+- Esportare qualsiasi task Finseo come issue Jira con un clic.
+- Esportare automaticamente i nuovi task tramite regole di automazione (filtrati per categoria e impatto).
+- Assegnare le issue esportate agli utenti Jira direttamente da Finseo.
+
+## Ottieni il tuo token API
+
+Finseo si autentica con Basic auth: l'email del tuo account Atlassian più un token API.
+
+1. Vai su [id.atlassian.com → Security → API tokens](https://id.atlassian.com/manage-profile/security/api-tokens).
+2. Clicca su **Create API token**, dagli un nome e copia il valore.
+
+Consulta la [documentazione sui token API](https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/) di Atlassian per i dettagli.
+
+## Connessione
+
+1. In Finseo apri **Integrations → Jira → Connect**.
+2. Inserisci l'URL del tuo sito (`your-team.atlassian.net`), l'email del tuo account e il token API.
+3. Salva.
+
+## Esporta i task
+
+- Nella pagina **Tasks**, apri un task e usa **Export → Jira**, poi scegli il progetto di destinazione.
+- Facoltativamente scegli un assegnatario Jira.
+
+## Regole di automazione
+
+Sotto **Tasks → Automation**, crea regole che inviano automaticamente i nuovi task Finseo in Jira — filtrati per categoria e impatto minimo, con un assegnatario predefinito opzionale.
+
+## Risoluzione dei problemi
+
+<AccordionGroup>
+  <Accordion title="L'autenticazione fallisce">
+    Usa l'indirizzo email dell'account Atlassian che ha creato il token e il dominio del sito senza `https://` (ad es. `acme.atlassian.net`). I token creati per un altro sito Atlassian non funzionano.
+  </Accordion>
+  <Accordion title="Un progetto non compare nel selettore">
+    Finseo elenca i progetti in cui il tuo utente Jira può creare issue. Controlla i tuoi permessi di progetto in Jira, poi riapri il selettore.
+  </Accordion>
+</AccordionGroup>

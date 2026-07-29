@@ -1,0 +1,50 @@
+---
+title: Trello
+description: Crie cartões do Trello a partir de tarefas de visibilidade do Finseo com descrições em markdown.
+---
+
+# Trello
+
+Ligue o Trello para exportar tarefas do Finseo como cartões para qualquer lista dos seus boards. As descrições dos cartões incluem as evidências e os passos recomendados em markdown.
+
+## O que pode fazer
+
+- Exportar qualquer tarefa do Finseo como cartão do Trello com um clique.
+- Exportar automaticamente novas tarefas através de regras de automação (filtradas por categoria e impacto).
+- Atribuir cartões exportados a membros do Trello diretamente a partir do Finseo.
+
+## Obter a sua chave de API e o token
+
+O Trello autentica-se com um par chave de API + token. A chave está associada a um Power-Up:
+
+1. Vá ao [portal de administração de Power-Ups](https://trello.com/power-ups/admin) e crie um novo Power-Up se ainda não tiver um (nome e email chegam — não é preciso código).
+2. Abra o seu Power-Up e mude para o separador **API Key**, depois clique em **Generate a new API Key**.
+3. Clique no link **Token** ao lado da sua chave de API, reveja as permissões e clique em **Allow**. O Trello mostra um token de 64 caracteres.
+4. Copie a chave de API e o token.
+
+Consulte o [guia da REST API do Trello](https://support.atlassian.com/trello/docs/getting-started-with-trello-rest-api/) para mais detalhes.
+
+## Ligar
+
+1. No Finseo, abra **Integrations → Trello → Connect**.
+2. Introduza a chave de API e o token, depois guarde.
+
+## Exportar tarefas
+
+- Na página **Tasks**, abra uma tarefa e use **Export → Trello**, depois escolha uma lista de um board.
+- Opcionalmente, escolha um responsável no Trello.
+
+## Regras de automação
+
+Em **Tasks → Automation**, crie regras que criam automaticamente cartões do Trello a partir de novas tarefas do Finseo — filtradas por categoria e impacto mínimo.
+
+## Resolução de problemas
+
+<AccordionGroup>
+  <Accordion title="A autenticação falha">
+    A chave e o token andam juntos: o token tem de ter sido gerado através do link Token da mesma chave de API. Regenerar a chave invalida os tokens antigos.
+  </Accordion>
+  <Accordion title="Falta um board ou uma lista">
+    O token só dá acesso a boards de que o seu utilizador do Trello é membro. Junte-se ao board e volte a abrir o seletor.
+  </Accordion>
+</AccordionGroup>

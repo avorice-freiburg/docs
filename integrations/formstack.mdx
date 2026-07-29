@@ -1,0 +1,41 @@
+---
+title: Formstack
+description: Receive Formstack form submissions in Finseo for attribution tracking.
+---
+
+# Formstack
+
+Connect Formstack to send form submissions to Finseo for attribution tracking. Formstack's native webhooks POST JSON payloads with the form field data on every submission.
+
+## Get your webhook URL
+
+1. In Finseo, open **Integrations → Formstack → Connect**.
+2. Copy your personal webhook URL (contains your project ID, `?source=formstack`, and a secret token):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=formstack&token=•••
+```
+
+## Set up the Formstack webhook
+
+1. In Formstack, open your form and go to **Settings → Integrations → Webhooks**.
+2. Add your Finseo webhook URL as the endpoint.
+3. Choose to send the data as JSON with field labels if available, then save.
+
+See Formstack's [webhook help article](https://help.formstack.com/s/article/Webhook-integration) for details.
+
+## Test and map fields
+
+- Use the **live listener** in the Finseo connect dialog: submit a test entry and inspect the received payload.
+- Formstack maps field IDs to values — select your "How did you find us?" field under **Field Mapping** in the dialog.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Submissions don't arrive">
+    Confirm the webhook is active on the specific form (webhooks are configured per form, not account-wide) and the URL includes `source` and `token` parameters.
+  </Accordion>
+  <Accordion title="The attribution answer isn't detected">
+    Use Field Mapping once to select the right field — Finseo remembers the mapping for all future submissions.
+  </Accordion>
+</AccordionGroup>

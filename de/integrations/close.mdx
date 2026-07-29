@@ -1,0 +1,44 @@
+---
+title: Close
+description: Empfange Lead-Attribution aus Close-CRM-Webhooks in Finseo.
+---
+
+# Close
+
+Verbinde Close CRM, um Attribution zu erfassen, sobald Leads erstellt werden. Close feuert einen Webhook mit den Lead-Daten inklusive Custom Fields; Finseo scannt nach der „Wie hast du uns gefunden?"-Antwort und normalisiert sie in einen Attributionskanal.
+
+## Voraussetzungen
+
+- Webhooks in der Close-UI gibt es ab dem **Business** Plan. Auf niedrigeren Plänen kannst du Webhook-Subscriptions stattdessen über die [Close API](https://developer.close.com/resources/webhook-subscriptions) erstellen.
+- Ein Custom Field auf Leads, das die Attributionsantwort erfasst.
+
+## Webhook-URL holen
+
+1. Öffne in Finseo **Integrations → Close → Connect**.
+2. Kopiere deine persönliche Webhook-URL (enthält deine Projekt-ID, `?source=close-crm` und einen geheimen Token):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=close-crm&token=•••
+```
+
+## Close-Webhook einrichten
+
+1. Gehe in Close zu **Settings → Integrations → Webhooks** (Zahnrad-Icon unten links in der Seitenleiste).
+2. Klicke auf **Add Webhook** und füge deine Finseo-URL ein.
+3. Wähle das Event **`lead.created`** (ergänze `lead.updated`, wenn das Attributionsfeld später gefüllt wird).
+4. Speichere — Close sendet einen Test-Ping, um zu prüfen, ob der Endpoint erreichbar ist.
+
+Alternativ per API: `POST https://api.close.com/api/v1/webhook/` mit `url` und `events: [{"object_type": "lead", "action": "created"}]`.
+
+## Testen und Felder mappen
+
+- Nutze den **Live-Listener** im Finseo-Connect-Dialog: Erstelle einen Test-Lead in Close und sieh dir den empfangenen Payload an.
+- Wird das Attributions-Custom-Field nicht automatisch erkannt, wähle es unter **Field Mapping**.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Die Webhooks-Option fehlt in den Close-Einstellungen">
+    UI-verwaltete Webhooks erfordern den Business Plan. Entweder upgraden, die Subscription per API erstellen oder die Daten über Zapier/Make/n8n leiten.
+  </Accordion>
+</AccordionGroup>

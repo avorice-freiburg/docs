@@ -1,0 +1,44 @@
+---
+title: Attio
+description: Synchronise les réponses d'attribution des fiches du CRM Attio vers Finseo via des webhooks.
+---
+
+# Attio
+
+Connecte Attio pour recevoir des données d'attribution à la création de fiches. Les webhooks natifs d'Attio se déclenchent sur les événements de fiches et envoient du JSON structuré avec tous les attributs — y compris les champs personnalisés comme « Comment nous avez-vous trouvés ? ». Finseo analyse le payload à la recherche de la réponse d'attribution et la normalise en canal.
+
+## Obtenir ton URL de webhook
+
+1. Dans Finseo, ouvre **Integrations → Attio → Connect**.
+2. Copie ton URL de webhook personnelle (elle contient ton ID de projet, `?source=attio` et un token secret) :
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=attio&token=•••
+```
+
+## Configurer le webhook Attio
+
+1. Dans Attio, va dans **Settings → Developers** et ouvre (ou crée) une intégration.
+2. Crée un **webhook** dans l'intégration avec ton URL Finseo comme cible.
+3. Abonne-toi à l'événement **`record.created`** pour ton objet People ou Deals (ajoute `record.updated` si le champ d'attribution est rempli plus tard).
+4. Enregistre. Attio peut envoyer un **événement de test** vers l'URL cible depuis la même page — utilise-le pour vérifier la connexion.
+
+Si ton objet People n'a pas encore d'attribut d'attribution, ajoute d'abord un attribut personnalisé comme « Comment nous avez-vous trouvés ? ».
+
+Consulte la [documentation webhooks d'Attio](https://docs.attio.com/rest-api/guides/webhooks) pour plus de détails.
+
+## Tester et mapper les champs
+
+- Utilise l'**écouteur en direct** dans la boîte de dialogue de connexion Finseo ou la fonction « Send test event » d'Attio et inspecte le payload reçu.
+- Si l'attribut d'attribution n'est pas détecté automatiquement, sélectionne-le sous **Field Mapping**.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="Aucun événement n'arrive">
+    Vérifie que le statut du webhook dans Attio est « active » et que l'événement souscrit correspond à la façon dont tes fiches sont créées. Les webhooks créés via des tokens OAuth ne sont pas visibles dans la page des paramètres développeur.
+  </Accordion>
+  <Accordion title="Les réponses arrivent sans canal">
+    Attio envoie tous les attributs de la fiche — utilise le Field Mapping dans Finseo pour pointer vers l'attribut qui contient la réponse d'attribution.
+  </Accordion>
+</AccordionGroup>

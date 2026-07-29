@@ -1,0 +1,49 @@
+---
+title: HubSpot
+description: Send "How did you hear about us?" answers from HubSpot workflows to Finseo attribution.
+---
+
+# HubSpot
+
+Connect HubSpot to automatically feed attribution survey responses into Finseo. When a lead submits a form with a "How did you hear about us?" field, a HubSpot workflow sends the contact to Finseo via webhook. Finseo normalizes the answer into attribution channels (ChatGPT, Perplexity, Google, referral, …) and correlates it with your AI visibility data.
+
+## Requirements
+
+- A HubSpot subscription that includes the **Send a webhook** workflow action — Operations Hub **Professional/Enterprise** or Data Hub **Professional/Enterprise**. It is not included in standard Marketing/Sales/Service Hub Professional tiers.
+- A form (or property) that captures the attribution answer, e.g. a "How did you hear about us?" field.
+
+## Get your webhook URL
+
+1. In Finseo, open **Integrations → HubSpot → Connect**.
+2. Copy your personal webhook URL. It already contains your project ID, the `?source=hubspot` marker for automatic payload detection, and a secret token:
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=hubspot&token=•••
+```
+
+## Set up the HubSpot workflow
+
+1. In HubSpot, go to **Automations → Workflows → Create workflow** (contact-based).
+2. Set the enrollment trigger to **Form submission** on your signup or contact form.
+3. Add the action **Send a webhook** (in the Data ops section), method **POST**.
+4. Paste your Finseo webhook URL.
+5. Include the contact properties in the request body — at minimum email, name, and your attribution field.
+6. Turn the workflow on.
+
+Finseo automatically parses HubSpot contact payloads and extracts email, name, and the attribution answer.
+
+## Test and map fields
+
+- The Finseo connect dialog has a **live listener**: turn it on, trigger a test enrollment in HubSpot, and Finseo shows the received payload.
+- If the attribution answer is not detected automatically, use **Field Mapping** in the dialog to point Finseo at the right property.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title='"Send a webhook" is missing in the workflow editor'>
+    Your HubSpot subscription doesn't include the webhook action (it requires Operations Hub or Data Hub Professional/Enterprise). As a workaround, route the form through Zapier, Make, or n8n instead — see the [Zapier / Make integration](/integrations/zapier-make).
+  </Accordion>
+  <Accordion title="Responses arrive but without an attribution channel">
+    Finseo scans field names for keywords like "how did", "find us", "source", "referral". If your property is named differently, set it explicitly under Field Mapping.
+  </Accordion>
+</AccordionGroup>

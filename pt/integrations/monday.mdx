@@ -1,0 +1,47 @@
+---
+title: Monday.com
+description: Envie tarefas de visibilidade do Finseo para os seus boards do Monday como itens.
+---
+
+# Monday.com
+
+Ligue o Monday.com para criar itens nos seus boards a partir de tarefas do Finseo. Os detalhes da tarefa, as evidências e os passos são anexados como um update em cada item.
+
+## O que pode fazer
+
+- Exportar qualquer tarefa do Finseo para um board do Monday com um clique.
+- Exportar automaticamente novas tarefas através de regras de automação (filtradas por categoria e impacto).
+- Atribuir itens exportados a membros do Monday diretamente a partir do Finseo.
+
+## Obter o seu token de API
+
+1. No Monday, clique no seu avatar no canto superior direito.
+2. Selecione **Developers** — o developer center abre-se.
+3. Vá a **My access tokens** e copie o seu token pessoal.
+
+Consulte a [documentação de autenticação do Monday](https://developer.monday.com/api-reference/docs/authentication) para mais detalhes.
+
+## Ligar
+
+1. No Finseo, abra **Integrations → Monday.com → Connect**.
+2. Cole o token e guarde.
+
+## Exportar tarefas
+
+- Na página **Tasks**, abra uma tarefa e use **Export → Monday**, depois escolha o board de destino.
+- Opcionalmente, escolha um responsável no Monday.
+
+## Regras de automação
+
+Em **Tasks → Automation**, crie regras que enviam automaticamente as novas tarefas do Finseo para um board do Monday — filtradas por categoria e impacto mínimo, com um responsável predefinido opcional.
+
+## Resolução de problemas
+
+<AccordionGroup>
+  <Accordion title="O token é rejeitado">
+    Copie o token do developer center (avatar → Developers → My access tokens). Tokens OAuth específicos de apps não são suportados aqui.
+  </Accordion>
+  <Accordion title="Falta um board no seletor">
+    O Finseo lista os boards a que o seu utilizador do Monday tem acesso. Peça a um proprietário do board para o convidar e volte a abrir o seletor.
+  </Accordion>
+</AccordionGroup>

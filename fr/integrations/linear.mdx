@@ -1,0 +1,47 @@
+---
+title: Linear
+description: Transforme les tâches de visibilité Finseo en issues Linear avec des descriptions markdown complètes.
+---
+
+# Linear
+
+Connecte Linear pour transformer les tâches Finseo en issues Linear — y compris la description markdown complète avec les preuves et les étapes recommandées. Idéal pour les équipes orientées ingénierie qui traitent les correctifs GEO techniques comme la crawlabilité ou les données structurées.
+
+## Ce que tu peux faire
+
+- Exporter n'importe quelle tâche Finseo en issue Linear en un clic.
+- Exporter automatiquement les nouvelles tâches via des règles d'automatisation (filtrées par catégorie et impact).
+- Assigner les issues exportées à des membres Linear directement depuis Finseo.
+
+## Obtenir ta clé API
+
+1. Dans Linear, ouvre **Settings → Security & access**.
+2. Sous **Personal API keys**, clique sur **New API key**.
+3. Nomme la clé et copie-la — elle commence par `lin_api_`.
+
+Consulte la [documentation des clés API de Linear](https://developers.linear.app/docs/graphql/working-with-the-graphql-api#personal-api-keys) pour plus de détails.
+
+## Connexion
+
+1. Dans Finseo, ouvre **Integrations → Linear → Connect**.
+2. Colle la clé et enregistre.
+
+## Exporter des tâches
+
+- Sur la page **Tasks**, ouvre une tâche et utilise **Export → Linear**, puis choisis l'équipe cible.
+- Optionnellement, choisis un assigné Linear.
+
+## Règles d'automatisation
+
+Sous **Tasks → Automation**, crée des règles qui transforment automatiquement les nouvelles tâches Finseo en issues Linear — par exemple, chaque tâche de la catégorie **Technical** à fort impact part directement vers ton équipe d'ingénierie.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="La clé est rejetée">
+    Les clés API personnelles commencent par `lin_api_`. Les tokens OAuth des apps Linear ne sont pas pris en charge ici.
+  </Accordion>
+  <Accordion title="Une équipe est absente du sélecteur">
+    Finseo liste les équipes auxquelles ton utilisateur Linear appartient. Rejoins l'équipe dans Linear, puis rouvre le sélecteur.
+  </Accordion>
+</AccordionGroup>

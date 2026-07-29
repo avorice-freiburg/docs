@@ -1,0 +1,50 @@
+---
+title: Trello
+description: Crea card Trello dai task di visibilità di Finseo con descrizioni in markdown.
+---
+
+# Trello
+
+Collega Trello per esportare i task Finseo come card in qualsiasi lista delle tue board. Le descrizioni delle card includono le evidenze e i passaggi consigliati in markdown.
+
+## Cosa puoi fare
+
+- Esportare qualsiasi task Finseo come card Trello con un clic.
+- Esportare automaticamente i nuovi task tramite regole di automazione (filtrati per categoria e impatto).
+- Assegnare le card esportate ai membri Trello direttamente da Finseo.
+
+## Ottieni la tua API key e il token
+
+Trello si autentica con una coppia API key + token. La chiave è legata a un Power-Up:
+
+1. Vai al [portale di amministrazione dei Power-Up](https://trello.com/power-ups/admin) e crea un nuovo Power-Up se non ne hai uno (bastano nome ed email — nessun codice richiesto).
+2. Apri il tuo Power-Up e passa alla scheda **API Key**, poi clicca su **Generate a new API Key**.
+3. Clicca sul link **Token** accanto alla tua API key, controlla i permessi e clicca su **Allow**. Trello mostra un token di 64 caratteri.
+4. Copia sia l'API key sia il token.
+
+Consulta la [guida alla REST API](https://support.atlassian.com/trello/docs/getting-started-with-trello-rest-api/) di Trello per i dettagli.
+
+## Connessione
+
+1. In Finseo apri **Integrations → Trello → Connect**.
+2. Inserisci l'API key e il token, poi salva.
+
+## Esporta i task
+
+- Nella pagina **Tasks**, apri un task e usa **Export → Trello**, poi scegli una lista della board.
+- Facoltativamente scegli un assegnatario Trello.
+
+## Regole di automazione
+
+Sotto **Tasks → Automation**, crea regole che creano automaticamente card Trello dai nuovi task Finseo — filtrati per categoria e impatto minimo.
+
+## Risoluzione dei problemi
+
+<AccordionGroup>
+  <Accordion title="L'autenticazione fallisce">
+    Chiave e token vanno insieme: il token deve essere stato generato tramite il link Token della stessa API key. Rigenerare la chiave invalida i vecchi token.
+  </Accordion>
+  <Accordion title="Una board o una lista non compare">
+    Il token dà accesso solo alle board di cui il tuo utente Trello è membro. Unisciti alla board, poi riapri il selettore.
+  </Accordion>
+</AccordionGroup>

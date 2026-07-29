@@ -1,0 +1,43 @@
+---
+title: Typeform
+description: Envie respostas do inquérito "Como nos encontrou?" do Typeform para o Finseo.
+---
+
+# Typeform
+
+Ligue o Typeform para receber automaticamente respostas ao inquérito "Como nos encontrou?". Adicione a pergunta a qualquer Typeform, registe o webhook do Finseo e cada submissão flui para o seu dashboard de atribuição.
+
+## Obter o seu URL de webhook
+
+1. No Finseo, abra **Integrations → Typeform → Connect**.
+2. Copie o seu URL de webhook pessoal (contém o ID do seu projeto, `?source=typeform` e um token secreto):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=typeform&token=•••
+```
+
+## Configurar o webhook do Typeform
+
+1. No Typeform, abra o seu formulário e vá a **Connect → Webhooks**.
+2. Clique em **Add a webhook** e cole o seu URL do Finseo.
+3. Guarde e ative o webhook.
+
+O Typeform envia cada submissão como JSON. O Finseo extrai automaticamente a resposta de atribuição das respostas do formulário — títulos de campos com palavras-chave como "how did", "find us", "source" ou "hear about" são detetados de origem.
+
+Consulte a [documentação de webhooks do Typeform](https://www.typeform.com/developers/webhooks/) para mais detalhes.
+
+## Testar e mapear campos
+
+- Use o **live listener** na janela de ligação do Finseo: submeta uma resposta de teste e inspecione o payload recebido.
+- Se a sua pergunta estiver formulada de outra forma, selecione o campo de resposta certo em **Field Mapping**.
+
+## Resolução de problemas
+
+<AccordionGroup>
+  <Accordion title="As submissões não chegam">
+    Verifique que o webhook está ativado no Typeform e que o URL inclui a query string completa (`source` e `token`). A vista de webhooks do Typeform mostra um log de entregas com códigos de resposta.
+  </Accordion>
+  <Accordion title="O email está em falta nas respostas">
+    Adicione uma pergunta de email ao seu formulário para que o Finseo possa associar a resposta de atribuição a um respondente.
+  </Accordion>
+</AccordionGroup>

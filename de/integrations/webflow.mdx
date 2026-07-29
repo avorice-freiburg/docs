@@ -1,0 +1,46 @@
+---
+title: Webflow
+description: Lass den Finseo-Agent deine Webflow-CMS-Items und Page-SEO-Einstellungen optimieren.
+---
+
+# Webflow
+
+Verbinde deine Webflow-Site, damit der Finseo-Agent CMS-Collection-Items, Page-SEO-Titel, Meta-Beschreibungen und Open-Graph-Einstellungen aktualisieren und Structured Data injizieren kann. Ideal für Marketing-Sites und Portfolios — Multi-Locale-Content wird unterstützt.
+
+## Was der Agent kann
+
+- CMS-Collection-Items bearbeiten (z. B. Blogposts, Case Studies).
+- Page-SEO-Titel, Meta-Beschreibungen und Open-Graph-Einstellungen aktualisieren.
+- JSON-LD-Schemas injizieren.
+- Änderungen auf deine Live-Site publizieren.
+
+## Site-API-Token generieren
+
+1. Öffne in Webflow die **Site Settings → Apps & Integrations → API access** deiner Site.
+2. Klicke auf **Generate API token** und gib einen Namen ein (z. B. „Finseo").
+3. Aktiviere die Scopes **CMS**, **Pages** und **Assets** (read + write).
+4. Kopiere den Token — er wird nur einmal angezeigt.
+
+Details findest du in der [Webflow-Entwickler-Doku](https://developers.webflow.com).
+
+## Verbinden
+
+1. Öffne in Finseo **Integrations → Webflow → Connect**.
+2. Füge den Token ein und speichere.
+3. Öffne den **Agent** und leg los, z. B. „Füge meiner Pricing-Seite ein FAQ-Schema hinzu".
+
+## Sicherheit
+
+- Jede Änderung erfordert deine Bestätigung, bevor sie angewendet wird.
+- Änderungen werden zuerst gestaged — das Publizieren auf die Live-Site ist ein separater, expliziter Schritt.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Der Token wird abgelehnt">
+    Site-Tokens sind site-spezifisch — stelle sicher, dass er in den Einstellungen der Site generiert wurde, die du verbindest, mit aktivierten CMS-, Pages- und Assets-Scopes.
+  </Accordion>
+  <Accordion title="Der Agent sieht bestimmte Inhalte nicht">
+    Statischer Seiteninhalt außerhalb von CMS-Collections ist nur über Page-Level-SEO-Einstellungen und Custom-Code-Injection bearbeitbar; CMS-getriebener Content bietet den vollen Bearbeitungsumfang.
+  </Accordion>
+</AccordionGroup>

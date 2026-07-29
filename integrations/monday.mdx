@@ -1,0 +1,47 @@
+---
+title: Monday.com
+description: Push Finseo visibility tasks onto your Monday boards as items.
+---
+
+# Monday.com
+
+Connect Monday.com to create items on your boards from Finseo tasks. The task details, evidence and steps are attached as an update on each item.
+
+## What you can do
+
+- Export any Finseo task onto a Monday board with one click.
+- Auto-export new tasks via automation rules (filtered by category and impact).
+- Assign exported items to Monday members directly from Finseo.
+
+## Get your API token
+
+1. In Monday, click your avatar in the top-right corner.
+2. Select **Developers** — the developer center opens.
+3. Go to **My access tokens** and copy your personal token.
+
+See Monday's [authentication docs](https://developer.monday.com/api-reference/docs/authentication) for details.
+
+## Connect
+
+1. In Finseo, open **Integrations → Monday.com → Connect**.
+2. Paste the token and save.
+
+## Export tasks
+
+- On the **Tasks** page, open a task and use **Export → Monday**, then pick the target board.
+- Optionally choose a Monday assignee.
+
+## Automation rules
+
+Under **Tasks → Automation**, create rules that push new Finseo tasks onto a Monday board automatically — filtered by category and minimum impact, with an optional default assignee.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="The token is rejected">
+    Copy the token from the developer center (avatar → Developers → My access tokens). App-specific OAuth tokens are not supported here.
+  </Accordion>
+  <Accordion title="A board is missing in the picker">
+    Finseo lists boards your Monday user can access. Ask a board owner to invite you, then reopen the picker.
+  </Accordion>
+</AccordionGroup>

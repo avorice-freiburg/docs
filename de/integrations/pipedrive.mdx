@@ -1,0 +1,47 @@
+---
+title: Pipedrive
+description: Erfasse Deal-Attribution aus Pipedrive-Automations in Finseo.
+---
+
+# Pipedrive
+
+Verbinde Pipedrive, um Attributionsdaten zu empfangen, wenn Deals erstellt oder aktualisiert werden. Eine Pipedrive-Automation sendet einen Webhook mit Deal- und Personenfeldern an Finseo, das dein „Wie hast du uns gefunden?"-Custom-Field parst und einem Attributionskanal zuordnet.
+
+## Voraussetzungen
+
+- Webhook-Aktionen innerhalb von Automations erfordern einen Pipedrive **Advanced** Plan oder höher.
+- Ein Custom Field auf Deals oder Personen, das die Attributionsantwort erfasst (z. B. „Wie hast du uns gefunden?").
+
+## Webhook-URL holen
+
+1. Öffne in Finseo **Integrations → Pipedrive → Connect**.
+2. Kopiere deine persönliche Webhook-URL (enthält deine Projekt-ID, `?source=pipedrive` und einen geheimen Token):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=pipedrive&token=•••
+```
+
+## Pipedrive-Automation einrichten
+
+1. Registriere in Pipedrive zuerst den Webhook: Füge deine Finseo-URL in den Webhook-Einstellungen hinzu, damit sie in Automations auswählbar wird.
+2. Gehe zu **Tools and apps → Automations → + Automation**.
+3. Trigger: **Deal created** (oder **Deal updated**, optional mit Beobachtung deines Attributionsfelds).
+4. Aktion: **Send webhook** → wähle deinen Finseo-Webhook, Methode **POST**.
+5. Mappe im Body (Key-Value oder Raw JSON) den Deal-Titel, E-Mail/Name der Person, den Deal-Wert und dein Attributions-Custom-Field.
+6. Aktiviere die Automation.
+
+## Testen und Felder mappen
+
+- Nutze den **Live-Listener** im Finseo-Connect-Dialog: Erstelle einen Test-Deal und sieh dir den empfangenen Payload an.
+- Pipedrive sendet Custom Fields unter hash-artigen Keys — wähle das Attributionsfeld über **Field Mapping** im Dialog, falls es nicht automatisch erkannt wird.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Die Webhook-Aktion fehlt in Automations">
+    Webhook-Requests in Automations gibt es ab dem Advanced Plan. Auf niedrigeren Plänen leitest du die Daten stattdessen über Zapier, Make oder n8n — siehe [Zapier / Make](/de/integrations/zapier-make).
+  </Accordion>
+  <Accordion title="Der Deal-Wert fehlt in Finseo">
+    Nimm die Wert- und Währungsfelder des Deals in den Webhook-Body auf, damit Finseo Umsatz pro Attributionskanal tracken kann.
+  </Accordion>
+</AccordionGroup>

@@ -1,0 +1,45 @@
+---
+title: Framer
+description: Let the Finseo agent optimize your Framer pages and CMS content via the Server API.
+---
+
+# Framer
+
+Connect your Framer site to let the agent optimize CMS entries, inject JSON-LD schemas into the site head, and publish changes — all from the chat. The integration uses Framer's Server API.
+
+## What the agent can do
+
+- Edit CMS collection items.
+- Inject custom code (e.g. JSON-LD structured data) into head/body.
+- Publish and deploy your site programmatically.
+
+## Generate an API key
+
+Framer Server API keys are created per project:
+
+1. Open your project in Framer and go to **Site Settings** (Cmd+K → "open settings").
+2. Find the **API Keys** section under General.
+3. Create a key and copy it — store it securely.
+
+<Note>
+The Server API is currently in open beta at Framer; keys authenticate as the user who created them and are bound to one project.
+</Note>
+
+## Connect
+
+1. In Finseo, open **Integrations → Framer → Connect**.
+2. Enter your Framer project URL and the API key.
+3. Save — then open the **Agent** and start optimizing, e.g. "Inject Organization schema into my site head and publish".
+
+## Safety
+
+- Every edit requires your confirmation before it is applied.
+- Publishing/deploying is an explicit step the agent announces beforehand.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Connection fails">
+    Keys are project-bound — the project URL and the API key must belong to the same Framer project. Regenerate the key in Site Settings if in doubt.
+  </Accordion>
+</AccordionGroup>

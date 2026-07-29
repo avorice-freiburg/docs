@@ -1,0 +1,49 @@
+---
+title: WordPress
+description: Deixe o agente do Finseo otimizar os seus artigos, páginas e meta tags do WordPress para visibilidade em IA.
+---
+
+# WordPress
+
+Ligue o seu site WordPress para deixar o agente do Finseo editar artigos, páginas, custom post types, meta tags do Yoast/RankMath e dados estruturados diretamente a partir do chat. O agente lê primeiro o conteúdo existente, pede a sua aprovação e cria backups automáticos antes de cada alteração — qualquer versão anterior pode ser restaurada de imediato.
+
+## O que o agente pode fazer
+
+- Reescrever títulos, meta descriptions e conteúdo para citabilidade em IA.
+- Atualizar campos meta do Yoast SEO / RankMath.
+- Injetar dados estruturados JSON-LD (FAQ, HowTo, Product, …).
+- Trabalhar em artigos, páginas e custom post types.
+
+## Criar uma application password
+
+O Finseo liga-se através da REST API do WordPress com uma application password — a sua password normal nunca é armazenada:
+
+1. No admin do WordPress, vá a **Users → Profile** (o seu próprio perfil).
+2. Desça até **Application Passwords**, introduza um nome (p. ex. "Finseo") e clique em **Add New Application Password**.
+3. Copie a password gerada — ela é mostrada apenas uma vez.
+
+<Note>
+As application passwords exigem WordPress 5.6+ e um site em HTTPS. Alguns plugins de segurança desativam-nas — verifique as definições do plugin se a secção não aparecer.
+</Note>
+
+## Ligar
+
+1. No Finseo, abra **Integrations → WordPress → Connect**.
+2. Introduza o URL do seu site, o seu nome de utilizador do WordPress e a application password.
+3. Guarde — depois abra o **Agent** e comece a otimizar, p. ex. "Otimiza as meta descriptions dos meus 5 artigos de blog mais citados".
+
+## Segurança
+
+- Cada edição exige a sua confirmação antes de ser aplicada.
+- O Finseo cria um backup da versão anterior antes de cada alteração e pode restaurá-lo a qualquer momento.
+
+## Resolução de problemas
+
+<AccordionGroup>
+  <Accordion title="A ligação falha com 401/403">
+    Verifique que o nome de utilizador corresponde ao perfil em que a application password foi criada e que nenhum plugin de segurança (p. ex. Wordfence) está a bloquear a REST API ou as application passwords.
+  </Accordion>
+  <Accordion title="A REST API está inacessível">
+    Confirme que `https://your-site.com/wp-json/` devolve JSON no browser. Alguns alojamentos ou firewalls bloqueiam o caminho da REST API.
+  </Accordion>
+</AccordionGroup>

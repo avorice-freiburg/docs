@@ -1,0 +1,57 @@
+---
+title: Notion
+description: Add Finseo visibility tasks as pages to any Notion database.
+---
+
+# Notion
+
+Connect Notion to add Finseo tasks as pages in any Notion database — for example your content calendar or sprint board. The task description, evidence and steps land as page content.
+
+## What you can do
+
+- Export any Finseo task as a page into a Notion database.
+- Auto-export new tasks via automation rules (filtered by category and impact).
+
+## Create an internal integration
+
+Notion uses an internal integration with a secret token:
+
+1. Go to [notion.so/my-integrations](https://www.notion.so/my-integrations) (you must be a workspace owner) and click **New integration**.
+2. Name it (e.g. "Finseo"), pick the workspace, and save.
+3. On the configuration page, copy the **Internal Integration Secret** — it starts with `ntn_`.
+
+## Share your database with the integration
+
+<Warning>
+This step is required. A new integration cannot see any content until you explicitly connect it to the target database — otherwise every export fails with "Could not find object".
+</Warning>
+
+1. Open the target database in Notion.
+2. Click the **•••** menu in the top-right corner.
+3. Choose **Connections** (or **Add connections**) and select your integration.
+
+See Notion's [authorization docs](https://developers.notion.com/docs/authorization#internal-integration-auth-flow-set-up) for details.
+
+## Connect
+
+1. In Finseo, open **Integrations → Notion → Connect**.
+2. Paste the secret and save.
+
+## Export tasks
+
+- On the **Tasks** page, open a task and use **Export → Notion**, then pick the target database. Finseo creates one page per task with the title as the page name and the full recommendation as page content.
+
+## Automation rules
+
+Under **Tasks → Automation**, create rules that add new Finseo tasks to a Notion database automatically — filtered by category and minimum impact.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title='"Could not find object" or empty database picker'>
+    The integration has not been connected to the database. Open the database → ••• → Connections → add your integration, then try again.
+  </Accordion>
+  <Accordion title="The secret is rejected">
+    Copy the Internal Integration Secret (starts with `ntn_`, older tokens with `secret_`) from the integration's configuration page — not the OAuth client secret of a public integration.
+  </Accordion>
+</AccordionGroup>

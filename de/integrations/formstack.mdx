@@ -1,0 +1,41 @@
+---
+title: Formstack
+description: Empfange Formstack-Übermittlungen in Finseo fürs Attribution-Tracking.
+---
+
+# Formstack
+
+Verbinde Formstack, um Formular-Übermittlungen fürs Attribution-Tracking an Finseo zu senden. Formstacks native Webhooks POSTen bei jeder Übermittlung JSON-Payloads mit den Formularfeld-Daten.
+
+## Webhook-URL holen
+
+1. Öffne in Finseo **Integrations → Formstack → Connect**.
+2. Kopiere deine persönliche Webhook-URL (enthält deine Projekt-ID, `?source=formstack` und einen geheimen Token):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=formstack&token=•••
+```
+
+## Formstack-Webhook einrichten
+
+1. Öffne dein Formular in Formstack und gehe zu **Settings → Integrations → Webhooks**.
+2. Füge deine Finseo-Webhook-URL als Endpoint hinzu.
+3. Wähle, die Daten als JSON mit Feld-Labels zu senden (falls verfügbar), und speichere.
+
+Details findest du in Formstacks [Webhook-Hilfeartikel](https://help.formstack.com/s/article/Webhook-integration).
+
+## Testen und Felder mappen
+
+- Nutze den **Live-Listener** im Finseo-Connect-Dialog: Sende eine Test-Übermittlung und sieh dir den empfangenen Payload an.
+- Formstack mappt Feld-IDs auf Werte — wähle dein „Wie hast du uns gefunden?"-Feld unter **Field Mapping** im Dialog.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Übermittlungen kommen nicht an">
+    Prüfe, ob der Webhook auf dem konkreten Formular aktiv ist (Webhooks werden pro Formular konfiguriert, nicht accountweit) und die URL die Parameter `source` und `token` enthält.
+  </Accordion>
+  <Accordion title="Die Attributionsantwort wird nicht erkannt">
+    Wähle das richtige Feld einmalig über Field Mapping — Finseo merkt sich das Mapping für alle künftigen Übermittlungen.
+  </Accordion>
+</AccordionGroup>

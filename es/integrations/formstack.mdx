@@ -1,0 +1,41 @@
+---
+title: Formstack
+description: Recibe los envíos de formularios de Formstack en Finseo para el seguimiento de atribución.
+---
+
+# Formstack
+
+Conecta Formstack para enviar los envíos de formularios a Finseo para el seguimiento de atribución. Los webhooks nativos de Formstack hacen POST de payloads JSON con los datos de los campos del formulario en cada envío.
+
+## Obtén tu URL de webhook
+
+1. En Finseo, abre **Integrations → Formstack → Connect**.
+2. Copia tu URL de webhook personal (contiene el ID de tu proyecto, `?source=formstack` y un token secreto):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=formstack&token=•••
+```
+
+## Configura el webhook de Formstack
+
+1. En Formstack, abre tu formulario y ve a **Settings → Integrations → Webhooks**.
+2. Añade tu URL de webhook de Finseo como endpoint.
+3. Elige enviar los datos como JSON con las etiquetas de los campos si está disponible, y guarda.
+
+Consulta el [artículo de ayuda sobre webhooks de Formstack](https://help.formstack.com/s/article/Webhook-integration) para más detalles.
+
+## Prueba y mapea los campos
+
+- Usa el **live listener** en el diálogo de conexión de Finseo: envía una entrada de prueba e inspecciona el payload recibido.
+- Formstack mapea IDs de campo a valores — selecciona tu campo "¿Cómo nos encontraste?" bajo **Field Mapping** en el diálogo.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Los envíos no llegan">
+    Confirma que el webhook está activo en el formulario concreto (los webhooks se configuran por formulario, no a nivel de cuenta) y que la URL incluye los parámetros `source` y `token`.
+  </Accordion>
+  <Accordion title="No se detecta la respuesta de atribución">
+    Usa Field Mapping una sola vez para seleccionar el campo correcto — Finseo recuerda el mapeo para todos los envíos futuros.
+  </Accordion>
+</AccordionGroup>

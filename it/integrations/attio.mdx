@@ -1,0 +1,44 @@
+---
+title: Attio
+description: Sincronizza le risposte di attribution dai record del CRM Attio a Finseo tramite webhook.
+---
+
+# Attio
+
+Collega Attio per ricevere dati di attribution alla creazione dei record. I webhook nativi di Attio si attivano sugli eventi dei record e inviano JSON strutturato con tutti gli attributi — inclusi i campi personalizzati come "Come ci hai trovato?". Finseo analizza il payload alla ricerca della risposta di attribution e la normalizza in un canale.
+
+## Ottieni il tuo URL webhook
+
+1. In Finseo apri **Integrations → Attio → Connect**.
+2. Copia il tuo URL webhook personale (contiene l'ID del tuo progetto, `?source=attio` e un token segreto):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=attio&token=•••
+```
+
+## Configura il webhook di Attio
+
+1. In Attio vai su **Settings → Developers** e apri (o crea) un'integrazione.
+2. Crea un **webhook** all'interno dell'integrazione con il tuo URL Finseo come destinazione.
+3. Iscriviti all'evento **`record.created`** per il tuo oggetto People o Deals (aggiungi `record.updated` se il campo di attribution viene compilato in un secondo momento).
+4. Salva. Dalla stessa pagina Attio può inviare un **evento di test** all'URL di destinazione — usalo per verificare la connessione.
+
+Se il tuo oggetto People non ha ancora un attributo di attribution, aggiungi prima un attributo personalizzato come "Come ci hai trovato?".
+
+Consulta la [documentazione sui webhook](https://docs.attio.com/rest-api/guides/webhooks) di Attio per i dettagli.
+
+## Test e mappatura dei campi
+
+- Usa il **live listener** nella finestra di connessione di Finseo o la funzione "Send test event" di Attio e ispeziona il payload ricevuto.
+- Se l'attributo di attribution non viene rilevato automaticamente, selezionalo sotto **Field Mapping**.
+
+## Risoluzione dei problemi
+
+<AccordionGroup>
+  <Accordion title="Non arriva nessun evento">
+    Verifica che lo stato del webhook in Attio sia "active" e che l'evento sottoscritto corrisponda a come vengono creati i tuoi record. I webhook creati tramite token OAuth non sono visibili nella pagina delle impostazioni developer.
+  </Accordion>
+  <Accordion title="Le risposte arrivano senza canale">
+    Attio invia tutti gli attributi del record — usa Field Mapping in Finseo per indicare l'attributo che contiene la risposta di attribution.
+  </Accordion>
+</AccordionGroup>

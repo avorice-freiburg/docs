@@ -1,0 +1,50 @@
+---
+title: Trello
+description: Crea tarjetas de Trello a partir de las tareas de visibilidad de Finseo con descripciones en markdown.
+---
+
+# Trello
+
+Conecta Trello para exportar tareas de Finseo como tarjetas a cualquier lista de tus tableros. Las descripciones de las tarjetas incluyen la evidencia y los pasos recomendados en markdown.
+
+## Qué puedes hacer
+
+- Exportar cualquier tarea de Finseo como tarjeta de Trello con un clic.
+- Exportar automáticamente las tareas nuevas mediante reglas de automatización (filtradas por categoría e impacto).
+- Asignar las tarjetas exportadas a miembros de Trello directamente desde Finseo.
+
+## Obtén tu clave de API y token
+
+Trello se autentica con un par de clave de API + token. La clave está vinculada a un Power-Up:
+
+1. Ve al [portal de administración de Power-Ups](https://trello.com/power-ups/admin) y crea un nuevo Power-Up si no tienes uno (con el nombre y el email es suficiente — no se requiere código).
+2. Abre tu Power-Up y cambia a la pestaña **API Key**, luego haz clic en **Generate a new API Key**.
+3. Haz clic en el enlace **Token** junto a tu clave de API, revisa los permisos y haz clic en **Allow**. Trello muestra un token de 64 caracteres.
+4. Copia tanto la clave de API como el token.
+
+Consulta la [guía de la REST API de Trello](https://support.atlassian.com/trello/docs/getting-started-with-trello-rest-api/) para más detalles.
+
+## Conexión
+
+1. En Finseo, abre **Integrations → Trello → Connect**.
+2. Introduce la clave de API y el token, luego guarda.
+
+## Exportar tareas
+
+- En la página **Tasks**, abre una tarea y usa **Export → Trello**, luego elige una lista de un tablero.
+- Opcionalmente elige un responsable en Trello.
+
+## Reglas de automatización
+
+Bajo **Tasks → Automation**, crea reglas que creen tarjetas de Trello a partir de las nuevas tareas de Finseo automáticamente — filtradas por categoría e impacto mínimo.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="La autenticación falla">
+    La clave y el token van juntos: el token debe haberse generado mediante el enlace Token de la misma clave de API. Regenerar la clave invalida los tokens antiguos.
+  </Accordion>
+  <Accordion title="Falta un tablero o una lista">
+    El token solo da acceso a los tableros de los que tu usuario de Trello es miembro. Únete al tablero y vuelve a abrir el selector.
+  </Accordion>
+</AccordionGroup>

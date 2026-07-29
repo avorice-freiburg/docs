@@ -1,0 +1,46 @@
+---
+title: Salesforce
+description: Envoie le LeadSource et les données d'attribution des Flows Salesforce vers Finseo.
+---
+
+# Salesforce
+
+Connecte Salesforce pour capturer l'attribution à la création de Leads ou de Contacts. Un Record-Triggered Flow avec un HTTP Callout envoie l'enregistrement en POST à Finseo, qui parse le `LeadSource` (ou un champ d'attribution personnalisé) et le normalise en canaux d'attribution.
+
+<Note>
+Les **Outbound Messages** natifs de Salesforce envoient du XML et ne sont pas pris en charge. Utilise plutôt un Flow avec une action **HTTP Callout** — aucun code Apex requis.
+</Note>
+
+## Obtenir ton URL de webhook
+
+1. Dans Finseo, ouvre **Integrations → Salesforce → Connect**.
+2. Copie ton URL de webhook personnelle (elle contient ton ID de projet, `?source=salesforce` et un token secret) :
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=salesforce&token=•••
+```
+
+## Configurer le Flow Salesforce
+
+1. Dans **Setup → Flow Builder**, crée un **Record-Triggered Flow**.
+2. Objet : **Lead** (ou Contact), déclencheur : **A record is created**.
+3. Crée un **Named Credential** pour `https://app.finseo.ai` (requis pour les HTTP Callouts).
+4. Ajoute une action **HTTP Callout** : méthode **POST**, chemin `/api/attribution/webhook/YOUR_PROJECT_ID?source=salesforce&token=...`.
+5. Construis le corps JSON à partir des champs de l'enregistrement — mappe au minimum `LeadSource`, `Email`, `Name`, et optionnellement un `Amount` pour la valeur du deal.
+6. Active le Flow.
+
+## Tester et mapper les champs
+
+- Utilise l'**écouteur en direct** dans la boîte de dialogue de connexion Finseo : crée un Lead de test et inspecte le payload reçu.
+- Si la valeur d'attribution se trouve dans un champ personnalisé plutôt que dans `LeadSource`, indique-le à Finseo via le **Field Mapping**.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="Le HTTP Callout échoue dans Salesforce">
+    Vérifie que le Named Credential pointe vers `https://app.finseo.ai` et que le chemin du callout inclut la query string complète avec `source` et `token`.
+  </Accordion>
+  <Accordion title="Les réponses arrivent mais le canal est 'unknown'">
+    Finseo mappe automatiquement les valeurs LeadSource courantes (par ex. "ChatGPT", "Google", "Referral"). Pour les valeurs de picklist personnalisées, utilise le Field Mapping ou ajuste les libellés de la picklist.
+  </Accordion>
+</AccordionGroup>

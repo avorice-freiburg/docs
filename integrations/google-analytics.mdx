@@ -1,0 +1,45 @@
+---
+title: Google Analytics (GA4)
+description: Track AI-referred traffic, conversions and revenue by connecting GA4 to Finseo.
+---
+
+# Google Analytics (GA4)
+
+Connect Google Analytics 4 to see exactly how much traffic AI platforms send to your site. Finseo identifies sessions referred by ChatGPT, Perplexity, Claude, Gemini, Copilot and other AI platforms in your GA4 data and shows trends, landing pages, conversions and revenue in the **AI Analytics** dashboard.
+
+## What you get
+
+- **AI traffic trend** — daily sessions referred by AI platforms, split per platform.
+- **Top AI landing pages** — which pages AI visitors land on.
+- **Conversions & revenue** — your GA4 conversion events and purchase revenue attributed to AI traffic.
+- **Comparison** — AI traffic share vs. organic and other channels.
+
+## Requirements
+
+- A GA4 property with your website's data (Universal Analytics is not supported).
+- A Google account with at least **Viewer** access to that property.
+
+## Connect
+
+1. In Finseo, open **Integrations → Google Analytics → Connect** (or go directly to the **AI Analytics** page).
+2. Sign in with Google and approve read access — Finseo only requests read-only Analytics scopes.
+3. Select the GA4 property (and data stream) for your project.
+4. Done — the AI Analytics page fills with data. Historical data is available as far back as your GA4 property retains it.
+
+## How AI traffic is detected
+
+Finseo classifies sessions by referrer and source/medium: referrals from domains like `chatgpt.com`, `perplexity.ai`, `gemini.google.com`, `copilot.microsoft.com`, and campaign parameters that identify AI platforms. No tagging or code change on your site is required.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="No property appears after OAuth">
+    Your Google account has no GA4 access. Ask the property admin for at least Viewer access, then reconnect.
+  </Accordion>
+  <Accordion title="AI traffic looks lower than expected">
+    Some AI platforms open links without a referrer (dark traffic). Finseo shows what's identifiable in GA4 — combining this with [Bot Analytics](/bot-analytics) and [Attribution](/attribution) gives the fuller picture.
+  </Accordion>
+  <Accordion title="Conversions are empty">
+    Mark the relevant events as key events (conversions) in GA4 — Finseo reads the conversion events your property defines.
+  </Accordion>
+</AccordionGroup>

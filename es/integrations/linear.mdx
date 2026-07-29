@@ -1,0 +1,47 @@
+---
+title: Linear
+description: Convierte las tareas de visibilidad de Finseo en issues de Linear con descripciones completas en markdown.
+---
+
+# Linear
+
+Conecta Linear para convertir tareas de Finseo en issues de Linear — incluida la descripción completa en markdown con la evidencia y los pasos recomendados. Ideal para equipos orientados a ingeniería que gestionan correcciones técnicas de GEO como crawlability o trabajo con datos estructurados.
+
+## Qué puedes hacer
+
+- Exportar cualquier tarea de Finseo como issue de Linear con un clic.
+- Exportar automáticamente las tareas nuevas mediante reglas de automatización (filtradas por categoría e impacto).
+- Asignar los issues exportados a miembros de Linear directamente desde Finseo.
+
+## Obtén tu clave de API
+
+1. En Linear, abre **Settings → Security & access**.
+2. Bajo **Personal API keys**, haz clic en **New API key**.
+3. Dale un nombre a la clave y cópiala — empieza con `lin_api_`.
+
+Consulta la [documentación de claves de API de Linear](https://developers.linear.app/docs/graphql/working-with-the-graphql-api#personal-api-keys) para más detalles.
+
+## Conexión
+
+1. En Finseo, abre **Integrations → Linear → Connect**.
+2. Pega la clave y guarda.
+
+## Exportar tareas
+
+- En la página **Tasks**, abre una tarea y usa **Export → Linear**, luego elige el equipo de destino.
+- Opcionalmente elige un responsable en Linear.
+
+## Reglas de automatización
+
+Bajo **Tasks → Automation**, crea reglas que conviertan las nuevas tareas de Finseo en issues de Linear automáticamente — por ejemplo, cada tarea de la categoría **Technical** con impacto alto va directa a tu equipo de ingeniería.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="La clave es rechazada">
+    Las personal API keys empiezan con `lin_api_`. Los tokens OAuth de apps de Linear no están soportados aquí.
+  </Accordion>
+  <Accordion title="Falta un equipo en el selector">
+    Finseo lista los equipos a los que pertenece tu usuario de Linear. Únete al equipo en Linear y vuelve a abrir el selector.
+  </Accordion>
+</AccordionGroup>

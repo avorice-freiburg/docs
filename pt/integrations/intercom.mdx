@@ -1,0 +1,48 @@
+---
+title: Intercom
+description: Capture atribuição a partir de eventos de contactos do Intercom no Finseo.
+---
+
+# Intercom
+
+Ligue o Intercom para receber dados de atribuição quando são criados contactos. Um webhook do Intercom envia os atributos do contacto — incluindo um atributo personalizado "Como nos encontrou?" — para o Finseo, que normaliza a resposta num canal de atribuição.
+
+## Requisitos
+
+- Os webhooks do Intercom são configurados através de uma **app do Developer Hub** (uma app interna gratuita para o seu workspace).
+- Um atributo personalizado nos contactos que capture a resposta de atribuição.
+
+## Obter o seu URL de webhook
+
+1. No Finseo, abra **Integrations → Intercom → Connect**.
+2. Copie o seu URL de webhook pessoal (contém o ID do seu projeto, `?source=intercom` e um token secreto):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=intercom&token=•••
+```
+
+## Configurar o webhook do Intercom
+
+1. Abra o [Intercom Developer Hub](https://app.intercom.com/a/apps/_/developer-hub) e crie uma app interna (ou abra uma existente).
+2. Em **Configure → Webhooks**, cole o seu URL do Finseo como endpoint. O Intercom valida o URL com um pedido HEAD.
+3. Subscreva tópicos como **`contact.user.created`** e **`contact.lead.created`** (adicione `conversation.admin.closed` se capturar a resposta em conversas).
+4. Na página **Authentication** da app, ative os scopes de permissões que os tópicos exigem (p. ex. "Read and write users") — sem eles o webhook não dispara.
+5. Guarde.
+
+Consulte o [guia de configuração de webhooks do Intercom](https://developers.intercom.com/docs/webhooks/setting-up-webhooks) para mais detalhes.
+
+## Testar e mapear campos
+
+- Use o **live listener** na janela de ligação do Finseo: crie um contacto de teste e inspecione o payload recebido.
+- Selecione o seu atributo personalizado de atribuição em **Field Mapping** se não for detetado automaticamente.
+
+## Resolução de problemas
+
+<AccordionGroup>
+  <Accordion title="Não chegam eventos">
+    Verifique que os scopes de permissões exigidos pelo tópico estão ativados na página Authentication da app — tópicos sem os scopes correspondentes são ignorados silenciosamente.
+  </Accordion>
+  <Accordion title="Faltam tópicos no menu">
+    Os tópicos disponíveis dependem da versão da API que a sua app usa. Se necessário, atualize a versão da API da app no Developer Hub.
+  </Accordion>
+</AccordionGroup>

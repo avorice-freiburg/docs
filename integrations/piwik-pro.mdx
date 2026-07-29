@@ -1,0 +1,43 @@
+---
+title: Piwik PRO
+description: Track AI-referred traffic in Finseo with your Piwik PRO analytics data.
+---
+
+# Piwik PRO
+
+Connect Piwik PRO as a privacy-friendly alternative to Google Analytics. Finseo reads your Piwik PRO session data to identify traffic referred by AI platforms (ChatGPT, Perplexity, Claude, Gemini, Copilot, …) and shows it in the **AI Analytics** dashboard.
+
+## What you get
+
+- **AI traffic trend** — daily sessions referred by AI platforms, split per platform.
+- **Top AI landing pages** — which pages AI visitors land on.
+- **Channel comparison** — AI traffic share alongside your other channels.
+
+## Create API credentials
+
+Finseo authenticates with Piwik PRO API credentials (OAuth client credentials):
+
+1. Log in to Piwik PRO and click **Menu → your email address** (your profile).
+2. Open the **API keys** tab and click **Create a key**.
+3. Name the key and click **OK**.
+4. Copy the **Client ID** and **Client secret** immediately — the secret is not shown again after you close the window.
+
+See the [Piwik PRO help article](https://help.piwik.pro/support/questions/generate-api-credentials/) for details.
+
+## Connect
+
+1. In Finseo, open the **AI Analytics** page and choose **Connect → Piwik PRO** (also reachable via **Integrations**).
+2. Enter your **account URL** (e.g. `yourcompany.piwik.pro`), the **Client ID**, and the **Client secret**.
+3. Finseo validates the credentials and lists your sites — select the site to track.
+4. Done — AI traffic data appears in the dashboard.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Connection fails">
+    Check the account URL format (no `https://`, just `yourcompany.piwik.pro`) and that the credentials were copied completely. Deleted API keys stop working immediately.
+  </Accordion>
+  <Accordion title="No sites appear">
+    The API key inherits your user's permissions. Make sure your Piwik PRO user has access to the site you want to connect.
+  </Accordion>
+</AccordionGroup>

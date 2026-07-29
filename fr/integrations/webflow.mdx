@@ -1,0 +1,46 @@
+---
+title: Webflow
+description: Laisse l'agent Finseo optimiser tes éléments CMS Webflow et les paramètres SEO de tes pages.
+---
+
+# Webflow
+
+Connecte ton site Webflow pour laisser l'agent Finseo mettre à jour les éléments de collections CMS, les titres SEO des pages, les meta descriptions, les paramètres Open Graph, et injecter des données structurées. Idéal pour les sites marketing et les portfolios — le contenu multi-locale est pris en charge.
+
+## Ce que l'agent peut faire
+
+- Modifier les éléments de collections CMS (par ex. articles de blog, études de cas).
+- Mettre à jour les titres SEO des pages, les meta descriptions et les paramètres Open Graph.
+- Injecter des schémas JSON-LD.
+- Publier les changements sur ton site en production.
+
+## Générer un Site API token
+
+1. Dans Webflow, ouvre les **Site Settings → Apps & Integrations → API access** de ton site.
+2. Clique sur **Generate API token** et donne-lui un nom (par ex. « Finseo »).
+3. Active les scopes **CMS**, **Pages** et **Assets** (lecture + écriture).
+4. Copie le token — il n'est affiché qu'une seule fois.
+
+Consulte la [documentation développeur de Webflow](https://developers.webflow.com) pour plus de détails.
+
+## Connexion
+
+1. Dans Finseo, ouvre **Integrations → Webflow → Connect**.
+2. Colle le token et enregistre.
+3. Ouvre l'**Agent** et commence à optimiser, par ex. « Ajoute un schéma FAQ à ma page tarifs ».
+
+## Sécurité
+
+- Chaque modification nécessite ta confirmation avant d'être appliquée.
+- Les changements sont d'abord mis en attente — la publication sur le site en production est une étape séparée et explicite.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="Le token est rejeté">
+    Les tokens de site sont propres à chaque site — assure-toi qu'il a été généré dans les paramètres du site que tu connectes, avec les scopes CMS + Pages + Assets activés.
+  </Accordion>
+  <Accordion title="L'agent ne voit pas certains contenus">
+    Le contenu des pages statiques hors collections CMS n'est modifiable que via les paramètres SEO au niveau des pages et l'injection de code personnalisé ; le contenu géré par le CMS offre toute la gamme d'édition.
+  </Accordion>
+</AccordionGroup>

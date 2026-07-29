@@ -1,0 +1,47 @@
+---
+title: Pipedrive
+description: Capture l'attribution des deals depuis les Automations Pipedrive dans Finseo.
+---
+
+# Pipedrive
+
+Connecte Pipedrive pour recevoir des données d'attribution à la création ou à la mise à jour de deals. Une Automation Pipedrive envoie un webhook avec les champs du deal et de la personne à Finseo, qui parse ton champ personnalisé « Comment nous avez-vous trouvés ? » et le mappe vers un canal d'attribution.
+
+## Prérequis
+
+- Les actions webhook dans les Automations nécessitent un plan Pipedrive **Advanced** ou supérieur.
+- Un champ personnalisé sur les deals ou les personnes qui capture la réponse d'attribution (par ex. « Comment nous avez-vous trouvés ? »).
+
+## Obtenir ton URL de webhook
+
+1. Dans Finseo, ouvre **Integrations → Pipedrive → Connect**.
+2. Copie ton URL de webhook personnelle (elle contient ton ID de projet, `?source=pipedrive` et un token secret) :
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=pipedrive&token=•••
+```
+
+## Configurer l'automation Pipedrive
+
+1. Dans Pipedrive, enregistre d'abord le webhook : ajoute ton URL Finseo dans les paramètres webhook pour qu'elle devienne sélectionnable dans les Automations.
+2. Va dans **Tools and apps → Automations → + Automation**.
+3. Déclencheur : **Deal created** (ou **Deal updated**, en surveillant optionnellement ton champ d'attribution).
+4. Action : **Send webhook** → sélectionne ton webhook Finseo, méthode **POST**.
+5. Dans le corps (clé-valeur ou JSON brut), mappe le titre du deal, l'email/le nom de la personne, la valeur du deal et ton champ personnalisé d'attribution.
+6. Active l'automation.
+
+## Tester et mapper les champs
+
+- Utilise l'**écouteur en direct** dans la boîte de dialogue de connexion Finseo : crée un deal de test et inspecte le payload reçu.
+- Pipedrive envoie les champs personnalisés sous des clés ressemblant à des hashs — utilise le **Field Mapping** dans la boîte de dialogue pour sélectionner le champ d'attribution s'il n'est pas détecté automatiquement.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="L'action webhook est absente des Automations">
+    Les requêtes webhook dans les Automations sont disponibles à partir des plans Advanced. Sur les plans inférieurs, fais transiter les données par Zapier, Make ou n8n — voir [Zapier / Make](/fr/integrations/zapier-make).
+  </Accordion>
+  <Accordion title="La valeur du deal manque dans Finseo">
+    Inclus les champs de valeur et de devise du deal dans le corps du webhook pour que Finseo puisse suivre le chiffre d'affaires par canal d'attribution.
+  </Accordion>
+</AccordionGroup>

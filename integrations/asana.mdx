@@ -1,0 +1,47 @@
+---
+title: Asana
+description: Send Finseo tasks into your Asana projects with evidence and action steps attached.
+---
+
+# Asana
+
+Connect Asana to send AI visibility tasks from the Finseo **Tasks** module into any Asana project. Each exported task includes the recommendation, the data evidence behind it, and concrete action steps as notes.
+
+## What you can do
+
+- Export any Finseo task into an Asana project with one click.
+- Auto-export new tasks via automation rules (filtered by category and impact).
+- Assign exported tasks to Asana members directly from Finseo.
+
+## Get your Personal Access Token
+
+1. Open the [Asana developer console](https://app.asana.com/0/my-apps) (My apps).
+2. Under **Personal access tokens**, click **Create new token**.
+3. Name the token, agree to the API terms, and copy the token — it is shown only once.
+
+See Asana's [Personal Access Token docs](https://developers.asana.com/docs/personal-access-token) for details.
+
+## Connect
+
+1. In Finseo, open **Integrations → Asana → Connect**.
+2. Paste the token and save.
+
+## Export tasks
+
+- On the **Tasks** page, open a task and use **Export → Asana**, then pick the target project.
+- Optionally choose an Asana assignee.
+
+## Automation rules
+
+Under **Tasks → Automation**, create rules that push new Finseo tasks into Asana automatically — filtered by category and minimum impact, with an optional default assignee.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="The token is rejected">
+    Personal access tokens start with a digit followed by a slash (e.g. `1/...`). Copy the full value directly after creating it — Asana does not show it again later.
+  </Accordion>
+  <Accordion title="A project is missing in the picker">
+    Finseo lists projects your Asana user is a member of. Join the project in Asana, then reopen the picker.
+  </Accordion>
+</AccordionGroup>

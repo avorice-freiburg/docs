@@ -1,0 +1,47 @@
+---
+title: Linear
+description: Trasforma i task di visibilità di Finseo in issue Linear con descrizioni markdown complete.
+---
+
+# Linear
+
+Collega Linear per trasformare i task Finseo in issue Linear — inclusa la descrizione markdown completa con le evidenze e i passaggi consigliati. Ideale per i team a guida ingegneristica che gestiscono interventi GEO tecnici come crawlability o dati strutturati.
+
+## Cosa puoi fare
+
+- Esportare qualsiasi task Finseo come issue Linear con un clic.
+- Esportare automaticamente i nuovi task tramite regole di automazione (filtrati per categoria e impatto).
+- Assegnare le issue esportate ai membri Linear direttamente da Finseo.
+
+## Ottieni la tua API key
+
+1. In Linear apri **Settings → Security & access**.
+2. Sotto **Personal API keys**, clicca su **New API key**.
+3. Dai un nome alla chiave e copiala — inizia con `lin_api_`.
+
+Consulta la [documentazione sulle API key](https://developers.linear.app/docs/graphql/working-with-the-graphql-api#personal-api-keys) di Linear per i dettagli.
+
+## Connessione
+
+1. In Finseo apri **Integrations → Linear → Connect**.
+2. Incolla la chiave e salva.
+
+## Esporta i task
+
+- Nella pagina **Tasks**, apri un task e usa **Export → Linear**, poi scegli il team di destinazione.
+- Facoltativamente scegli un assegnatario Linear.
+
+## Regole di automazione
+
+Sotto **Tasks → Automation**, crea regole che trasformano automaticamente i nuovi task Finseo in issue Linear — ad esempio, ogni task nella categoria **Technical** con impatto alto va direttamente al tuo team di engineering.
+
+## Risoluzione dei problemi
+
+<AccordionGroup>
+  <Accordion title="La chiave viene rifiutata">
+    Le personal API key iniziano con `lin_api_`. I token OAuth delle app Linear non sono supportati qui.
+  </Accordion>
+  <Accordion title="Un team non compare nel selettore">
+    Finseo elenca i team di cui fa parte il tuo utente Linear. Unisciti al team in Linear, poi riapri il selettore.
+  </Accordion>
+</AccordionGroup>

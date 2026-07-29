@@ -1,0 +1,57 @@
+---
+title: Webhook personalizado
+description: Envía datos de atribución a Finseo desde cualquier fuente mediante el endpoint de webhook genérico.
+---
+
+# Webhook personalizado
+
+Usa el endpoint de webhook genérico para enviar datos de atribución desde cualquier integración propia — tu propio backend, un manejador de formularios o una herramienta interna. Finseo detecta automáticamente los formatos de payload conocidos (HubSpot, Salesforce, Typeform, Jotform, …) y también acepta JSON plano.
+
+## Obtén tu URL de webhook
+
+1. En Finseo, abre **Integrations → Custom Webhook → Connect**.
+2. Copia tu URL de webhook personal (contiene el ID de tu proyecto y un token secreto):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+## Envía una petición
+
+Haz un POST con JSON que incluya como mínimo un `channelId` (o un `freetextResponse` que Finseo categoriza):
+
+```bash
+curl -X POST "https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "channelId": "ai_chatgpt",
+    "respondentEmail": "jane@example.com",
+    "respondentName": "Jane Doe",
+    "dealValue": 490,
+    "dealCurrency": "EUR",
+    "metadata": { "campaign": "spring-launch" }
+  }'
+```
+
+Campos soportados: `channelId`, `channelLabel`, `channelCategory`, `subChannel`, `freetextResponse`, `respondentEmail`, `respondentName`, `respondentExternalId`, `dealValue`, `dealCurrency`, `pageUrl`, `formId`, `metadata`.
+
+## Prueba y mapea los campos
+
+- El diálogo de conexión tiene un **live listener**: actívalo, envía una petición y Finseo muestra el payload recibido con el resultado del parseo.
+- Para payloads no estándar, usa **Field Mapping** para indicarle a Finseo qué campo contiene la respuesta de atribución.
+
+## Seguridad
+
+- El parámetro de query `token` autentica las peticiones — trata la URL como un secreto. Puedes regenerar el token en el diálogo de conexión en cualquier momento (la URL antigua deja de funcionar de inmediato).
+- Opcionalmente, configura un webhook saliente en los ajustes de Attribution para recibir notificaciones de nuevas respuestas en tus propios sistemas.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Las peticiones son rechazadas">
+    Comprueba que la URL incluye el `token` actual — después de regenerarlo, las URLs antiguas quedan invalidadas. El body debe ser JSON (o form-encoded para los proveedores conocidos).
+  </Accordion>
+  <Accordion title="La respuesta acaba en el canal equivocado">
+    Envía un `channelId` explícito en lugar de depender de la categorización de texto libre, o ajusta el Field Mapping.
+  </Accordion>
+</AccordionGroup>

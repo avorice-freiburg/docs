@@ -1,0 +1,57 @@
+---
+title: Notion
+description: Füge Finseo-Sichtbarkeits-Tasks als Seiten zu jeder Notion-Datenbank hinzu.
+---
+
+# Notion
+
+Verbinde Notion, um Finseo-Tasks als Seiten in jede Notion-Datenbank einzufügen — zum Beispiel in deinen Content-Kalender oder dein Sprint-Board. Task-Beschreibung, Daten-Nachweise und Schritte landen als Seiteninhalt.
+
+## Was du damit machen kannst
+
+- Exportiere jeden Finseo-Task als Seite in eine Notion-Datenbank.
+- Exportiere neue Tasks automatisch per Automatisierungsregeln (gefiltert nach Kategorie und Impact).
+
+## Interne Integration erstellen
+
+Notion nutzt eine interne Integration mit einem geheimen Token:
+
+1. Gehe zu [notion.so/my-integrations](https://www.notion.so/my-integrations) (du musst Workspace-Owner sein) und klicke auf **New integration**.
+2. Benenne sie (z. B. „Finseo"), wähle den Workspace und speichere.
+3. Kopiere auf der Konfigurationsseite das **Internal Integration Secret** — es beginnt mit `ntn_`.
+
+## Datenbank mit der Integration teilen
+
+<Warning>
+Dieser Schritt ist Pflicht. Eine neue Integration sieht keinerlei Inhalte, bis du sie explizit mit der Ziel-Datenbank verbindest — sonst schlägt jeder Export mit „Could not find object" fehl.
+</Warning>
+
+1. Öffne die Ziel-Datenbank in Notion.
+2. Klicke oben rechts auf das **•••**-Menü.
+3. Wähle **Connections** (oder **Add connections**) und wähle deine Integration.
+
+Details findest du in Notions [Autorisierungs-Doku](https://developers.notion.com/docs/authorization#internal-integration-auth-flow-set-up).
+
+## Verbinden
+
+1. Öffne in Finseo **Integrations → Notion → Connect**.
+2. Füge das Secret ein und speichere.
+
+## Tasks exportieren
+
+- Öffne auf der **Tasks**-Seite einen Task und nutze **Export → Notion**, wähle dann die Ziel-Datenbank. Finseo erstellt pro Task eine Seite — der Titel wird zum Seitennamen, die komplette Empfehlung zum Seiteninhalt.
+
+## Automatisierungsregeln
+
+Unter **Tasks → Automation** erstellst du Regeln, die neue Finseo-Tasks automatisch zu einer Notion-Datenbank hinzufügen — gefiltert nach Kategorie und Mindest-Impact.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title='"Could not find object" oder leerer Datenbank-Picker'>
+    Die Integration wurde nicht mit der Datenbank verbunden. Öffne die Datenbank → ••• → Connections → füge deine Integration hinzu und versuche es erneut.
+  </Accordion>
+  <Accordion title="Das Secret wird abgelehnt">
+    Kopiere das Internal Integration Secret (beginnt mit `ntn_`, ältere Tokens mit `secret_`) von der Konfigurationsseite der Integration — nicht das OAuth Client Secret einer öffentlichen Integration.
+  </Accordion>
+</AccordionGroup>

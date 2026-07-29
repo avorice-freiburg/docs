@@ -1,0 +1,49 @@
+---
+title: Jira
+description: Export Finseo tasks as Jira Cloud issues with formatted descriptions.
+---
+
+# Jira
+
+Connect Jira Cloud to export Finseo tasks as Jira issues into any project. Descriptions arrive fully formatted with the data evidence and step-by-step instructions.
+
+## What you can do
+
+- Export any Finseo task as a Jira issue with one click.
+- Auto-export new tasks via automation rules (filtered by category and impact).
+- Assign exported issues to Jira users directly from Finseo.
+
+## Get your API token
+
+Finseo authenticates with Basic auth: your Atlassian account email plus an API token.
+
+1. Go to [id.atlassian.com → Security → API tokens](https://id.atlassian.com/manage-profile/security/api-tokens).
+2. Click **Create API token**, name it, and copy the value.
+
+See Atlassian's [API token docs](https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/) for details.
+
+## Connect
+
+1. In Finseo, open **Integrations → Jira → Connect**.
+2. Enter your site URL (`your-team.atlassian.net`), your account email, and the API token.
+3. Save.
+
+## Export tasks
+
+- On the **Tasks** page, open a task and use **Export → Jira**, then pick the target project.
+- Optionally choose a Jira assignee.
+
+## Automation rules
+
+Under **Tasks → Automation**, create rules that push new Finseo tasks into Jira automatically — filtered by category and minimum impact, with an optional default assignee.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Authentication fails">
+    Use the email address of the Atlassian account that created the token, and the bare site domain without `https://` (e.g. `acme.atlassian.net`). Tokens created for a different Atlassian site will not work.
+  </Accordion>
+  <Accordion title="A project is missing in the picker">
+    Finseo lists projects your Jira user can create issues in. Check your project permissions in Jira, then reopen the picker.
+  </Accordion>
+</AccordionGroup>

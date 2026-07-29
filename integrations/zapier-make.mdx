@@ -1,0 +1,54 @@
+---
+title: Zapier / Make
+description: Connect any form or CRM to Finseo attribution via Zapier or Make.
+---
+
+# Zapier / Make
+
+Use Zapier or Make as the universal connector for attribution: any tool with a Zapier/Make trigger — Google Forms, a CRM, a survey tool — can send "How did you find us?" answers to the Finseo REST API.
+
+## What you need
+
+- A Finseo API key with **write** scope: create it under **Settings → API → Create Key**.
+- Your project ID (visible in the connect dialog under **Integrations → Zapier / Make**, or via `GET /v1/projects`).
+
+## Set up the Zap / scenario
+
+1. Create a new Zap (Zapier) or scenario (Make) with your form or CRM as the **trigger**.
+2. Add an action: **Webhooks by Zapier → Custom Request** (or the **HTTP** module in Make).
+3. Configure the request:
+   - **Method**: `POST`
+   - **URL**: `https://app.finseo.ai/api/v1/projects/YOUR_PROJECT_ID/attribution`
+   - **Headers**: `Authorization: Bearer YOUR_API_KEY`, `Content-Type: application/json`
+4. Map the fields into the JSON body:
+
+```json
+{
+  "channelId": "ai_chatgpt",
+  "freetextResponse": "Found you via ChatGPT",
+  "respondentEmail": "jane@example.com",
+  "respondentName": "Jane Doe",
+  "dealValue": 490,
+  "dealCurrency": "EUR"
+}
+```
+
+`channelId` is required — either map a fixed channel or pass the raw answer as `freetextResponse` and let Finseo categorize it. Optional fields include `channelLabel`, `subChannel`, `pageUrl`, `formId`, and a free-form `metadata` object.
+
+5. Test the action — the response returns the stored attribution record — and turn the automation on.
+
+## Tips
+
+- One API key can serve several Zaps; restrict it to the relevant project when creating it.
+- For tools with native webhooks (Typeform, Jotform, HubSpot, …) prefer the direct integration — no middleware needed.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="401 Unauthorized">
+    The API key is missing, lacks the write scope, or isn't allowed for this project. Create a new key under Settings → API with write access.
+  </Accordion>
+  <Accordion title="400 Bad Request">
+    `channelId` is required and the body must be valid JSON. Check the mapped fields in your action's test output.
+  </Accordion>
+</AccordionGroup>

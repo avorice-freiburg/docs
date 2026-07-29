@@ -1,0 +1,47 @@
+---
+title: Pipedrive
+description: Capture deal attribution from Pipedrive Automations in Finseo.
+---
+
+# Pipedrive
+
+Connect Pipedrive to receive attribution data when deals are created or updated. A Pipedrive Automation sends a webhook with deal and person fields to Finseo, which parses your "How did you find us?" custom field and maps it to an attribution channel.
+
+## Requirements
+
+- Webhook actions inside Automations require a Pipedrive **Advanced** plan or higher.
+- A custom field on deals or persons that captures the attribution answer (e.g. "How did you find us?").
+
+## Get your webhook URL
+
+1. In Finseo, open **Integrations → Pipedrive → Connect**.
+2. Copy your personal webhook URL (contains your project ID, `?source=pipedrive`, and a secret token):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=pipedrive&token=•••
+```
+
+## Set up the Pipedrive automation
+
+1. In Pipedrive, first register the webhook: add your Finseo URL under the webhook settings so it becomes selectable in Automations.
+2. Go to **Tools and apps → Automations → + Automation**.
+3. Trigger: **Deal created** (or **Deal updated**, optionally monitoring your attribution field).
+4. Action: **Send webhook** → select your Finseo webhook, method **POST**.
+5. In the body (key-value or raw JSON), map the deal title, person email/name, deal value, and your attribution custom field.
+6. Activate the automation.
+
+## Test and map fields
+
+- Use the **live listener** in the Finseo connect dialog: create a test deal and inspect the received payload.
+- Pipedrive sends custom fields under hash-like keys — use **Field Mapping** in the dialog to select the attribution field if it isn't detected automatically.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="The webhook action is missing in Automations">
+    Webhook requests in Automations are available on Advanced plans and higher. On lower plans, route the data through Zapier, Make, or n8n instead — see [Zapier / Make](/integrations/zapier-make).
+  </Accordion>
+  <Accordion title="Deal value is missing in Finseo">
+    Include the deal's value and currency fields in the webhook body so Finseo can track revenue per attribution channel.
+  </Accordion>
+</AccordionGroup>

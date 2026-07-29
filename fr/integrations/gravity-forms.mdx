@@ -1,0 +1,51 @@
+---
+title: Gravity Forms
+description: Envoie les soumissions Gravity Forms de WordPress vers l'attribution Finseo via le Webhooks Add-On.
+---
+
+# Gravity Forms
+
+Connecte Gravity Forms (WordPress) pour envoyer les soumissions de formulaires à Finseo pour le suivi d'attribution. Le **Webhooks Add-On** de Gravity Forms envoie chaque entrée en POST JSON vers ton URL de webhook Finseo.
+
+## Prérequis
+
+- Le Webhooks Add-On nécessite une licence Gravity Forms **Elite** (ou Nonprofit) — il n'est pas inclus dans Basic ni Pro. Les upgrades sont calculés au prorata.
+- Un champ de formulaire qui capture la réponse d'attribution (par ex. « Comment nous avez-vous trouvés ? »).
+
+## Obtenir ton URL de webhook
+
+1. Dans Finseo, ouvre **Integrations → Gravity Forms → Connect**.
+2. Copie ton URL de webhook personnelle (elle contient ton ID de projet, `?source=gravity-forms` et un token secret) :
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=gravity-forms&token=•••
+```
+
+## Configurer le feed webhook
+
+1. Dans WordPress, va dans **Forms → Add-Ons**, installe et active le **Webhooks Add-On**.
+2. Modifie ton formulaire → **Settings → Webhooks → Add New**.
+3. Configure le feed :
+   - **Request URL** : ton URL de webhook Finseo
+   - **Request Method** : `POST`
+   - **Request Format** : `JSON`
+   - **Request Body** : tous les champs (ou sélectionne les champs pertinents)
+4. Enregistre le feed.
+
+Consulte la [documentation webhooks de Gravity Forms](https://docs.gravityforms.com/category/add-ons-gravity-forms/webhooks-add-on/) pour plus de détails.
+
+## Tester et mapper les champs
+
+- Utilise l'**écouteur en direct** dans la boîte de dialogue de connexion Finseo : soumets une entrée de test et inspecte le payload reçu.
+- Gravity Forms envoie les champs sous des IDs numériques ou des libellés — sélectionne ton champ d'attribution sous **Field Mapping** dans la boîte de dialogue.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="Le Webhooks Add-On n'apparaît pas sous Add-Ons">
+    Ta licence ne l'inclut pas — l'add-on nécessite une licence Elite ou Nonprofit. Alternativement, fais transiter les soumissions par Zapier, Make ou n8n.
+  </Accordion>
+  <Accordion title="Les requêtes échouent depuis WordPress">
+    Certains plugins de sécurité bloquent les requêtes sortantes. Mets `app.finseo.ai` sur liste blanche ou consulte les logs du feed webhook sous Forms → Settings → Logging.
+  </Accordion>
+</AccordionGroup>

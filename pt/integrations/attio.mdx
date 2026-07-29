@@ -1,0 +1,44 @@
+---
+title: Attio
+description: Sincronize respostas de atribuição de registos do CRM Attio para o Finseo via webhooks.
+---
+
+# Attio
+
+Ligue o Attio para receber dados de atribuição quando são criados registos. Os webhooks nativos do Attio disparam em eventos de registos e enviam JSON estruturado com todos os atributos — incluindo campos personalizados como "Como nos encontrou?". O Finseo analisa o payload à procura da resposta de atribuição e normaliza-a num canal.
+
+## Obter o seu URL de webhook
+
+1. No Finseo, abra **Integrations → Attio → Connect**.
+2. Copie o seu URL de webhook pessoal (contém o ID do seu projeto, `?source=attio` e um token secreto):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=attio&token=•••
+```
+
+## Configurar o webhook do Attio
+
+1. No Attio, vá a **Settings → Developers** e abra (ou crie) uma integração.
+2. Crie um **webhook** dentro da integração com o seu URL do Finseo como destino.
+3. Subscreva o evento **`record.created`** para o seu objeto People ou Deals (adicione `record.updated` se o campo de atribuição for preenchido mais tarde).
+4. Guarde. O Attio pode enviar um **evento de teste** para o URL de destino a partir da mesma página — use-o para verificar a ligação.
+
+Se o seu objeto People ainda não tiver um atributo de atribuição, adicione primeiro um atributo personalizado como "Como nos encontrou?".
+
+Consulte a [documentação de webhooks do Attio](https://docs.attio.com/rest-api/guides/webhooks) para mais detalhes.
+
+## Testar e mapear campos
+
+- Use o **live listener** na janela de ligação do Finseo ou a funcionalidade "Send test event" do Attio e inspecione o payload recebido.
+- Se o atributo de atribuição não for detetado automaticamente, selecione-o em **Field Mapping**.
+
+## Resolução de problemas
+
+<AccordionGroup>
+  <Accordion title="Não chegam eventos">
+    Verifique que o estado do webhook no Attio é "active" e que o evento subscrito corresponde à forma como os seus registos são criados. Webhooks criados via tokens OAuth não são visíveis na página de definições de programador.
+  </Accordion>
+  <Accordion title="As respostas chegam sem canal">
+    O Attio envia todos os atributos do registo — use o Field Mapping no Finseo para apontar para o atributo que contém a resposta de atribuição.
+  </Accordion>
+</AccordionGroup>

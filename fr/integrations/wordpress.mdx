@@ -1,0 +1,49 @@
+---
+title: WordPress
+description: Laisse l'agent Finseo optimiser tes articles, pages et balises meta WordPress pour la visibilité IA.
+---
+
+# WordPress
+
+Connecte ton site WordPress pour laisser l'agent Finseo modifier les articles, pages, custom post types, balises meta Yoast/RankMath et données structurées directement depuis le chat. L'agent lit d'abord le contenu existant, demande ton approbation et crée des sauvegardes automatiques avant chaque changement — toute version précédente peut être restaurée instantanément.
+
+## Ce que l'agent peut faire
+
+- Réécrire les titres, meta descriptions et contenus pour la citabilité IA.
+- Mettre à jour les champs meta Yoast SEO / RankMath.
+- Injecter des données structurées JSON-LD (FAQ, HowTo, Product, …).
+- Travailler sur les articles, pages et custom post types.
+
+## Créer un mot de passe d'application
+
+Finseo se connecte via l'API REST WordPress avec un mot de passe d'application — ton mot de passe habituel n'est jamais stocké :
+
+1. Dans l'admin WordPress, va dans **Users → Profile** (ton propre profil).
+2. Descends jusqu'à **Application Passwords**, saisis un nom (par ex. « Finseo ») et clique sur **Add New Application Password**.
+3. Copie le mot de passe généré — il n'est affiché qu'une seule fois.
+
+<Note>
+Les mots de passe d'application nécessitent WordPress 5.6+ et un site en HTTPS. Certains plugins de sécurité les désactivent — vérifie les paramètres du plugin si la section est absente.
+</Note>
+
+## Connexion
+
+1. Dans Finseo, ouvre **Integrations → WordPress → Connect**.
+2. Saisis l'URL de ton site, ton nom d'utilisateur WordPress et le mot de passe d'application.
+3. Enregistre — puis ouvre l'**Agent** et commence à optimiser, par ex. « Optimise les meta descriptions de mes 5 articles de blog les plus cités ».
+
+## Sécurité
+
+- Chaque modification nécessite ta confirmation avant d'être appliquée.
+- Finseo crée une sauvegarde de la version précédente avant chaque changement et peut la restaurer à tout moment.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="La connexion échoue avec 401/403">
+    Vérifie que le nom d'utilisateur correspond au profil sous lequel le mot de passe d'application a été créé, et qu'aucun plugin de sécurité (par ex. Wordfence) ne bloque l'API REST ou les mots de passe d'application.
+  </Accordion>
+  <Accordion title="L'API REST est injoignable">
+    Vérifie que `https://your-site.com/wp-json/` renvoie du JSON dans le navigateur. Certains hébergeurs ou pare-feux bloquent le chemin de l'API REST.
+  </Accordion>
+</AccordionGroup>

@@ -1,0 +1,43 @@
+---
+title: Typeform
+description: Sende „Wie hast du uns gefunden?"-Umfrageantworten aus Typeform an Finseo.
+---
+
+# Typeform
+
+Verbinde Typeform, um „Wie hast du uns gefunden?"-Umfrageantworten automatisch zu empfangen. Füge die Frage zu einem beliebigen Typeform hinzu, registriere den Finseo-Webhook — und jede Übermittlung fließt in dein Attribution-Dashboard.
+
+## Webhook-URL holen
+
+1. Öffne in Finseo **Integrations → Typeform → Connect**.
+2. Kopiere deine persönliche Webhook-URL (enthält deine Projekt-ID, `?source=typeform` und einen geheimen Token):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=typeform&token=•••
+```
+
+## Typeform-Webhook einrichten
+
+1. Öffne dein Formular in Typeform und gehe zu **Connect → Webhooks**.
+2. Klicke auf **Add a webhook** und füge deine Finseo-URL ein.
+3. Speichere und schalte den Webhook an.
+
+Typeform sendet jede Übermittlung als JSON. Finseo extrahiert die Attributionsantwort automatisch aus den Formularantworten — Feldtitel mit Keywords wie "how did", "find us", "source" oder "hear about" werden von Haus aus erkannt.
+
+Details findest du in Typeforms [Webhook-Doku](https://www.typeform.com/developers/webhooks/).
+
+## Testen und Felder mappen
+
+- Nutze den **Live-Listener** im Finseo-Connect-Dialog: Sende eine Test-Antwort und sieh dir den empfangenen Payload an.
+- Ist deine Frage anders formuliert, wähle das richtige Antwortfeld unter **Field Mapping**.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Übermittlungen kommen nicht an">
+    Prüfe, ob der Webhook-Schalter in Typeform an ist und die URL den vollständigen Query-String (`source` und `token`) enthält. Typeforms Webhook-Ansicht zeigt ein Delivery-Log mit Response-Codes.
+  </Accordion>
+  <Accordion title="Bei Antworten fehlt die E-Mail">
+    Füge deinem Formular eine E-Mail-Frage hinzu, damit Finseo die Attributionsantwort einer Person zuordnen kann.
+  </Accordion>
+</AccordionGroup>

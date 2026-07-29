@@ -1,0 +1,60 @@
+---
+title: Calendly
+description: Cattura le risposte a "Come ci hai conosciuto?" dai form di prenotazione Calendly in Finseo.
+---
+
+# Calendly
+
+Collega Calendly per ricevere dati di attribution dalle domande dei form di prenotazione. Quando qualcuno prenota un appuntamento, Calendly invia un webhook con tutte le risposte dell'invitato — inclusa la tua domanda "Come ci hai conosciuto?" — che Finseo normalizza in canali di attribution.
+
+## Requisiti
+
+- I webhook di Calendly richiedono un piano a pagamento: **Standard**, **Teams** o **Enterprise** (non disponibili su Free).
+- Le sottoscrizioni webhook si creano tramite l'API di Calendly — non esiste un toggle nell'interfaccia. Ti serve un [personal access token](https://calendly.com/integrations/api_webhooks) dalla pagina delle integrazioni Calendly.
+- Una domanda per l'invitato sul tuo tipo di evento, ad es. "Come ci hai conosciuto?".
+
+## Ottieni il tuo URL webhook
+
+1. In Finseo apri **Integrations → Calendly → Connect**.
+2. Copia il tuo URL webhook personale (contiene l'ID del tuo progetto, `?source=calendly` e un token segreto):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=calendly&token=•••
+```
+
+## Crea la sottoscrizione webhook
+
+Crea la sottoscrizione con una singola chiamata API (sostituisci il token e gli URL):
+
+```bash
+curl --request POST \
+  --url https://api.calendly.com/webhook_subscriptions \
+  --header 'Authorization: Bearer YOUR_CALENDLY_ACCESS_TOKEN' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "url": "https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=calendly&token=YOUR_TOKEN",
+    "events": ["invitee.created"],
+    "organization": "https://api.calendly.com/organizations/YOUR_ORG_URI",
+    "scope": "organization"
+  }'
+```
+
+Usa invece `"scope": "user"` con un URI `user` se vuoi solo le tue prenotazioni. Finseo estrae automaticamente la risposta di attribution dall'array `questions_and_answers`.
+
+Consulta la [documentazione sui webhook](https://developer.calendly.com/api-docs/d7755e2f9e5fe-webhooks) di Calendly per i dettagli.
+
+## Test e mappatura dei campi
+
+- Usa il **live listener** nella finestra di connessione di Finseo: prenota un appuntamento di prova e ispeziona il payload ricevuto.
+- Se la tua domanda è formulata diversamente, seleziona la risposta giusta sotto **Field Mapping**.
+
+## Risoluzione dei problemi
+
+<AccordionGroup>
+  <Accordion title="L'API restituisce un errore di permessi">
+    I webhook richiedono un piano Standard o superiore sull'account Calendly proprietario del token. Gli account Free possono leggere l'API ma non possono creare sottoscrizioni webhook.
+  </Accordion>
+  <Accordion title="Le prenotazioni arrivano senza risposta di attribution">
+    Assicurati che la domanda faccia parte delle domande per l'invitato del tipo di evento (o di un routing form) — le risposte compaiono nel payload solo se l'invitato ha effettivamente visto la domanda.
+  </Accordion>
+</AccordionGroup>

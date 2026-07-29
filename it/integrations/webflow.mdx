@@ -1,0 +1,46 @@
+---
+title: Webflow
+description: Lascia che l'agente Finseo ottimizzi gli elementi CMS e le impostazioni SEO delle pagine del tuo Webflow.
+---
+
+# Webflow
+
+Collega il tuo sito Webflow per permettere all'agente Finseo di aggiornare gli elementi delle collezioni CMS, i titoli SEO delle pagine, le meta description, le impostazioni Open Graph e di iniettare dati strutturati. Ideale per siti marketing e portfolio — i contenuti multi-locale sono supportati.
+
+## Cosa può fare l'agente
+
+- Modificare gli elementi delle collezioni CMS (ad es. articoli del blog, case study).
+- Aggiornare titoli SEO delle pagine, meta description e impostazioni Open Graph.
+- Iniettare schemi JSON-LD.
+- Pubblicare le modifiche sul tuo sito live.
+
+## Genera un Site API token
+
+1. In Webflow apri le **Site Settings → Apps & Integrations → API access** del tuo sito.
+2. Clicca su **Generate API token** e dagli un nome (ad es. "Finseo").
+3. Abilita gli scope **CMS**, **Pages** e **Assets** (lettura + scrittura).
+4. Copia il token — viene mostrato una sola volta.
+
+Consulta la [documentazione per sviluppatori di Webflow](https://developers.webflow.com) per i dettagli.
+
+## Connessione
+
+1. In Finseo apri **Integrations → Webflow → Connect**.
+2. Incolla il token e salva.
+3. Apri l'**Agent** e inizia a ottimizzare, ad es. "Aggiungi lo schema FAQ alla mia pagina prezzi".
+
+## Sicurezza
+
+- Ogni modifica richiede la tua conferma prima di essere applicata.
+- Le modifiche vengono prima messe in staging — la pubblicazione sul sito live è un passaggio separato ed esplicito.
+
+## Risoluzione dei problemi
+
+<AccordionGroup>
+  <Accordion title="Il token viene rifiutato">
+    I site token sono specifici per sito — assicurati che sia stato generato nelle impostazioni del sito che stai collegando, con gli scope CMS + Pages + Assets abilitati.
+  </Accordion>
+  <Accordion title="L'agente non vede alcuni contenuti">
+    I contenuti statici delle pagine fuori dalle collezioni CMS sono modificabili solo tramite le impostazioni SEO a livello di pagina e l'iniezione di codice personalizzato; i contenuti gestiti dal CMS offrono l'intera gamma di modifiche.
+  </Accordion>
+</AccordionGroup>

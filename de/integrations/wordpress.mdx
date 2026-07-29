@@ -1,0 +1,49 @@
+---
+title: WordPress
+description: Lass den Finseo-Agent deine WordPress-Beiträge, -Seiten und -Meta-Tags für KI-Sichtbarkeit optimieren.
+---
+
+# WordPress
+
+Verbinde deine WordPress-Site, damit der Finseo-Agent Beiträge, Seiten, Custom Post Types, Yoast/RankMath-Meta-Tags und Structured Data direkt aus dem Chat bearbeiten kann. Der Agent liest zuerst den bestehenden Inhalt, holt deine Freigabe ein und legt vor jeder Änderung ein automatisches Backup an — jede frühere Version lässt sich sofort wiederherstellen.
+
+## Was der Agent kann
+
+- Titel, Meta-Beschreibungen und Inhalte für KI-Zitierfähigkeit umschreiben.
+- Yoast-SEO- / RankMath-Meta-Felder aktualisieren.
+- JSON-LD-Structured-Data injizieren (FAQ, HowTo, Product, …).
+- Über Beiträge, Seiten und Custom Post Types hinweg arbeiten.
+
+## Anwendungspasswort erstellen
+
+Finseo verbindet sich über die WordPress REST API mit einem Anwendungspasswort — dein normales Passwort wird nie gespeichert:
+
+1. Gehe im WordPress-Admin zu **Users → Profile** (dein eigenes Profil).
+2. Scrolle zu **Application Passwords**, gib einen Namen ein (z. B. „Finseo") und klicke auf **Add New Application Password**.
+3. Kopiere das generierte Passwort — es wird nur einmal angezeigt.
+
+<Note>
+Anwendungspasswörter erfordern WordPress 5.6+ und eine HTTPS-Site. Manche Security-Plugins deaktivieren sie — prüfe die Plugin-Einstellungen, falls der Abschnitt fehlt.
+</Note>
+
+## Verbinden
+
+1. Öffne in Finseo **Integrations → WordPress → Connect**.
+2. Gib deine Site-URL, deinen WordPress-Benutzernamen und das Anwendungspasswort ein.
+3. Speichere — öffne dann den **Agent** und leg los, z. B. „Optimiere die Meta-Beschreibungen meiner 5 meistzitierten Blogposts".
+
+## Sicherheit
+
+- Jede Änderung erfordert deine Bestätigung, bevor sie angewendet wird.
+- Finseo erstellt vor jeder Änderung ein Backup der vorherigen Version und kann sie jederzeit wiederherstellen.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Verbindung schlägt mit 401/403 fehl">
+    Prüfe, ob der Benutzername zum Profil passt, unter dem das Anwendungspasswort erstellt wurde, und ob ein Security-Plugin (z. B. Wordfence) die REST API oder Anwendungspasswörter blockiert.
+  </Accordion>
+  <Accordion title="Die REST API ist nicht erreichbar">
+    Prüfe, ob `https://your-site.com/wp-json/` im Browser JSON zurückgibt. Manche Hoster oder Firewalls blockieren den REST-API-Pfad.
+  </Accordion>
+</AccordionGroup>

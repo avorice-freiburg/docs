@@ -1,0 +1,50 @@
+---
+title: Trello
+description: Erstelle Trello-Karten aus Finseo-Sichtbarkeits-Tasks mit Markdown-Beschreibungen.
+---
+
+# Trello
+
+Verbinde Trello, um Finseo-Tasks als Karten in jede Liste auf deinen Boards zu exportieren. Die Kartenbeschreibungen enthalten Daten-Nachweise und empfohlene Schritte in Markdown.
+
+## Was du damit machen kannst
+
+- Exportiere jeden Finseo-Task mit einem Klick als Trello-Karte.
+- Exportiere neue Tasks automatisch per Automatisierungsregeln (gefiltert nach Kategorie und Impact).
+- Weise exportierte Karten direkt aus Finseo Trello-Mitgliedern zu.
+
+## API-Key und Token holen
+
+Trello authentifiziert sich mit einem Paar aus API-Key + Token. Der Key ist an ein Power-Up gebunden:
+
+1. Gehe zum [Power-Ups-Admin-Portal](https://trello.com/power-ups/admin) und erstelle ein neues Power-Up, falls du noch keins hast (Name und E-Mail reichen — kein Code nötig).
+2. Öffne dein Power-Up, wechsle zum Tab **API Key** und klicke auf **Generate a new API Key**.
+3. Klicke auf den **Token**-Link neben deinem API-Key, prüfe die Berechtigungen und klicke auf **Allow**. Trello zeigt einen 64-Zeichen-Token.
+4. Kopiere sowohl den API-Key als auch den Token.
+
+Details findest du in Trellos [REST-API-Guide](https://support.atlassian.com/trello/docs/getting-started-with-trello-rest-api/).
+
+## Verbinden
+
+1. Öffne in Finseo **Integrations → Trello → Connect**.
+2. Gib API-Key und Token ein und speichere.
+
+## Tasks exportieren
+
+- Öffne auf der **Tasks**-Seite einen Task und nutze **Export → Trello**, wähle dann eine Board-Liste.
+- Optional wählst du eine Trello-Zuweisung.
+
+## Automatisierungsregeln
+
+Unter **Tasks → Automation** erstellst du Regeln, die aus neuen Finseo-Tasks automatisch Trello-Karten erstellen — gefiltert nach Kategorie und Mindest-Impact.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Authentifizierung schlägt fehl">
+    Key und Token gehören zusammen: Der Token muss über den Token-Link desselben API-Keys generiert worden sein. Wird der Key neu generiert, werden alte Tokens ungültig.
+  </Accordion>
+  <Accordion title="Ein Board oder eine Liste fehlt">
+    Der Token gewährt nur Zugriff auf Boards, in denen dein Trello-User Mitglied ist. Tritt dem Board bei und öffne den Picker erneut.
+  </Accordion>
+</AccordionGroup>

@@ -1,0 +1,46 @@
+---
+title: Webflow
+description: Let the Finseo agent optimize your Webflow CMS items and page SEO settings.
+---
+
+# Webflow
+
+Connect your Webflow site to let the Finseo agent update CMS collection items, page SEO titles, meta descriptions, Open Graph settings, and inject structured data. Ideal for marketing sites and portfolios — multi-locale content is supported.
+
+## What the agent can do
+
+- Edit CMS collection items (e.g. blog posts, case studies).
+- Update page SEO titles, meta descriptions and Open Graph settings.
+- Inject JSON-LD schemas.
+- Publish changes to your live site.
+
+## Generate a Site API token
+
+1. In Webflow, open your site's **Site Settings → Apps & Integrations → API access**.
+2. Click **Generate API token** and give it a name (e.g. "Finseo").
+3. Enable the **CMS**, **Pages**, and **Assets** scopes (read + write).
+4. Copy the token — it is shown only once.
+
+See the [Webflow developer docs](https://developers.webflow.com) for details.
+
+## Connect
+
+1. In Finseo, open **Integrations → Webflow → Connect**.
+2. Paste the token and save.
+3. Open the **Agent** and start optimizing, e.g. "Add FAQ schema to my pricing page".
+
+## Safety
+
+- Every edit requires your confirmation before it is applied.
+- Changes are staged first — publishing to the live site is a separate, explicit step.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="The token is rejected">
+    Site tokens are site-specific — make sure it was generated in the settings of the site you're connecting, with CMS + Pages + Assets scopes enabled.
+  </Accordion>
+  <Accordion title="The agent can't see certain content">
+    Static page content outside CMS collections is only editable via page-level SEO settings and custom code injection; CMS-driven content offers the full editing range.
+  </Accordion>
+</AccordionGroup>

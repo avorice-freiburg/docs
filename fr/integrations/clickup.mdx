@@ -1,0 +1,57 @@
+---
+title: ClickUp
+description: Exporte les tâches Finseo dans tes listes ClickUp et assigne-les à des membres ClickUp — manuellement ou via des règles d'automatisation.
+---
+
+# ClickUp
+
+Connecte ClickUp pour pousser les tâches du module **Tasks** de Finseo directement dans tes listes ClickUp. Chaque tâche exportée arrive avec son titre, les données qui la justifient et des instructions étape par étape. Une fois connecté, les membres du workspace ClickUp apparaissent aussi dans les menus d'assignation de Finseo, marqués de l'icône ClickUp.
+
+## Ce que tu peux faire
+
+- Exporter n'importe quelle tâche Finseo vers une liste ClickUp en un clic.
+- Exporter automatiquement les nouvelles tâches via des règles d'automatisation (filtrées par catégorie et impact).
+- Assigner les tâches exportées à des membres ClickUp directement depuis Finseo.
+
+## Obtenir ton token API
+
+Finseo s'authentifie avec ton token API ClickUp personnel :
+
+1. Connecte-toi à ClickUp et clique sur ton avatar en haut à droite.
+2. Sélectionne **Settings**, puis clique sur **Apps** dans la barre latérale.
+3. Sous **API Token**, clique sur **Generate** (ou **Regenerate**) et copie le token — il commence par `pk_`.
+
+Consulte la [documentation d'authentification de ClickUp](https://developer.clickup.com/docs/authentication) pour plus de détails.
+
+<Note>
+Le token agit avec tes permissions ClickUp. Les tâches sont créées en ton nom et ne peuvent cibler que les listes auxquelles tu as accès.
+</Note>
+
+## Connexion
+
+1. Dans Finseo, ouvre **Integrations → ClickUp → Connect**.
+2. Colle le token et enregistre.
+
+## Exporter des tâches
+
+- Sur la page **Tasks**, ouvre une tâche et utilise **Export → ClickUp**, puis choisis la liste de destination (Space → Folder → List).
+- Optionnellement, choisis un assigné ClickUp — la liste des membres est chargée en direct depuis ton workspace.
+
+## Règles d'automatisation
+
+Sous **Tasks → Automation**, tu peux créer des règles qui s'exécutent sur chaque nouvelle tâche générée :
+
+1. Choisis les filtres : catégorie (Content, Technical, Authority, …) et impact minimum.
+2. Active **Create in PM tool → ClickUp** et sélectionne la liste cible.
+3. Optionnellement, définis **Assign in ClickUp** sur un membre — les nouvelles tâches sont alors créées et assignées automatiquement.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="Le token est rejeté">
+    Assure-toi d'avoir copié le token personnel complet commençant par `pk_` depuis Settings → Apps. Les client secrets d'apps OAuth ne fonctionnent pas ici.
+  </Accordion>
+  <Accordion title="Une liste est absente du sélecteur">
+    Finseo n'affiche que les listes accessibles à ton utilisateur ClickUp. Demande à un admin ClickUp de partager le Space ou le Folder avec toi, puis rouvre le sélecteur.
+  </Accordion>
+</AccordionGroup>

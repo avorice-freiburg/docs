@@ -1,0 +1,47 @@
+---
+title: Asana
+description: Sende Finseo-Tasks in deine Asana-Projekte — mit Daten-Nachweisen und konkreten Schritten im Gepäck.
+---
+
+# Asana
+
+Verbinde Asana, um KI-Sichtbarkeits-Tasks aus dem Finseo-Modul **Tasks** in jedes Asana-Projekt zu senden. Jeder exportierte Task enthält die Empfehlung, die zugrunde liegenden Daten und konkrete Schritte als Notizen.
+
+## Was du damit machen kannst
+
+- Exportiere jeden Finseo-Task mit einem Klick in ein Asana-Projekt.
+- Exportiere neue Tasks automatisch per Automatisierungsregeln (gefiltert nach Kategorie und Impact).
+- Weise exportierte Tasks direkt aus Finseo Asana-Mitgliedern zu.
+
+## Personal Access Token holen
+
+1. Öffne die [Asana-Entwicklerkonsole](https://app.asana.com/0/my-apps) (My apps).
+2. Klicke unter **Personal access tokens** auf **Create new token**.
+3. Benenne den Token, stimme den API-Bedingungen zu und kopiere den Token — er wird nur einmal angezeigt.
+
+Details findest du in Asanas [Personal-Access-Token-Doku](https://developers.asana.com/docs/personal-access-token).
+
+## Verbinden
+
+1. Öffne in Finseo **Integrations → Asana → Connect**.
+2. Füge den Token ein und speichere.
+
+## Tasks exportieren
+
+- Öffne auf der **Tasks**-Seite einen Task und nutze **Export → Asana**, wähle dann das Ziel-Projekt.
+- Optional wählst du eine Asana-Zuweisung.
+
+## Automatisierungsregeln
+
+Unter **Tasks → Automation** erstellst du Regeln, die neue Finseo-Tasks automatisch nach Asana pushen — gefiltert nach Kategorie und Mindest-Impact, optional mit Standard-Zuweisung.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Der Token wird abgelehnt">
+    Personal Access Tokens beginnen mit einer Ziffer gefolgt von einem Schrägstrich (z. B. `1/...`). Kopiere den vollständigen Wert direkt nach dem Erstellen — Asana zeigt ihn später nicht mehr an.
+  </Accordion>
+  <Accordion title="Ein Projekt fehlt im Picker">
+    Finseo listet Projekte, in denen dein Asana-User Mitglied ist. Tritt dem Projekt in Asana bei und öffne den Picker erneut.
+  </Accordion>
+</AccordionGroup>

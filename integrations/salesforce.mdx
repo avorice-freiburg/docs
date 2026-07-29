@@ -1,0 +1,46 @@
+---
+title: Salesforce
+description: Send LeadSource and attribution data from Salesforce Flows to Finseo.
+---
+
+# Salesforce
+
+Connect Salesforce to capture attribution when Leads or Contacts are created. A Record-Triggered Flow with an HTTP Callout POSTs the record to Finseo, which parses the `LeadSource` (or a custom attribution field) and normalizes it into attribution channels.
+
+<Note>
+Salesforce's native **Outbound Messages** send XML and are not supported. Use a Flow with an **HTTP Callout** action instead — no Apex code required.
+</Note>
+
+## Get your webhook URL
+
+1. In Finseo, open **Integrations → Salesforce → Connect**.
+2. Copy your personal webhook URL (contains your project ID, `?source=salesforce`, and a secret token):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=salesforce&token=•••
+```
+
+## Set up the Salesforce Flow
+
+1. In **Setup → Flow Builder**, create a **Record-Triggered Flow**.
+2. Object: **Lead** (or Contact), trigger: **A record is created**.
+3. Create a **Named Credential** for `https://app.finseo.ai` (required for HTTP Callouts).
+4. Add an **HTTP Callout** action: method **POST**, path `/api/attribution/webhook/YOUR_PROJECT_ID?source=salesforce&token=...`.
+5. Build the JSON body from record fields — map at minimum `LeadSource`, `Email`, `Name`, and optionally an `Amount` for deal value.
+6. Activate the Flow.
+
+## Test and map fields
+
+- Use the **live listener** in the Finseo connect dialog: create a test Lead and inspect the received payload.
+- If the attribution value sits in a custom field instead of `LeadSource`, point Finseo at it via **Field Mapping**.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="The HTTP Callout fails in Salesforce">
+    Check that the Named Credential points to `https://app.finseo.ai` and that the callout path includes the full query string with `source` and `token`.
+  </Accordion>
+  <Accordion title="Responses arrive but the channel is 'unknown'">
+    Finseo maps common LeadSource values (e.g. "ChatGPT", "Google", "Referral") automatically. For custom picklist values, use Field Mapping or adjust the picklist labels.
+  </Accordion>
+</AccordionGroup>

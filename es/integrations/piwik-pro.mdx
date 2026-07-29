@@ -1,0 +1,43 @@
+---
+title: Piwik PRO
+description: Mide el tráfico referido por IA en Finseo con tus datos de analítica de Piwik PRO.
+---
+
+# Piwik PRO
+
+Conecta Piwik PRO como alternativa respetuosa con la privacidad a Google Analytics. Finseo lee tus datos de sesiones de Piwik PRO para identificar el tráfico referido por plataformas de IA (ChatGPT, Perplexity, Claude, Gemini, Copilot, …) y lo muestra en el dashboard de **AI Analytics**.
+
+## Qué obtienes
+
+- **Tendencia de tráfico de IA** — sesiones diarias referidas por plataformas de IA, desglosadas por plataforma.
+- **Top landing pages de IA** — en qué páginas aterrizan los visitantes que llegan desde IA.
+- **Comparativa de canales** — la cuota de tráfico de IA junto a tus otros canales.
+
+## Crea las credenciales de API
+
+Finseo se autentica con credenciales de API de Piwik PRO (OAuth client credentials):
+
+1. Inicia sesión en Piwik PRO y haz clic en **Menu → tu dirección de email** (tu perfil).
+2. Abre la pestaña **API keys** y haz clic en **Create a key**.
+3. Dale un nombre a la clave y haz clic en **OK**.
+4. Copia el **Client ID** y el **Client secret** de inmediato — el secret no se vuelve a mostrar después de cerrar la ventana.
+
+Consulta el [artículo de ayuda de Piwik PRO](https://help.piwik.pro/support/questions/generate-api-credentials/) para más detalles.
+
+## Conexión
+
+1. En Finseo, abre la página **AI Analytics** y elige **Connect → Piwik PRO** (también accesible vía **Integrations**).
+2. Introduce la **URL de tu cuenta** (p. ej. `yourcompany.piwik.pro`), el **Client ID** y el **Client secret**.
+3. Finseo valida las credenciales y lista tus sitios — selecciona el sitio a monitorizar.
+4. Listo — los datos de tráfico de IA aparecen en el dashboard.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="La conexión falla">
+    Revisa el formato de la URL de la cuenta (sin `https://`, solo `yourcompany.piwik.pro`) y que las credenciales se copiaron completas. Las claves de API eliminadas dejan de funcionar de inmediato.
+  </Accordion>
+  <Accordion title="No aparece ningún sitio">
+    La clave de API hereda los permisos de tu usuario. Asegúrate de que tu usuario de Piwik PRO tiene acceso al sitio que quieres conectar.
+  </Accordion>
+</AccordionGroup>

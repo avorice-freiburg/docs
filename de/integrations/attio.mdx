@@ -1,0 +1,44 @@
+---
+title: Attio
+description: Synchronisiere Attributionsantworten aus Attio-CRM-Datensätzen per Webhook zu Finseo.
+---
+
+# Attio
+
+Verbinde Attio, um Attributionsdaten zu empfangen, wenn Datensätze erstellt werden. Attios native Webhooks feuern bei Record-Events und senden strukturiertes JSON mit allen Attributen — auch Custom Fields wie „Wie hast du uns gefunden?". Finseo scannt den Payload nach der Attributionsantwort und normalisiert sie in einen Kanal.
+
+## Webhook-URL holen
+
+1. Öffne in Finseo **Integrations → Attio → Connect**.
+2. Kopiere deine persönliche Webhook-URL (enthält deine Projekt-ID, `?source=attio` und einen geheimen Token):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=attio&token=•••
+```
+
+## Attio-Webhook einrichten
+
+1. Gehe in Attio zu **Settings → Developers** und öffne (oder erstelle) eine Integration.
+2. Erstelle innerhalb der Integration einen **Webhook** mit deiner Finseo-URL als Ziel.
+3. Abonniere das Event **`record.created`** für dein People- oder Deals-Objekt (ergänze `record.updated`, wenn das Attributionsfeld später gefüllt wird).
+4. Speichere. Attio kann von derselben Seite ein **Test-Event** an die Ziel-URL senden — nutze es, um die Verbindung zu prüfen.
+
+Falls dein People-Objekt noch kein Attributionsattribut hat, lege zuerst ein Custom-Attribut wie „Wie hast du uns gefunden?" an.
+
+Details findest du in Attios [Webhook-Doku](https://docs.attio.com/rest-api/guides/webhooks).
+
+## Testen und Felder mappen
+
+- Nutze den **Live-Listener** im Finseo-Connect-Dialog oder Attios „Send test event"-Funktion und sieh dir den empfangenen Payload an.
+- Wird das Attributionsattribut nicht automatisch erkannt, wähle es unter **Field Mapping**.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Keine Events kommen an">
+    Prüfe, ob der Webhook-Status in Attio „active" ist und das abonnierte Event dazu passt, wie deine Datensätze erstellt werden. Webhooks, die über OAuth-Tokens erstellt wurden, sind in den Developer-Einstellungen nicht sichtbar.
+  </Accordion>
+  <Accordion title="Antworten kommen ohne Kanal an">
+    Attio sendet alle Record-Attribute — zeige Finseo über Field Mapping auf das Attribut, das die Attributionsantwort enthält.
+  </Accordion>
+</AccordionGroup>

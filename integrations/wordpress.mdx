@@ -1,0 +1,49 @@
+---
+title: WordPress
+description: Let the Finseo agent optimize your WordPress posts, pages and meta tags for AI visibility.
+---
+
+# WordPress
+
+Connect your WordPress site to let the Finseo agent edit posts, pages, custom post types, Yoast/RankMath meta tags, and structured data directly from the chat. The agent reads existing content first, asks for your approval, and creates automatic backups before every change — any previous version can be restored instantly.
+
+## What the agent can do
+
+- Rewrite titles, meta descriptions and content for AI citability.
+- Update Yoast SEO / RankMath meta fields.
+- Inject JSON-LD structured data (FAQ, HowTo, Product, …).
+- Work across posts, pages and custom post types.
+
+## Create an application password
+
+Finseo connects via the WordPress REST API with an application password — your normal password is never stored:
+
+1. In WordPress admin, go to **Users → Profile** (your own profile).
+2. Scroll to **Application Passwords**, enter a name (e.g. "Finseo") and click **Add New Application Password**.
+3. Copy the generated password — it is shown only once.
+
+<Note>
+Application passwords require WordPress 5.6+ and an HTTPS site. Some security plugins disable them — check the plugin settings if the section is missing.
+</Note>
+
+## Connect
+
+1. In Finseo, open **Integrations → WordPress → Connect**.
+2. Enter your site URL, your WordPress username, and the application password.
+3. Save — then open the **Agent** and start optimizing, e.g. "Optimize the meta descriptions of my 5 most-cited blog posts".
+
+## Safety
+
+- Every edit requires your confirmation before it is applied.
+- Finseo creates a backup of the previous version before each change and can restore it at any time.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Connection fails with 401/403">
+    Check that the username matches the profile the application password was created under, and that a security plugin (e.g. Wordfence) isn't blocking the REST API or application passwords.
+  </Accordion>
+  <Accordion title="The REST API is unreachable">
+    Confirm `https://your-site.com/wp-json/` returns JSON in the browser. Some hosts or firewalls block the REST API path.
+  </Accordion>
+</AccordionGroup>

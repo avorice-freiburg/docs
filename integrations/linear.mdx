@@ -1,0 +1,47 @@
+---
+title: Linear
+description: Turn Finseo visibility tasks into Linear issues with full markdown descriptions.
+---
+
+# Linear
+
+Connect Linear to turn Finseo tasks into Linear issues — including the full markdown description with evidence and recommended steps. Ideal for engineering-driven teams handling technical GEO fixes such as crawlability or structured-data work.
+
+## What you can do
+
+- Export any Finseo task as a Linear issue with one click.
+- Auto-export new tasks via automation rules (filtered by category and impact).
+- Assign exported issues to Linear members directly from Finseo.
+
+## Get your API key
+
+1. In Linear, open **Settings → Security & access**.
+2. Under **Personal API keys**, click **New API key**.
+3. Name the key and copy it — it starts with `lin_api_`.
+
+See Linear's [API key docs](https://developers.linear.app/docs/graphql/working-with-the-graphql-api#personal-api-keys) for details.
+
+## Connect
+
+1. In Finseo, open **Integrations → Linear → Connect**.
+2. Paste the key and save.
+
+## Export tasks
+
+- On the **Tasks** page, open a task and use **Export → Linear**, then pick the target team.
+- Optionally choose a Linear assignee.
+
+## Automation rules
+
+Under **Tasks → Automation**, create rules that turn new Finseo tasks into Linear issues automatically — for example every task in the **Technical** category with high impact goes straight to your engineering team.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="The key is rejected">
+    Personal API keys start with `lin_api_`. OAuth tokens from Linear apps are not supported here.
+  </Accordion>
+  <Accordion title="A team is missing in the picker">
+    Finseo lists teams your Linear user belongs to. Join the team in Linear, then reopen the picker.
+  </Accordion>
+</AccordionGroup>

@@ -1,0 +1,43 @@
+---
+title: Typeform
+description: Envía las respuestas de la encuesta "¿Cómo nos encontraste?" desde Typeform a Finseo.
+---
+
+# Typeform
+
+Conecta Typeform para recibir automáticamente las respuestas de la encuesta "¿Cómo nos encontraste?". Añade la pregunta a cualquier Typeform, registra el webhook de Finseo y cada envío fluye hacia tu dashboard de atribución.
+
+## Obtén tu URL de webhook
+
+1. En Finseo, abre **Integrations → Typeform → Connect**.
+2. Copia tu URL de webhook personal (contiene el ID de tu proyecto, `?source=typeform` y un token secreto):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=typeform&token=•••
+```
+
+## Configura el webhook de Typeform
+
+1. En Typeform, abre tu formulario y ve a **Connect → Webhooks**.
+2. Haz clic en **Add a webhook** y pega tu URL de Finseo.
+3. Guarda y activa el webhook.
+
+Typeform envía cada envío como JSON. Finseo extrae la respuesta de atribución de las respuestas del formulario automáticamente — los títulos de campo que contienen palabras clave como "how did", "find us", "source" o "hear about" se detectan de serie.
+
+Consulta la [documentación de webhooks de Typeform](https://www.typeform.com/developers/webhooks/) para más detalles.
+
+## Prueba y mapea los campos
+
+- Usa el **live listener** en el diálogo de conexión de Finseo: envía una respuesta de prueba e inspecciona el payload recibido.
+- Si tu pregunta está formulada de otra manera, selecciona el campo de respuesta correcto bajo **Field Mapping**.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Los envíos no llegan">
+    Comprueba que el interruptor del webhook en Typeform está activado y que la URL incluye la query string completa (`source` y `token`). La vista de webhooks de Typeform muestra un log de entregas con los códigos de respuesta.
+  </Accordion>
+  <Accordion title="Falta el email en las respuestas">
+    Añade una pregunta de email a tu formulario para que Finseo pueda asociar la respuesta de atribución con un encuestado.
+  </Accordion>
+</AccordionGroup>

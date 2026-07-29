@@ -109,13 +109,60 @@
                 ]
               },
               {
-                "group": "Connectors",
+                "group": "Analytics",
+                "pages": [
+                  "integrations/google-analytics",
+                  "integrations/piwik-pro",
+                  "search-console",
+                  "cloudflare-bot-traffic"
+                ]
+              },
+              {
+                "group": "Reporting & data",
                 "pages": [
                   "looker-studio",
-                  "search-console",
-                  "cloudflare-bot-traffic",
                   "products",
                   "sentiment"
+                ]
+              },
+              {
+                "group": "CMS & content",
+                "pages": [
+                  "integrations/wordpress",
+                  "integrations/webflow",
+                  "integrations/framer",
+                  "integrations/shopify"
+                ]
+              },
+              {
+                "group": "Project management",
+                "pages": [
+                  "integrations/clickup",
+                  "integrations/asana",
+                  "integrations/linear",
+                  "integrations/jira",
+                  "integrations/monday",
+                  "integrations/trello",
+                  "integrations/notion"
+                ]
+              },
+              {
+                "group": "Attribution & CRM",
+                "pages": [
+                  "integrations/hubspot",
+                  "integrations/salesforce",
+                  "integrations/pipedrive",
+                  "integrations/attio",
+                  "integrations/close",
+                  "integrations/typeform",
+                  "integrations/jotform",
+                  "integrations/gravity-forms",
+                  "integrations/formstack",
+                  "integrations/calendly",
+                  "integrations/intercom",
+                  "integrations/zapier-make",
+                  "integrations/n8n",
+                  "integrations/custom-webhook"
                 ]
               }
             ]
@@ -260,13 +307,60 @@
                 ]
               },
               {
-                "group": "Connectors",
+                "group": "Analytics",
+                "pages": [
+                  "de/integrations/google-analytics",
+                  "de/integrations/piwik-pro",
+                  "de/search-console",
+                  "de/cloudflare-bot-traffic"
+                ]
+              },
+              {
+                "group": "Reporting & Daten",
                 "pages": [
                   "de/looker-studio",
-                  "de/search-console",
-                  "de/cloudflare-bot-traffic",
                   "de/products",
                   "de/sentiment"
+                ]
+              },
+              {
+                "group": "CMS & Content",
+                "pages": [
+                  "de/integrations/wordpress",
+                  "de/integrations/webflow",
+                  "de/integrations/framer",
+                  "de/integrations/shopify"
+                ]
+              },
+              {
+                "group": "Projektmanagement",
+                "pages": [
+                  "de/integrations/clickup",
+                  "de/integrations/asana",
+                  "de/integrations/linear",
+                  "de/integrations/jira",
+                  "de/integrations/monday",
+                  "de/integrations/trello",
+                  "de/integrations/notion"
+                ]
+              },
+              {
+                "group": "Attribution & CRM",
+                "pages": [
+                  "de/integrations/hubspot",
+                  "de/integrations/salesforce",
+                  "de/integrations/pipedrive",
+                  "de/integrations/attio",
+                  "de/integrations/close",
+                  "de/integrations/typeform",
+                  "de/integrations/jotform",
+                  "de/integrations/gravity-forms",
+                  "de/integrations/formstack",
+                  "de/integrations/calendly",
+                  "de/integrations/intercom",
+                  "de/integrations/zapier-make",
+                  "de/integrations/n8n",
+                  "de/integrations/custom-webhook"
                 ]
               }
             ]
@@ -411,13 +505,60 @@
                 ]
               },
               {
-                "group": "Connecteurs",
+                "group": "Analytics",
+                "pages": [
+                  "fr/integrations/google-analytics",
+                  "fr/integrations/piwik-pro",
+                  "fr/search-console",
+                  "fr/cloudflare-bot-traffic"
+                ]
+              },
+              {
+                "group": "Reporting & données",
                 "pages": [
                   "fr/looker-studio",
-                  "fr/search-console",
-                  "fr/cloudflare-bot-traffic",
                   "fr/products",
                   "fr/sentiment"
+                ]
+              },
+              {
+                "group": "CMS & contenu",
+                "pages": [
+                  "fr/integrations/wordpress",
+                  "fr/integrations/webflow",
+                  "fr/integrations/framer",
+                  "fr/integrations/shopify"
+                ]
+              },
+              {
+                "group": "Gestion de projet",
+                "pages": [
+                  "fr/integrations/clickup",
+                  "fr/integrations/asana",
+                  "fr/integrations/linear",
+                  "fr/integrations/jira",
+                  "fr/integrations/monday",
+                  "fr/integrations/trello",
+                  "fr/integrations/notion"
+                ]
+              },
+              {
+                "group": "Attribution & CRM",
+                "pages": [
+                  "fr/integrations/hubspot",
+                  "fr/integrations/salesforce",
+                  "fr/integrations/pipedrive",
+                  "fr/integrations/attio",
+                  "fr/integrations/close",
+                  "fr/integrations/typeform",
+                  "fr/integrations/jotform",
+                  "fr/integrations/gravity-forms",
+                  "fr/integrations/formstack",
+                  "fr/integrations/calendly",
+                  "fr/integrations/intercom",
+                  "fr/integrations/zapier-make",
+                  "fr/integrations/n8n",
+                  "fr/integrations/custom-webhook"
                 ]
               }
             ]
@@ -562,13 +703,60 @@
                 ]
               },
               {
-                "group": "Connettori",
+                "group": "Analytics",
+                "pages": [
+                  "it/integrations/google-analytics",
+                  "it/integrations/piwik-pro",
+                  "it/search-console",
+                  "it/cloudflare-bot-traffic"
+                ]
+              },
+              {
+                "group": "Reporting e dati",
                 "pages": [
                   "it/looker-studio",
-                  "it/search-console",
-                  "it/cloudflare-bot-traffic",
                   "it/products",
                   "it/sentiment"
+                ]
+              },
+              {
+                "group": "CMS e contenuti",
+                "pages": [
+                  "it/integrations/wordpress",
+                  "it/integrations/webflow",
+                  "it/integrations/framer",
+                  "it/integrations/shopify"
+                ]
+              },
+              {
+                "group": "Gestione progetti",
+                "pages": [
+                  "it/integrations/clickup",
+                  "it/integrations/asana",
+                  "it/integrations/linear",
+                  "it/integrations/jira",
+                  "it/integrations/monday",
+                  "it/integrations/trello",
+                  "it/integrations/notion"
+                ]
+              },
+              {
+                "group": "Attribuzione e CRM",
+                "pages": [
+                  "it/integrations/hubspot",
+                  "it/integrations/salesforce",
+                  "it/integrations/pipedrive",
+                  "it/integrations/attio",
+                  "it/integrations/close",
+                  "it/integrations/typeform",
+                  "it/integrations/jotform",
+                  "it/integrations/gravity-forms",
+                  "it/integrations/formstack",
+                  "it/integrations/calendly",
+                  "it/integrations/intercom",
+                  "it/integrations/zapier-make",
+                  "it/integrations/n8n",
+                  "it/integrations/custom-webhook"
                 ]
               }
             ]
@@ -713,13 +901,60 @@
                 ]
               },
               {
-                "group": "Conectores",
+                "group": "Analytics",
+                "pages": [
+                  "es/integrations/google-analytics",
+                  "es/integrations/piwik-pro",
+                  "es/search-console",
+                  "es/cloudflare-bot-traffic"
+                ]
+              },
+              {
+                "group": "Informes y datos",
                 "pages": [
                   "es/looker-studio",
-                  "es/search-console",
-                  "es/cloudflare-bot-traffic",
                   "es/products",
                   "es/sentiment"
+                ]
+              },
+              {
+                "group": "CMS y contenido",
+                "pages": [
+                  "es/integrations/wordpress",
+                  "es/integrations/webflow",
+                  "es/integrations/framer",
+                  "es/integrations/shopify"
+                ]
+              },
+              {
+                "group": "Gestión de proyectos",
+                "pages": [
+                  "es/integrations/clickup",
+                  "es/integrations/asana",
+                  "es/integrations/linear",
+                  "es/integrations/jira",
+                  "es/integrations/monday",
+                  "es/integrations/trello",
+                  "es/integrations/notion"
+                ]
+              },
+              {
+                "group": "Atribución y CRM",
+                "pages": [
+                  "es/integrations/hubspot",
+                  "es/integrations/salesforce",
+                  "es/integrations/pipedrive",
+                  "es/integrations/attio",
+                  "es/integrations/close",
+                  "es/integrations/typeform",
+                  "es/integrations/jotform",
+                  "es/integrations/gravity-forms",
+                  "es/integrations/formstack",
+                  "es/integrations/calendly",
+                  "es/integrations/intercom",
+                  "es/integrations/zapier-make",
+                  "es/integrations/n8n",
+                  "es/integrations/custom-webhook"
                 ]
               }
             ]
@@ -864,13 +1099,60 @@
                 ]
               },
               {
-                "group": "Conectores",
+                "group": "Analytics",
+                "pages": [
+                  "pt/integrations/google-analytics",
+                  "pt/integrations/piwik-pro",
+                  "pt/search-console",
+                  "pt/cloudflare-bot-traffic"
+                ]
+              },
+              {
+                "group": "Relatórios e dados",
                 "pages": [
                   "pt/looker-studio",
-                  "pt/search-console",
-                  "pt/cloudflare-bot-traffic",
                   "pt/products",
                   "pt/sentiment"
+                ]
+              },
+              {
+                "group": "CMS e conteúdo",
+                "pages": [
+                  "pt/integrations/wordpress",
+                  "pt/integrations/webflow",
+                  "pt/integrations/framer",
+                  "pt/integrations/shopify"
+                ]
+              },
+              {
+                "group": "Gestão de projetos",
+                "pages": [
+                  "pt/integrations/clickup",
+                  "pt/integrations/asana",
+                  "pt/integrations/linear",
+                  "pt/integrations/jira",
+                  "pt/integrations/monday",
+                  "pt/integrations/trello",
+                  "pt/integrations/notion"
+                ]
+              },
+              {
+                "group": "Atribuição e CRM",
+                "pages": [
+                  "pt/integrations/hubspot",
+                  "pt/integrations/salesforce",
+                  "pt/integrations/pipedrive",
+                  "pt/integrations/attio",
+                  "pt/integrations/close",
+                  "pt/integrations/typeform",
+                  "pt/integrations/jotform",
+                  "pt/integrations/gravity-forms",
+                  "pt/integrations/formstack",
+                  "pt/integrations/calendly",
+                  "pt/integrations/intercom",
+                  "pt/integrations/zapier-make",
+                  "pt/integrations/n8n",
+                  "pt/integrations/custom-webhook"
                 ]
               }
             ]

@@ -1,0 +1,43 @@
+---
+title: Jotform
+description: Ricevi gli invii dei sondaggi Jotform in Finseo per il tracciamento dell'attribution.
+---
+
+# Jotform
+
+Collega Jotform per ricevere automaticamente le risposte al sondaggio "Come ci hai trovato?". Il webhook nativo di Jotform invia ogni invio a Finseo, che rileva automaticamente il campo di attribution.
+
+## Ottieni il tuo URL webhook
+
+1. In Finseo apri **Integrations → Jotform → Connect**.
+2. Copia il tuo URL webhook personale (contiene l'ID del tuo progetto, `?source=jotform` e un token segreto):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=jotform&token=•••
+```
+
+## Configura il webhook di Jotform
+
+1. In Jotform apri il tuo form e vai su **Settings → Integrations**.
+2. Cerca **Webhooks** e aggiungi il tuo URL Finseo.
+3. Completa l'integrazione — ogni nuovo invio viene ora inoltrato.
+
+Jotform invia i dati del form come `multipart/form-data` con un campo JSON `rawRequest`. Finseo gestisce automaticamente entrambi i formati e analizza i nomi dei campi cercando parole chiave di attribution (`how_did`, `find_us`, `source`, `referral`).
+
+Consulta la [guida ai webhook](https://www.jotform.com/help/245-how-to-setup-webhook-with-jotform) di Jotform per i dettagli.
+
+## Test e mappatura dei campi
+
+- Usa il **live listener** nella finestra di connessione di Finseo: invia un modulo di prova e ispeziona il payload ricevuto.
+- Se il tuo campo ha un nome diverso, selezionalo sotto **Field Mapping** nella finestra.
+
+## Risoluzione dei problemi
+
+<AccordionGroup>
+  <Accordion title="Gli invii non arrivano">
+    Verifica che il webhook sia elencato sotto Settings → Integrations e che l'URL contenga la query string completa. Jotform ritenta le consegne fallite solo per poco tempo.
+  </Accordion>
+  <Accordion title="La risposta di attribution non viene rilevata">
+    Le chiavi dei campi Jotform sono generate automaticamente (ad es. `q12_howDid`). Usa Field Mapping una sola volta per selezionare il campo giusto — Finseo lo ricorda per tutti gli invii futuri.
+  </Accordion>
+</AccordionGroup>

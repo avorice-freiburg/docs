@@ -1,0 +1,45 @@
+---
+title: Google Analytics (GA4)
+description: Acompanhe tráfego referido por IA, conversões e receita ligando o GA4 ao Finseo.
+---
+
+# Google Analytics (GA4)
+
+Ligue o Google Analytics 4 para ver exatamente quanto tráfego as plataformas de IA enviam para o seu site. O Finseo identifica sessões referidas por ChatGPT, Perplexity, Claude, Gemini, Copilot e outras plataformas de IA nos seus dados do GA4 e mostra tendências, páginas de destino, conversões e receita no dashboard **AI Analytics**.
+
+## O que obtém
+
+- **Tendência de tráfego de IA** — sessões diárias referidas por plataformas de IA, divididas por plataforma.
+- **Principais páginas de destino de IA** — em que páginas os visitantes vindos de IA aterram.
+- **Conversões e receita** — os seus eventos de conversão do GA4 e a receita de compras atribuída ao tráfego de IA.
+- **Comparação** — quota de tráfego de IA vs. orgânico e outros canais.
+
+## Requisitos
+
+- Uma propriedade GA4 com os dados do seu site (o Universal Analytics não é suportado).
+- Uma conta Google com acesso de pelo menos **Viewer** a essa propriedade.
+
+## Ligar
+
+1. No Finseo, abra **Integrations → Google Analytics → Connect** (ou vá diretamente à página **AI Analytics**).
+2. Inicie sessão com o Google e aprove o acesso de leitura — o Finseo pede apenas scopes de Analytics só de leitura.
+3. Selecione a propriedade GA4 (e o data stream) para o seu projeto.
+4. Pronto — a página AI Analytics enche-se de dados. Os dados históricos estão disponíveis até onde a sua propriedade GA4 os retém.
+
+## Como o tráfego de IA é detetado
+
+O Finseo classifica as sessões por referrer e source/medium: referências de domínios como `chatgpt.com`, `perplexity.ai`, `gemini.google.com`, `copilot.microsoft.com`, e parâmetros de campanha que identificam plataformas de IA. Não é necessária qualquer marcação ou alteração de código no seu site.
+
+## Resolução de problemas
+
+<AccordionGroup>
+  <Accordion title="Não aparece nenhuma propriedade após o OAuth">
+    A sua conta Google não tem acesso ao GA4. Peça ao administrador da propriedade acesso de pelo menos Viewer e volte a ligar.
+  </Accordion>
+  <Accordion title="O tráfego de IA parece mais baixo do que o esperado">
+    Algumas plataformas de IA abrem links sem referrer (dark traffic). O Finseo mostra o que é identificável no GA4 — combinar isto com [Bot Analytics](/pt/bot-analytics) e [Attribution](/pt/attribution) dá uma imagem mais completa.
+  </Accordion>
+  <Accordion title="As conversões estão vazias">
+    Marque os eventos relevantes como key events (conversões) no GA4 — o Finseo lê os eventos de conversão que a sua propriedade define.
+  </Accordion>
+</AccordionGroup>

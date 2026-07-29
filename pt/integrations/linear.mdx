@@ -1,0 +1,47 @@
+---
+title: Linear
+description: Transforme tarefas de visibilidade do Finseo em issues do Linear com descrições completas em markdown.
+---
+
+# Linear
+
+Ligue o Linear para transformar tarefas do Finseo em issues do Linear — incluindo a descrição completa em markdown com evidências e passos recomendados. Ideal para equipas orientadas a engenharia que tratam de correções técnicas de GEO, como crawlability ou dados estruturados.
+
+## O que pode fazer
+
+- Exportar qualquer tarefa do Finseo como issue do Linear com um clique.
+- Exportar automaticamente novas tarefas através de regras de automação (filtradas por categoria e impacto).
+- Atribuir issues exportadas a membros do Linear diretamente a partir do Finseo.
+
+## Obter a sua chave de API
+
+1. No Linear, abra **Settings → Security & access**.
+2. Em **Personal API keys**, clique em **New API key**.
+3. Dê um nome à chave e copie-a — começa com `lin_api_`.
+
+Consulte a [documentação de chaves de API do Linear](https://developers.linear.app/docs/graphql/working-with-the-graphql-api#personal-api-keys) para mais detalhes.
+
+## Ligar
+
+1. No Finseo, abra **Integrations → Linear → Connect**.
+2. Cole a chave e guarde.
+
+## Exportar tarefas
+
+- Na página **Tasks**, abra uma tarefa e use **Export → Linear**, depois escolha a equipa de destino.
+- Opcionalmente, escolha um responsável no Linear.
+
+## Regras de automação
+
+Em **Tasks → Automation**, crie regras que transformam automaticamente novas tarefas do Finseo em issues do Linear — por exemplo, cada tarefa da categoria **Technical** com impacto alto vai diretamente para a sua equipa de engenharia.
+
+## Resolução de problemas
+
+<AccordionGroup>
+  <Accordion title="A chave é rejeitada">
+    As personal API keys começam com `lin_api_`. Tokens OAuth de apps do Linear não são suportados aqui.
+  </Accordion>
+  <Accordion title="Falta uma equipa no seletor">
+    O Finseo lista as equipas a que o seu utilizador do Linear pertence. Junte-se à equipa no Linear e volte a abrir o seletor.
+  </Accordion>
+</AccordionGroup>

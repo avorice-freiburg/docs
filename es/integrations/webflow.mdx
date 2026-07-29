@@ -1,0 +1,46 @@
+---
+title: Webflow
+description: Deja que el agente de Finseo optimice tus items del CMS de Webflow y los ajustes SEO de tus páginas.
+---
+
+# Webflow
+
+Conecta tu sitio de Webflow para que el agente de Finseo actualice items de colecciones del CMS, títulos SEO de páginas, meta descripciones, ajustes de Open Graph e inyecte datos estructurados. Ideal para sitios de marketing y portfolios — el contenido multi-idioma está soportado.
+
+## Qué puede hacer el agente
+
+- Editar items de colecciones del CMS (p. ej. entradas de blog, casos de estudio).
+- Actualizar títulos SEO de páginas, meta descripciones y ajustes de Open Graph.
+- Inyectar schemas JSON-LD.
+- Publicar cambios en tu sitio en producción.
+
+## Genera un Site API token
+
+1. En Webflow, abre los **Site Settings → Apps & Integrations → API access** de tu sitio.
+2. Haz clic en **Generate API token** y dale un nombre (p. ej. "Finseo").
+3. Habilita los scopes **CMS**, **Pages** y **Assets** (lectura + escritura).
+4. Copia el token — solo se muestra una vez.
+
+Consulta la [documentación para desarrolladores de Webflow](https://developers.webflow.com) para más detalles.
+
+## Conexión
+
+1. En Finseo, abre **Integrations → Webflow → Connect**.
+2. Pega el token y guarda.
+3. Abre el **Agent** y empieza a optimizar, p. ej. "Añade el schema FAQ a mi página de precios".
+
+## Seguridad
+
+- Cada edición requiere tu confirmación antes de aplicarse.
+- Los cambios se preparan primero en staging — publicar en el sitio en producción es un paso separado y explícito.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="El token es rechazado">
+    Los site tokens son específicos de cada sitio — asegúrate de que se generó en los ajustes del sitio que estás conectando, con los scopes CMS + Pages + Assets habilitados.
+  </Accordion>
+  <Accordion title="El agente no puede ver cierto contenido">
+    El contenido de páginas estáticas fuera de las colecciones del CMS solo es editable mediante los ajustes SEO a nivel de página y la inyección de código personalizado; el contenido gestionado por el CMS ofrece el rango completo de edición.
+  </Accordion>
+</AccordionGroup>

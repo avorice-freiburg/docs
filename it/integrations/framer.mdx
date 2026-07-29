@@ -1,0 +1,45 @@
+---
+title: Framer
+description: Lascia che l'agente Finseo ottimizzi le pagine e i contenuti CMS del tuo Framer tramite la Server API.
+---
+
+# Framer
+
+Collega il tuo sito Framer per permettere all'agente di ottimizzare le voci CMS, iniettare schemi JSON-LD nell'head del sito e pubblicare le modifiche — tutto dalla chat. L'integrazione usa la Server API di Framer.
+
+## Cosa può fare l'agente
+
+- Modificare gli elementi delle collezioni CMS.
+- Iniettare codice personalizzato (ad es. dati strutturati JSON-LD) in head/body.
+- Pubblicare e distribuire il tuo sito in modo programmatico.
+
+## Genera una API key
+
+Le API key della Server API di Framer si creano per progetto:
+
+1. Apri il tuo progetto in Framer e vai su **Site Settings** (Cmd+K → "open settings").
+2. Trova la sezione **API Keys** sotto General.
+3. Crea una chiave e copiala — conservala in modo sicuro.
+
+<Note>
+La Server API è attualmente in open beta presso Framer; le chiavi si autenticano come l'utente che le ha create e sono vincolate a un solo progetto.
+</Note>
+
+## Connessione
+
+1. In Finseo apri **Integrations → Framer → Connect**.
+2. Inserisci l'URL del tuo progetto Framer e la API key.
+3. Salva — poi apri l'**Agent** e inizia a ottimizzare, ad es. "Inietta lo schema Organization nell'head del mio sito e pubblica".
+
+## Sicurezza
+
+- Ogni modifica richiede la tua conferma prima di essere applicata.
+- La pubblicazione/il deploy è un passaggio esplicito che l'agente annuncia in anticipo.
+
+## Risoluzione dei problemi
+
+<AccordionGroup>
+  <Accordion title="La connessione fallisce">
+    Le chiavi sono vincolate al progetto — l'URL del progetto e la API key devono appartenere allo stesso progetto Framer. In caso di dubbio, rigenera la chiave in Site Settings.
+  </Accordion>
+</AccordionGroup>

@@ -1,0 +1,46 @@
+---
+title: Webflow
+description: Deixe o agente do Finseo otimizar os seus itens do CMS do Webflow e as definições de SEO das páginas.
+---
+
+# Webflow
+
+Ligue o seu site Webflow para deixar o agente do Finseo atualizar itens de coleções do CMS, títulos SEO das páginas, meta descriptions, definições de Open Graph e injetar dados estruturados. Ideal para sites de marketing e portefólios — conteúdo multi-locale é suportado.
+
+## O que o agente pode fazer
+
+- Editar itens de coleções do CMS (p. ex. artigos de blog, case studies).
+- Atualizar títulos SEO das páginas, meta descriptions e definições de Open Graph.
+- Injetar schemas JSON-LD.
+- Publicar alterações no seu site em produção.
+
+## Gerar um Site API token
+
+1. No Webflow, abra as **Site Settings → Apps & Integrations → API access** do seu site.
+2. Clique em **Generate API token** e dê-lhe um nome (p. ex. "Finseo").
+3. Ative os scopes **CMS**, **Pages** e **Assets** (leitura + escrita).
+4. Copie o token — ele é mostrado apenas uma vez.
+
+Consulte a [documentação de programador do Webflow](https://developers.webflow.com) para mais detalhes.
+
+## Ligar
+
+1. No Finseo, abra **Integrations → Webflow → Connect**.
+2. Cole o token e guarde.
+3. Abra o **Agent** e comece a otimizar, p. ex. "Adiciona o schema FAQ à minha página de preços".
+
+## Segurança
+
+- Cada edição exige a sua confirmação antes de ser aplicada.
+- As alterações ficam primeiro em staging — publicar no site em produção é um passo separado e explícito.
+
+## Resolução de problemas
+
+<AccordionGroup>
+  <Accordion title="O token é rejeitado">
+    Os site tokens são específicos de cada site — certifique-se de que foi gerado nas definições do site que está a ligar, com os scopes CMS + Pages + Assets ativados.
+  </Accordion>
+  <Accordion title="O agente não consegue ver determinado conteúdo">
+    O conteúdo estático das páginas fora das coleções do CMS só é editável através das definições de SEO ao nível da página e da injeção de código personalizado; o conteúdo gerido pelo CMS oferece o alcance de edição completo.
+  </Accordion>
+</AccordionGroup>

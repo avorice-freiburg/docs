@@ -1,0 +1,44 @@
+---
+title: Close
+description: Reçois l'attribution des leads depuis les webhooks du CRM Close dans Finseo.
+---
+
+# Close
+
+Connecte le CRM Close pour capturer l'attribution à la création de leads. Close déclenche un webhook avec les données du lead, champs personnalisés inclus ; Finseo y recherche la réponse « Comment nous avez-vous trouvés ? » et la normalise en canal d'attribution.
+
+## Prérequis
+
+- Les webhooks dans l'interface de Close sont disponibles à partir du plan **Business**. Sur les plans inférieurs, tu peux créer des abonnements webhook via l'[API Close](https://developer.close.com/resources/webhook-subscriptions) à la place.
+- Un champ personnalisé sur les leads qui capture la réponse d'attribution.
+
+## Obtenir ton URL de webhook
+
+1. Dans Finseo, ouvre **Integrations → Close → Connect**.
+2. Copie ton URL de webhook personnelle (elle contient ton ID de projet, `?source=close-crm` et un token secret) :
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=close-crm&token=•••
+```
+
+## Configurer le webhook Close
+
+1. Dans Close, va dans **Settings → Integrations → Webhooks** (icône d'engrenage dans la barre latérale en bas à gauche).
+2. Clique sur **Add Webhook** et colle ton URL Finseo.
+3. Sélectionne l'événement **`lead.created`** (ajoute `lead.updated` si le champ d'attribution est rempli plus tard).
+4. Enregistre — Close envoie un ping de test pour vérifier que l'endpoint est joignable.
+
+Alternativement via l'API : `POST https://api.close.com/api/v1/webhook/` avec `url` et `events: [{"object_type": "lead", "action": "created"}]`.
+
+## Tester et mapper les champs
+
+- Utilise l'**écouteur en direct** dans la boîte de dialogue de connexion Finseo : crée un lead de test dans Close et inspecte le payload reçu.
+- Si le champ personnalisé d'attribution n'est pas détecté automatiquement, sélectionne-le sous **Field Mapping**.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="L'option Webhooks est absente des paramètres Close">
+    Les webhooks gérés dans l'interface nécessitent le plan Business. Passe au plan supérieur, crée l'abonnement via l'API, ou fais transiter les données par Zapier/Make/n8n.
+  </Accordion>
+</AccordionGroup>

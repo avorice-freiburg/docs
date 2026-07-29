@@ -1,0 +1,57 @@
+---
+title: Custom Webhook
+description: Sende Attributionsdaten aus jeder beliebigen Quelle über den generischen Webhook-Endpoint an Finseo.
+---
+
+# Custom Webhook
+
+Nutze den generischen Webhook-Endpoint, um Attributionsdaten aus jeder eigenen Integration zu senden — dein eigenes Backend, ein Formular-Handler oder ein internes Tool. Finseo erkennt bekannte Payload-Formate automatisch (HubSpot, Salesforce, Typeform, Jotform, …) und akzeptiert auch schlichtes JSON.
+
+## Webhook-URL holen
+
+1. Öffne in Finseo **Integrations → Custom Webhook → Connect**.
+2. Kopiere deine persönliche Webhook-URL (enthält deine Projekt-ID und einen geheimen Token):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+## Request senden
+
+POSTe JSON mit mindestens einer `channelId` (oder einer `freetextResponse`, die Finseo kategorisiert):
+
+```bash
+curl -X POST "https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "channelId": "ai_chatgpt",
+    "respondentEmail": "jane@example.com",
+    "respondentName": "Jane Doe",
+    "dealValue": 490,
+    "dealCurrency": "EUR",
+    "metadata": { "campaign": "spring-launch" }
+  }'
+```
+
+Unterstützte Felder: `channelId`, `channelLabel`, `channelCategory`, `subChannel`, `freetextResponse`, `respondentEmail`, `respondentName`, `respondentExternalId`, `dealValue`, `dealCurrency`, `pageUrl`, `formId`, `metadata`.
+
+## Testen und Felder mappen
+
+- Der Connect-Dialog hat einen **Live-Listener**: Schalte ihn an, sende einen Request, und Finseo zeigt den empfangenen Payload samt Parse-Ergebnis.
+- Für Nicht-Standard-Payloads sagst du Finseo über **Field Mapping**, welches Feld die Attributionsantwort enthält.
+
+## Sicherheit
+
+- Der `token`-Query-Parameter authentifiziert Requests — behandle die URL wie ein Geheimnis. Du kannst den Token im Connect-Dialog jederzeit neu generieren (die alte URL funktioniert dann sofort nicht mehr).
+- Optional konfigurierst du in den Attribution-Einstellungen einen ausgehenden Webhook, um in deinen eigenen Systemen über neue Antworten benachrichtigt zu werden.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Requests werden abgelehnt">
+    Prüfe, ob die URL den aktuellen `token` enthält — nach dem Neugenerieren sind alte URLs ungültig. Der Body muss JSON sein (oder form-encoded bei bekannten Anbietern).
+  </Accordion>
+  <Accordion title="Die Antwort landet im falschen Kanal">
+    Sende eine explizite `channelId` statt dich auf die Freitext-Kategorisierung zu verlassen, oder passe das Field Mapping an.
+  </Accordion>
+</AccordionGroup>

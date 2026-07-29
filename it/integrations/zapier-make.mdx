@@ -1,0 +1,54 @@
+---
+title: Zapier / Make
+description: Collega qualsiasi form o CRM all'attribution di Finseo tramite Zapier o Make.
+---
+
+# Zapier / Make
+
+Usa Zapier o Make come connettore universale per l'attribution: qualsiasi strumento con un trigger Zapier/Make — Google Forms, un CRM, uno strumento di sondaggi — può inviare le risposte a "Come ci hai trovato?" alla REST API di Finseo.
+
+## Cosa ti serve
+
+- Una API key Finseo con scope di **scrittura**: creala sotto **Settings → API → Create Key**.
+- L'ID del tuo progetto (visibile nella finestra di connessione sotto **Integrations → Zapier / Make**, o tramite `GET /v1/projects`).
+
+## Configura lo Zap / scenario
+
+1. Crea un nuovo Zap (Zapier) o scenario (Make) con il tuo form o CRM come **trigger**.
+2. Aggiungi un'azione: **Webhooks by Zapier → Custom Request** (o il modulo **HTTP** in Make).
+3. Configura la richiesta:
+   - **Method**: `POST`
+   - **URL**: `https://app.finseo.ai/api/v1/projects/YOUR_PROJECT_ID/attribution`
+   - **Headers**: `Authorization: Bearer YOUR_API_KEY`, `Content-Type: application/json`
+4. Mappa i campi nel corpo JSON:
+
+```json
+{
+  "channelId": "ai_chatgpt",
+  "freetextResponse": "Found you via ChatGPT",
+  "respondentEmail": "jane@example.com",
+  "respondentName": "Jane Doe",
+  "dealValue": 490,
+  "dealCurrency": "EUR"
+}
+```
+
+`channelId` è obbligatorio — mappa un canale fisso oppure passa la risposta grezza come `freetextResponse` e lascia che Finseo la categorizzi. I campi opzionali includono `channelLabel`, `subChannel`, `pageUrl`, `formId` e un oggetto `metadata` libero.
+
+5. Testa l'azione — la risposta restituisce il record di attribution salvato — e attiva l'automazione.
+
+## Suggerimenti
+
+- Una sola API key può servire più Zap; limitala al progetto rilevante al momento della creazione.
+- Per gli strumenti con webhook nativi (Typeform, Jotform, HubSpot, …) preferisci l'integrazione diretta — nessun intermediario necessario.
+
+## Risoluzione dei problemi
+
+<AccordionGroup>
+  <Accordion title="401 Unauthorized">
+    L'API key manca, non ha lo scope di scrittura o non è abilitata per questo progetto. Crea una nuova chiave sotto Settings → API con accesso in scrittura.
+  </Accordion>
+  <Accordion title="400 Bad Request">
+    `channelId` è obbligatorio e il corpo deve essere JSON valido. Controlla i campi mappati nell'output di test della tua azione.
+  </Accordion>
+</AccordionGroup>

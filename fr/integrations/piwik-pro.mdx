@@ -1,0 +1,43 @@
+---
+title: Piwik PRO
+description: Suis le trafic issu de l'IA dans Finseo avec tes données d'analytics Piwik PRO.
+---
+
+# Piwik PRO
+
+Connecte Piwik PRO comme alternative à Google Analytics respectueuse de la vie privée. Finseo lit tes données de sessions Piwik PRO pour identifier le trafic issu des plateformes IA (ChatGPT, Perplexity, Claude, Gemini, Copilot, …) et l'affiche dans le dashboard **AI Analytics**.
+
+## Ce que tu obtiens
+
+- **Tendance du trafic IA** — sessions quotidiennes issues des plateformes IA, ventilées par plateforme.
+- **Top pages d'atterrissage IA** — les pages sur lesquelles atterrissent les visiteurs venus de l'IA.
+- **Comparaison des canaux** — part du trafic IA aux côtés de tes autres canaux.
+
+## Créer des identifiants API
+
+Finseo s'authentifie avec des identifiants API Piwik PRO (client credentials OAuth) :
+
+1. Connecte-toi à Piwik PRO et clique sur **Menu → ton adresse email** (ton profil).
+2. Ouvre l'onglet **API keys** et clique sur **Create a key**.
+3. Nomme la clé et clique sur **OK**.
+4. Copie immédiatement le **Client ID** et le **Client secret** — le secret n'est plus affiché après la fermeture de la fenêtre.
+
+Consulte l'[article d'aide Piwik PRO](https://help.piwik.pro/support/questions/generate-api-credentials/) pour plus de détails.
+
+## Connexion
+
+1. Dans Finseo, ouvre la page **AI Analytics** et choisis **Connect → Piwik PRO** (aussi accessible via **Integrations**).
+2. Saisis ton **URL de compte** (par ex. `yourcompany.piwik.pro`), le **Client ID** et le **Client secret**.
+3. Finseo valide les identifiants et liste tes sites — sélectionne le site à suivre.
+4. C'est fait — les données de trafic IA apparaissent dans le dashboard.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="La connexion échoue">
+    Vérifie le format de l'URL de compte (pas de `https://`, juste `yourcompany.piwik.pro`) et que les identifiants ont été copiés en entier. Les clés API supprimées cessent de fonctionner immédiatement.
+  </Accordion>
+  <Accordion title="Aucun site n'apparaît">
+    La clé API hérite des permissions de ton utilisateur. Assure-toi que ton utilisateur Piwik PRO a accès au site que tu veux connecter.
+  </Accordion>
+</AccordionGroup>

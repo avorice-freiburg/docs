@@ -1,0 +1,45 @@
+---
+title: Google Analytics (GA4)
+description: Tracke KI-Traffic, Conversions und Umsatz, indem du GA4 mit Finseo verbindest.
+---
+
+# Google Analytics (GA4)
+
+Verbinde Google Analytics 4, um genau zu sehen, wie viel Traffic KI-Plattformen auf deine Website schicken. Finseo identifiziert Sessions, die von ChatGPT, Perplexity, Claude, Gemini, Copilot und anderen KI-Plattformen kommen, in deinen GA4-Daten und zeigt Trends, Landingpages, Conversions und Umsatz im **AI Analytics**-Dashboard.
+
+## Was du bekommst
+
+- **KI-Traffic-Trend** — tägliche Sessions von KI-Plattformen, aufgeschlüsselt pro Plattform.
+- **Top KI-Landingpages** — auf welchen Seiten KI-Besucher landen.
+- **Conversions & Umsatz** — deine GA4-Conversion-Events und Kaufumsätze, die KI-Traffic zugeordnet werden.
+- **Vergleich** — KI-Traffic-Anteil vs. Organic und andere Kanäle.
+
+## Voraussetzungen
+
+- Eine GA4-Property mit den Daten deiner Website (Universal Analytics wird nicht unterstützt).
+- Ein Google-Konto mit mindestens **Viewer**-Zugriff auf diese Property.
+
+## Verbinden
+
+1. Öffne in Finseo **Integrations → Google Analytics → Connect** (oder gehe direkt zur **AI Analytics**-Seite).
+2. Melde dich mit Google an und erteile Lesezugriff — Finseo fordert nur Read-only-Analytics-Scopes an.
+3. Wähle die GA4-Property (und den Datenstream) für dein Projekt.
+4. Fertig — die AI-Analytics-Seite füllt sich mit Daten. Historische Daten sind so weit verfügbar, wie deine GA4-Property sie vorhält.
+
+## So wird KI-Traffic erkannt
+
+Finseo klassifiziert Sessions nach Referrer und Source/Medium: Referrals von Domains wie `chatgpt.com`, `perplexity.ai`, `gemini.google.com`, `copilot.microsoft.com` sowie Kampagnenparameter, die KI-Plattformen identifizieren. Tagging oder Code-Änderungen auf deiner Website sind nicht nötig.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Nach dem OAuth erscheint keine Property">
+    Dein Google-Konto hat keinen GA4-Zugriff. Bitte den Property-Admin um mindestens Viewer-Zugriff und verbinde dich erneut.
+  </Accordion>
+  <Accordion title="KI-Traffic wirkt niedriger als erwartet">
+    Manche KI-Plattformen öffnen Links ohne Referrer (Dark Traffic). Finseo zeigt, was in GA4 identifizierbar ist — kombiniert mit [Bot Analytics](/de/bot-analytics) und [Attribution](/de/attribution) bekommst du das vollständigere Bild.
+  </Accordion>
+  <Accordion title="Conversions sind leer">
+    Markiere die relevanten Events in GA4 als Key Events (Conversions) — Finseo liest die Conversion-Events, die deine Property definiert.
+  </Accordion>
+</AccordionGroup>

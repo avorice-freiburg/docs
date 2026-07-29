@@ -1,0 +1,50 @@
+---
+title: n8n
+description: Build custom attribution workflows into Finseo with the open-source automation tool n8n.
+---
+
+# n8n
+
+Connect n8n to build custom attribution workflows. n8n is an open-source alternative to Zapier/Make — self-hosted or cloud — that can pipe any form, CRM, or data source into Finseo via an HTTP Request node, with full control over data transformation.
+
+## What you need
+
+- A Finseo API key with **write** scope: create it under **Settings → API → Create Key**.
+- Your project ID (visible in the connect dialog under **Integrations → n8n**, or via `GET /v1/projects`).
+
+## Set up the workflow
+
+1. In n8n, create a new workflow with your preferred **trigger** (form submission, CRM event, webhook, schedule, …).
+2. Add an **HTTP Request** node:
+   - **Method**: `POST`
+   - **URL**: `https://app.finseo.ai/api/v1/projects/YOUR_PROJECT_ID/attribution`
+   - **Authentication**: Generic → Header Auth with `Authorization: Bearer YOUR_API_KEY`
+   - **Body Content Type**: JSON
+3. Map the fields:
+
+```json
+{
+  "channelId": "ai_perplexity",
+  "freetextResponse": "={{ $json.how_did_you_find_us }}",
+  "respondentEmail": "={{ $json.email }}",
+  "dealValue": 1200,
+  "dealCurrency": "USD"
+}
+```
+
+`channelId` is required — pass a fixed channel or forward the raw answer as `freetextResponse` and let Finseo categorize it. Optional fields: `channelLabel`, `subChannel`, `respondentName`, `pageUrl`, `formId`, `metadata`.
+
+4. Execute the node once to test, then activate the workflow.
+
+Alternatively, you can POST to your project's **webhook URL** (from the connect dialog) instead of the v1 API — useful if you'd rather not manage API keys in n8n.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="401 Unauthorized">
+    Check the Header Auth configuration: the header name must be `Authorization` and the value `Bearer YOUR_API_KEY` with write scope.
+  </Accordion>
+  <Accordion title="Data arrives but the channel is 'unknown'">
+    If you send `freetextResponse` without a matching `channelId`, Finseo categorizes the text automatically — check the raw answer text if categorization looks off.
+  </Accordion>
+</AccordionGroup>

@@ -1,0 +1,43 @@
+---
+title: Typeform
+description: Invia le risposte al sondaggio "Come ci hai trovato?" da Typeform a Finseo.
+---
+
+# Typeform
+
+Collega Typeform per ricevere automaticamente le risposte al sondaggio "Come ci hai trovato?". Aggiungi la domanda a qualsiasi Typeform, registra il webhook di Finseo e ogni invio confluirà nella tua dashboard di attribution.
+
+## Ottieni il tuo URL webhook
+
+1. In Finseo apri **Integrations → Typeform → Connect**.
+2. Copia il tuo URL webhook personale (contiene l'ID del tuo progetto, `?source=typeform` e un token segreto):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=typeform&token=•••
+```
+
+## Configura il webhook di Typeform
+
+1. In Typeform apri il tuo form e vai su **Connect → Webhooks**.
+2. Clicca su **Add a webhook** e incolla il tuo URL Finseo.
+3. Salva e attiva il webhook.
+
+Typeform invia ogni invio come JSON. Finseo estrae automaticamente la risposta di attribution dalle risposte del form — i titoli dei campi che contengono parole chiave come "how did", "find us", "source" o "hear about" vengono riconosciuti senza alcuna configurazione.
+
+Consulta la [documentazione sui webhook](https://www.typeform.com/developers/webhooks/) di Typeform per i dettagli.
+
+## Test e mappatura dei campi
+
+- Usa il **live listener** nella finestra di connessione di Finseo: invia una risposta di prova e ispeziona il payload ricevuto.
+- Se la tua domanda è formulata diversamente, seleziona il campo di risposta giusto sotto **Field Mapping**.
+
+## Risoluzione dei problemi
+
+<AccordionGroup>
+  <Accordion title="Gli invii non arrivano">
+    Verifica che il toggle del webhook in Typeform sia attivo e che l'URL includa la query string completa (`source` e `token`). La vista webhook di Typeform mostra un log delle consegne con i codici di risposta.
+  </Accordion>
+  <Accordion title="L'email manca nelle risposte">
+    Aggiungi una domanda email al tuo form, così Finseo può associare la risposta di attribution a un rispondente.
+  </Accordion>
+</AccordionGroup>

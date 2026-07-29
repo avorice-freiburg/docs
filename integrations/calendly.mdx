@@ -1,0 +1,60 @@
+---
+title: Calendly
+description: Capture "How did you hear about us?" answers from Calendly booking forms in Finseo.
+---
+
+# Calendly
+
+Connect Calendly to receive attribution data from booking form questions. When someone schedules a meeting, Calendly sends a webhook with all invitee answers — including your "How did you hear about us?" question — which Finseo normalizes into attribution channels.
+
+## Requirements
+
+- Calendly webhooks require a paid plan: **Standard**, **Teams**, or **Enterprise** (not available on Free).
+- Webhook subscriptions are created via the Calendly API — there is no UI toggle. You need a [personal access token](https://calendly.com/integrations/api_webhooks) from your Calendly integrations page.
+- An invitee question on your event type, e.g. "How did you hear about us?".
+
+## Get your webhook URL
+
+1. In Finseo, open **Integrations → Calendly → Connect**.
+2. Copy your personal webhook URL (contains your project ID, `?source=calendly`, and a secret token):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=calendly&token=•••
+```
+
+## Create the webhook subscription
+
+Create the subscription with one API call (replace the token and URLs):
+
+```bash
+curl --request POST \
+  --url https://api.calendly.com/webhook_subscriptions \
+  --header 'Authorization: Bearer YOUR_CALENDLY_ACCESS_TOKEN' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "url": "https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=calendly&token=YOUR_TOKEN",
+    "events": ["invitee.created"],
+    "organization": "https://api.calendly.com/organizations/YOUR_ORG_URI",
+    "scope": "organization"
+  }'
+```
+
+Use `"scope": "user"` with a `user` URI instead if you only want your own bookings. Finseo extracts the attribution answer from the `questions_and_answers` array automatically.
+
+See Calendly's [webhook docs](https://developer.calendly.com/api-docs/d7755e2f9e5fe-webhooks) for details.
+
+## Test and map fields
+
+- Use the **live listener** in the Finseo connect dialog: book a test meeting and inspect the received payload.
+- If your question is phrased differently, select the right answer under **Field Mapping**.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="The API returns a permission error">
+    Webhooks require a Standard plan or higher on the Calendly account that owns the token. Free accounts can read the API but cannot create webhook subscriptions.
+  </Accordion>
+  <Accordion title="Bookings arrive without an attribution answer">
+    Make sure the question is part of the event type's invitee questions (or a routing form) — answers only appear in the payload if the invitee actually saw the question.
+  </Accordion>
+</AccordionGroup>

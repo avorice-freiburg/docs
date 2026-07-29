@@ -1,0 +1,57 @@
+---
+title: Notion
+description: Ajoute les tâches de visibilité Finseo comme pages dans n'importe quelle base de données Notion.
+---
+
+# Notion
+
+Connecte Notion pour ajouter les tâches Finseo comme pages dans n'importe quelle base de données Notion — par exemple ton calendrier éditorial ou ton tableau de sprint. La description de la tâche, les preuves et les étapes arrivent en contenu de page.
+
+## Ce que tu peux faire
+
+- Exporter n'importe quelle tâche Finseo comme page dans une base de données Notion.
+- Exporter automatiquement les nouvelles tâches via des règles d'automatisation (filtrées par catégorie et impact).
+
+## Créer une intégration interne
+
+Notion utilise une intégration interne avec un token secret :
+
+1. Va sur [notion.so/my-integrations](https://www.notion.so/my-integrations) (tu dois être propriétaire du workspace) et clique sur **New integration**.
+2. Nomme-la (par ex. « Finseo »), choisis le workspace et enregistre.
+3. Sur la page de configuration, copie l'**Internal Integration Secret** — il commence par `ntn_`.
+
+## Partager ta base de données avec l'intégration
+
+<Warning>
+Cette étape est obligatoire. Une nouvelle intégration ne peut voir aucun contenu tant que tu ne l'as pas explicitement connectée à la base de données cible — sinon chaque export échoue avec « Could not find object ».
+</Warning>
+
+1. Ouvre la base de données cible dans Notion.
+2. Clique sur le menu **•••** en haut à droite.
+3. Choisis **Connections** (ou **Add connections**) et sélectionne ton intégration.
+
+Consulte la [documentation d'autorisation de Notion](https://developers.notion.com/docs/authorization#internal-integration-auth-flow-set-up) pour plus de détails.
+
+## Connexion
+
+1. Dans Finseo, ouvre **Integrations → Notion → Connect**.
+2. Colle le secret et enregistre.
+
+## Exporter des tâches
+
+- Sur la page **Tasks**, ouvre une tâche et utilise **Export → Notion**, puis choisis la base de données cible. Finseo crée une page par tâche avec le titre comme nom de page et la recommandation complète comme contenu de page.
+
+## Règles d'automatisation
+
+Sous **Tasks → Automation**, crée des règles qui ajoutent automatiquement les nouvelles tâches Finseo à une base de données Notion — filtrées par catégorie et impact minimum.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="« Could not find object » ou sélecteur de base de données vide">
+    L'intégration n'a pas été connectée à la base de données. Ouvre la base de données → ••• → Connections → ajoute ton intégration, puis réessaie.
+  </Accordion>
+  <Accordion title="Le secret est rejeté">
+    Copie l'Internal Integration Secret (commence par `ntn_`, les anciens tokens par `secret_`) depuis la page de configuration de l'intégration — pas le client secret OAuth d'une intégration publique.
+  </Accordion>
+</AccordionGroup>

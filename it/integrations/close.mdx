@@ -1,0 +1,44 @@
+---
+title: Close
+description: Ricevi l'attribution dei lead dai webhook del CRM Close in Finseo.
+---
+
+# Close
+
+Collega Close CRM per catturare l'attribution alla creazione dei lead. Close invia un webhook con i dati del lead, campi personalizzati inclusi; Finseo cerca la risposta a "Come ci hai trovato?" e la normalizza in un canale di attribution.
+
+## Requisiti
+
+- I webhook nell'interfaccia di Close sono disponibili dal piano **Business** in su. Sui piani inferiori puoi creare le sottoscrizioni webhook tramite la [Close API](https://developer.close.com/resources/webhook-subscriptions).
+- Un campo personalizzato sui lead che raccolga la risposta di attribution.
+
+## Ottieni il tuo URL webhook
+
+1. In Finseo apri **Integrations → Close → Connect**.
+2. Copia il tuo URL webhook personale (contiene l'ID del tuo progetto, `?source=close-crm` e un token segreto):
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?source=close-crm&token=•••
+```
+
+## Configura il webhook di Close
+
+1. In Close vai su **Settings → Integrations → Webhooks** (icona dell'ingranaggio nella barra laterale in basso a sinistra).
+2. Clicca su **Add Webhook** e incolla il tuo URL Finseo.
+3. Seleziona l'evento **`lead.created`** (aggiungi `lead.updated` se il campo di attribution viene compilato in un secondo momento).
+4. Salva — Close invia un ping di test per verificare che l'endpoint sia raggiungibile.
+
+In alternativa via API: `POST https://api.close.com/api/v1/webhook/` con `url` e `events: [{"object_type": "lead", "action": "created"}]`.
+
+## Test e mappatura dei campi
+
+- Usa il **live listener** nella finestra di connessione di Finseo: crea un lead di prova in Close e ispeziona il payload ricevuto.
+- Se il campo personalizzato di attribution non viene rilevato automaticamente, selezionalo sotto **Field Mapping**.
+
+## Risoluzione dei problemi
+
+<AccordionGroup>
+  <Accordion title="L'opzione Webhooks non compare nelle impostazioni di Close">
+    I webhook gestiti dall'interfaccia richiedono il piano Business. Puoi fare l'upgrade, creare la sottoscrizione via API oppure instradare i dati tramite Zapier/Make/n8n.
+  </Accordion>
+</AccordionGroup>

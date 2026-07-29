@@ -113,6 +113,7 @@
                 "pages": [
                   "looker-studio",
                   "search-console",
+                  "cloudflare-bot-traffic",
                   "products",
                   "sentiment"
                 ]
@@ -263,6 +264,7 @@
                 "pages": [
                   "de/looker-studio",
                   "de/search-console",
+                  "de/cloudflare-bot-traffic",
                   "de/products",
                   "de/sentiment"
                 ]
@@ -413,6 +415,7 @@
                 "pages": [
                   "fr/looker-studio",
                   "fr/search-console",
+                  "fr/cloudflare-bot-traffic",
                   "fr/products",
                   "fr/sentiment"
                 ]
@@ -563,6 +566,7 @@
                 "pages": [
                   "it/looker-studio",
                   "it/search-console",
+                  "it/cloudflare-bot-traffic",
                   "it/products",
                   "it/sentiment"
                 ]
@@ -713,6 +717,7 @@
                 "pages": [
                   "es/looker-studio",
                   "es/search-console",
+                  "es/cloudflare-bot-traffic",
                   "es/products",
                   "es/sentiment"
                 ]
@@ -863,6 +868,7 @@
                 "pages": [
                   "pt/looker-studio",
                   "pt/search-console",
+                  "pt/cloudflare-bot-traffic",
                   "pt/products",
                   "pt/sentiment"
                 ]

@@ -147,7 +147,13 @@ The current log-upload parser focuses on crawl volume, URLs, response sizes, and
 
 ## Sync integrations
 
-The **Sync** tab may show providers such as Cloudflare, Fastly, AWS CloudFront, or API sync as future ingestion options. Manual `.log` and `.txt` upload is the current production path.
+Instead of uploading logs manually, you can stream bot visits automatically. The **Sync** tab connects your CDN directly to Finseo:
+
+<Card title="Cloudflare" icon="https://www.google.com/s2/favicons?domain=cloudflare.com&sz=128" href="/cloudflare-bot-traffic">
+  Stream AI crawler visits in near real-time — via Worker (all plans) or Logpush (Enterprise). One-time setup, no more manual uploads.
+</Card>
+
+Manual `.log` and `.txt` upload remains available and can be combined with a sync integration — duplicate visits are skipped automatically.
 
 ## Troubleshooting
 

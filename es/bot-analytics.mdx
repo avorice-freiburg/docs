@@ -147,7 +147,13 @@ El parser actual de subida de logs se centra en el volumen de rastreo, las URLs,
 
 ## Integraciones de Sync
 
-La pestaña **Sync** puede mostrar proveedores como Cloudflare, Fastly, AWS CloudFront o sync por API como futuras opciones de ingesta. La subida manual de archivos `.log` y `.txt` es la vía de producción actual.
+En lugar de subir los logs manualmente, puedes transmitir las visitas de bots automáticamente. La pestaña **Sync** conecta tu CDN directamente con Finseo:
+
+<Card title="Cloudflare" icon="https://www.google.com/s2/favicons?domain=cloudflare.com&sz=128" href="/es/cloudflare-bot-traffic">
+  Transmite las visitas de crawlers de IA casi en tiempo real — vía Worker (todos los planes) o Logpush (Enterprise). Configuración única, sin más subidas manuales.
+</Card>
+
+La subida manual de archivos `.log` y `.txt` sigue disponible y puede combinarse con una integración de sync — las visitas duplicadas se omiten automáticamente.
 
 ## Troubleshooting
 

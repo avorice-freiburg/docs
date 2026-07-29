@@ -147,7 +147,13 @@ L'attuale parser di upload dei log si concentra su volume di crawl, URL, dimensi
 
 ## Integrazioni di sincronizzazione
 
-Il tab **Sync** può mostrare provider come Cloudflare, Fastly, AWS CloudFront o l'API sync come future opzioni di ingestion. L'upload manuale di file `.log` e `.txt` è la modalità di produzione attuale.
+Invece di caricare i log manualmente, puoi trasmettere le visite dei bot automaticamente. Il tab **Sync** collega il tuo CDN direttamente a Finseo:
+
+<Card title="Cloudflare" icon="https://www.google.com/s2/favicons?domain=cloudflare.com&sz=128" href="/it/cloudflare-bot-traffic">
+  Trasmetti le visite dei crawler AI quasi in tempo reale — via Worker (tutti i piani) o Logpush (Enterprise). Configurazione una tantum, niente più upload manuali.
+</Card>
+
+L'upload manuale di file `.log` e `.txt` resta disponibile e può essere combinato con un'integrazione di sync — le visite duplicate vengono saltate automaticamente.
 
 ## Risoluzione dei problemi
 

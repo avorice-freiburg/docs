@@ -147,7 +147,13 @@ O parser atual de carregamento de logs foca-se no volume de rastreamento, nos UR
 
 ## Integrações de Sync
 
-O separador **Sync** pode mostrar fornecedores como Cloudflare, Fastly, AWS CloudFront ou API sync como futuras opções de ingestão. O carregamento manual de ficheiros `.log` e `.txt` é o caminho de produção atual.
+Em vez de carregar logs manualmente, pode transmitir as visitas de bots automaticamente. O separador **Sync** liga o seu CDN diretamente ao Finseo:
+
+<Card title="Cloudflare" icon="https://www.google.com/s2/favicons?domain=cloudflare.com&sz=128" href="/pt/cloudflare-bot-traffic">
+  Transmita as visitas de crawlers de IA quase em tempo real — via Worker (todos os planos) ou Logpush (Enterprise). Configuração única, sem mais carregamentos manuais.
+</Card>
+
+O carregamento manual de ficheiros `.log` e `.txt` continua disponível e pode ser combinado com uma integração de sync — as visitas duplicadas são ignoradas automaticamente.
 
 ## Resolução de problemas
 

@@ -1,0 +1,51 @@
+---
+title: WooCommerce
+description: Send WooCommerce orders to Finseo attribution with a native order webhook.
+---
+
+# WooCommerce
+
+WooCommerce sends every order to Finseo via a native webhook — total, currency, and billing email included. If WooCommerce's built-in **Order Attribution** feature is enabled (core since WooCommerce 8.5), the acquisition origin is captured as the marketing channel too.
+
+## Get your webhook URL
+
+1. In Finseo, open **Attribution → Set up attribution** and pick **WooCommerce**, or copy the URL from your Attribution settings:
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+## Set up the webhook
+
+1. In WordPress, go to **WooCommerce → Settings → Advanced → Webhooks → Add webhook**.
+2. Configure:
+
+```text
+Name:         Finseo Attribution
+Status:       Active
+Topic:        Order created
+Delivery URL: <your Finseo webhook URL>
+API Version:  WP REST API Integration v3
+```
+
+3. Save the webhook.
+
+## What Finseo reads
+
+- **Order total, currency, and billing email** from the standard order payload — stored as a conversion and merged with survey answers via email or order number.
+- **Order Attribution meta** (`_wc_order_attribution_utm_source`, referrer, source type) if the feature is enabled — stored as a full attribution response, so orders arrive pre-attributed without any survey.
+
+<Tip>
+Enable WooCommerce's Order Attribution (WooCommerce → Settings → Advanced → Features) for the richest data — combined with the [Finseo Snippet](/attribution#the-finseo-snippet) survey you get both the technical origin and the customer's self-reported channel.
+</Tip>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Webhook status switches to 'Paused'">
+    WooCommerce pauses webhooks after repeated delivery failures. Check **Attribution → Webhook logs** in Finseo for the rejection reason (usually an invalid token), fix the URL, and set the webhook back to Active.
+  </Accordion>
+  <Accordion title="Orders arrive but without a marketing channel">
+    Without Order Attribution meta, orders are stored as conversions awaiting a survey answer. Enable Order Attribution or run the Finseo survey popup on your store.
+  </Accordion>
+</AccordionGroup>

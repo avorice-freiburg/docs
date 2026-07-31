@@ -1,0 +1,46 @@
+---
+title: SurveyMonkey
+description: Importe respostas do SurveyMonkey para a atribuição do Finseo via Zapier ou Make.
+---
+
+# SurveyMonkey
+
+Já pergunta "Como nos encontrou?" num inquérito do SurveyMonkey? Mantenha-o — o Finseo importa as respostas via Zapier ou Make.
+
+<Warning>
+Os webhooks nativos do SurveyMonkey transportam apenas um **ID de resposta**, não as respostas em si. Ligue-o através do Zapier ou do Make, que obtêm a resposta completa por si — apontar o webhook do SurveyMonkey diretamente para o Finseo não funciona.
+</Warning>
+
+## Configurar via Zapier / Make
+
+1. Crie um Zap (ou cenário do Make) com o trigger **SurveyMonkey — New Response with details** (esta variante obtém as respostas automaticamente).
+2. Adicione a ação **Webhooks — POST** (JSON) com o URL:
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+3. Corpo:
+
+```json
+{
+  "channel": "<answer to 'How did you hear about us?'>",
+  "freetext": "<open-text answer>",
+  "respondentEmail": "<respondent email>"
+}
+```
+
+4. Ative o Zap.
+
+O Finseo normaliza o texto das respostas em canais automaticamente e funde as respostas com encomendas posteriores através do email (janela de 90 dias).
+
+## Resolução de problemas
+
+<AccordionGroup>
+  <Accordion title="O trigger só devolve um ID de resposta">
+    Escolheu o trigger simples "New Response". Mude para **New Response with details** — só essa variante inclui os textos das respostas.
+  </Accordion>
+  <Accordion title="As respostas chegam mas caem no canal 'other'">
+    Mapeie as suas opções de resposta do SurveyMonkey para nomes de canais no Zap (p. ex. com um passo Formatter), ou adicione regras de tradução no Finseo em Attribution → Workflows.
+  </Accordion>
+</AccordionGroup>

@@ -1,0 +1,51 @@
+---
+title: WooCommerce
+description: Sende WooCommerce-Bestellungen mit einem nativen Bestell-Webhook an die Finseo Attribution.
+---
+
+# WooCommerce
+
+WooCommerce sendet jede Bestellung über einen nativen Webhook an Finseo — inklusive Gesamtsumme, Währung und Rechnungs-E-Mail. Ist WooCommerces eingebautes **Order Attribution**-Feature aktiviert (im Core seit WooCommerce 8.5), wird zusätzlich die Akquise-Herkunft als Marketing-Kanal erfasst.
+
+## Webhook-URL holen
+
+1. Öffne in Finseo **Attribution → Set up attribution** und wähle **WooCommerce**, oder kopiere die URL aus deinen Attribution-Einstellungen:
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+## Webhook einrichten
+
+1. Gehe in WordPress zu **WooCommerce → Einstellungen → Erweitert → Webhooks → Webhook hinzufügen**.
+2. Konfiguriere:
+
+```text
+Name:         Finseo Attribution
+Status:       Active
+Topic:        Order created
+Delivery URL: <deine Finseo-Webhook-URL>
+API Version:  WP REST API Integration v3
+```
+
+3. Speichere den Webhook.
+
+## Was Finseo ausliest
+
+- **Bestellsumme, Währung und Rechnungs-E-Mail** aus dem Standard-Bestell-Payload — gespeichert als Conversion und über E-Mail oder Bestellnummer mit Umfrageantworten zusammengeführt.
+- **Order-Attribution-Meta** (`_wc_order_attribution_utm_source`, Referrer, Quelltyp), falls das Feature aktiviert ist — gespeichert als vollständige Attributionsantwort, sodass Bestellungen bereits attribuiert ankommen, ganz ohne Umfrage.
+
+<Tip>
+Aktiviere WooCommerces Order Attribution (WooCommerce → Einstellungen → Erweitert → Funktionen) für die reichhaltigsten Daten — kombiniert mit der [Finseo-Snippet](/de/attribution#das-finseo-snippet)-Umfrage bekommst du sowohl die technische Herkunft als auch den vom Kunden selbst genannten Kanal.
+</Tip>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Webhook-Status springt auf „Pausiert"">
+    WooCommerce pausiert Webhooks nach wiederholten Zustellungsfehlern. Prüfe in Finseo unter **Attribution → Webhook logs** den Ablehnungsgrund (meist ein ungültiger Token), korrigiere die URL und setze den Webhook zurück auf Aktiv.
+  </Accordion>
+  <Accordion title="Bestellungen kommen an, aber ohne Marketing-Kanal">
+    Ohne Order-Attribution-Meta werden Bestellungen als Conversions gespeichert, die auf eine Umfrageantwort warten. Aktiviere Order Attribution oder lass das Finseo-Umfrage-Popup in deinem Shop laufen.
+  </Accordion>
+</AccordionGroup>

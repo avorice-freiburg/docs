@@ -1,24 +1,66 @@
 ---
 title: Shopify
-description: Optimiere Produkt-SEO und Structured Data deines Shopify-Stores mit dem Finseo-Agent (bald verfügbar).
+description: Tracke Checkouts für die Attribution mit einem Custom Pixel und optimiere die SEO deines Shops mit dem Finseo-Agent (bald verfügbar).
 ---
 
 # Shopify
 
+## Checkouts an die Attribution senden
+
+Schon heute verfügbar: ein Shopify **Custom Pixel**, das jeden abgeschlossenen Checkout (Bestell-ID, Wert, Währung, Kunden-E-Mail) an die Finseo [Attribution](/de/attribution) sendet. Theme-Scripts laufen nicht auf Shopifys Checkout — dieses Pixel schon. Bestellungen werden über Bestell-ID oder E-Mail mit den Antworten auf „Wie bist du auf uns aufmerksam geworden?" zusammengeführt.
+
+### Pixel installieren
+
+1. Gehe in Shopify zu **Admin → Einstellungen → Kundenereignisse → Benutzerdefiniertes Pixel hinzufügen**.
+2. Füge den Pixel-Code ein (deine persönliche Version mit Projekt-ID und Token bekommst du in Finseo unter **Attribution → Set up attribution → Shopify**):
+
+```js
+const WEBHOOK_URL = 'https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••';
+
+analytics.subscribe('checkout_completed', (event) => {
+  const checkout = event.data.checkout;
+  if (init.customerPrivacy &&
+      init.customerPrivacy.analyticsProcessingAllowed === false) return;
+  fetch(WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      respondentExternalId: String((checkout.order && checkout.order.id) || checkout.token),
+      dealValue: Number(checkout.totalPrice ? checkout.totalPrice.amount : 0),
+      dealCurrency: checkout.totalPrice ? checkout.totalPrice.currencyCode : 'USD',
+      respondentEmail: checkout.email || undefined
+    }),
+    keepalive: true
+  });
+});
+```
+
+3. Speichere und **verbinde** das Pixel.
+4. Datenschutz-Einstellungen für Kunden: Berechtigung **Erforderlich** mit nur **Analytics** angehakt · Datenverkauf: **gilt nicht als Datenverkauf**. Das Pixel respektiert die Einwilligung des Kunden — Checkouts ohne Analytics-Erlaubnis werden nicht gesendet.
+
+### Und wo läuft die Umfrage?
+
+Shopifys Checkout und Danke-Seite sind sandboxed — externe Scripts (auch das Finseo-Popup) können dort nicht laufen. Zwei Optionen:
+
+- **Umfrage-App (beste Daten)**: Nutze [Fairing](/de/integrations/fairing), [KnoCommerce](/de/integrations/knocommerce) oder [Zigpoll](/de/integrations/zigpoll) für eine native Post-Purchase-Umfrage — Finseo importiert die Antworten automatisch.
+- **Storefront-Popup**: Füge das [Finseo Snippet](/de/attribution#das-finseo-snippet) in dein Theme ein (**Onlineshop → Themes → Code bearbeiten → `theme.liquid`** vor `</body>`). Das Popup fragt Shopper auf deinen Shop-Seiten; die Antworten werden über die E-Mail mit ihren späteren Bestellungen zusammengeführt.
+
+## Agent-Integration (bald verfügbar)
+
 <Note>
-Die Shopify-Integration ist **bald verfügbar**. Diese Seite beschreibt die geplante Funktionalität.
+Die Shopify-Agent-Integration ist **bald verfügbar**. Dieser Abschnitt beschreibt die geplante Funktionalität.
 </Note>
 
-Verbinde deinen Shopify-Store, damit der Finseo-Agent Produkt-SEO-Titel, Beschreibungen, Structured Data (JSON-LD-Schemas), Seiteninhalte und URL-Redirects optimieren kann — per natürlichsprachlicher Befehle wie „Optimiere die SEO-Titel meiner Top-5-Produkte".
+Verbinde deinen Shopify-Shop, damit der Finseo-Agent Produkt-SEO-Titel, Beschreibungen, strukturierte Daten (JSON-LD-Schemas), Seiteninhalte und URL-Redirects optimiert — über natürlichsprachige Befehle wie „Optimiere die SEO-Titel meiner Top-5-Produkte".
 
-## So wird es funktionieren
+### So wird es funktionieren
 
-1. Klicke auf der Shopify-Karte unter **Integrations** auf **Connect** und gib deine Store-URL ein (z. B. `mystore.myshopify.com`).
+1. Klicke unter **Integrations** auf der Shopify-Karte auf **Connect** und gib deine Shop-URL ein (z. B. `mystore.myshopify.com`).
 2. Du wirst zu Shopify weitergeleitet, um Finseo per OAuth zu autorisieren — keine API-Keys zum Kopieren.
-3. Nach der Autorisierung erhält der Agent Zugriff auf die Shopify Admin API und kann Produkte, Seiten, Collections, Structured Data und Redirects lesen und bearbeiten.
+3. Nach der Autorisierung erhält der Agent Zugriff auf die Shopify Admin API und kann Produkte, Seiten, Kollektionen, strukturierte Daten und Redirects lesen und bearbeiten.
 4. Jede Änderung erfordert deine Bestätigung, bevor sie angewendet wird.
 
-## In der Zwischenzeit
+### In der Zwischenzeit
 
-- Tracke die KI-Sichtbarkeit deines Stores mit [Prompt-Tracking](/de/getting-started/prompts) und beobachte KI-Traffic über [Google Analytics](/de/integrations/google-analytics).
-- Verfolge KI-Bot-Crawls deines Stores mit [Bot Analytics](/de/bot-analytics).
+- Tracke die KI-Sichtbarkeit deines Shops mit [Prompt-Tracking](/de/getting-started/prompts) und beobachte KI-Traffic über [Google Analytics](/de/integrations/google-analytics).
+- Tracke KI-Bot-Crawls deines Shops mit [Bot Analytics](/de/bot-analytics).

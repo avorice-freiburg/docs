@@ -1,0 +1,51 @@
+---
+title: Fairing
+description: Importe respostas do inquérito pós-compra do Fairing para a atribuição do Finseo via Shopify Flow.
+---
+
+# Fairing
+
+Já tem um inquérito pós-compra do [Fairing](https://fairing.co) no Shopify? Mantenha-o — o Finseo importa as suas respostas em vez de mostrar um segundo popup. As respostas fundem-se automaticamente com a encomenda através do ID da encomenda e do email.
+
+## Passo 1: Ligar o Fairing ao Shopify Flow
+
+Na app do Fairing, abra **Integrations → Shopify Flow → Connect**. Este passo é obrigatório — o Fairing só envia respostas de inquérito para o Flow depois de a ligação ser feita.
+
+## Passo 2: Construir o Flow
+
+1. No Shopify, vá a **Flow → Create workflow**.
+2. Trigger: **Fairing Post Purchase Surveys — New Survey Response**.
+3. Ação: **Send HTTP request** com:
+
+```text
+Method: POST
+Header: Content-Type: application/json
+URL:    https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+4. Corpo:
+
+```json
+{
+  "channel": "{{trigger.response}}",
+  "freetext": "{{trigger.responseWasOther}}",
+  "question": "{{trigger.question}}",
+  "respondentExternalId": "{{order.id}}",
+  "respondentEmail": "{{order.email}}"
+}
+```
+
+5. Ative o workflow.
+
+O Finseo normaliza o texto da resposta em canais automaticamente — "Saw you on ChatGPT" torna-se `ai_search`. O ID da encomenda e o email fundem a resposta com a conversão de checkout do seu [Custom Pixel do Shopify](/pt/integrations/shopify).
+
+## Resolução de problemas
+
+<AccordionGroup>
+  <Accordion title="O trigger do Fairing não aparece no Shopify Flow">
+    A ligação ao Flow na app do Fairing ainda não foi feita — abra primeiro Fairing → Integrations → Shopify Flow → Connect.
+  </Accordion>
+  <Accordion title="As respostas chegam mas a receita fica vazia">
+    A receita vem da conversão de checkout, não do inquérito. Instale o Custom Pixel do Shopify para que as encomendas cheguem com valor — elas fundem-se com a resposta do Fairing através do ID da encomenda.
+  </Accordion>
+</AccordionGroup>

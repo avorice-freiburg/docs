@@ -1,0 +1,51 @@
+---
+title: Fairing
+description: Import Fairing post-purchase survey answers into Finseo attribution via Shopify Flow.
+---
+
+# Fairing
+
+Already running a [Fairing](https://fairing.co) post-purchase survey on Shopify? Keep it — Finseo imports its answers instead of showing a second popup. Answers merge with the order automatically via order ID and email.
+
+## Step 1: Connect Fairing to Shopify Flow
+
+In the Fairing app, open **Integrations → Shopify Flow → Connect**. This step is required — Fairing only sends survey responses to Flow after the connection is made.
+
+## Step 2: Build the Flow
+
+1. In Shopify, go to **Flow → Create workflow**.
+2. Trigger: **Fairing Post Purchase Surveys — New Survey Response**.
+3. Action: **Send HTTP request** with:
+
+```text
+Method: POST
+Header: Content-Type: application/json
+URL:    https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+4. Body:
+
+```json
+{
+  "channel": "{{trigger.response}}",
+  "freetext": "{{trigger.responseWasOther}}",
+  "question": "{{trigger.question}}",
+  "respondentExternalId": "{{order.id}}",
+  "respondentEmail": "{{order.email}}"
+}
+```
+
+5. Turn the workflow on.
+
+Finseo normalizes the answer text into channels automatically — "Saw you on ChatGPT" becomes `ai_search`. The order ID and email merge the answer with the checkout conversion from your [Shopify Custom Pixel](/integrations/shopify#track-checkouts-for-attribution).
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="The Fairing trigger doesn't appear in Shopify Flow">
+    The Flow connection in the Fairing app hasn't been made yet — open Fairing → Integrations → Shopify Flow → Connect first.
+  </Accordion>
+  <Accordion title="Answers arrive but revenue stays empty">
+    Revenue comes from the checkout conversion, not the survey. Install the Shopify Custom Pixel so orders arrive with value — they merge with the Fairing answer via order ID.
+  </Accordion>
+</AccordionGroup>

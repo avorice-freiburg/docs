@@ -1,0 +1,58 @@
+---
+title: Shopware
+description: Envía los pedidos de Shopware a la atribución de Finseo con un webhook de Flow Builder.
+---
+
+# Shopware
+
+Un webhook de Shopware Flow Builder se dispara con cada pedido realizado y envía el número de pedido, el total, la moneda y el email del cliente a Finseo — los pedidos se almacenan como conversiones y se fusionan con las respuestas a "¿Cómo nos conociste?" vía email o número de pedido.
+
+## Requisitos
+
+- La acción de Flow Builder **Call URL (webhook)** requiere el plan **Evolve** de Shopware o superior.
+- En **Rise** o en la Community edition, usa en su lugar el [Snippet de Finseo](/es/attribution#el-snippet-de-finseo) en tu tema — a diferencia de Shopify, Shopware sí ejecuta scripts en la página de finalización del checkout, por lo que el snippet captura las compras ahí.
+
+## Obtén tu URL de webhook
+
+1. En Finseo, abre **Attribution → Set up attribution** y elige **Shopware**, o copia la URL desde tus ajustes de Attribution:
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+## Configura el Flow
+
+1. En el admin de Shopware, ve a **Settings → Flow Builder → New flow**.
+2. Disparador: **Order placed** (`checkout.order.placed`).
+3. Acción: **Call URL (webhook)** con:
+
+```text
+URL:    <your Finseo webhook URL>
+Method: POST
+Header: Content-Type: application/json
+```
+
+4. Cuerpo:
+
+```json
+{
+  "orderNumber": "{{ order.orderNumber }}",
+  "amountTotal": {{ order.amountTotal }},
+  "currency": { "isoCode": "{{ order.currency.isoCode }}" },
+  "orderCustomer": { "email": "{{ order.orderCustomer.email }}" },
+  "lineItems": []
+}
+```
+
+5. Activa el flow.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title='"Call URL (webhook)" no aparece en Flow Builder'>
+    Tu plan de Shopware no incluye la acción de webhook (solo Evolve+). Pega el Snippet de Finseo en tu tema en su lugar — captura las compras desde la página de finalización a través de tu tracking existente.
+  </Accordion>
+  <Accordion title="Los pedidos llegan pero nunca se atribuyen">
+    Las conversiones necesitan una respuesta de encuesta con la que fusionarse. Añade el popup de encuesta de Finseo a tu tienda para que los clientes respondan la pregunta de atribución — los pedidos se fusionan entonces vía email (ventana de 90 días).
+  </Accordion>
+</AccordionGroup>

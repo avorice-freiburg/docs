@@ -1,0 +1,51 @@
+---
+title: Fairing
+description: Importa las respuestas de encuestas post-compra de Fairing a la atribución de Finseo vía Shopify Flow.
+---
+
+# Fairing
+
+¿Ya tienes una encuesta post-compra de [Fairing](https://fairing.co) en Shopify? Consérvala — Finseo importa sus respuestas en lugar de mostrar un segundo popup. Las respuestas se fusionan con el pedido automáticamente vía ID de pedido y email.
+
+## Paso 1: Conecta Fairing con Shopify Flow
+
+En la app de Fairing, abre **Integrations → Shopify Flow → Connect**. Este paso es obligatorio — Fairing solo envía respuestas de encuesta a Flow después de establecer la conexión.
+
+## Paso 2: Construye el Flow
+
+1. En Shopify, ve a **Flow → Create workflow**.
+2. Disparador: **Fairing Post Purchase Surveys — New Survey Response**.
+3. Acción: **Send HTTP request** con:
+
+```text
+Method: POST
+Header: Content-Type: application/json
+URL:    https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+4. Cuerpo:
+
+```json
+{
+  "channel": "{{trigger.response}}",
+  "freetext": "{{trigger.responseWasOther}}",
+  "question": "{{trigger.question}}",
+  "respondentExternalId": "{{order.id}}",
+  "respondentEmail": "{{order.email}}"
+}
+```
+
+5. Activa el workflow.
+
+Finseo normaliza el texto de la respuesta en canales automáticamente — "Os vi en ChatGPT" se convierte en `ai_search`. El ID de pedido y el email fusionan la respuesta con la conversión de checkout de tu [Custom Pixel de Shopify](/es/integrations/shopify).
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="El disparador de Fairing no aparece en Shopify Flow">
+    La conexión con Flow aún no se ha hecho en la app de Fairing — abre primero Fairing → Integrations → Shopify Flow → Connect.
+  </Accordion>
+  <Accordion title="Las respuestas llegan pero los ingresos quedan vacíos">
+    Los ingresos vienen de la conversión del checkout, no de la encuesta. Instala el Custom Pixel de Shopify para que los pedidos lleguen con su valor — se fusionan con la respuesta de Fairing vía ID de pedido.
+  </Accordion>
+</AccordionGroup>

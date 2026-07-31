@@ -1,0 +1,35 @@
+---
+title: KnoCommerce
+description: Importe respostas do inquérito pós-compra do KnoCommerce para a atribuição do Finseo via webhook.
+---
+
+# KnoCommerce
+
+Já tem um inquérito pós-compra do [KnoCommerce](https://knocommerce.com) (Shopify ou WooCommerce)? Mantenha-o — o Finseo importa as suas respostas em vez de mostrar um segundo popup. Registe um webhook através da API do KnoCommerce e o Finseo interpreta o payload automaticamente, fundindo as respostas com as encomendas através do ID e do email.
+
+## Configurar o webhook
+
+1. No KnoCommerce, vá a **Settings → API Access** e crie credenciais de API.
+2. Registe um webhook através da REST API deles:
+
+```text
+Topic: response/create
+URL:   https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+A documentação do KnoCommerce ([docs.knocommerce.com](https://docs.knocommerce.com)) mostra o pedido exato de criação de webhooks no guia "Make Integration".
+
+## Mapeamento de campos
+
+O Finseo deteta automaticamente os campos de resposta, email e encomenda nos payloads do KnoCommerce. Se o seu inquérito usar uma estrutura de perguntas personalizada, envie uma resposta de teste e mapeie os campos uma única vez em **Attribution → Workflows** — as respostas futuras com a mesma estrutura são interpretadas automaticamente.
+
+## Resolução de problemas
+
+<AccordionGroup>
+  <Accordion title="As respostas chegam mas o canal é 'other'">
+    O Finseo normaliza o texto das respostas por palavras-chave (chatgpt, google, instagram, …). Se as suas opções de resposta usarem formulações invulgares, adicione regras no mapeamento de campos do workflow para as traduzir em canais.
+  </Accordion>
+  <Accordion title="Não chega nenhum pedido">
+    Verifique o registo do webhook através da API do KnoCommerce (listar webhooks) e confirme que o URL contém o seu token — consulte **Attribution → Webhook logs** no Finseo para ver pedidos rejeitados.
+  </Accordion>
+</AccordionGroup>

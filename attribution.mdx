@@ -1,63 +1,127 @@
 ---
 title: Attribution
-description: Send self-reported attribution data from forms, CRMs, and orders into Finseo.
+description: Connect leads, orders, and revenue to the channels customers actually found you through — including AI search.
 ---
 
 # Attribution
 
-Attribution connects your AI visibility data to real leads and revenue. Instead of only seeing whether your brand appears in AI answers, you can see whether customers actually say they found you through ChatGPT, Perplexity, Claude, Google, ads, referrals, or other channels.
+Attribution connects your AI visibility data to real leads and revenue. Instead of only seeing whether your brand appears in AI answers, you can see whether customers actually say they found you through ChatGPT, Perplexity, Claude, Google, ads, referrals, or other channels — and how much revenue each channel drives.
 
-Use Attribution when you ask questions like:
+Finseo attribution works with two kinds of data that are merged automatically:
 
-- "How did you hear about us?"
-- "Where did you first find us?"
-- "Which source influenced this order?"
-- "How much pipeline came from AI search?"
+- **Responses** — a customer's answer to "How did you hear about us?", from the Finseo survey popup, your own forms, a survey tool, or your CRM.
+- **Conversions** — purchases and leads with a transaction ID and value, from your existing tracking (Google/Meta), Stripe, your shop system, or a webhook.
 
-## Recommended setup
+When a response and a conversion share the same order ID or email, they merge into one attributed data point: "this €1,234 order came from ChatGPT."
 
-The simplest setup is to send one webhook whenever a lead, signup, order, or deal is created.
+## Guided setup
 
-```json
-{
-  "channelId": "AI Search",
-  "respondentEmail": "kunde@example.com",
-  "respondentName": "Max Mustermann",
-  "respondentExternalId": "BESTELLUNG-12345",
-  "dealValue": 1234.56,
-  "dealCurrency": "EUR",
-  "metadata": {
-    "produkt": "Produkt XY",
-    "sku": "ABC-123",
-    "menge": 2
-  }
-}
-```
+The fastest way to set up attribution is the built-in wizard: open **Attribution** in your dashboard and click **Set up attribution**. It asks what you want to track (purchases, leads, or both), which system you run, and whether you already have tracking or a post-purchase survey — then it recommends exactly one install path with copy-paste snippets and verifies live that the first event arrives.
 
-The most important rule is consistency. Use the same field names across countries and shops when possible. Finseo can map many formats, but consistent payloads make reporting cleaner.
-
-<Tip>
-The webhook does not need to run in real time. A daily batch is fine if that is easier for your CRM, shop, or data warehouse.
-</Tip>
-
-## Choose how to send data
+The recommended paths, depending on your setup:
 
 <CardGroup cols={2}>
-  <Card title="Webhook" icon="webhook" href="#send-data-with-a-webhook">
-    Best for forms, CRMs, shops, and automation tools.
+  <Card title="Finseo Snippet" icon="code" href="#the-finseo-snippet">
+    One script tag. Survey popup plus automatic purchase capture from your existing Google/Meta tracking.
   </Card>
-  <Card title="Customer API" icon="code" href="/api-reference/attribution/submit">
-    Best for backend integrations and direct API clients.
+  <Card title="Stripe" icon="credit-card" href="/integrations/stripe">
+    One Stripe webhook event. Amounts, trials, and renewals are classified automatically.
   </Card>
-  <Card title="Bulk import" icon="database" href="/api-reference/attribution/bulk">
-    Best for historical imports or daily batch jobs.
+  <Card title="Shopify" icon="bag-shopping" href="/integrations/shopify#track-checkouts-for-attribution">
+    A Custom Pixel that reports every completed checkout — theme scripts can't run on Shopify's checkout, the pixel can.
   </Card>
-  <Card title="Dashboard workflows" icon="workflow" href="#map-incoming-fields">
-    Best when your source sends custom fields.
+  <Card title="WooCommerce" icon="cart-shopping" href="/integrations/woocommerce">
+    A native order webhook, including WooCommerce's built-in Order Attribution origin.
   </Card>
-  <Card title="Outbound webhook" icon="arrow-right" href="#receive-attribution-events">
-    Best when your own system should receive saved responses.
+  <Card title="Shopware" icon="store" href="/integrations/shopware">
+    A Flow Builder webhook on "Order placed".
   </Card>
+  <Card title="Webhook / CRM" icon="webhook" href="#send-data-with-a-webhook">
+    HubSpot, Pipedrive, Calendly, form tools, or your own backend.
+  </Card>
+</CardGroup>
+
+## The Finseo Snippet
+
+The snippet is a single script tag served per project:
+
+```html
+<script src="https://app.finseo.ai/api/attribution/widget/YOUR_PROJECT_ID" async></script>
+```
+
+Paste it before `</head>` on every page (or add it via Google Tag Manager as a Custom HTML tag). It does three things:
+
+### 1. Captures answers from your existing forms
+
+If your forms already ask "How did you hear about us?" (also detected in German: "Wie bist du auf uns aufmerksam geworden?"), the snippet captures that answer on submit — the popup then never shows. Emails and names from the same form are attached as merge keys so the answer can later be linked to a deal or order.
+
+### 2. Shows the survey popup
+
+If no form on the page asks the question, the snippet shows a small popup with your configured question and answer options. You control everything in **Attribution → Survey settings**:
+
+- **Question and channels** — default channels include AI Search, Google/Bing, Social Media, Online Ads, Referral, Content, and Other (with free text). You can also use detailed AI channels (ChatGPT, Perplexity, Claude, Gemini, Copilot).
+- **Trigger** — on page load, after form submit, after a detected purchase, or manual via JavaScript.
+- **Style** — accent color, position, corner radius, font (system or inherit from your site), and optional answer shuffling to avoid position bias ("Other" always stays last).
+
+Each visitor is asked only once (stored in `localStorage`).
+
+### 3. Piggybacks on your existing conversion tracking
+
+If Google Analytics / Google Ads (`dataLayer` / `gtag`) or the Meta Pixel (`fbq`) is installed, the snippet passively listens for conversion events and reports them to Finseo — no duplicate tracking setup:
+
+| Source | Events captured |
+| --- | --- |
+| `dataLayer` / `gtag` | `purchase` (incl. GA4 and Universal Analytics ecommerce formats), `generate_lead` |
+| Meta Pixel (`fbq`) | `Purchase`, `Lead` |
+
+The snippet reads transaction ID, value, currency, and items from the event, deduplicates per transaction ID (thank-you-page reloads are not counted twice), and also scans events that fired before it loaded. Visitor-facing behavior is never altered.
+
+### JavaScript API
+
+For manual control, the snippet exposes a small API:
+
+```js
+// Show the survey popup programmatically (e.g. after signup)
+window.finseoAttribution.show();
+
+// Report a conversion from your own code
+window.finseoAttribution.trackConversion({
+  transactionId: "ORDER-12345",
+  value: 1234.56,
+  currency: "EUR",
+  email: "kunde@example.com" // optional merge key
+});
+```
+
+## How responses and conversions merge
+
+Conversions and survey answers usually arrive separately — a customer answers the popup while browsing, and the order comes in later via Stripe or your shop webhook. Finseo merges them automatically:
+
+- **Merge keys**: transaction ID (`respondentExternalId` ↔ `transactionId`) or email. A transaction-ID match always wins over an email match.
+- **Windows**: a new conversion looks back **90 days** for a survey answer (SaaS trials often convert weeks after signup). A new survey answer only looks back **48 hours** for an unmatched conversion, so a fresh answer is never linked to an old, unrelated order.
+- **Deal values**: if the answer has no deal value, the merged conversion's amount fills it in — revenue is never counted twice.
+- **Conversion types**: Stripe checkouts with a $0 total are stored as **trials**, recurring invoices as **renewals**. Only regular purchases count as new customers awaiting attribution.
+- **Unattributed revenue**: conversions that never got a survey answer are shown as their own KPI, so you always see how much revenue is still unexplained.
+
+<Tip>
+Whatever sends the conversion (Stripe, Shopify Pixel, webhook), always include the customer email when available — it is the most reliable merge key for leads that answer the survey before buying.
+</Tip>
+
+## Privacy by default
+
+Customer emails are **SHA-256-hashed at ingestion**. Finseo never stores plaintext addresses — only the hash (used to merge orders with survey answers) and a masked preview like `j***@company.com` for the dashboard.
+
+## Import answers from survey tools
+
+Already running a post-purchase survey? Keep it — Finseo imports its answers instead of showing a second popup:
+
+<CardGroup cols={3}>
+  <Card title="Fairing" href="/integrations/fairing">Via Shopify Flow</Card>
+  <Card title="KnoCommerce" href="/integrations/knocommerce">Via native webhook</Card>
+  <Card title="Zigpoll" href="/integrations/zigpoll">Via native webhook</Card>
+  <Card title="SurveyMonkey" href="/integrations/surveymonkey">Via Zapier/Make</Card>
+  <Card title="Typeform" href="/integrations/typeform">Native support</Card>
+  <Card title="Tally" href="/integrations/tally">Native support</Card>
 </CardGroup>
 
 ## Send data with a webhook
@@ -68,7 +132,7 @@ Your project webhook endpoint has this shape:
 https://app.finseo.ai/api/attribution/webhook/PROJECT_ID?token=WEBHOOK_TOKEN
 ```
 
-You can find or regenerate the webhook token in the Attribution settings for the project.
+You can find or regenerate the webhook token in the Attribution settings for the project. Treat the URL like a secret — the token authenticates every request.
 
 Send `POST` requests with `Content-Type: application/json`. Form-encoded and multipart form submissions are also accepted for form tools that cannot send raw JSON.
 
@@ -101,6 +165,21 @@ Successful webhook responses look like this:
 }
 ```
 
+### Order-only payloads become conversions
+
+If a payload carries order data (transaction ID + amount) but no attribution answer — a Stripe event, a WooCommerce order, or a custom order webhook — Finseo stores it as a **conversion** instead of rejecting it. The response then looks like this:
+
+```json
+{
+  "success": true,
+  "type": "conversion",
+  "id": "conversion-id",
+  "matched": true
+}
+```
+
+`matched: true` means the conversion was immediately merged with an earlier survey answer.
+
 ## Field reference
 
 | Field | Required | Description |
@@ -108,9 +187,9 @@ Successful webhook responses look like this:
 | `channelId` | Yes | The source selected by the customer, for example `AI Search`, `ChatGPT`, `Google`, `Referral`, or `Paid Ads`. |
 | `channelLabel` | No | Human-readable label if you want it to differ from `channelId`. |
 | `channelCategory` | No | Optional category such as `ai_search`, `organic_search`, `paid`, `social`, `referral`, `content`, `direct`, or `other`. |
-| `respondentEmail` | No | Customer or lead email. Also accepted as `email` in raw webhooks. |
+| `respondentEmail` | No | Customer or lead email. Also accepted as `email` in raw webhooks. Hashed at ingestion. |
 | `respondentName` | No | Customer or lead name. Also accepted as `name` in raw webhooks. |
-| `respondentExternalId` | No | ID from your CRM, order system, checkout, or data warehouse. |
+| `respondentExternalId` | No | ID from your CRM, order system, checkout, or data warehouse — the strongest merge key for conversions. |
 | `dealValue` | No | Numeric revenue or pipeline value. |
 | `dealCurrency` | No | Currency code such as `EUR`, `USD`, or `GBP`. Send the currency as paid. |
 | `freetextResponse` | No | Original text answer if the customer used a free-text field. |
@@ -131,7 +210,7 @@ Many tools send payloads with their own names, such as `LeadSource`, `how_did_yo
 5. Map the incoming fields to attribution, email, name, deal value, currency, form ID, or rules.
 6. Save the mapping.
 
-After mapping, future webhooks with the same structure are parsed automatically.
+After mapping, future webhooks with the same structure are parsed automatically. When a payload cannot be parsed at all, Finseo creates the workflow for you and suggests a field mapping using AI — you only need to confirm it.
 
 ```json
 {
@@ -155,6 +234,9 @@ Finseo auto-detects several common sources:
 - **Tally**: `data.fields` payloads.
 - **Salesforce**: JSON from Flow HTTP Callout, for example `LeadSource`, `Email`, `Name`, `Amount`, and `CurrencyIsoCode`.
 - **Jotform**: multipart/form-data with `rawRequest` or fields like `q3_howDid`, `formID`, and `submissionID`.
+- **Stripe**: event payloads (`checkout.session.completed`, `invoice.paid`, …) — stored as conversions with automatic cent conversion and trial/renewal classification.
+- **WooCommerce**: order webhooks, including Order Attribution meta as the marketing origin.
+- **Shopware**: Flow Builder order payloads with `orderNumber`, `amountTotal`, and customer email.
 - **Raw JSON**: direct payloads with fields like `channelId`, `respondentEmail`, `dealValue`, and `metadata`.
 
 ## Examples
@@ -255,6 +337,25 @@ You can configure an outbound webhook URL in Attribution settings. Finseo sends 
 
 If you add an outbound webhook secret, Finseo signs the JSON body with an `X-FinSEO-Signature` header using HMAC-SHA256.
 
+## Rate limits
+
+- Webhook endpoint: **120 requests per minute** per project.
+- Snippet collect endpoint: **60 requests per minute** per visitor IP.
+
+Requests over the limit receive `429` and can safely be retried after a minute.
+
+## Troubleshooting
+
+Every incoming webhook request is logged with its parse result in **Attribution → Webhook logs** — including rejected requests. The statuses:
+
+| Status | Meaning |
+| --- | --- |
+| `stored` | Attribution response saved. |
+| `stored_conversion` | Order-only payload saved as a conversion. |
+| `parse_failed` | No attribution field or order data recognized — a workflow was created for manual field mapping. |
+| `invalid_token` | The `token` query parameter is missing or wrong — copy the URL from the dashboard again. |
+| `error` | Invalid body or server error. |
+
 ## Best practices
 
 - Add the attribution question close to conversion, such as signup, demo request, checkout, or lead qualification.
@@ -263,4 +364,3 @@ If you add an outbound webhook secret, Finseo signs the JSON body with an `X-Fin
 - Include a stable `respondentExternalId` such as order ID, CRM lead ID, contact ID, or deal ID.
 - Put product, SKU, market, campaign, and other business context in `metadata`.
 - Send one event per lead, order, or deal. Avoid sending every page view as attribution.
-

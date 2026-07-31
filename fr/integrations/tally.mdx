@@ -1,0 +1,39 @@
+---
+title: Tally
+description: Envoie les réponses des formulaires Tally à l'attribution Finseo — support natif, aucun mapping de champs nécessaire.
+---
+
+# Tally
+
+Les payloads Tally sont analysés nativement par Finseo. Ajoute une question « Comment avez-vous entendu parler de nous ? » à ton formulaire, pointe le webhook du formulaire vers Finseo, et les réponses arrivent déjà catégorisées — avec l'email du répondant comme clé de fusion pour les deals et commandes ultérieurs.
+
+## Configurer le webhook
+
+1. Dans Tally, ouvre ton formulaire et va dans **Integrations → Webhooks → Connect**.
+2. URL de l'endpoint :
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+3. Enregistre. Chaque soumission est désormais envoyée à Finseo.
+
+Aucun mapping de champs nécessaire — Finseo détecte le format `data.fields` de Tally, trouve la question d'attribution (tout libellé contenant « How did you find us? » ou similaire) et récupère automatiquement le champ email.
+
+## Libellés de question personnalisés
+
+Si ta question d'attribution utilise un libellé très différent (par exemple dans une autre langue), configure-le une seule fois :
+
+1. Soumets une réponse de test.
+2. Ouvre **Attribution → Workflows** dans Finseo et mappe le champ contenant la réponse.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="Les soumissions arrivent avec le statut parse_failed">
+    Finseo n'a pas trouvé de champ de réponse par mots-clés. Ouvre le workflow créé automatiquement dans Attribution → Workflows et pointe le mapping vers le bon champ — les futures soumissions sont analysées automatiquement.
+  </Accordion>
+  <Accordion title="Les réponses n'ont pas d'email">
+    Ajoute un champ email au formulaire Tally (type « Email ») — Finseo le détecte automatiquement et l'utilise pour fusionner la réponse avec les conversions ultérieures.
+  </Accordion>
+</AccordionGroup>

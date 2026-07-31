@@ -1,0 +1,51 @@
+---
+title: WooCommerce
+description: Envoie les commandes WooCommerce à l'attribution Finseo avec un webhook de commande natif.
+---
+
+# WooCommerce
+
+WooCommerce envoie chaque commande à Finseo via un webhook natif — total, devise et email de facturation inclus. Si la fonctionnalité **Order Attribution** intégrée à WooCommerce est activée (dans le cœur depuis WooCommerce 8.5), l'origine d'acquisition est aussi capturée comme canal marketing.
+
+## Récupérer ton URL webhook
+
+1. Dans Finseo, ouvre **Attribution → Set up attribution** et choisis **WooCommerce**, ou copie l'URL depuis tes réglages Attribution :
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+## Configurer le webhook
+
+1. Dans WordPress, va dans **WooCommerce → Réglages → Avancé → Webhooks → Ajouter un webhook**.
+2. Configure :
+
+```text
+Name:         Finseo Attribution
+Status:       Active
+Topic:        Order created
+Delivery URL: <your Finseo webhook URL>
+API Version:  WP REST API Integration v3
+```
+
+3. Enregistre le webhook.
+
+## Ce que Finseo lit
+
+- **Le total de la commande, la devise et l'email de facturation** depuis le payload de commande standard — stockés comme conversion et fusionnés avec les réponses au sondage via l'email ou le numéro de commande.
+- **Les métadonnées Order Attribution** (`_wc_order_attribution_utm_source`, referrer, type de source) si la fonctionnalité est activée — stockées comme réponse d'attribution complète, si bien que les commandes arrivent déjà attribuées, sans aucun sondage.
+
+<Tip>
+Active l'Order Attribution de WooCommerce (WooCommerce → Réglages → Avancé → Fonctionnalités) pour les données les plus riches — combinée au sondage du [snippet Finseo](/fr/attribution#le-snippet-finseo), tu obtiens à la fois l'origine technique et le canal déclaré par le client.
+</Tip>
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="Le statut du webhook passe à « En pause »">
+    WooCommerce met les webhooks en pause après des échecs de livraison répétés. Vérifie la raison du rejet dans **Attribution → Webhook logs** dans Finseo (généralement un token invalide), corrige l'URL et remets le webhook sur Actif.
+  </Accordion>
+  <Accordion title="Les commandes arrivent mais sans canal marketing">
+    Sans métadonnées Order Attribution, les commandes sont stockées comme conversions en attente d'une réponse au sondage. Active l'Order Attribution ou affiche la popup de sondage Finseo sur ta boutique.
+  </Accordion>
+</AccordionGroup>

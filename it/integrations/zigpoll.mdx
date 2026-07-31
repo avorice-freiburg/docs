@@ -1,0 +1,37 @@
+---
+title: Zigpoll
+description: Importa le risposte dei sondaggi Zigpoll nell'attribution di Finseo tramite webhook nativi.
+---
+
+# Zigpoll
+
+Hai già un sondaggio [Zigpoll](https://zigpoll.com) attivo? Tienilo — Zigpoll ha webhook nativi, nessun bisogno di Zapier. Ogni risposta inviata viene spedita a Finseo come POST JSON e unita agli ordini tramite email.
+
+## Configura il webhook
+
+1. Nella dashboard di Zigpoll, vai su **Integrations → Webhooks → Create webhook**.
+2. URL:
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+3. Salva — Zigpoll ora invia ogni risposta completata.
+
+## Se il campo della risposta non viene rilevato
+
+I payload di Zigpoll variano in base alla struttura del tuo sondaggio. Se Finseo non rileva automaticamente la risposta di attribuzione:
+
+1. Invia una risposta di test.
+2. Apri **Attribution → Workflows** in Finseo — il payload ricevuto è salvato lì.
+3. Mappa una sola volta i campi risposta, email e ordine. Le risposte future verranno interpretate automaticamente.
+
+Alternativa con controllo esatto dei campi: usa Zapier con il trigger **Zigpoll — New Survey Response** e un'azione **Webhooks POST** che invia `channel`, `freetext` e `respondentEmail`.
+
+## Risoluzione dei problemi
+
+<AccordionGroup>
+  <Accordion title="Le risposte arrivano con stato parse_failed">
+    È il caso della mappatura dei campi — apri il workflow creato automaticamente in Attribution → Workflows e conferma la mappatura suggerita dall'AI (oppure impostala manualmente).
+  </Accordion>
+</AccordionGroup>

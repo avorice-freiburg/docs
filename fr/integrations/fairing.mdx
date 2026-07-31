@@ -1,0 +1,51 @@
+---
+title: Fairing
+description: Importe les réponses du sondage post-achat Fairing dans l'attribution Finseo via Shopify Flow.
+---
+
+# Fairing
+
+Tu utilises déjà un sondage post-achat [Fairing](https://fairing.co) sur Shopify ? Garde-le — Finseo importe ses réponses au lieu d'afficher une seconde popup. Les réponses fusionnent automatiquement avec la commande via l'ID de commande et l'email.
+
+## Étape 1 : connecter Fairing à Shopify Flow
+
+Dans l'app Fairing, ouvre **Integrations → Shopify Flow → Connect**. Cette étape est obligatoire — Fairing n'envoie les réponses de sondage à Flow qu'une fois la connexion établie.
+
+## Étape 2 : construire le Flow
+
+1. Dans Shopify, va dans **Flow → Create workflow**.
+2. Déclencheur : **Fairing Post Purchase Surveys — New Survey Response**.
+3. Action : **Send HTTP request** avec :
+
+```text
+Method: POST
+Header: Content-Type: application/json
+URL:    https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+4. Corps :
+
+```json
+{
+  "channel": "{{trigger.response}}",
+  "freetext": "{{trigger.responseWasOther}}",
+  "question": "{{trigger.question}}",
+  "respondentExternalId": "{{order.id}}",
+  "respondentEmail": "{{order.email}}"
+}
+```
+
+5. Active le workflow.
+
+Finseo normalise automatiquement le texte des réponses en canaux — « Vu sur ChatGPT » devient `ai_search`. L'ID de commande et l'email fusionnent la réponse avec la conversion de checkout issue de ton [Custom Pixel Shopify](/fr/integrations/shopify#suivre-les-checkouts-pour-lattribution).
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="Le déclencheur Fairing n'apparaît pas dans Shopify Flow">
+    La connexion Flow n'a pas encore été établie dans l'app Fairing — ouvre d'abord Fairing → Integrations → Shopify Flow → Connect.
+  </Accordion>
+  <Accordion title="Les réponses arrivent mais le chiffre d'affaires reste vide">
+    Le chiffre d'affaires vient de la conversion de checkout, pas du sondage. Installe le Custom Pixel Shopify pour que les commandes arrivent avec leur montant — elles fusionnent avec la réponse Fairing via l'ID de commande.
+  </Accordion>
+</AccordionGroup>

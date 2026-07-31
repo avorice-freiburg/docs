@@ -1,0 +1,35 @@
+---
+title: KnoCommerce
+description: Import KnoCommerce post-purchase survey answers into Finseo attribution via webhook.
+---
+
+# KnoCommerce
+
+Already running a [KnoCommerce](https://knocommerce.com) post-purchase survey (Shopify or WooCommerce)? Keep it — Finseo imports its answers instead of showing a second popup. Register a webhook via the KnoCommerce API and Finseo parses the payload automatically, merging answers with orders via ID and email.
+
+## Set up the webhook
+
+1. In KnoCommerce, go to **Settings → API Access** and create API credentials.
+2. Register a webhook via their REST API:
+
+```text
+Topic: response/create
+URL:   https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+The KnoCommerce docs ([docs.knocommerce.com](https://docs.knocommerce.com)) show the exact webhook-creation request under their "Make Integration" guide.
+
+## Field mapping
+
+Finseo detects the answer, email, and order fields in KnoCommerce payloads automatically. If your survey uses a custom question structure, send one test response and map the fields once in **Attribution → Workflows** — future responses with the same structure parse automatically.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Responses arrive but the channel is 'other'">
+    Finseo normalizes answer text by keywords (chatgpt, google, instagram, …). If your answer options use unusual wording, add rules in the workflow's field mapping to translate them to channels.
+  </Accordion>
+  <Accordion title="No requests arrive at all">
+    Verify the webhook registration via the KnoCommerce API (list webhooks) and check that the URL contains your token — check **Attribution → Webhook logs** in Finseo for rejected requests.
+  </Accordion>
+</AccordionGroup>

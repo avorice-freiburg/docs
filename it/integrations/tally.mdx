@@ -1,0 +1,39 @@
+---
+title: Tally
+description: Invia le risposte dei moduli Tally all'attribution di Finseo — supporto nativo, nessuna mappatura dei campi necessaria.
+---
+
+# Tally
+
+I payload di Tally vengono interpretati nativamente da Finseo. Aggiungi una domanda "Come ci hai conosciuto?" al tuo modulo, punta il webhook del modulo su Finseo e le risposte arrivano già categorizzate — inclusa l'email del rispondente come chiave di associazione per deal e ordini successivi.
+
+## Configura il webhook
+
+1. In Tally, apri il tuo modulo e vai su **Integrations → Webhooks → Connect**.
+2. Endpoint URL:
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+3. Salva. Ogni invio viene ora spedito a Finseo.
+
+Nessuna mappatura dei campi necessaria — Finseo riconosce il formato `data.fields` di Tally, trova la domanda di attribuzione (qualsiasi etichetta contenente "How did you find us?" o simili) e rileva automaticamente il campo email.
+
+## Etichette di domanda personalizzate
+
+Se la tua domanda di attribuzione usa un'etichetta molto diversa (per esempio in un'altra lingua), impostala una sola volta:
+
+1. Invia una risposta di test.
+2. Apri **Attribution → Workflows** in Finseo e mappa il campo che contiene la risposta.
+
+## Risoluzione dei problemi
+
+<AccordionGroup>
+  <Accordion title="Gli invii arrivano con stato parse_failed">
+    Finseo non è riuscito a trovare un campo risposta tramite parole chiave. Apri il workflow creato automaticamente in Attribution → Workflows e punta la mappatura sul campo giusto — gli invii futuri verranno interpretati automaticamente.
+  </Accordion>
+  <Accordion title="Le risposte non hanno email">
+    Aggiungi un campo email al modulo Tally (tipo "Email") — Finseo lo rileva automaticamente e lo usa per unire la risposta alle conversioni successive.
+  </Accordion>
+</AccordionGroup>

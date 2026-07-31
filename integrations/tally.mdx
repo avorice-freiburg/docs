@@ -1,0 +1,39 @@
+---
+title: Tally
+description: Send Tally form answers to Finseo attribution — natively supported, no field mapping needed.
+---
+
+# Tally
+
+Tally payloads are parsed natively by Finseo. Add a "How did you hear about us?" question to your form, point the form's webhook at Finseo, and answers arrive pre-categorized — including the respondent's email as a merge key for later deals and orders.
+
+## Set up the webhook
+
+1. In Tally, open your form and go to **Integrations → Webhooks → Connect**.
+2. Endpoint URL:
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+3. Save. Every submission is now sent to Finseo.
+
+No field mapping needed — Finseo detects Tally's `data.fields` format, finds the attribution question (any label containing "How did you find us?" or similar), and picks up the email field automatically.
+
+## Custom question labels
+
+If your attribution question uses a very different label (e.g. another language), set it once:
+
+1. Submit one test response.
+2. Open **Attribution → Workflows** in Finseo and map the field containing the answer.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Submissions arrive with status parse_failed">
+    Finseo couldn't find an answer field by keywords. Open the auto-created workflow in Attribution → Workflows and point the mapping at the right field — future submissions parse automatically.
+  </Accordion>
+  <Accordion title="Responses have no email">
+    Add an email field to the Tally form (type "Email") — Finseo detects it automatically and uses it to merge the answer with later conversions.
+  </Accordion>
+</AccordionGroup>

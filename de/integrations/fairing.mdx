@@ -1,0 +1,51 @@
+---
+title: Fairing
+description: Importiere Fairing-Post-Purchase-Umfrageantworten via Shopify Flow in die Finseo Attribution.
+---
+
+# Fairing
+
+Du hast schon eine [Fairing](https://fairing.co)-Post-Purchase-Umfrage auf Shopify laufen? Behalte sie — Finseo importiert die Antworten, statt ein zweites Popup zu zeigen. Antworten werden über Bestell-ID und E-Mail automatisch mit der Bestellung zusammengeführt.
+
+## Schritt 1: Fairing mit Shopify Flow verbinden
+
+Öffne in der Fairing-App **Integrations → Shopify Flow → Connect**. Dieser Schritt ist Pflicht — Fairing sendet Umfrageantworten erst nach hergestellter Verbindung an Flow.
+
+## Schritt 2: Flow bauen
+
+1. Gehe in Shopify zu **Flow → Workflow erstellen**.
+2. Trigger: **Fairing Post Purchase Surveys — New Survey Response**.
+3. Aktion: **Send HTTP request** mit:
+
+```text
+Method: POST
+Header: Content-Type: application/json
+URL:    https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+4. Body:
+
+```json
+{
+  "channel": "{{trigger.response}}",
+  "freetext": "{{trigger.responseWasOther}}",
+  "question": "{{trigger.question}}",
+  "respondentExternalId": "{{order.id}}",
+  "respondentEmail": "{{order.email}}"
+}
+```
+
+5. Schalte den Workflow an.
+
+Finseo normalisiert den Antworttext automatisch in Kanäle — „Saw you on ChatGPT" wird zu `ai_search`. Bestell-ID und E-Mail führen die Antwort mit der Checkout-Conversion aus deinem [Shopify Custom Pixel](/de/integrations/shopify#checkouts-an-die-attribution-senden) zusammen.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Der Fairing-Trigger taucht in Shopify Flow nicht auf">
+    Die Flow-Verbindung in der Fairing-App wurde noch nicht hergestellt — öffne zuerst Fairing → Integrations → Shopify Flow → Connect.
+  </Accordion>
+  <Accordion title="Antworten kommen an, aber der Umsatz bleibt leer">
+    Der Umsatz kommt aus der Checkout-Conversion, nicht aus der Umfrage. Installiere das Shopify Custom Pixel, damit Bestellungen mit Wert ankommen — sie werden über die Bestell-ID mit der Fairing-Antwort zusammengeführt.
+  </Accordion>
+</AccordionGroup>

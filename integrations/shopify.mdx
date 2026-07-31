@@ -1,24 +1,66 @@
 ---
 title: Shopify
-description: Optimize your Shopify store's product SEO and structured data with the Finseo agent (coming soon).
+description: Track checkouts for attribution with a Custom Pixel, and optimize your store's SEO with the Finseo agent (coming soon).
 ---
 
 # Shopify
 
+## Track checkouts for attribution
+
+Available today: a Shopify **Custom Pixel** that sends every completed checkout (order ID, value, currency, customer email) to Finseo [attribution](/attribution). Theme scripts don't run on Shopify's checkout — this pixel does. Orders merge with "How did you hear about us?" answers via order ID or email.
+
+### Install the pixel
+
+1. In Shopify, go to **Admin → Settings → Customer events → Add custom pixel**.
+2. Paste the pixel code (get your personal version with project ID and token from **Attribution → Set up attribution → Shopify** in Finseo):
+
+```js
+const WEBHOOK_URL = 'https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••';
+
+analytics.subscribe('checkout_completed', (event) => {
+  const checkout = event.data.checkout;
+  if (init.customerPrivacy &&
+      init.customerPrivacy.analyticsProcessingAllowed === false) return;
+  fetch(WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      respondentExternalId: String((checkout.order && checkout.order.id) || checkout.token),
+      dealValue: Number(checkout.totalPrice ? checkout.totalPrice.amount : 0),
+      dealCurrency: checkout.totalPrice ? checkout.totalPrice.currencyCode : 'USD',
+      respondentEmail: checkout.email || undefined
+    }),
+    keepalive: true
+  });
+});
+```
+
+3. Save and **connect** the pixel.
+4. Customer privacy settings: Permission **Required** with only **Analytics** checked · Data sale: **not considered data sale**. The pixel respects the customer's consent — checkouts without analytics permission are not sent.
+
+### Where does the survey go?
+
+Shopify's checkout and thank-you page are sandboxed — external scripts (including the Finseo popup) can't run there. Two options:
+
+- **Survey app (best data)**: use [Fairing](/integrations/fairing), [KnoCommerce](/integrations/knocommerce), or [Zigpoll](/integrations/zigpoll) for a native post-purchase survey — Finseo imports the answers automatically.
+- **Storefront popup**: add the [Finseo Snippet](/attribution#the-finseo-snippet) to your theme (**Online Store → Themes → Edit code → `theme.liquid`** before `</body>`). The popup asks shoppers on your store pages; answers merge with their later orders via email.
+
+## Agent integration (coming soon)
+
 <Note>
-The Shopify integration is **coming soon**. This page describes the planned functionality.
+The Shopify agent integration is **coming soon**. This section describes the planned functionality.
 </Note>
 
 Connect your Shopify store to let the Finseo agent optimize product SEO titles, descriptions, structured data (JSON-LD schemas), page content and URL redirects — through natural language commands like "Optimize my top 5 product SEO titles".
 
-## How it will work
+### How it will work
 
 1. Click **Connect** on the Shopify card under **Integrations** and enter your store URL (e.g. `mystore.myshopify.com`).
 2. You'll be redirected to Shopify to authorize Finseo via OAuth — no API keys to copy.
 3. Once authorized, the agent gains access to the Shopify Admin API and can read and edit products, pages, collections, structured data, and redirects.
 4. Every edit requires your confirmation before being applied.
 
-## In the meantime
+### In the meantime
 
 - Track your store's AI visibility with [prompt tracking](/getting-started/prompts) and monitor AI-referred traffic via [Google Analytics](/integrations/google-analytics).
 - Track AI bot crawls of your store with [Bot Analytics](/bot-analytics).

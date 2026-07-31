@@ -1,0 +1,58 @@
+---
+title: Shopware
+description: Send Shopware orders to Finseo attribution with a Flow Builder webhook.
+---
+
+# Shopware
+
+A Shopware Flow Builder webhook fires on every placed order and sends order number, total, currency, and customer email to Finseo — orders are stored as conversions and merged with "How did you hear about us?" answers via email or order number.
+
+## Requirements
+
+- The Flow Builder action **Call URL (webhook)** requires the Shopware **Evolve** plan or higher.
+- On **Rise** or Community edition, use the [Finseo Snippet](/attribution#the-finseo-snippet) in your theme instead — unlike Shopify, Shopware runs scripts on the checkout finish page, so the snippet captures purchases there.
+
+## Get your webhook URL
+
+1. In Finseo, open **Attribution → Set up attribution** and pick **Shopware**, or copy the URL from your Attribution settings:
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+## Set up the Flow
+
+1. In the Shopware admin, go to **Settings → Flow Builder → New flow**.
+2. Trigger: **Order placed** (`checkout.order.placed`).
+3. Action: **Call URL (webhook)** with:
+
+```text
+URL:    <your Finseo webhook URL>
+Method: POST
+Header: Content-Type: application/json
+```
+
+4. Body:
+
+```json
+{
+  "orderNumber": "{{ order.orderNumber }}",
+  "amountTotal": {{ order.amountTotal }},
+  "currency": { "isoCode": "{{ order.currency.isoCode }}" },
+  "orderCustomer": { "email": "{{ order.orderCustomer.email }}" },
+  "lineItems": []
+}
+```
+
+5. Activate the flow.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title='"Call URL (webhook)" is missing in Flow Builder'>
+    Your Shopware plan doesn't include the webhook action (Evolve+ only). Paste the Finseo Snippet into your theme instead — it captures purchases from the finish page via your existing tracking.
+  </Accordion>
+  <Accordion title="Orders arrive but are never attributed">
+    Conversions need a survey answer to merge with. Add the Finseo survey popup to your storefront so customers answer the attribution question — orders then merge via email (90-day window).
+  </Accordion>
+</AccordionGroup>

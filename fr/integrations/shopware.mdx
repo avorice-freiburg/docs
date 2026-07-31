@@ -1,0 +1,58 @@
+---
+title: Shopware
+description: Envoie les commandes Shopware à l'attribution Finseo avec un webhook Flow Builder.
+---
+
+# Shopware
+
+Un webhook Shopware Flow Builder se déclenche à chaque commande passée et envoie le numéro de commande, le total, la devise et l'email client à Finseo — les commandes sont stockées comme conversions et fusionnées avec les réponses à « Comment avez-vous entendu parler de nous ? » via l'email ou le numéro de commande.
+
+## Prérequis
+
+- L'action Flow Builder **Call URL (webhook)** nécessite le plan Shopware **Evolve** ou supérieur.
+- Sur **Rise** ou l'édition Community, utilise plutôt le [snippet Finseo](/fr/attribution#le-snippet-finseo) dans ton thème — contrairement à Shopify, Shopware exécute les scripts sur la page de fin de checkout, le snippet y capture donc les achats.
+
+## Récupérer ton URL webhook
+
+1. Dans Finseo, ouvre **Attribution → Set up attribution** et choisis **Shopware**, ou copie l'URL depuis tes réglages Attribution :
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+## Configurer le Flow
+
+1. Dans l'admin Shopware, va dans **Paramètres → Flow Builder → Nouveau flow**.
+2. Déclencheur : **Order placed** (`checkout.order.placed`).
+3. Action : **Call URL (webhook)** avec :
+
+```text
+URL:    <your Finseo webhook URL>
+Method: POST
+Header: Content-Type: application/json
+```
+
+4. Corps :
+
+```json
+{
+  "orderNumber": "{{ order.orderNumber }}",
+  "amountTotal": {{ order.amountTotal }},
+  "currency": { "isoCode": "{{ order.currency.isoCode }}" },
+  "orderCustomer": { "email": "{{ order.orderCustomer.email }}" },
+  "lineItems": []
+}
+```
+
+5. Active le flow.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="« Call URL (webhook) » n'apparaît pas dans Flow Builder">
+    Ton plan Shopware n'inclut pas l'action webhook (Evolve+ uniquement). Colle plutôt le snippet Finseo dans ton thème — il capture les achats depuis la page de fin de commande via ton tracking existant.
+  </Accordion>
+  <Accordion title="Les commandes arrivent mais ne sont jamais attribuées">
+    Les conversions ont besoin d'une réponse au sondage avec laquelle fusionner. Ajoute la popup de sondage Finseo à ta boutique pour que les clients répondent à la question d'attribution — les commandes fusionnent ensuite via l'email (fenêtre de 90 jours).
+  </Accordion>
+</AccordionGroup>

@@ -1,0 +1,58 @@
+---
+title: Stripe
+description: Send Stripe payments to Finseo attribution — amounts, trials, and renewals are classified automatically.
+---
+
+# Stripe
+
+Point one Stripe webhook event at Finseo and every payment becomes an attribution conversion. Amount, currency, and customer email are read automatically and merged with "How did you hear about us?" answers via order ID or email — so you can see how much Stripe revenue came from ChatGPT, Perplexity, and other channels.
+
+## What Finseo classifies automatically
+
+- **Amounts** arrive in Stripe's minor units (cents) and are converted correctly — including zero-decimal currencies like JPY and KRW.
+- **$0 checkouts** (free trial started, 100% coupon) are stored as **trials**, not purchases.
+- **Recurring invoices** (any `billing_reason` other than `subscription_create`) are stored as **renewals**.
+- Only regular purchases count as new customers awaiting attribution — trials and renewals never inflate your KPIs.
+
+## Get your webhook URL
+
+1. In Finseo, open **Attribution → Set up attribution** and pick **SaaS / Stripe**, or copy the URL from your Attribution settings:
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+## Set up the Stripe webhook
+
+1. In Stripe, go to **Workbench → Webhooks → Add destination** and choose destination type **Webhook endpoint** (on older accounts: **Developers → Webhooks**).
+2. Paste your Finseo webhook URL as the endpoint URL.
+3. Subscribe to **one** event only — subscribing to both double-counts every payment:
+   - `checkout.session.completed` — for one-time payments and subscription starts.
+   - `invoice.paid` — if you bill via invoices.
+4. Save.
+
+<Warning>
+Never subscribe to both events. A subscription start fires `checkout.session.completed` *and* `invoice.paid` — Finseo would store the payment twice.
+</Warning>
+
+## How merging works
+
+Finseo prefers your own order reference as the transaction ID: `client_reference_id` or `metadata.order_id` if set, otherwise the Stripe object ID (`cs_…`, `in_…`). The customer email is hashed at ingestion and used as a merge key — if the same person answered the survey at signup, the payment is attributed to their answer (90-day window).
+
+<Tip>
+If you run the Finseo survey at signup or onboarding, pass the same email to Stripe Checkout — the trial-to-paid conversion then attributes automatically weeks later.
+</Tip>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Payments show up but are never attributed">
+    Attribution needs a survey answer to merge with. Install the [Finseo Snippet](/attribution#the-finseo-snippet) or a survey tool so customers answer "How did you hear about us?" — payments then merge via email or order ID.
+  </Accordion>
+  <Accordion title="Stripe shows failed deliveries (403)">
+    The `token` query parameter is missing or outdated. Copy the full webhook URL from Finseo again — if the token was regenerated, old URLs stop working immediately.
+  </Accordion>
+  <Accordion title="Trial signups appear with 0 value">
+    That is intentional: $0 checkouts are stored as trials and excluded from revenue KPIs. When the first real invoice is paid, it arrives as a separate conversion.
+  </Accordion>
+</AccordionGroup>

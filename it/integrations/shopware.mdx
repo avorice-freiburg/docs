@@ -1,0 +1,58 @@
+---
+title: Shopware
+description: Invia gli ordini Shopware all'attribution di Finseo con un webhook di Flow Builder.
+---
+
+# Shopware
+
+Un webhook di Shopware Flow Builder scatta a ogni ordine effettuato e invia a Finseo numero d'ordine, totale, valuta ed email del cliente — gli ordini vengono salvati come conversioni e uniti alle risposte alla domanda "Come ci hai conosciuto?" tramite email o numero d'ordine.
+
+## Requisiti
+
+- L'azione di Flow Builder **Call URL (webhook)** richiede il piano Shopware **Evolve** o superiore.
+- Su **Rise** o Community edition, usa invece lo [snippet Finseo](/it/attribution#lo-snippet-finseo) nel tuo tema — a differenza di Shopify, Shopware esegue gli script sulla pagina finale del checkout, quindi lo snippet cattura lì gli acquisti.
+
+## Ottieni il tuo URL webhook
+
+1. In Finseo, apri **Attribution → Set up attribution** e scegli **Shopware**, oppure copia l'URL dalle impostazioni Attribution:
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+## Configura il Flow
+
+1. Nell'admin di Shopware, vai su **Impostazioni → Flow Builder → Nuovo flow**.
+2. Trigger: **Order placed** (`checkout.order.placed`).
+3. Azione: **Call URL (webhook)** con:
+
+```text
+URL:    <your Finseo webhook URL>
+Method: POST
+Header: Content-Type: application/json
+```
+
+4. Body:
+
+```json
+{
+  "orderNumber": "{{ order.orderNumber }}",
+  "amountTotal": {{ order.amountTotal }},
+  "currency": { "isoCode": "{{ order.currency.isoCode }}" },
+  "orderCustomer": { "email": "{{ order.orderCustomer.email }}" },
+  "lineItems": []
+}
+```
+
+5. Attiva il flow.
+
+## Risoluzione dei problemi
+
+<AccordionGroup>
+  <Accordion title='"Call URL (webhook)" non compare in Flow Builder'>
+    Il tuo piano Shopware non include l'azione webhook (solo Evolve+). Incolla invece lo snippet Finseo nel tuo tema — cattura gli acquisti dalla pagina finale tramite il tuo tracking esistente.
+  </Accordion>
+  <Accordion title="Gli ordini arrivano ma non vengono mai attribuiti">
+    Le conversioni hanno bisogno di una risposta al sondaggio con cui unirsi. Aggiungi il popup del sondaggio Finseo al tuo storefront, così i clienti rispondono alla domanda di attribuzione — gli ordini vengono poi uniti tramite email (finestra di 90 giorni).
+  </Accordion>
+</AccordionGroup>

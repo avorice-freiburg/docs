@@ -1,0 +1,51 @@
+---
+title: Fairing
+description: Importa le risposte del sondaggio post-acquisto di Fairing nell'attribution di Finseo tramite Shopify Flow.
+---
+
+# Fairing
+
+Hai già un sondaggio post-acquisto [Fairing](https://fairing.co) su Shopify? Tienilo — Finseo importa le sue risposte invece di mostrare un secondo popup. Le risposte vengono unite all'ordine automaticamente tramite ID ordine ed email.
+
+## Passo 1: Collega Fairing a Shopify Flow
+
+Nell'app Fairing, apri **Integrations → Shopify Flow → Connect**. Questo passaggio è obbligatorio — Fairing invia le risposte del sondaggio a Flow solo dopo che la connessione è stata effettuata.
+
+## Passo 2: Crea il Flow
+
+1. In Shopify, vai su **Flow → Create workflow**.
+2. Trigger: **Fairing Post Purchase Surveys — New Survey Response**.
+3. Azione: **Send HTTP request** con:
+
+```text
+Method: POST
+Header: Content-Type: application/json
+URL:    https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+4. Body:
+
+```json
+{
+  "channel": "{{trigger.response}}",
+  "freetext": "{{trigger.responseWasOther}}",
+  "question": "{{trigger.question}}",
+  "respondentExternalId": "{{order.id}}",
+  "respondentEmail": "{{order.email}}"
+}
+```
+
+5. Attiva il workflow.
+
+Finseo normalizza automaticamente il testo della risposta in canali — "Saw you on ChatGPT" diventa `ai_search`. L'ID ordine e l'email uniscono la risposta alla conversione di checkout proveniente dal tuo [Custom Pixel di Shopify](/it/integrations/shopify#traccia-i-checkout-per-lattribuzione).
+
+## Risoluzione dei problemi
+
+<AccordionGroup>
+  <Accordion title="Il trigger di Fairing non compare in Shopify Flow">
+    La connessione a Flow nell'app Fairing non è ancora stata effettuata — apri prima Fairing → Integrations → Shopify Flow → Connect.
+  </Accordion>
+  <Accordion title="Le risposte arrivano ma i ricavi restano vuoti">
+    I ricavi arrivano dalla conversione di checkout, non dal sondaggio. Installa il Custom Pixel di Shopify così gli ordini arrivano con il valore — vengono poi uniti alla risposta di Fairing tramite ID ordine.
+  </Accordion>
+</AccordionGroup>

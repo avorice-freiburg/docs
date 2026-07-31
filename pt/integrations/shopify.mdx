@@ -1,24 +1,66 @@
 ---
 title: Shopify
-description: Otimize o SEO de produtos e os dados estruturados da sua loja Shopify com o agente do Finseo (brevemente).
+description: Rastreie checkouts para atribuição com um Custom Pixel e otimize o SEO da sua loja com o agente do Finseo (brevemente).
 ---
 
 # Shopify
 
+## Rastrear checkouts para atribuição
+
+Disponível já hoje: um **Custom Pixel** do Shopify que envia cada checkout concluído (ID da encomenda, valor, moeda, email do cliente) para a [atribuição](/pt/attribution) do Finseo. Os scripts do tema não correm no checkout do Shopify — este pixel corre. As encomendas fundem-se com as respostas a "Como nos encontrou?" através do ID da encomenda ou do email.
+
+### Instalar o pixel
+
+1. No Shopify, vá a **Admin → Settings → Customer events → Add custom pixel**.
+2. Cole o código do pixel (obtenha a sua versão pessoal, com ID do projeto e token, em **Attribution → Set up attribution → Shopify** no Finseo):
+
+```js
+const WEBHOOK_URL = 'https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••';
+
+analytics.subscribe('checkout_completed', (event) => {
+  const checkout = event.data.checkout;
+  if (init.customerPrivacy &&
+      init.customerPrivacy.analyticsProcessingAllowed === false) return;
+  fetch(WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      respondentExternalId: String((checkout.order && checkout.order.id) || checkout.token),
+      dealValue: Number(checkout.totalPrice ? checkout.totalPrice.amount : 0),
+      dealCurrency: checkout.totalPrice ? checkout.totalPrice.currencyCode : 'USD',
+      respondentEmail: checkout.email || undefined
+    }),
+    keepalive: true
+  });
+});
+```
+
+3. Guarde e **ligue** o pixel.
+4. Definições de privacidade do cliente: permissão **Required** com apenas **Analytics** selecionado · Venda de dados: **not considered data sale**. O pixel respeita o consentimento do cliente — checkouts sem permissão de analytics não são enviados.
+
+### Onde entra o inquérito?
+
+O checkout e a página de agradecimento do Shopify estão em sandbox — scripts externos (incluindo o popup do Finseo) não podem correr aí. Duas opções:
+
+- **App de inquéritos (melhores dados)**: use o [Fairing](/pt/integrations/fairing), o [KnoCommerce](/pt/integrations/knocommerce) ou o [Zigpoll](/pt/integrations/zigpoll) para um inquérito pós-compra nativo — o Finseo importa as respostas automaticamente.
+- **Popup na loja**: adicione o [Snippet do Finseo](/pt/attribution#o-snippet-do-finseo) ao seu tema (**Online Store → Themes → Edit code → `theme.liquid`** antes de `</body>`). O popup faz a pergunta aos visitantes nas páginas da sua loja; as respostas fundem-se com as encomendas posteriores através do email.
+
+## Integração do agente (brevemente)
+
 <Note>
-A integração com o Shopify chega **brevemente**. Esta página descreve a funcionalidade planeada.
+A integração do agente com o Shopify está **brevemente disponível**. Esta secção descreve a funcionalidade planeada.
 </Note>
 
-Ligue a sua loja Shopify para deixar o agente do Finseo otimizar títulos SEO de produtos, descrições, dados estruturados (schemas JSON-LD), conteúdo de páginas e redirecionamentos de URL — através de comandos em linguagem natural como "Otimiza os títulos SEO dos meus 5 principais produtos".
+Ligue a sua loja Shopify para deixar o agente do Finseo otimizar títulos SEO de produtos, descrições, dados estruturados (schemas JSON-LD), conteúdo de páginas e redirecionamentos de URL — através de comandos em linguagem natural como "Otimiza os títulos SEO dos meus 5 produtos principais".
 
-## Como vai funcionar
+### Como vai funcionar
 
 1. Clique em **Connect** no cartão do Shopify em **Integrations** e introduza o URL da sua loja (p. ex. `mystore.myshopify.com`).
 2. Será redirecionado para o Shopify para autorizar o Finseo via OAuth — sem chaves de API para copiar.
 3. Depois de autorizado, o agente ganha acesso à Shopify Admin API e pode ler e editar produtos, páginas, coleções, dados estruturados e redirecionamentos.
 4. Cada edição exige a sua confirmação antes de ser aplicada.
 
-## Entretanto
+### Entretanto
 
-- Acompanhe a visibilidade em IA da sua loja com o [rastreio de prompts](/pt/getting-started/prompts) e monitorize o tráfego referido por IA via [Google Analytics](/pt/integrations/google-analytics).
-- Acompanhe os rastreios de bots de IA na sua loja com o [Bot Analytics](/pt/bot-analytics).
+- Acompanhe a visibilidade da sua loja em IA com o [rastreio de prompts](/pt/getting-started/prompts) e monitorize o tráfego referido por IA através do [Google Analytics](/pt/integrations/google-analytics).
+- Rastreie as visitas de bots de IA à sua loja com o [Bot Analytics](/pt/bot-analytics).

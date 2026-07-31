@@ -1,0 +1,35 @@
+---
+title: KnoCommerce
+description: Importiere KnoCommerce-Post-Purchase-Umfrageantworten per Webhook in die Finseo Attribution.
+---
+
+# KnoCommerce
+
+Du hast schon eine [KnoCommerce](https://knocommerce.com)-Post-Purchase-Umfrage laufen (Shopify oder WooCommerce)? Behalte sie — Finseo importiert die Antworten, statt ein zweites Popup zu zeigen. Registriere einen Webhook über die KnoCommerce-API, und Finseo parst den Payload automatisch und führt Antworten über ID und E-Mail mit Bestellungen zusammen.
+
+## Webhook einrichten
+
+1. Gehe in KnoCommerce zu **Settings → API Access** und erstelle API-Zugangsdaten.
+2. Registriere einen Webhook über deren REST-API:
+
+```text
+Topic: response/create
+URL:   https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+Die KnoCommerce-Doku ([docs.knocommerce.com](https://docs.knocommerce.com)) zeigt den genauen Webhook-Erstellungs-Request in ihrem „Make Integration"-Guide.
+
+## Feld-Mapping
+
+Finseo erkennt Antwort-, E-Mail- und Bestellfelder in KnoCommerce-Payloads automatisch. Nutzt deine Umfrage eine eigene Fragenstruktur, sende eine Test-Antwort und mappe die Felder einmalig unter **Attribution → Workflows** — künftige Antworten mit derselben Struktur werden automatisch geparst.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Antworten kommen an, aber der Kanal ist „other"">
+    Finseo normalisiert Antworttexte per Keywords (chatgpt, google, instagram, …). Verwenden deine Antwortoptionen ungewöhnliche Formulierungen, füge im Feld-Mapping des Workflows Regeln hinzu, die sie in Kanäle übersetzen.
+  </Accordion>
+  <Accordion title="Es kommen gar keine Requests an">
+    Verifiziere die Webhook-Registrierung über die KnoCommerce-API (Webhooks auflisten) und prüfe, ob die URL deinen Token enthält — abgelehnte Requests findest du in Finseo unter **Attribution → Webhook logs**.
+  </Accordion>
+</AccordionGroup>

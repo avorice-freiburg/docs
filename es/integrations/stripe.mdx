@@ -1,0 +1,58 @@
+---
+title: Stripe
+description: Envía los pagos de Stripe a la atribución de Finseo — importes, pruebas gratuitas y renovaciones se clasifican automáticamente.
+---
+
+# Stripe
+
+Apunta un solo evento de webhook de Stripe a Finseo y cada pago se convierte en una conversión de atribución. El importe, la moneda y el email del cliente se leen automáticamente y se fusionan con las respuestas a "¿Cómo nos conociste?" vía ID de pedido o email — así puedes ver cuántos ingresos de Stripe vinieron de ChatGPT, Perplexity y otros canales.
+
+## Qué clasifica Finseo automáticamente
+
+- **Los importes** llegan en las unidades menores de Stripe (céntimos) y se convierten correctamente — incluidas las monedas sin decimales como JPY y KRW.
+- **Los checkouts de 0 $** (prueba gratuita iniciada, cupón del 100 %) se almacenan como **trials**, no como compras.
+- **Las facturas recurrentes** (cualquier `billing_reason` distinto de `subscription_create`) se almacenan como **renewals**.
+- Solo las compras normales cuentan como clientes nuevos pendientes de atribución — los trials y las renovaciones nunca inflan tus KPIs.
+
+## Obtén tu URL de webhook
+
+1. En Finseo, abre **Attribution → Set up attribution** y elige **SaaS / Stripe**, o copia la URL desde tus ajustes de Attribution:
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+## Configura el webhook de Stripe
+
+1. En Stripe, ve a **Workbench → Webhooks → Add destination** y elige el tipo de destino **Webhook endpoint** (en cuentas antiguas: **Desarrolladores → Webhooks**).
+2. Pega tu URL de webhook de Finseo como URL del endpoint.
+3. Suscríbete a **un solo** evento — suscribirse a ambos cuenta cada pago dos veces:
+   - `checkout.session.completed` — para pagos únicos e inicios de suscripción.
+   - `invoice.paid` — si facturas mediante invoices.
+4. Guarda.
+
+<Warning>
+Nunca te suscribas a ambos eventos. Un inicio de suscripción dispara `checkout.session.completed` *y* `invoice.paid` — Finseo almacenaría el pago dos veces.
+</Warning>
+
+## Cómo funciona la fusión
+
+Finseo prefiere tu propia referencia de pedido como ID de transacción: `client_reference_id` o `metadata.order_id` si están definidos, de lo contrario el ID del objeto de Stripe (`cs_…`, `in_…`). El email del cliente se hashea en la ingesta y se usa como clave de fusión — si la misma persona respondió a la encuesta en el registro, el pago se atribuye a su respuesta (ventana de 90 días).
+
+<Tip>
+Si muestras la encuesta de Finseo en el registro o el onboarding, pasa el mismo email a Stripe Checkout — la conversión de trial a pago se atribuye entonces automáticamente semanas después.
+</Tip>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Los pagos aparecen pero nunca se atribuyen">
+    La atribución necesita una respuesta de encuesta con la que fusionarse. Instala el [Snippet de Finseo](/es/attribution#el-snippet-de-finseo) o una herramienta de encuestas para que los clientes respondan "¿Cómo nos conociste?" — los pagos se fusionan entonces vía email o ID de pedido.
+  </Accordion>
+  <Accordion title="Stripe muestra entregas fallidas (403)">
+    El parámetro de query `token` falta o está desactualizado. Copia de nuevo la URL completa del webhook desde Finseo — si el token fue regenerado, las URLs antiguas dejan de funcionar de inmediato.
+  </Accordion>
+  <Accordion title="Los registros de prueba aparecen con valor 0">
+    Es intencional: los checkouts de 0 $ se almacenan como trials y se excluyen de los KPIs de ingresos. Cuando se paga la primera factura real, llega como una conversión separada.
+  </Accordion>
+</AccordionGroup>

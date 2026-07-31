@@ -1,66 +1,130 @@
 ---
 title: Attribution
-description: Invia a Finseo i dati di attribuzione self-reported da form, CRM e ordini.
+description: Collega lead, ordini e ricavi ai canali attraverso cui i clienti ti hanno davvero trovato — inclusa la ricerca AI.
 ---
 
 # Attribution
 
-Attribution collega i tuoi dati di visibilità AI a lead e ricavi reali. Invece di vedere solo se il tuo brand compare nelle risposte AI, puoi vedere se i clienti dichiarano effettivamente di averti trovato tramite ChatGPT, Perplexity, Claude, Google, annunci, referral o altri canali.
+Attribution collega i tuoi dati di visibilità AI a lead e ricavi reali. Invece di vedere soltanto se il tuo brand compare nelle risposte AI, puoi vedere se i clienti dichiarano davvero di averti trovato tramite ChatGPT, Perplexity, Claude, Google, annunci, passaparola o altri canali — e quanto fatturato genera ciascun canale.
 
-Usa Attribution quando poni domande come:
+L'attribution di Finseo lavora con due tipi di dati che vengono uniti automaticamente:
 
-- "Come hai saputo di noi?"
-- "Dove ci hai trovati per la prima volta?"
-- "Quale sorgente ha influenzato questo ordine?"
-- "Quanta pipeline è arrivata dalla ricerca AI?"
+- **Risposte** — la risposta di un cliente alla domanda "Come ci hai conosciuto?", dal popup del sondaggio Finseo, dai tuoi moduli, da uno strumento di sondaggi o dal tuo CRM.
+- **Conversioni** — acquisti e lead con un ID transazione e un valore, dal tuo tracking esistente (Google/Meta), da Stripe, dal tuo sistema shop o da un webhook.
 
-## Setup consigliato
+Quando una risposta e una conversione condividono lo stesso ID ordine o la stessa email, vengono unite in un unico dato attribuito: "questo ordine da 1.234 € è arrivato da ChatGPT."
 
-Il setup più semplice è inviare un webhook ogni volta che viene creato un lead, una registrazione, un ordine o un deal.
+## Configurazione guidata
 
-```json
-{
-  "channelId": "AI Search",
-  "respondentEmail": "kunde@example.com",
-  "respondentName": "Max Mustermann",
-  "respondentExternalId": "BESTELLUNG-12345",
-  "dealValue": 1234.56,
-  "dealCurrency": "EUR",
-  "metadata": {
-    "produkt": "Produkt XY",
-    "sku": "ABC-123",
-    "menge": 2
-  }
-}
-```
+Il modo più rapido per configurare l'attribution è il wizard integrato: apri **Attribution** nella dashboard e clicca su **Set up attribution**. Ti chiede cosa vuoi tracciare (acquisti, lead o entrambi), quale sistema utilizzi e se hai già un tracking o un sondaggio post-acquisto — poi consiglia esattamente un percorso di installazione con snippet da copiare e incollare e verifica in tempo reale che il primo evento arrivi.
 
-La regola più importante è la coerenza. Quando possibile, usa gli stessi nomi di campo tra paesi e shop diversi. Finseo può mappare molti formati, ma payload coerenti rendono il reporting più pulito.
-
-<Tip>
-Il webhook non deve necessariamente funzionare in tempo reale. Un batch giornaliero va bene se è più semplice per il tuo CRM, shop o data warehouse.
-</Tip>
-
-## Scegli come inviare i dati
+I percorsi consigliati, a seconda del tuo setup:
 
 <CardGroup cols={2}>
-  <Card title="Webhook" icon="webhook" href="#inviare-i-dati-con-un-webhook">
-    Ideale per form, CRM, shop e strumenti di automazione.
+  <Card title="Finseo Snippet" icon="code" href="#lo-snippet-finseo">
+    Un solo tag script. Popup del sondaggio più cattura automatica degli acquisti dal tuo tracking Google/Meta esistente.
   </Card>
-  <Card title="Customer API" icon="code" href="/api-reference/attribution/submit">
-    Ideale per integrazioni di backend e client API diretti.
+  <Card title="Stripe" icon="credit-card" href="/it/integrations/stripe">
+    Un solo evento webhook di Stripe. Importi, trial e rinnovi vengono classificati automaticamente.
   </Card>
-  <Card title="Import in blocco" icon="database" href="/api-reference/attribution/bulk">
-    Ideale per import storici o job batch giornalieri.
+  <Card title="Shopify" icon="bag-shopping" href="/it/integrations/shopify#traccia-i-checkout-per-lattribuzione">
+    Un Custom Pixel che segnala ogni checkout completato — gli script del tema non possono girare sul checkout di Shopify, il pixel sì.
   </Card>
-  <Card title="Workflow della dashboard" icon="workflow" href="#mappare-i-campi-in-entrata">
-    Ideale quando la tua sorgente invia campi personalizzati.
+  <Card title="WooCommerce" icon="cart-shopping" href="/it/integrations/woocommerce">
+    Un webhook ordini nativo, inclusa l'origine della funzione Order Attribution integrata in WooCommerce.
   </Card>
-  <Card title="Webhook in uscita" icon="arrow-right" href="#ricevere-gli-eventi-di-attribution">
-    Ideale quando è il tuo sistema a dover ricevere le risposte salvate.
+  <Card title="Shopware" icon="store" href="/it/integrations/shopware">
+    Un webhook Flow Builder sull'evento "Order placed".
+  </Card>
+  <Card title="Webhook / CRM" icon="webhook" href="#invia-dati-con-un-webhook">
+    HubSpot, Pipedrive, Calendly, strumenti per moduli o il tuo backend.
   </Card>
 </CardGroup>
 
-## Inviare i dati con un webhook
+## Lo snippet Finseo
+
+Lo snippet è un singolo tag script servito per progetto:
+
+```html
+<script src="https://app.finseo.ai/api/attribution/widget/YOUR_PROJECT_ID" async></script>
+```
+
+Incollalo prima di `</head>` su ogni pagina (oppure aggiungilo tramite Google Tag Manager come tag Custom HTML). Fa tre cose:
+
+### 1. Cattura le risposte dai tuoi moduli esistenti
+
+Se i tuoi moduli chiedono già "How did you hear about us?" (rilevato anche in tedesco: "Wie bist du auf uns aufmerksam geworden?"), lo snippet cattura la risposta al momento dell'invio — e il popup non viene mai mostrato. Email e nomi dello stesso modulo vengono allegati come chiavi di associazione, così la risposta può essere collegata in seguito a un deal o a un ordine.
+
+### 2. Mostra il popup del sondaggio
+
+Se nessun modulo sulla pagina pone la domanda, lo snippet mostra un piccolo popup con la domanda e le opzioni di risposta che hai configurato. Controlli tutto in **Attribution → Survey settings**:
+
+- **Domanda e canali** — i canali predefiniti includono AI Search, Google/Bing, Social Media, Online Ads, Referral, Content e Other (con testo libero). Puoi anche usare canali AI dettagliati (ChatGPT, Perplexity, Claude, Gemini, Copilot).
+- **Trigger** — al caricamento della pagina, dopo l'invio di un modulo, dopo un acquisto rilevato oppure manuale via JavaScript.
+- **Stile** — colore d'accento, posizione, raggio degli angoli, font (di sistema o ereditato dal tuo sito) e mescolamento opzionale delle risposte per evitare il bias di posizione ("Other" resta sempre per ultimo).
+
+A ogni visitatore la domanda viene posta una sola volta (memorizzato in `localStorage`).
+
+### 3. Sfrutta il tuo tracking delle conversioni esistente
+
+Se sono installati Google Analytics / Google Ads (`dataLayer` / `gtag`) o il Meta Pixel (`fbq`), lo snippet ascolta passivamente gli eventi di conversione e li segnala a Finseo — nessun setup di tracking duplicato:
+
+| Origine | Eventi catturati |
+| --- | --- |
+| `dataLayer` / `gtag` | `purchase` (inclusi i formati e-commerce di GA4 e Universal Analytics), `generate_lead` |
+| Meta Pixel (`fbq`) | `Purchase`, `Lead` |
+
+Lo snippet legge ID transazione, valore, valuta e articoli dall'evento, deduplica per ID transazione (i ricaricamenti della thank-you page non vengono contati due volte) e analizza anche gli eventi scattati prima del suo caricamento. Il comportamento visibile ai visitatori non viene mai alterato.
+
+### API JavaScript
+
+Per il controllo manuale, lo snippet espone una piccola API:
+
+```js
+// Show the survey popup programmatically (e.g. after signup)
+window.finseoAttribution.show();
+
+// Report a conversion from your own code
+window.finseoAttribution.trackConversion({
+  transactionId: "ORDER-12345",
+  value: 1234.56,
+  currency: "EUR",
+  email: "kunde@example.com" // optional merge key
+});
+```
+
+## Come vengono unite risposte e conversioni
+
+Conversioni e risposte al sondaggio di solito arrivano separatamente — un cliente risponde al popup mentre naviga, e l'ordine arriva più tardi via Stripe o tramite il webhook del tuo shop. Finseo le unisce automaticamente:
+
+- **Chiavi di associazione**: ID transazione (`respondentExternalId` ↔ `transactionId`) oppure email. Una corrispondenza per ID transazione vince sempre su una corrispondenza per email.
+- **Finestre temporali**: una nuova conversione guarda indietro di **90 giorni** in cerca di una risposta al sondaggio (i trial SaaS spesso convertono settimane dopo la registrazione). Una nuova risposta al sondaggio guarda indietro solo di **48 ore** in cerca di una conversione non abbinata, così una risposta fresca non viene mai collegata a un ordine vecchio e non correlato.
+- **Valori dei deal**: se la risposta non ha un valore, l'importo della conversione unita lo compila — i ricavi non vengono mai contati due volte.
+- **Tipi di conversione**: i checkout Stripe con totale a 0 $ vengono salvati come **trial**, le fatture ricorrenti come **rinnovi**. Solo gli acquisti regolari contano come nuovi clienti in attesa di attribuzione.
+- **Ricavi non attribuiti**: le conversioni che non hanno mai ricevuto una risposta al sondaggio vengono mostrate come KPI a sé, così vedi sempre quanto fatturato resta ancora senza spiegazione.
+
+<Tip>
+Qualunque cosa invii la conversione (Stripe, Shopify Pixel, webhook), includi sempre l'email del cliente quando disponibile — è la chiave di associazione più affidabile per i lead che rispondono al sondaggio prima di acquistare.
+</Tip>
+
+## Privacy by default
+
+Le email dei clienti vengono **hashate con SHA-256 all'ingestione**. Finseo non memorizza mai indirizzi in chiaro — solo l'hash (usato per unire gli ordini alle risposte del sondaggio) e un'anteprima mascherata come `j***@company.com` per la dashboard.
+
+## Importa risposte dagli strumenti di sondaggio
+
+Hai già un sondaggio post-acquisto? Tienilo — Finseo importa le sue risposte invece di mostrare un secondo popup:
+
+<CardGroup cols={3}>
+  <Card title="Fairing" href="/it/integrations/fairing">Via Shopify Flow</Card>
+  <Card title="KnoCommerce" href="/it/integrations/knocommerce">Via webhook nativo</Card>
+  <Card title="Zigpoll" href="/it/integrations/zigpoll">Via webhook nativo</Card>
+  <Card title="SurveyMonkey" href="/it/integrations/surveymonkey">Via Zapier/Make</Card>
+  <Card title="Typeform" href="/it/integrations/typeform">Supporto nativo</Card>
+  <Card title="Tally" href="/it/integrations/tally">Supporto nativo</Card>
+</CardGroup>
+
+## Invia dati con un webhook
 
 L'endpoint webhook del tuo progetto ha questa forma:
 
@@ -68,9 +132,9 @@ L'endpoint webhook del tuo progetto ha questa forma:
 https://app.finseo.ai/api/attribution/webhook/PROJECT_ID?token=WEBHOOK_TOKEN
 ```
 
-Puoi trovare o rigenerare il token del webhook nelle impostazioni Attribution del progetto.
+Puoi trovare o rigenerare il token webhook nelle impostazioni Attribution del progetto. Tratta l'URL come un segreto — il token autentica ogni richiesta.
 
-Invia richieste `POST` con `Content-Type: application/json`. Sono accettate anche le submission form-encoded e multipart form per gli strumenti di form che non possono inviare JSON puro.
+Invia richieste `POST` con `Content-Type: application/json`. Sono accettati anche invii form-encoded e multipart, per gli strumenti di moduli che non possono inviare JSON grezzo.
 
 ```bash
 curl --request POST \
@@ -91,7 +155,7 @@ curl --request POST \
   }'
 ```
 
-Le risposte di webhook riuscite hanno questo aspetto:
+Le risposte webhook riuscite hanno questo aspetto:
 
 ```json
 {
@@ -101,37 +165,52 @@ Le risposte di webhook riuscite hanno questo aspetto:
 }
 ```
 
+### I payload di soli ordini diventano conversioni
+
+Se un payload contiene dati d'ordine (ID transazione + importo) ma nessuna risposta di attribuzione — un evento Stripe, un ordine WooCommerce o un webhook ordini personalizzato — Finseo lo salva come **conversione** invece di rifiutarlo. La risposta ha allora questo aspetto:
+
+```json
+{
+  "success": true,
+  "type": "conversion",
+  "id": "conversion-id",
+  "matched": true
+}
+```
+
+`matched: true` significa che la conversione è stata immediatamente unita a una risposta al sondaggio precedente.
+
 ## Riferimento dei campi
 
 | Campo | Obbligatorio | Descrizione |
 | --- | --- | --- |
-| `channelId` | Sì | La sorgente selezionata dal cliente, per esempio `AI Search`, `ChatGPT`, `Google`, `Referral` o `Paid Ads`. |
-| `channelLabel` | No | Etichetta leggibile se vuoi che differisca da `channelId`. |
+| `channelId` | Sì | La fonte selezionata dal cliente, per esempio `AI Search`, `ChatGPT`, `Google`, `Referral` o `Paid Ads`. |
+| `channelLabel` | No | Etichetta leggibile, se vuoi che sia diversa da `channelId`. |
 | `channelCategory` | No | Categoria opzionale come `ai_search`, `organic_search`, `paid`, `social`, `referral`, `content`, `direct` o `other`. |
-| `respondentEmail` | No | Email del cliente o del lead. Accettata anche come `email` nei webhook raw. |
+| `respondentEmail` | No | Email del cliente o del lead. Accettata anche come `email` nei webhook raw. Hashata all'ingestione. |
 | `respondentName` | No | Nome del cliente o del lead. Accettato anche come `name` nei webhook raw. |
-| `respondentExternalId` | No | ID dal tuo CRM, sistema d'ordine, checkout o data warehouse. |
+| `respondentExternalId` | No | ID dal tuo CRM, sistema ordini, checkout o data warehouse — la chiave di associazione più forte per le conversioni. |
 | `dealValue` | No | Valore numerico di ricavo o pipeline. |
-| `dealCurrency` | No | Codice valuta come `EUR`, `USD` o `GBP`. Invia la valuta in cui è stato effettuato il pagamento. |
+| `dealCurrency` | No | Codice valuta come `EUR`, `USD` o `GBP`. Invia la valuta effettivamente pagata. |
 | `freetextResponse` | No | Risposta testuale originale se il cliente ha usato un campo a testo libero. |
-| `formId` | No | Identificatore del form, del sondaggio o della sorgente. |
-| `pageUrl` | No | Pagina in cui è avvenuto il form o il checkout. |
-| `metadata` | No | Dati chiave-valore aggiuntivi come prodotto, SKU, paese, piano o quantità. |
+| `formId` | No | Identificatore del modulo, del sondaggio o della fonte. |
+| `pageUrl` | No | Pagina dove è avvenuto il modulo o il checkout. |
+| `metadata` | No | Dati chiave-valore extra come prodotto, SKU, paese, piano o quantità. |
 
-Finseo normalizza il testo del canale in categorie. Per esempio, le risposte che contengono `chatgpt`, `openai`, `claude`, `perplexity`, `gemini`, `copilot` o `ai search` vengono classificate come `ai_search`.
+Finseo normalizza il testo del canale in categorie. Per esempio, le risposte contenenti `chatgpt`, `openai`, `claude`, `perplexity`, `gemini`, `copilot` o `ai search` vengono categorizzate come `ai_search`.
 
-## Mappare i campi in entrata
+## Mappa i campi in ingresso
 
 Molti strumenti inviano payload con nomi propri, come `LeadSource`, `how_did_you_find_us`, `q3_howDid` o risposte Typeform annidate. Finseo può mappare questi campi nei workflow di Attribution.
 
 1. Apri **Attribution**.
 2. Vai su **Workflows**.
-3. Invia un webhook di test dal tuo sistema sorgente.
+3. Invia un webhook di test dal tuo sistema di origine.
 4. Apri il workflow creato.
-5. Mappa i campi in entrata su attribution, email, nome, valore del deal, valuta, ID del form o regole.
-6. Salva il mapping.
+5. Mappa i campi in ingresso su attribuzione, email, nome, valore del deal, valuta, ID modulo o regole.
+6. Salva la mappatura.
 
-Dopo il mapping, i webhook futuri con la stessa struttura vengono analizzati automaticamente.
+Dopo la mappatura, i webhook futuri con la stessa struttura vengono interpretati automaticamente. Quando un payload non può essere interpretato affatto, Finseo crea il workflow per te e suggerisce una mappatura dei campi tramite AI — devi solo confermarla.
 
 ```json
 {
@@ -144,24 +223,27 @@ Dopo il mapping, i webhook futuri con la stessa struttura vengono analizzati aut
 }
 ```
 
-Puoi anche usare regole quando un campo sorgente deve essere tradotto. Per esempio, se `utm_source` contiene `chatgpt`, mappalo su `AI Search`.
+Puoi anche usare regole quando un campo di origine deve essere tradotto. Per esempio, se `utm_source` contiene `chatgpt`, mappalo su `AI Search`.
 
-## Formati sorgente supportati
+## Formati di origine supportati
 
-Finseo rileva automaticamente diverse sorgenti comuni:
+Finseo rileva automaticamente diverse origini comuni:
 
-- **HubSpot**: payload legacy dei webhook di contatto con `properties`, oppure body JSON personalizzati da Operations Hub.
-- **Typeform**: `form_response.answers`, inclusi i campi choice, choices, text ed email.
+- **HubSpot**: payload dei webhook contatto legacy con `properties`, oppure body JSON personalizzati da Operations Hub.
+- **Typeform**: `form_response.answers`, inclusi campi choice, choices, text ed email.
 - **Tally**: payload `data.fields`.
 - **Salesforce**: JSON da Flow HTTP Callout, per esempio `LeadSource`, `Email`, `Name`, `Amount` e `CurrencyIsoCode`.
 - **Jotform**: multipart/form-data con `rawRequest` o campi come `q3_howDid`, `formID` e `submissionID`.
+- **Stripe**: payload di eventi (`checkout.session.completed`, `invoice.paid`, …) — salvati come conversioni con conversione automatica dei centesimi e classificazione trial/rinnovo.
+- **WooCommerce**: webhook degli ordini, inclusi i meta di Order Attribution come origine marketing.
+- **Shopware**: payload ordini di Flow Builder con `orderNumber`, `amountTotal` ed email del cliente.
 - **Raw JSON**: payload diretti con campi come `channelId`, `respondentEmail`, `dealValue` e `metadata`.
 
 ## Esempi
 
 <CodeGroup>
 
-```json CRM lead
+```json Lead CRM
 {
   "channelId": "ChatGPT",
   "respondentEmail": "jane@company.com",
@@ -176,7 +258,7 @@ Finseo rileva automaticamente diverse sorgenti comuni:
 }
 ```
 
-```json Ecommerce order
+```json Ordine e-commerce
 {
   "channelId": "Perplexity",
   "respondentEmail": "kunde@example.com",
@@ -227,11 +309,11 @@ curl --request POST \
   }'
 ```
 
-Consulta la [Bulk Create Attributions API](/api-reference/attribution/bulk) per il riferimento completo.
+Consulta la [Bulk Create Attributions API](/it/api-reference/attribution/bulk) per il riferimento completo.
 
-## Ricevere gli eventi di attribution
+## Ricevi eventi di attribuzione
 
-Nelle impostazioni di Attribution puoi configurare un URL di webhook in uscita. Finseo invia un evento al tuo URL ogni volta che viene salvata una nuova risposta.
+Puoi configurare un URL webhook in uscita nelle impostazioni Attribution. Finseo invia un evento al tuo URL ogni volta che viene salvata una nuova risposta.
 
 ```json
 {
@@ -255,11 +337,30 @@ Nelle impostazioni di Attribution puoi configurare un URL di webhook in uscita. 
 
 Se aggiungi un secret per il webhook in uscita, Finseo firma il body JSON con un header `X-FinSEO-Signature` usando HMAC-SHA256.
 
+## Limiti di frequenza
+
+- Endpoint webhook: **120 richieste al minuto** per progetto.
+- Endpoint collect dello snippet: **60 richieste al minuto** per IP visitatore.
+
+Le richieste oltre il limite ricevono `429` e possono essere ritentate senza problemi dopo un minuto.
+
+## Risoluzione dei problemi
+
+Ogni richiesta webhook in ingresso viene registrata con il risultato del parsing in **Attribution → Webhook logs** — incluse le richieste rifiutate. Gli stati:
+
+| Stato | Significato |
+| --- | --- |
+| `stored` | Risposta di attribuzione salvata. |
+| `stored_conversion` | Payload di soli dati d'ordine salvato come conversione. |
+| `parse_failed` | Nessun campo di attribuzione o dato d'ordine riconosciuto — è stato creato un workflow per la mappatura manuale dei campi. |
+| `invalid_token` | Il parametro query `token` manca o è errato — copia di nuovo l'URL dalla dashboard. |
+| `error` | Body non valido o errore del server. |
+
 ## Best practice
 
-- Inserisci la domanda di attribuzione vicino alla conversione, come registrazione, richiesta di demo, checkout o qualificazione del lead.
-- Mantieni stabili le opzioni di risposta tra i vari paesi. Traduci le etichette per gli utenti se necessario, ma mantieni coerenti i valori del webhook.
-- Invia la valuta di pagamento originale in `dealCurrency`; Finseo può comunque aggregare e mappare i valori.
-- Includi un `respondentExternalId` stabile come ID ordine, ID lead CRM, ID contatto o ID deal.
-- Inserisci prodotto, SKU, mercato, campagna e altro contesto di business in `metadata`.
+- Aggiungi la domanda di attribuzione vicino alla conversione, come registrazione, richiesta demo, checkout o qualificazione del lead.
+- Mantieni le opzioni di risposta stabili tra i vari paesi. Traduci le etichette per gli utenti se necessario, ma mantieni coerenti i valori dei webhook.
+- Invia in `dealCurrency` la valuta originale pagata; Finseo può comunque aggregare e mappare i valori.
+- Includi un `respondentExternalId` stabile come ID ordine, ID lead del CRM, ID contatto o ID deal.
+- Metti prodotto, SKU, mercato, campagna e altro contesto di business in `metadata`.
 - Invia un evento per ogni lead, ordine o deal. Evita di inviare ogni visualizzazione di pagina come attribuzione.

@@ -1,0 +1,58 @@
+---
+title: Shopware
+description: Envie encomendas do Shopware para a atribuição do Finseo com um webhook do Flow Builder.
+---
+
+# Shopware
+
+Um webhook do Flow Builder do Shopware dispara em cada encomenda efetuada e envia o número da encomenda, o total, a moeda e o email do cliente para o Finseo — as encomendas são guardadas como conversões e fundidas com as respostas a "Como nos encontrou?" através do email ou do número da encomenda.
+
+## Requisitos
+
+- A ação do Flow Builder **Call URL (webhook)** exige o plano **Evolve** do Shopware ou superior.
+- No **Rise** ou na Community edition, use em alternativa o [Snippet do Finseo](/pt/attribution#o-snippet-do-finseo) no seu tema — ao contrário do Shopify, o Shopware executa scripts na página de conclusão do checkout, pelo que o snippet captura as compras aí.
+
+## Obter o URL do webhook
+
+1. No Finseo, abra **Attribution → Set up attribution** e escolha **Shopware**, ou copie o URL das suas definições de Attribution:
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+## Configurar o Flow
+
+1. Na administração do Shopware, vá a **Settings → Flow Builder → New flow**.
+2. Trigger: **Order placed** (`checkout.order.placed`).
+3. Ação: **Call URL (webhook)** com:
+
+```text
+URL:    <your Finseo webhook URL>
+Method: POST
+Header: Content-Type: application/json
+```
+
+4. Corpo:
+
+```json
+{
+  "orderNumber": "{{ order.orderNumber }}",
+  "amountTotal": {{ order.amountTotal }},
+  "currency": { "isoCode": "{{ order.currency.isoCode }}" },
+  "orderCustomer": { "email": "{{ order.orderCustomer.email }}" },
+  "lineItems": []
+}
+```
+
+5. Ative o flow.
+
+## Resolução de problemas
+
+<AccordionGroup>
+  <Accordion title='"Call URL (webhook)" não aparece no Flow Builder'>
+    O seu plano do Shopware não inclui a ação de webhook (apenas Evolve+). Cole em alternativa o Snippet do Finseo no seu tema — ele captura as compras na página de conclusão através do seu tracking existente.
+  </Accordion>
+  <Accordion title="As encomendas chegam mas nunca são atribuídas">
+    As conversões precisam de uma resposta ao inquérito com que se fundir. Adicione o popup de inquérito do Finseo à sua loja para que os clientes respondam à pergunta de atribuição — as encomendas fundem-se então por email (janela de 90 dias).
+  </Accordion>
+</AccordionGroup>

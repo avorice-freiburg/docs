@@ -1,0 +1,58 @@
+---
+title: Shopware
+description: Sende Shopware-Bestellungen mit einem Flow-Builder-Webhook an die Finseo Attribution.
+---
+
+# Shopware
+
+Ein Shopware-Flow-Builder-Webhook feuert bei jeder aufgegebenen Bestellung und sendet Bestellnummer, Gesamtsumme, Währung und Kunden-E-Mail an Finseo — Bestellungen werden als Conversions gespeichert und über E-Mail oder Bestellnummer mit den Antworten auf „Wie bist du auf uns aufmerksam geworden?" zusammengeführt.
+
+## Voraussetzungen
+
+- Die Flow-Builder-Aktion **URL aufrufen (Webhook)** erfordert den Shopware-Plan **Evolve** oder höher.
+- Auf **Rise** oder der Community Edition nutzt du stattdessen das [Finseo Snippet](/de/attribution#das-finseo-snippet) in deinem Theme — anders als Shopify führt Shopware Scripts auf der Checkout-Abschlussseite aus, das Snippet erfasst Käufe also dort.
+
+## Webhook-URL holen
+
+1. Öffne in Finseo **Attribution → Set up attribution** und wähle **Shopware**, oder kopiere die URL aus deinen Attribution-Einstellungen:
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+## Flow einrichten
+
+1. Gehe in der Shopware-Administration zu **Einstellungen → Flow Builder → Flow anlegen**.
+2. Trigger: **Bestellung aufgegeben** (`checkout.order.placed`).
+3. Aktion: **URL aufrufen (Webhook)** mit:
+
+```text
+URL:    <deine Finseo-Webhook-URL>
+Method: POST
+Header: Content-Type: application/json
+```
+
+4. Body:
+
+```json
+{
+  "orderNumber": "{{ order.orderNumber }}",
+  "amountTotal": {{ order.amountTotal }},
+  "currency": { "isoCode": "{{ order.currency.isoCode }}" },
+  "orderCustomer": { "email": "{{ order.orderCustomer.email }}" },
+  "lineItems": []
+}
+```
+
+5. Aktiviere den Flow.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="„URL aufrufen (Webhook)" fehlt im Flow Builder">
+    Dein Shopware-Plan enthält die Webhook-Aktion nicht (nur Evolve+). Füge stattdessen das Finseo Snippet in dein Theme ein — es erfasst Käufe auf der Abschlussseite über dein bestehendes Tracking.
+  </Accordion>
+  <Accordion title="Bestellungen kommen an, werden aber nie attribuiert">
+    Conversions brauchen eine Umfrageantwort zum Zusammenführen. Füge deiner Storefront das Finseo-Umfrage-Popup hinzu, damit Kunden die Attributionsfrage beantworten — Bestellungen werden dann über die E-Mail zusammengeführt (90-Tage-Fenster).
+  </Accordion>
+</AccordionGroup>

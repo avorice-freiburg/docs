@@ -155,6 +155,7 @@
                   "integrations/attio",
                   "integrations/close",
                   "integrations/typeform",
+                  "integrations/tally",
                   "integrations/jotform",
                   "integrations/gravity-forms",
                   "integrations/formstack",
@@ -163,6 +164,18 @@
                   "integrations/zapier-make",
                   "integrations/n8n",
                   "integrations/custom-webhook"
+                ]
+              },
+              {
+                "group": "E-commerce & surveys",
+                "pages": [
+                  "integrations/stripe",
+                  "integrations/woocommerce",
+                  "integrations/shopware",
+                  "integrations/fairing",
+                  "integrations/knocommerce",
+                  "integrations/zigpoll",
+                  "integrations/surveymonkey"
                 ]
               }
             ]
@@ -353,6 +366,7 @@
                   "de/integrations/attio",
                   "de/integrations/close",
                   "de/integrations/typeform",
+                  "de/integrations/tally",
                   "de/integrations/jotform",
                   "de/integrations/gravity-forms",
                   "de/integrations/formstack",
@@ -361,6 +375,18 @@
                   "de/integrations/zapier-make",
                   "de/integrations/n8n",
                   "de/integrations/custom-webhook"
+                ]
+              },
+              {
+                "group": "E-Commerce & Umfragen",
+                "pages": [
+                  "de/integrations/stripe",
+                  "de/integrations/woocommerce",
+                  "de/integrations/shopware",
+                  "de/integrations/fairing",
+                  "de/integrations/knocommerce",
+                  "de/integrations/zigpoll",
+                  "de/integrations/surveymonkey"
                 ]
               }
             ]
@@ -551,6 +577,7 @@
                   "fr/integrations/attio",
                   "fr/integrations/close",
                   "fr/integrations/typeform",
+                  "fr/integrations/tally",
                   "fr/integrations/jotform",
                   "fr/integrations/gravity-forms",
                   "fr/integrations/formstack",
@@ -559,6 +586,18 @@
                   "fr/integrations/zapier-make",
                   "fr/integrations/n8n",
                   "fr/integrations/custom-webhook"
+                ]
+              },
+              {
+                "group": "E-commerce et sondages",
+                "pages": [
+                  "fr/integrations/stripe",
+                  "fr/integrations/woocommerce",
+                  "fr/integrations/shopware",
+                  "fr/integrations/fairing",
+                  "fr/integrations/knocommerce",
+                  "fr/integrations/zigpoll",
+                  "fr/integrations/surveymonkey"
                 ]
               }
             ]
@@ -749,6 +788,7 @@
                   "it/integrations/attio",
                   "it/integrations/close",
                   "it/integrations/typeform",
+                  "it/integrations/tally",
                   "it/integrations/jotform",
                   "it/integrations/gravity-forms",
                   "it/integrations/formstack",
@@ -757,6 +797,18 @@
                   "it/integrations/zapier-make",
                   "it/integrations/n8n",
                   "it/integrations/custom-webhook"
+                ]
+              },
+              {
+                "group": "E-commerce e sondaggi",
+                "pages": [
+                  "it/integrations/stripe",
+                  "it/integrations/woocommerce",
+                  "it/integrations/shopware",
+                  "it/integrations/fairing",
+                  "it/integrations/knocommerce",
+                  "it/integrations/zigpoll",
+                  "it/integrations/surveymonkey"
                 ]
               }
             ]
@@ -947,6 +999,7 @@
                   "es/integrations/attio",
                   "es/integrations/close",
                   "es/integrations/typeform",
+                  "es/integrations/tally",
                   "es/integrations/jotform",
                   "es/integrations/gravity-forms",
                   "es/integrations/formstack",
@@ -955,6 +1008,18 @@
                   "es/integrations/zapier-make",
                   "es/integrations/n8n",
                   "es/integrations/custom-webhook"
+                ]
+              },
+              {
+                "group": "E-commerce y encuestas",
+                "pages": [
+                  "es/integrations/stripe",
+                  "es/integrations/woocommerce",
+                  "es/integrations/shopware",
+                  "es/integrations/fairing",
+                  "es/integrations/knocommerce",
+                  "es/integrations/zigpoll",
+                  "es/integrations/surveymonkey"
                 ]
               }
             ]
@@ -1145,6 +1210,7 @@
                   "pt/integrations/attio",
                   "pt/integrations/close",
                   "pt/integrations/typeform",
+                  "pt/integrations/tally",
                   "pt/integrations/jotform",
                   "pt/integrations/gravity-forms",
                   "pt/integrations/formstack",
@@ -1153,6 +1219,18 @@
                   "pt/integrations/zapier-make",
                   "pt/integrations/n8n",
                   "pt/integrations/custom-webhook"
+                ]
+              },
+              {
+                "group": "E-commerce e pesquisas",
+                "pages": [
+                  "pt/integrations/stripe",
+                  "pt/integrations/woocommerce",
+                  "pt/integrations/shopware",
+                  "pt/integrations/fairing",
+                  "pt/integrations/knocommerce",
+                  "pt/integrations/zigpoll",
+                  "pt/integrations/surveymonkey"
                 ]
               }
             ]

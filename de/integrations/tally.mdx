@@ -1,0 +1,39 @@
+---
+title: Tally
+description: Sende Tally-Formularantworten an die Finseo Attribution — nativ unterstützt, kein Feld-Mapping nötig.
+---
+
+# Tally
+
+Tally-Payloads werden von Finseo nativ geparst. Füge deinem Formular eine „Wie hast du uns gefunden?"-Frage hinzu, richte den Webhook des Formulars auf Finseo — und die Antworten kommen bereits kategorisiert an, inklusive der E-Mail des Ausfüllenden als Merge-Key für spätere Deals und Bestellungen.
+
+## Webhook einrichten
+
+1. Öffne dein Formular in Tally und gehe zu **Integrations → Webhooks → Connect**.
+2. Endpoint-URL:
+
+```text
+https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••
+```
+
+3. Speichern. Jede Übermittlung wird jetzt an Finseo gesendet.
+
+Kein Feld-Mapping nötig — Finseo erkennt Tallys `data.fields`-Format, findet die Attributionsfrage (jedes Label mit „Wie hast du uns gefunden?", „How did you find us?" oder Ähnlichem) und greift das E-Mail-Feld automatisch ab.
+
+## Eigene Fragen-Labels
+
+Nutzt deine Attributionsfrage ein ganz anderes Label (z. B. in einer anderen Sprache), richte es einmalig ein:
+
+1. Schicke eine Test-Antwort ab.
+2. Öffne in Finseo **Attribution → Workflows** und mappe das Feld, das die Antwort enthält.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Übermittlungen kommen mit Status parse_failed an">
+    Finseo konnte per Keywords kein Antwortfeld finden. Öffne den automatisch erstellten Workflow unter Attribution → Workflows und richte das Mapping auf das richtige Feld — künftige Übermittlungen werden automatisch geparst.
+  </Accordion>
+  <Accordion title="Antworten haben keine E-Mail">
+    Füge dem Tally-Formular ein E-Mail-Feld hinzu (Typ „Email") — Finseo erkennt es automatisch und nutzt es, um die Antwort mit späteren Conversions zusammenzuführen.
+  </Accordion>
+</AccordionGroup>

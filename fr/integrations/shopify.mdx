@@ -1,24 +1,66 @@
 ---
 title: Shopify
-description: Optimise le SEO produit et les données structurées de ta boutique Shopify avec l'agent Finseo (bientôt disponible).
+description: Suis les checkouts pour l'attribution avec un Custom Pixel, et optimise le SEO de ta boutique avec l'agent Finseo (bientôt disponible).
 ---
 
 # Shopify
 
+## Suivre les checkouts pour l'attribution
+
+Disponible dès aujourd'hui : un **Custom Pixel** Shopify qui envoie chaque checkout finalisé (ID de commande, montant, devise, email client) à l'[attribution](/fr/attribution) Finseo. Les scripts de thème ne s'exécutent pas sur le checkout Shopify — ce pixel, si. Les commandes fusionnent avec les réponses à « Comment avez-vous entendu parler de nous ? » via l'ID de commande ou l'email.
+
+### Installer le pixel
+
+1. Dans Shopify, va dans **Admin → Paramètres → Événements client → Ajouter un pixel personnalisé**.
+2. Colle le code du pixel (récupère ta version personnelle avec ID de projet et token dans **Attribution → Set up attribution → Shopify** dans Finseo) :
+
+```js
+const WEBHOOK_URL = 'https://app.finseo.ai/api/attribution/webhook/YOUR_PROJECT_ID?token=•••';
+
+analytics.subscribe('checkout_completed', (event) => {
+  const checkout = event.data.checkout;
+  if (init.customerPrivacy &&
+      init.customerPrivacy.analyticsProcessingAllowed === false) return;
+  fetch(WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      respondentExternalId: String((checkout.order && checkout.order.id) || checkout.token),
+      dealValue: Number(checkout.totalPrice ? checkout.totalPrice.amount : 0),
+      dealCurrency: checkout.totalPrice ? checkout.totalPrice.currencyCode : 'USD',
+      respondentEmail: checkout.email || undefined
+    }),
+    keepalive: true
+  });
+});
+```
+
+3. Enregistre et **connecte** le pixel.
+4. Paramètres de confidentialité des clients : autorisation **Requise** avec seulement **Analytics** coché · Vente de données : **non considéré comme une vente de données**. Le pixel respecte le consentement du client — les checkouts sans autorisation analytics ne sont pas envoyés.
+
+### Et le sondage, où va-t-il ?
+
+Le checkout et la page de remerciement de Shopify sont sandboxés — les scripts externes (y compris la popup Finseo) ne peuvent pas s'y exécuter. Deux options :
+
+- **App de sondage (meilleures données)** : utilise [Fairing](/fr/integrations/fairing), [KnoCommerce](/fr/integrations/knocommerce) ou [Zigpoll](/fr/integrations/zigpoll) pour un sondage post-achat natif — Finseo importe les réponses automatiquement.
+- **Popup sur la boutique** : ajoute le [snippet Finseo](/fr/attribution#le-snippet-finseo) à ton thème (**Boutique en ligne → Thèmes → Modifier le code → `theme.liquid`** avant `</body>`). La popup interroge les visiteurs sur les pages de ta boutique ; les réponses fusionnent avec leurs commandes ultérieures via l'email.
+
+## Intégration agent (bientôt disponible)
+
 <Note>
-L'intégration Shopify arrive **bientôt**. Cette page décrit les fonctionnalités prévues.
+L'intégration agent Shopify arrive **bientôt**. Cette section décrit les fonctionnalités prévues.
 </Note>
 
 Connecte ta boutique Shopify pour laisser l'agent Finseo optimiser les titres SEO produits, les descriptions, les données structurées (schémas JSON-LD), le contenu des pages et les redirections d'URL — via des commandes en langage naturel comme « Optimise les titres SEO de mes 5 meilleurs produits ».
 
-## Comment ça fonctionnera
+### Comment ça fonctionnera
 
-1. Clique sur **Connect** sur la carte Shopify sous **Integrations** et saisis l'URL de ta boutique (par ex. `mystore.myshopify.com`).
-2. Tu seras redirigé vers Shopify pour autoriser Finseo via OAuth — aucune clé API à copier.
-3. Une fois autorisé, l'agent accède à la Shopify Admin API et peut lire et modifier les produits, pages, collections, données structurées et redirections.
+1. Clique sur **Connect** sur la carte Shopify sous **Integrations** et saisis l'URL de ta boutique (par exemple `mystore.myshopify.com`).
+2. Tu es redirigé vers Shopify pour autoriser Finseo via OAuth — aucune clé API à copier.
+3. Une fois l'autorisation accordée, l'agent accède à l'API Admin de Shopify et peut lire et modifier produits, pages, collections, données structurées et redirections.
 4. Chaque modification nécessite ta confirmation avant d'être appliquée.
 
-## En attendant
+### En attendant
 
 - Suis la visibilité IA de ta boutique avec le [suivi de prompts](/fr/getting-started/prompts) et surveille le trafic issu de l'IA via [Google Analytics](/fr/integrations/google-analytics).
 - Suis les crawls des bots IA sur ta boutique avec [Bot Analytics](/fr/bot-analytics).

@@ -41,10 +41,13 @@ All tools are **read-only** — they retrieve data and never modify it.
 | `list_projects` | List all your projects |
 | `get_visibility_metrics` | Visibility KPIs incl. the dashboard "Visibility" rate and own-domain "Citations" KPI, with previous-period comparison |
 | `get_visibility_timeseries` | Per-day visibility, mentions, position and sentiment (same values as the dashboard chart) |
-| `list_prompts` | Tracked prompts with metrics, top competitors and per-prompt citations (paginated via `offset`/`hasMore`) |
+| `list_prompts` | Tracked prompts with metrics, top competitors and per-prompt citations (paginated via `offset`/`hasMore`) — returns the prompt `id` used by the prompt drill-down tools |
+| `get_prompt_details` | Drill into one prompt: per-model metrics and the full answer history (one row per AI answer with mention, depth, sentiment and brands named) |
+| `get_answer_content` | Read the actual AI answers for one prompt on one day: full answer text, brands with sentiment, and every cited source (`concise`/`detailed` format) |
 | `get_competitor_ranking` | Competitor visibility ranking across AI models — returns the competitor `id` used by the drill-down tools |
 | `get_competitor_gap_analysis` | Gap analysis vs one competitor: answers where only they appear (your losses), head-to-head, and your wins — with the concrete prompts behind them |
 | `get_competitor_h2h` | Head-to-head vs one competitor: who is named first, average mention order, and LLM-judged comparative claims |
+| `get_sentiment_overview` | Sentiment & Share of Voice: uncapped SoV with explicit denominators, per-brand sentiment leaderboard with win rates and aspect scores, and the most negative LLM-judged statements |
 | `get_top_sources` | Most cited sources with citation counts and source types |
 | `get_tags` | List tags with prompt counts |
 | `get_query_fanouts` | AI query fan-outs (sub-queries) ranked by frequency |
@@ -53,7 +56,11 @@ The analytics tools accept optional `model` (e.g. `chatgpt`, `perplexity`, `ai_o
 
 ### Drill-down workflow
 
-Go from overview to detail in three steps: `get_visibility_metrics` for the big picture → `get_competitor_ranking` to find the competitors that matter (each row carries an `id`) → `get_competitor_gap_analysis` / `get_competitor_h2h` with that `competitorId` for the prompt-level "where do we lose and why".
+Go from overview to detail — the tools chain from broad to a single AI answer:
+
+- **Competitor track:** `get_visibility_metrics` for the big picture → `get_competitor_ranking` to find the competitors that matter (each row carries an `id`) → `get_competitor_gap_analysis` / `get_competitor_h2h` with that `competitorId` for the prompt-level "where do we lose and why".
+- **Prompt track:** `list_prompts` to find the prompts that matter (each row carries an `id`) → `get_prompt_details` with that `promptId` for the per-answer history and available dates → `get_answer_content` with `promptId` + `date` to read the exact AI answer, the brands it names and the sources it cites.
+- **Sentiment track:** `get_sentiment_overview` for Share of Voice, the sentiment leaderboard and the most negative statements about any brand.
 
 ## Example prompts
 
@@ -63,6 +70,8 @@ Try asking your AI assistant:
 - *"Rank my competitors by AI visibility and run a gap analysis against the strongest one — where do they appear when we don't?"*
 - *"Which sources do AI models cite most for my tracked prompts, filtered to ChatGPT only?"*
 - *"Compare me head-to-head with competitor X: who gets named first, and what do AI models claim about each of us?"*
+- *"Show me what ChatGPT actually answered yesterday for my prompt 'best CRM for startups' — full text and the sources it cited."*
+- *"What is my Share of Voice, and which negative statements do AI models make about my brand?"*
 
 ### Metric definitions
 

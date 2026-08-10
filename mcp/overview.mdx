@@ -41,13 +41,28 @@ All tools are **read-only** — they retrieve data and never modify it.
 | `list_projects` | List all your projects |
 | `get_visibility_metrics` | Visibility KPIs incl. the dashboard "Visibility" rate and own-domain "Citations" KPI, with previous-period comparison |
 | `get_visibility_timeseries` | Per-day visibility, mentions, position and sentiment (same values as the dashboard chart) |
-| `list_prompts` | Tracked prompts with metrics, top competitors and per-prompt citations |
-| `get_competitor_ranking` | Competitor visibility ranking across AI models |
+| `list_prompts` | Tracked prompts with metrics, top competitors and per-prompt citations (paginated via `offset`/`hasMore`) |
+| `get_competitor_ranking` | Competitor visibility ranking across AI models — returns the competitor `id` used by the drill-down tools |
+| `get_competitor_gap_analysis` | Gap analysis vs one competitor: answers where only they appear (your losses), head-to-head, and your wins — with the concrete prompts behind them |
+| `get_competitor_h2h` | Head-to-head vs one competitor: who is named first, average mention order, and LLM-judged comparative claims |
 | `get_top_sources` | Most cited sources with citation counts and source types |
 | `get_tags` | List tags with prompt counts |
 | `get_query_fanouts` | AI query fan-outs (sub-queries) ranked by frequency |
 
-The analytics tools accept optional `model` (e.g. `chatgpt`, `perplexity`, `ai_overview`, `gemini`, `grok`) and `tags` filters — the same filters as the dashboard.
+The analytics tools accept optional `model` (e.g. `chatgpt`, `perplexity`, `ai_overview`, `copilot`, `gemini`, `grok`) and `tags` filters — the same filters as the dashboard.
+
+### Drill-down workflow
+
+Go from overview to detail in three steps: `get_visibility_metrics` for the big picture → `get_competitor_ranking` to find the competitors that matter (each row carries an `id`) → `get_competitor_gap_analysis` / `get_competitor_h2h` with that `competitorId` for the prompt-level "where do we lose and why".
+
+## Example prompts
+
+Try asking your AI assistant:
+
+- *"How visible is my brand in AI search this month, and how did it change vs. the previous period?"*
+- *"Rank my competitors by AI visibility and run a gap analysis against the strongest one — where do they appear when we don't?"*
+- *"Which sources do AI models cite most for my tracked prompts, filtered to ChatGPT only?"*
+- *"Compare me head-to-head with competitor X: who gets named first, and what do AI models claim about each of us?"*
 
 ### Metric definitions
 
@@ -63,4 +78,4 @@ The tools return the same numbers as the Finseo dashboard and label them explici
 POST https://api.finseo.ai/v1/mcp
 ```
 
-The server implements JSON-RPC 2.0 over Streamable HTTP and supports `initialize`, `tools/list`, and `tools/call`. Unauthenticated requests receive a `401` with OAuth discovery metadata per the MCP authorization spec (RFC 9728).
+The server implements JSON-RPC 2.0 over Streamable HTTP (stateless) and supports `initialize`, `ping`, `tools/list`, and `tools/call`. Tool results include `structuredContent` (machine-readable JSON) alongside the text block, per MCP spec 2025-06-18. `GET` requests to the endpoint return `405 Method Not Allowed` — the server does not offer a standalone SSE stream. Unauthenticated requests receive a `401` with OAuth discovery metadata per the MCP authorization spec (RFC 9728).

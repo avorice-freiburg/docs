@@ -41,13 +41,28 @@ Alle Tools sind **read-only** — sie rufen Daten ab und ändern nie etwas.
 | `list_projects` | Alle deine Projekte auflisten |
 | `get_visibility_metrics` | Sichtbarkeits-KPIs inkl. der Dashboard-„Visibility"-Rate und dem „Citations"-KPI für die eigene Domain, mit Vergleich zur Vorperiode |
 | `get_visibility_timeseries` | Sichtbarkeit, Mentions, Position und Sentiment pro Tag (dieselben Werte wie im Dashboard-Chart) |
-| `list_prompts` | Getrackte Prompts mit Metriken, Top-Wettbewerbern und Citations pro Prompt |
-| `get_competitor_ranking` | Sichtbarkeits-Ranking der Wettbewerber über alle KI-Modelle |
+| `list_prompts` | Getrackte Prompts mit Metriken, Top-Wettbewerbern und Citations pro Prompt (paginiert via `offset`/`hasMore`) |
+| `get_competitor_ranking` | Sichtbarkeits-Ranking der Wettbewerber über alle KI-Modelle — liefert die Wettbewerber-`id` für die Drill-down-Tools |
+| `get_competitor_gap_analysis` | Gap-Analyse gegen einen Wettbewerber: Antworten, in denen nur er vorkommt (deine Verluste), Head-to-Head und deine Wins — inkl. der konkreten Prompts dahinter |
+| `get_competitor_h2h` | Head-to-Head gegen einen Wettbewerber: wer wird zuerst genannt, durchschnittliche Nennungsreihenfolge und LLM-bewertete Vergleichs-Claims |
 | `get_top_sources` | Meistzitierte Quellen mit Citation-Anzahl und Quellentyp |
 | `get_tags` | Tags mit Prompt-Anzahl auflisten |
 | `get_query_fanouts` | KI-Query-Fan-outs (Sub-Queries), nach Häufigkeit sortiert |
 
-Die Analytics-Tools akzeptieren optionale Filter für `model` (z. B. `chatgpt`, `perplexity`, `ai_overview`, `gemini`, `grok`) und `tags` — dieselben Filter wie im Dashboard.
+Die Analytics-Tools akzeptieren optionale Filter für `model` (z. B. `chatgpt`, `perplexity`, `ai_overview`, `copilot`, `gemini`, `grok`) und `tags` — dieselben Filter wie im Dashboard.
+
+### Drill-down-Workflow
+
+In drei Schritten von der Übersicht ins Detail: `get_visibility_metrics` für das Gesamtbild → `get_competitor_ranking` für die relevanten Wettbewerber (jede Zeile enthält eine `id`) → `get_competitor_gap_analysis` / `get_competitor_h2h` mit dieser `competitorId` für die Prompt-Ebene: „Wo verlieren wir und warum?"
+
+## Beispiel-Prompts
+
+Frag deinen KI-Assistenten zum Beispiel:
+
+- *„Wie sichtbar ist meine Marke diesen Monat in der KI-Suche, und wie hat sich das im Vergleich zur Vorperiode verändert?"*
+- *„Ranke meine Wettbewerber nach KI-Sichtbarkeit und mach eine Gap-Analyse gegen den stärksten — wo taucht er auf, wenn wir fehlen?"*
+- *„Welche Quellen zitieren KI-Modelle am häufigsten für meine getrackten Prompts, gefiltert nur auf ChatGPT?"*
+- *„Vergleiche mich Head-to-Head mit Wettbewerber X: Wer wird zuerst genannt, und was behaupten KI-Modelle über uns beide?"*
 
 ### Metrik-Definitionen
 
@@ -63,4 +78,4 @@ Die Tools liefern dieselben Zahlen wie das Finseo Dashboard und benennen sie exp
 POST https://api.finseo.ai/v1/mcp
 ```
 
-Der Server implementiert JSON-RPC 2.0 über Streamable HTTP und unterstützt `initialize`, `tools/list` und `tools/call`. Nicht authentifizierte Requests erhalten eine `401` mit OAuth-Discovery-Metadaten gemäß der MCP-Authorization-Spec (RFC 9728).
+Der Server implementiert JSON-RPC 2.0 über Streamable HTTP (stateless) und unterstützt `initialize`, `ping`, `tools/list` und `tools/call`. Tool-Ergebnisse enthalten neben dem Text-Block auch `structuredContent` (maschinenlesbares JSON) gemäß MCP-Spec 2025-06-18. `GET`-Requests auf den Endpoint liefern `405 Method Not Allowed` — der Server bietet keinen separaten SSE-Stream an. Nicht authentifizierte Requests erhalten eine `401` mit OAuth-Discovery-Metadaten gemäß der MCP-Authorization-Spec (RFC 9728).

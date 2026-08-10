@@ -42,7 +42,9 @@ Tutti i tool sono **read-only**: recuperano dati e non li modificano mai.
 | `get_visibility_metrics` | KPI di visibilità inclusi il tasso "Visibility" della dashboard e il KPI "Citations" per il dominio proprio, con confronto rispetto al periodo precedente |
 | `get_visibility_timeseries` | Visibilità, menzioni, posizione e sentiment per giorno (gli stessi valori del grafico della dashboard) |
 | `list_prompts` | Prompt monitorati con metriche, principali competitor e citazioni per prompt |
-| `get_competitor_ranking` | Ranking di visibilità dei competitor sui modelli AI |
+| `get_competitor_ranking` | Ranking di visibilità dei competitor sui modelli AI — restituisce l'`id` del competitor per gli strumenti di analisi dettagliata |
+| `get_competitor_gap_analysis` | Gap analysis contro un competitor: risposte in cui appare solo lui (le tue perdite), head-to-head e le tue vittorie — con i prompt concreti dietro |
+| `get_competitor_h2h` | Confronto head-to-head con un competitor: chi viene nominato per primo, ordine medio di menzione e claim comparativi valutati da LLM |
 | `get_top_sources` | Fonti più citate con conteggi delle citazioni e tipi di fonte |
 | `get_tags` | Elenca i tag con il numero di prompt |
 | `get_query_fanouts` | Query fan-out AI (sotto-query) ordinate per frequenza |

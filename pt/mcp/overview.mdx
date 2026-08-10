@@ -42,7 +42,9 @@ Todas as ferramentas são **read-only** — obtêm dados e nunca os modificam.
 | `get_visibility_metrics` | KPIs de visibilidade, incl. a taxa "Visibility" do dashboard e o KPI "Citations" do domínio próprio, com comparação com o período anterior |
 | `get_visibility_timeseries` | Visibilidade, menções, posição e sentiment por dia (os mesmos valores que o gráfico do dashboard) |
 | `list_prompts` | Prompts rastreados com métricas, principais concorrentes e citações por prompt |
-| `get_competitor_ranking` | Ranking de visibilidade dos concorrentes nos vários modelos de IA |
+| `get_competitor_ranking` | Ranking de visibilidade dos concorrentes nos vários modelos de IA — devolve o `id` do concorrente para as ferramentas de análise detalhada |
+| `get_competitor_gap_analysis` | Análise de gaps contra um concorrente: respostas onde só ele aparece (as tuas perdas), head-to-head e as tuas vitórias — com os prompts concretos por trás |
+| `get_competitor_h2h` | Comparação head-to-head com um concorrente: quem é mencionado primeiro, ordem média de menção e afirmações comparativas avaliadas por LLM |
 | `get_top_sources` | Fontes mais citadas com contagens de citações e tipos de fonte |
 | `get_tags` | Listar tags com contagens de prompts |
 | `get_query_fanouts` | Query fan-outs de IA (sub-queries) ordenados por frequência |

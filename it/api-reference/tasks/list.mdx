@@ -1,0 +1,78 @@
+---
+title: Elenca Task
+api: GET /v1/projects/{projectId}/tasks
+description: Elenca le task di ottimizzazione generate dall'AI di un progetto — to-do concreti e prioritizzati derivati dai tuoi dati di visibilità, ordinati per priority score.
+---
+
+Le task di ottimizzazione vengono generate automaticamente dai dati di visibilità AI del tuo progetto — ad esempio correggere errori di crawl incontrati dai bot AI, rispondere a thread di community ad alto potenziale, colmare gap rispetto ai competitor o rielaborare contenuti deboli. Questo endpoint restituisce le stesse task della pagina Tasks nella dashboard di Finseo.
+
+Le righe sono compatte e ordinate per `priorityScore` (impatto ponderato rispetto allo sforzo — più è alto, prima va fatta). Usa [Ottieni Task](/it/api-reference/tasks/get) con l'`id` di una task per la descrizione completa, il piano passo-passo e le evidenze.
+
+<Note>Il modulo Tasks è attualmente in beta. Le task sono in sola lettura via API — i cambi di stato avvengono nella dashboard.</Note>
+
+<ParamField path="projectId" type="string" required>L'ID del progetto</ParamField>
+<ParamField query="status" type="string" default="open">Stati separati da virgola — `open`, `in_progress`, `done`, `dismissed` o `all`</ParamField>
+<ParamField query="category" type="string">Filtra per categoria — `technical`, `visibility`, `content`, `offsite`, `reputation`, `competitor` o `setup`</ParamField>
+<ParamField query="minImpact" type="integer">Restituisci solo task con almeno questo impact score (1–10)</ParamField>
+<ParamField query="page" type="integer" default="1">Numero di pagina</ParamField>
+<ParamField query="limit" type="integer" default="50">Risultati per pagina (max 200)</ParamField>
+
+<RequestExample>
+```bash cURL
+curl --request GET \
+  --url 'https://api.finseo.ai/v1/projects/proj_abc123/tasks?status=open&limit=10' \
+  --header 'Authorization: Bearer YOUR_API_KEY'
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    f"https://api.finseo.ai/v1/projects/{project_id}/tasks",
+    headers={"Authorization": "Bearer YOUR_API_KEY"},
+    params={"status": "open", "limit": 10}
+)
+tasks = response.json()["data"]["tasks"]
+
+for t in tasks:
+    print(f"[{t['priorityScore']}] {t['category']}: {t['title']}")
+```
+
+```javascript Node.js
+const res = await fetch(
+  `https://api.finseo.ai/v1/projects/${projectId}/tasks?status=open`,
+  { headers: { Authorization: "Bearer YOUR_API_KEY" } }
+);
+const { data } = await res.json();
+data.tasks.forEach(t => console.log(t.priorityScore, t.title));
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": {
+    "counts": { "open": 33, "in_progress": 2, "done": 5, "dismissed": 1 },
+    "total": 33,
+    "page": 1,
+    "limit": 10,
+    "hasMore": true,
+    "tasks": [
+      {
+        "id": "05ba7f64-9c1e-4f2a-8d3b-1a2b3c4d5e6f",
+        "title": "Reindirizza l'URL marketplace non funzionante",
+        "category": "technical",
+        "status": "open",
+        "impact": 10,
+        "effort": 2,
+        "priorityScore": 96,
+        "autoResolved": false,
+        "assigneeEmail": null,
+        "createdAt": "2026-08-12T15:20:00Z",
+        "updatedAt": "2026-08-12T15:20:00Z"
+      }
+    ]
+  }
+}
+```
+</ResponseExample>

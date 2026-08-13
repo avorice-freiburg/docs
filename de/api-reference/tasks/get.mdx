@@ -1,0 +1,93 @@
+---
+title: Task abrufen
+api: GET /v1/projects/{projectId}/tasks/{taskId}
+description: Lies einen Optimierungs-Task komplett — Beschreibung, Schritt-für-Schritt-Plan, die auslösende Evidenz und der strukturierte Content-Plan bei Content-Tasks.
+---
+
+Liefert den vollständigen Task: die komplette Beschreibung, einen Schritt-für-Schritt-Maßnahmenplan, die Evidenz (Datenpunkte und betroffene Prompts oder Quellen), die den Task ausgelöst hat, und — bei Content-Tasks — einen strukturierten `contentPlan` mit Zielseite, Template und den Prompts, die der Content abdecken soll.
+
+Die `taskId` bekommst du aus [Tasks auflisten](/de/api-reference/tasks/list) (Feld `id`).
+
+<ParamField path="projectId" type="string" required>Die Projekt-ID</ParamField>
+<ParamField path="taskId" type="string" required>Die Task-ID (UUID) aus Tasks auflisten</ParamField>
+
+<RequestExample>
+```bash cURL
+curl --request GET \
+  --url 'https://api.finseo.ai/v1/projects/proj_abc123/tasks/05ba7f64-9c1e-4f2a-8d3b-1a2b3c4d5e6f' \
+  --header 'Authorization: Bearer YOUR_API_KEY'
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    f"https://api.finseo.ai/v1/projects/{project_id}/tasks/{task_id}",
+    headers={"Authorization": "Bearer YOUR_API_KEY"}
+)
+task = response.json()["data"]
+
+print(task["title"])
+for i, step in enumerate(task["steps"], 1):
+    print(f"{i}. {step}")
+```
+
+```javascript Node.js
+const res = await fetch(
+  `https://api.finseo.ai/v1/projects/${projectId}/tasks/${taskId}`,
+  { headers: { Authorization: "Bearer YOUR_API_KEY" } }
+);
+const { data: task } = await res.json();
+console.log(task.title, task.steps);
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": {
+    "id": "05ba7f64-9c1e-4f2a-8d3b-1a2b3c4d5e6f",
+    "title": "Weiterleitung der defekten Marketplace-URL einrichten",
+    "category": "technical",
+    "status": "open",
+    "impact": 10,
+    "effort": 2,
+    "priorityScore": 96,
+    "description": "Die URL https://example.com/marketplace/197275 liefert aktuell HTTP 404, obwohl sie in deinen AI-Traffic-Daten auftaucht…",
+    "steps": [
+      "Prüfe im CMS, dass die URL 404 liefert",
+      "Finde die passendste Live-Seite",
+      "Richte einen 301-Redirect ein",
+      "Führe den Crawl-Check erneut aus"
+    ],
+    "evidence": {
+      "summary": "URL liefert 404, hatte aber 23 KI-Besuche in den letzten 30 Tagen",
+      "metrics": [
+        { "label": "HTTP-Status", "value": "404" },
+        { "label": "KI-Besuche (30 Tage)", "value": "23" }
+      ],
+      "items": [],
+      "deepLink": "/bot-traffic"
+    },
+    "contentPlan": null,
+    "assigneeEmail": null,
+    "exports": [],
+    "autoResolvable": true,
+    "autoResolved": false,
+    "resolvedAt": null,
+    "lastSeenAt": "2026-08-12T15:20:00Z",
+    "createdAt": "2026-08-12T15:20:00Z",
+    "updatedAt": "2026-08-12T15:20:00Z"
+  }
+}
+```
+
+```json 404
+{
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "Task not found"
+  }
+}
+```
+</ResponseExample>

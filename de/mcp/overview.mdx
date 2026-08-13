@@ -51,6 +51,8 @@ Alle Tools sind **read-only** — sie rufen Daten ab und ändern nie etwas.
 | `get_top_sources` | Meistzitierte Quellen mit Citation-Anzahl und Quellentyp |
 | `get_tags` | Tags mit Prompt-Anzahl auflisten |
 | `get_query_fanouts` | KI-Query-Fan-outs (Sub-Queries), nach Häufigkeit sortiert |
+| `list_tasks` | KI-generierte Optimierungs-Tasks (die Tasks-Seite im Dashboard), nach Prioritäts-Score sortiert, mit Status-/Kategorie-/Impact-Filtern — liefert die Task-`id` für `get_task_details` |
+| `get_task_details` | Ein Task komplett: Beschreibung, Schritt-für-Schritt-Plan, die auslösende Evidenz und der strukturierte Content-Plan bei Content-Tasks |
 
 Die Analytics-Tools akzeptieren optionale Filter für `model` (z. B. `chatgpt`, `perplexity`, `ai_overview`, `copilot`, `gemini`, `grok`) und `tags` — dieselben Filter wie im Dashboard.
 
@@ -61,6 +63,7 @@ Von der Übersicht bis zur einzelnen KI-Antwort — die Tools bauen aufeinander 
 - **Wettbewerber-Pfad:** `get_visibility_metrics` für das Gesamtbild → `get_competitor_ranking` für die relevanten Wettbewerber (jede Zeile enthält eine `id`) → `get_competitor_gap_analysis` / `get_competitor_h2h` mit dieser `competitorId` für die Prompt-Ebene: „Wo verlieren wir und warum?"
 - **Prompt-Pfad:** `list_prompts` für die relevanten Prompts (jede Zeile enthält eine `id`) → `get_prompt_details` mit dieser `promptId` für die Antwort-Historie und verfügbaren Tage → `get_answer_content` mit `promptId` + `date` für die exakte KI-Antwort, die genannten Marken und die zitierten Quellen.
 - **Sentiment-Pfad:** `get_sentiment_overview` für Share of Voice, das Sentiment-Leaderboard und die negativsten Aussagen über jede Marke.
+- **Tasks-Pfad:** `list_tasks` für das priorisierte Optimierungs-Backlog (jede Zeile trägt eine `id`) → `get_task_details` mit dieser `taskId` für den vollständigen Maßnahmenplan und die Evidenz dahinter.
 
 ## Beispiel-Prompts
 
@@ -72,6 +75,7 @@ Frag deinen KI-Assistenten zum Beispiel:
 - *„Vergleiche mich Head-to-Head mit Wettbewerber X: Wer wird zuerst genannt, und was behaupten KI-Modelle über uns beide?"*
 - *„Zeig mir, was ChatGPT gestern auf meinen Prompt ‚beste CRM für Startups' tatsächlich geantwortet hat — voller Text und die zitierten Quellen."*
 - *„Wie hoch ist mein Share of Voice, und welche negativen Aussagen machen KI-Modelle über meine Marke?"*
+- *„Was sind meine wichtigsten offenen Optimierungs-Tasks, und was genau soll ich beim Top-Task tun?"*
 
 ### Metrik-Definitionen
 

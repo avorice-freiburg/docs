@@ -1,0 +1,93 @@
+---
+title: Obtenir une Task
+api: GET /v1/projects/{projectId}/tasks/{taskId}
+description: Lis une task d'optimisation complète — description, plan d'action étape par étape, les preuves à l'origine de la task et le content plan structuré pour les tasks de contenu.
+---
+
+Renvoie la task complète : la description intégrale, un plan d'action étape par étape, les preuves (données et prompts ou sources concernés) à l'origine de la task et — pour les tasks de contenu — un `contentPlan` structuré décrivant la page cible, le template et les prompts que le contenu doit couvrir.
+
+Récupère le `taskId` depuis [Lister les Tasks](/fr/api-reference/tasks/list) (champ `id`).
+
+<ParamField path="projectId" type="string" required>L'ID du projet</ParamField>
+<ParamField path="taskId" type="string" required>L'ID de la task (UUID) depuis Lister les Tasks</ParamField>
+
+<RequestExample>
+```bash cURL
+curl --request GET \
+  --url 'https://api.finseo.ai/v1/projects/proj_abc123/tasks/05ba7f64-9c1e-4f2a-8d3b-1a2b3c4d5e6f' \
+  --header 'Authorization: Bearer YOUR_API_KEY'
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    f"https://api.finseo.ai/v1/projects/{project_id}/tasks/{task_id}",
+    headers={"Authorization": "Bearer YOUR_API_KEY"}
+)
+task = response.json()["data"]
+
+print(task["title"])
+for i, step in enumerate(task["steps"], 1):
+    print(f"{i}. {step}")
+```
+
+```javascript Node.js
+const res = await fetch(
+  `https://api.finseo.ai/v1/projects/${projectId}/tasks/${taskId}`,
+  { headers: { Authorization: "Bearer YOUR_API_KEY" } }
+);
+const { data: task } = await res.json();
+console.log(task.title, task.steps);
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": {
+    "id": "05ba7f64-9c1e-4f2a-8d3b-1a2b3c4d5e6f",
+    "title": "Rediriger l'URL marketplace cassée",
+    "category": "technical",
+    "status": "open",
+    "impact": 10,
+    "effort": 2,
+    "priorityScore": 96,
+    "description": "L'URL https://example.com/marketplace/197275 renvoie actuellement HTTP 404 alors qu'elle apparaît dans tes données de trafic IA…",
+    "steps": [
+      "Vérifie dans ton CMS que l'URL renvoie 404",
+      "Identifie la page active la plus pertinente",
+      "Mets en place une redirection 301",
+      "Relance le crawl check"
+    ],
+    "evidence": {
+      "summary": "L'URL renvoie 404 mais a reçu 23 visites référées par IA au cours des 30 derniers jours",
+      "metrics": [
+        { "label": "Statut HTTP", "value": "404" },
+        { "label": "Visites référées par IA (30j)", "value": "23" }
+      ],
+      "items": [],
+      "deepLink": "/bot-traffic"
+    },
+    "contentPlan": null,
+    "assigneeEmail": null,
+    "exports": [],
+    "autoResolvable": true,
+    "autoResolved": false,
+    "resolvedAt": null,
+    "lastSeenAt": "2026-08-12T15:20:00Z",
+    "createdAt": "2026-08-12T15:20:00Z",
+    "updatedAt": "2026-08-12T15:20:00Z"
+  }
+}
+```
+
+```json 404
+{
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "Task not found"
+  }
+}
+```
+</ResponseExample>

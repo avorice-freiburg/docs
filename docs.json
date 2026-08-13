@@ -233,6 +233,13 @@
                 ]
               },
               {
+                "group": "Tasks",
+                "pages": [
+                  "api-reference/tasks/list",
+                  "api-reference/tasks/get"
+                ]
+              },
+              {
                 "group": "Export",
                 "pages": [
                   "api-reference/export/bulk"
@@ -441,6 +448,13 @@
                 "pages": [
                   "de/api-reference/fanouts/list",
                   "de/api-reference/fanouts/details"
+                ]
+              },
+              {
+                "group": "Tasks",
+                "pages": [
+                  "de/api-reference/tasks/list",
+                  "de/api-reference/tasks/get"
                 ]
               },
               {
@@ -655,6 +669,13 @@
                 ]
               },
               {
+                "group": "Tasks",
+                "pages": [
+                  "fr/api-reference/tasks/list",
+                  "fr/api-reference/tasks/get"
+                ]
+              },
+              {
                 "group": "Export",
                 "pages": [
                   "fr/api-reference/export/bulk"
@@ -863,6 +884,13 @@
                 "pages": [
                   "it/api-reference/fanouts/list",
                   "it/api-reference/fanouts/details"
+                ]
+              },
+              {
+                "group": "Tasks",
+                "pages": [
+                  "it/api-reference/tasks/list",
+                  "it/api-reference/tasks/get"
                 ]
               },
               {
@@ -1077,6 +1105,13 @@
                 ]
               },
               {
+                "group": "Tasks",
+                "pages": [
+                  "es/api-reference/tasks/list",
+                  "es/api-reference/tasks/get"
+                ]
+              },
+              {
                 "group": "Export",
                 "pages": [
                   "es/api-reference/export/bulk"
@@ -1285,6 +1320,13 @@
                 "pages": [
                   "pt/api-reference/fanouts/list",
                   "pt/api-reference/fanouts/details"
+                ]
+              },
+              {
+                "group": "Tasks",
+                "pages": [
+                  "pt/api-reference/tasks/list",
+                  "pt/api-reference/tasks/get"
                 ]
               },
               {

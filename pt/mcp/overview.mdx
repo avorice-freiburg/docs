@@ -51,6 +51,8 @@ Todas as ferramentas são **read-only** — obtêm dados e nunca os modificam.
 | `get_top_sources` | Fontes mais citadas com contagens de citações e tipos de fonte |
 | `get_tags` | Listar tags com contagens de prompts |
 | `get_query_fanouts` | Query fan-outs de IA (sub-queries) ordenados por frequência |
+| `list_tasks` | Tasks de otimização geradas por IA (a página Tasks do dashboard), ordenadas por priority score, com filtros de estado/categoria/impacto — devolve o `id` da task usado por `get_task_details` |
+| `get_task_details` | Uma task completa: descrição, plano passo a passo, as evidências que a originaram e o content plan estruturado em tasks de conteúdo |
 
 As ferramentas de analytics aceitam filtros opcionais de `model` (por exemplo `chatgpt`, `perplexity`, `ai_overview`, `gemini`, `grok`) e `tags` — os mesmos filtros que o dashboard.
 

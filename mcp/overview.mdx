@@ -51,6 +51,8 @@ All tools are **read-only** — they retrieve data and never modify it.
 | `get_top_sources` | Most cited sources with citation counts and source types |
 | `get_tags` | List tags with prompt counts |
 | `get_query_fanouts` | AI query fan-outs (sub-queries) ranked by frequency |
+| `list_tasks` | AI-generated optimization tasks (the dashboard Tasks page) sorted by priority score, with status/category/impact filters — returns the task `id` used by `get_task_details` |
+| `get_task_details` | One task in full: description, step-by-step plan, the evidence that triggered it, and the structured content plan for content tasks |
 
 The analytics tools accept optional `model` (e.g. `chatgpt`, `perplexity`, `ai_overview`, `copilot`, `gemini`, `grok`) and `tags` filters — the same filters as the dashboard.
 
@@ -61,6 +63,7 @@ Go from overview to detail — the tools chain from broad to a single AI answer:
 - **Competitor track:** `get_visibility_metrics` for the big picture → `get_competitor_ranking` to find the competitors that matter (each row carries an `id`) → `get_competitor_gap_analysis` / `get_competitor_h2h` with that `competitorId` for the prompt-level "where do we lose and why".
 - **Prompt track:** `list_prompts` to find the prompts that matter (each row carries an `id`) → `get_prompt_details` with that `promptId` for the per-answer history and available dates → `get_answer_content` with `promptId` + `date` to read the exact AI answer, the brands it names and the sources it cites.
 - **Sentiment track:** `get_sentiment_overview` for Share of Voice, the sentiment leaderboard and the most negative statements about any brand.
+- **Tasks track:** `list_tasks` for the prioritized optimization backlog (each row carries an `id`) → `get_task_details` with that `taskId` for the full action plan and the evidence behind it.
 
 ## Example prompts
 
@@ -72,6 +75,7 @@ Try asking your AI assistant:
 - *"Compare me head-to-head with competitor X: who gets named first, and what do AI models claim about each of us?"*
 - *"Show me what ChatGPT actually answered yesterday for my prompt 'best CRM for startups' — full text and the sources it cited."*
 - *"What is my Share of Voice, and which negative statements do AI models make about my brand?"*
+- *"What are my most important open optimization tasks, and what exactly should I do for the top one?"*
 
 ### Metric definitions
 

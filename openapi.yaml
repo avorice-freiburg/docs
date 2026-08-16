@@ -7,8 +7,10 @@ info:
     name: FinSEO Support
     url: https://finseo.ai
 servers:
-  - url: https://app.finseo.ai/api/v1
+  - url: https://api.finseo.ai/v1
     description: Production
+  - url: https://app.finseo.ai/api/v1
+    description: Dashboard host — same API, kept for backwards compatibility
 
 security:
   - bearerAuth: []

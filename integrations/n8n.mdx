@@ -18,7 +18,7 @@ Connect n8n to build custom attribution workflows. n8n is an open-source alterna
 1. In n8n, create a new workflow with your preferred **trigger** (form submission, CRM event, webhook, schedule, …).
 2. Add an **HTTP Request** node:
    - **Method**: `POST`
-   - **URL**: `https://app.finseo.ai/api/v1/projects/YOUR_PROJECT_ID/attribution`
+   - **URL**: `https://api.finseo.ai/v1/projects/YOUR_PROJECT_ID/attribution`
    - **Authentication**: Generic → Header Auth with `Authorization: Bearer YOUR_API_KEY`
    - **Body Content Type**: JSON
 3. Map the fields:

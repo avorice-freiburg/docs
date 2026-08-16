@@ -1,0 +1,180 @@
+---
+title: "KPI e metriche spiegate — Misurazione della visibilità AI"
+sidebarTitle: "KPI e metriche"
+description: Tutte le metriche di Finseo spiegate in modo semplice, con formule ed esempi — Visibility, Mentions, Share of Voice, Position, Mention Depth, Citations, Sentiment e altro.
+---
+
+# KPI e metriche
+
+Finseo misura quanto il tuo brand è visibile nelle risposte AI di ChatGPT, Perplexity, Gemini, Claude e altri modelli. Questa pagina definisce ogni metrica con precisione: cosa conta, come viene calcolata e come si presenta un buon valore.
+
+Tutte le metriche sono disponibili nella dashboard, nella [API REST](/it/api-reference/metrics/daily) e nel [server MCP](/it/mcp/overview), e ogni metrica mostra un indicatore di variazione che confronta il periodo selezionato con il periodo precedente di pari durata.
+
+## L'esempio di riferimento
+
+Tutte le formule seguenti usano questo esempio: monitori **20 prompt** su **2 modelli**, quindi un giorno produce **40 risposte AI**. Il tuo brand è **Acme**.
+
+- Acme compare in **18** delle 40 risposte.
+- Nelle 40 risposte, i modelli AI nominano brand **120 volte** in totale (tutti i brand insieme).
+- Acme viene nominata **24 volte** (una singola risposta può menzionarti più di una volta).
+
+## Metriche di presenza
+
+### Visibility
+
+**La quota di risposte AI in cui il tuo brand compare.**
+
+```text
+Visibility = (risposte che menzionano il tuo brand ÷ tutte le risposte monitorate) × 100
+```
+
+Esempio: Acme compare in 18 risposte su 40 → **Visibility = 45%**.
+
+La Visibility è la metrica principale: risponde a "quando qualcuno chiede all'AI della mia categoria, quanto spesso faccio parte della risposta?". Ogni risposta conta una sola volta, indipendentemente da quante menzioni contiene.
+
+### Mentions
+
+**Il numero totale di volte in cui il tuo brand viene nominato nel periodo selezionato.**
+
+A differenza della Visibility, Mentions conta ogni occorrenza: se una risposta nomina Acme tre volte, vale 1 per la Visibility ma 3 Mentions. Esempio: **24 menzioni** in 18 risposte.
+
+Usa Mentions per capire quanto sei presente all'interno delle risposte; usa Visibility per capire quanto spesso compari.
+
+### Model Visibility
+
+**La Visibility suddivisa per modello AI** (ChatGPT, Perplexity, Gemini, Claude, Grok, Mistral, DeepSeek, Copilot, Google AI Overview, Google AI Mode).
+
+I modelli attingono a fonti e dati di addestramento diversi: è normale essere forti su un modello e invisibili su un altro. Un divario tra modelli indica di solito su quali fonti si basa ciascuno — controlla le [Top Sources](/it/api-reference/sources/ranking) per modello per capire dove investire.
+
+## Metriche competitive
+
+### Share of Voice (SoV)
+
+**La tua fetta della conversazione totale sui brand: le tue risposte come percentuale di tutte le apparizioni di tutti i brand.**
+
+```text
+SoV = (risposte con il tuo brand ÷ apparizioni di TUTTI i brand) × 100
+```
+
+Il SoV differisce dalla Visibility perché il denominatore è l'intero mercato, non il tuo set di prompt. Supponiamo che le 40 risposte producano 90 apparizioni di brand tra tutti i brand rilevati, di cui 18 di Acme → **SoV = 20%**, anche se la Visibility è del 45%. Puoi avere Visibility alta e SoV basso quando i concorrenti compaiono accanto a te in quasi ogni risposta.
+
+Finseo mostra il SoV con due denominatori, così il numero non è mai ambiguo:
+
+| Variante | Denominatore |
+| --- | --- |
+| **Tutti i brand** | Ogni brand effettivamente nominato dai modelli AI — il mercato completo come lo vede l'AI |
+| **Brand monitorati** | Solo il tuo brand più i concorrenti che monitori — il tuo set competitivo definito |
+
+### Average Position
+
+**L'ordine medio in cui il tuo brand viene nominato tra i brand di una risposta.** Mostrato come valore assoluto, ad es. `#2.6`. Più basso è, meglio è.
+
+Se una risposta consiglia "1. Acme, 2. Beta, 3. Gamma", Acme ha posizione #1 in quella risposta. Facendo la media su tutte le risposte in cui compari:
+
+```text
+Avg Position = somma delle tue posizioni ordinali ÷ risposte in cui compari
+```
+
+Esempio: Acme è nominata per prima in 9 risposte, seconda in 6, quarta in 3 → (9×1 + 6×2 + 3×4) ÷ 18 = **#1.8**.
+
+La posizione conta perché le risposte AI si comportano come classifiche: il primo brand nominato di solito orienta la raccomandazione. I pareggi (due brand nominati insieme) condividono lo stesso ordinale.
+
+### #1 Share
+
+**La percentuale delle tue risposte in cui sei il PRIMO brand nominato.**
+
+```text
+#1 Share = (risposte con posizione = 1 ÷ risposte in cui compari) × 100
+```
+
+Esempio: primo in 9 risposte su 18 → **#1 Share = 50%**. È la metrica da "pole position": isola quanto spesso guidi la risposta invece di limitarti a comparirvi.
+
+### Top-3 Share
+
+**La percentuale delle tue risposte in cui sei tra i primi tre brand nominati.**
+
+```text
+Top-3 Share = (risposte con posizione ≤ 3 ÷ risposte in cui compari) × 100
+```
+
+Esempio: 15 delle 18 risposte di Acme la collocano nella top 3 → **Top-3 Share = 83%**. Utile per risposte lunghe a elenco, dove stare nel gruppo di testa conta più che essere rigorosamente primi.
+
+### Head-to-Head (H2H)
+
+**Contro un concorrente specifico: la percentuale di risposte che nominano ENTRAMBI i brand in cui il tuo viene nominato per primo.** I pareggi sono esclusi.
+
+```text
+Tasso di vittoria H2H = (risposte condivise in cui sei primo ÷ risposte condivise con ordine deciso) × 100
+```
+
+Esempio: Acme e Beta compaiono insieme in 10 risposte; Acme è nominata per prima in 7 → **H2H vs Beta = 70%**. L'H2H elimina il rumore delle risposte in cui compare solo uno dei due — il confronto più pulito per "chi preferisce l'AI?".
+
+## Metriche di posizionamento
+
+### Mention Depth
+
+**Quanto in profondità nel testo della risposta compare in media la tua menzione.** 0% = all'inizio della risposta, 100% = alla fine. Più basso è, meglio è.
+
+```text
+Mention Depth = posizione del carattere della menzione ÷ lunghezza totale della risposta × 100
+```
+
+Esempio: la tua menzione inizia al carattere 300 di una risposta di 1.200 caratteri → profondità = 25% per quella risposta. Un brand può avere Average Position #1 con il 40% di profondità quando le risposte si aprono con un lungo preambolo prima di nominare i brand — per questo Finseo riporta ordine e profondità come metriche separate.
+
+## Metriche sulle fonti
+
+### Citations
+
+**Il numero di risposte AI che hanno citato uno dei tuoi domini come fonte.** Ogni risposta conta una volta, anche se collega il tuo dominio più volte.
+
+Le Citations misurano qualcosa di diverso dalle Mentions: una menzione è l'AI che *parla di* te, una citazione è l'AI che *si basa su* di te. Puoi essere menzionato senza essere citato (il modello ti conosce dai dati di addestramento) e citato senza essere menzionato (il tuo contenuto alimenta una risposta su qualcun altro).
+
+### Citation Share
+
+**Le tue citazioni come percentuale delle citazioni di tutti i brand del progetto.**
+
+```text
+Citation Share = (risposte che citano i tuoi domini ÷ risposte che citano i domini dei brand monitorati) × 100
+```
+
+Esempio: le risposte AI citano i domini di Acme 30 volte e quelli di tutti i brand monitorati 150 volte → **Citation Share = 20%**. È l'equivalente lato fonti dello Share of Voice: mostra a chi appartiene la base di prove su cui sono costruite le risposte AI.
+
+## Metriche di qualità
+
+### Sentiment
+
+**Quanto positivamente i modelli AI descrivono il tuo brand, con punteggio da 0 a 100.**
+
+Finseo analizza il linguaggio attorno a ogni menzione — parole come "affidabile", "leader di mercato" o "supporto eccellente" contano positivo; "costoso", "complicato" o "recensioni contrastanti" contano negativo. I punteggi si leggono all'incirca così:
+
+| Punteggio | Lettura |
+| --- | --- |
+| 80–100 | Rappresentazione fortemente positiva |
+| 60–79 | Positiva |
+| 40–59 | Neutra / mista |
+| 0–39 | Rappresentazione critica — controlla la [pagina Sentiment](/it/sentiment) per le frasi esatte |
+
+Il sentiment è tracciato per aspetto (prezzo, qualità, supporto, …) e per concorrente: vedi non solo *che* la percezione è calata, ma *quale* aspetto l'ha trascinata.
+
+## Leggere le metriche insieme
+
+Le metriche formano un imbuto — ognuna risponde a una domanda diversa:
+
+| Domanda | Metrica |
+| --- | --- |
+| Faccio parte della risposta? | Visibility |
+| Quanta della conversazione totale è mia? | Share of Voice |
+| Quando compaio, sono in testa? | Avg Position, #1 Share, Top-3 Share |
+| Chi vince quando compariamo insieme? | Head-to-Head |
+| Quanto presto nel testo vengo nominato? | Mention Depth |
+| L'AI usa i miei contenuti come prova? | Citations, Citation Share |
+| Come si parla di me? | Sentiment |
+
+<Tip>
+Uno schema ricorrente: la Visibility regge ma lo Share of Voice cala. Significa che la conversazione di mercato cresce più velocemente della tua presenza — i concorrenti vengono aggiunti a risposte che prima dominavi. Controlla la [gap analysis dei concorrenti](/it/mcp/overview) per vedere quali prompt guidano lo spostamento.
+</Tip>
+
+## Accedere alle metriche via codice
+
+- **API REST** — [`GET /v1/projects/{projectId}/metrics/daily`](/it/api-reference/metrics/daily) e [`/metrics/timeseries`](/it/api-reference/metrics/timeseries)
+- **Server MCP** — `get_visibility_metrics`, `get_visibility_timeseries`, `get_competitor_ranking`, `get_competitor_h2h`, `get_sentiment_overview` e altro; vedi la [panoramica MCP](/it/mcp/overview)

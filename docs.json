@@ -86,7 +86,8 @@
                 "group": "Getting Started",
                 "pages": [
                   "getting-started/prompts",
-                  "getting-started/models"
+                  "getting-started/models",
+                  "getting-started/kpis"
                 ]
               },
               {
@@ -304,7 +305,8 @@
                 "group": "Erste Schritte",
                 "pages": [
                   "de/getting-started/prompts",
-                  "de/getting-started/models"
+                  "de/getting-started/models",
+                  "de/getting-started/kpis"
                 ]
               },
               {
@@ -522,7 +524,8 @@
                 "group": "Prise en main",
                 "pages": [
                   "fr/getting-started/prompts",
-                  "fr/getting-started/models"
+                  "fr/getting-started/models",
+                  "fr/getting-started/kpis"
                 ]
               },
               {
@@ -740,7 +743,8 @@
                 "group": "Per iniziare",
                 "pages": [
                   "it/getting-started/prompts",
-                  "it/getting-started/models"
+                  "it/getting-started/models",
+                  "it/getting-started/kpis"
                 ]
               },
               {
@@ -958,7 +962,8 @@
                 "group": "Primeros pasos",
                 "pages": [
                   "es/getting-started/prompts",
-                  "es/getting-started/models"
+                  "es/getting-started/models",
+                  "es/getting-started/kpis"
                 ]
               },
               {
@@ -1176,7 +1181,8 @@
                 "group": "Primeiros passos",
                 "pages": [
                   "pt/getting-started/prompts",
-                  "pt/getting-started/models"
+                  "pt/getting-started/models",
+                  "pt/getting-started/kpis"
                 ]
               },
               {

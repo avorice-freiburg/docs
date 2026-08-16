@@ -1,0 +1,180 @@
+---
+title: "KPIs & Metrics Explained — AI Visibility Measurement"
+sidebarTitle: "KPIs & metrics"
+description: Every Finseo metric explained in plain language, with formulas and worked examples — Visibility, Mentions, Share of Voice, Position, Mention Depth, Citations, Sentiment and more.
+---
+
+# KPIs & metrics
+
+Finseo measures how visible your brand is in AI answers from ChatGPT, Perplexity, Gemini, Claude and other models. This page defines every metric precisely — what it counts, how it is calculated, and what a good number looks like.
+
+All metrics are available in the dashboard, the [REST API](/api-reference/metrics/daily) and the [MCP server](/mcp/overview), and every metric shows a change indicator comparing the selected timeframe to the previous period of the same length.
+
+## The running example
+
+The formulas below all use this example: you track **20 prompts** across **2 models**, so one day produces **40 AI answers**. Your brand is **Acme**.
+
+- Acme appears in **18** of the 40 answers.
+- Across all 40 answers, AI models name brands **120 times** in total (all brands combined).
+- Acme is named **24 times** (a single answer can mention you more than once).
+
+## Presence metrics
+
+### Visibility
+
+**The share of AI answers in which your brand appears at all.**
+
+```text
+Visibility = (answers mentioning your brand ÷ all tracked answers) × 100
+```
+
+Example: Acme appears in 18 of 40 answers → **Visibility = 45%**.
+
+Visibility is the headline metric: it answers "when someone asks AI about my category, how often am I part of the answer?" It counts each answer once, no matter how often you are mentioned inside it.
+
+### Mentions
+
+**The total number of times your brand is named in the selected timeframe.**
+
+Unlike Visibility, Mentions counts every occurrence — if one answer names Acme three times, that is 1 toward Visibility but 3 Mentions. Example: **24 mentions** across 18 answers.
+
+Use Mentions to gauge how prominently you feature inside answers; use Visibility to gauge how often you feature at all.
+
+### Model Visibility
+
+**Visibility broken down per AI model** (ChatGPT, Perplexity, Gemini, Claude, Grok, Mistral, DeepSeek, Copilot, Google AI Overview, Google AI Mode).
+
+Models draw on different sources and training data, so it is normal to be strong on one model and invisible on another. A gap between models usually points to which sources each model relies on — check [Top Sources](/api-reference/sources/ranking) per model to find out where to invest.
+
+## Competitive metrics
+
+### Share of Voice (SoV)
+
+**Your slice of the total brand conversation — your answers as a percentage of all brand appearances across every brand.**
+
+```text
+SoV = (answers naming your brand ÷ answer-appearances of ALL brands) × 100
+```
+
+SoV differs from Visibility because the denominator is the whole market, not your prompt set. Suppose in our example the 40 answers produce 90 brand-appearances across all detected brands, 18 of which are Acme → **SoV = 20%**, even though Visibility is 45%. You can have high Visibility and low SoV when competitors are mentioned alongside you in almost every answer.
+
+Finseo shows SoV against two denominators so the number is never ambiguous:
+
+| Variant | Denominator |
+| --- | --- |
+| **All brands** | Every brand the AI models actually named — the full market as AI sees it |
+| **Tracked brands** | Only your brand plus the competitors you track — your defined competitive set |
+
+### Average Position
+
+**The average order in which your brand is named among the brands in an answer.** Displayed as an absolute value, e.g. `#2.6`. Lower is better.
+
+If an answer recommends "1. Acme, 2. Beta, 3. Gamma", Acme has position #1 in that answer. Averaged across all answers where you appear:
+
+```text
+Avg Position = sum of your ordinal positions ÷ answers where you appear
+```
+
+Example: Acme is named first in 9 answers, second in 6, fourth in 3 → (9×1 + 6×2 + 3×4) ÷ 18 = **#1.8**.
+
+Position matters because AI answers behave like rankings: the first brand named typically frames the recommendation. Ties (two brands named in the same breath) share the same ordinal.
+
+### #1 Share
+
+**The percentage of your answers in which you are the FIRST brand named.**
+
+```text
+#1 Share = (answers where your position = 1 ÷ answers where you appear) × 100
+```
+
+Example: first in 9 of 18 answers → **#1 Share = 50%**. This is the "pole position" metric — it isolates how often you lead the answer rather than just appearing in it.
+
+### Top-3 Share
+
+**The percentage of your answers in which you are among the first three brands named.**
+
+```text
+Top-3 Share = (answers where your position ≤ 3 ÷ answers where you appear) × 100
+```
+
+Example: 15 of Acme's 18 answers have it in the top three → **Top-3 Share = 83%**. Useful for long list-style answers where being in the opening cluster matters more than being strictly first.
+
+### Head-to-Head (H2H)
+
+**Against one specific competitor: the percentage of answers naming BOTH brands where yours is named first.** Ties are excluded.
+
+```text
+H2H win rate = (shared answers where you are first ÷ shared answers with a decided order) × 100
+```
+
+Example: Acme and Beta appear together in 10 answers; Acme is named first in 7 → **H2H vs Beta = 70%**. H2H removes the noise of answers where only one of you appears — it is the cleanest "who does AI prefer?" comparison.
+
+## Placement metrics
+
+### Mention Depth
+
+**How deep in the answer text your mention appears, on average.** 0% = the very top of the answer, 100% = the very end. Lower is better.
+
+```text
+Mention Depth = character offset of the mention ÷ total answer length × 100
+```
+
+Example: your mention starts at character 300 of a 1,200-character answer → depth = 25% for that answer. A brand can hold Average Position #1 with 40% depth when answers open with a long preamble before naming any brands — that is why Finseo reports order and depth as separate metrics.
+
+## Source metrics
+
+### Citations
+
+**The number of AI answers that cited one of your domains as a source.** Each answer counts once, even if it links your domain several times.
+
+Citations measure something different from Mentions: a mention is the AI *talking about* you, a citation is the AI *sourcing from* you. You can be mentioned without being cited (the model knows you from training data) and cited without being mentioned (your content informs an answer about someone else).
+
+### Citation Share
+
+**Your citations as a percentage of all brands' citations in the project.**
+
+```text
+Citation Share = (answers citing your domains ÷ answers citing any tracked brand's domains) × 100
+```
+
+Example: AI answers cite Acme's domains 30 times and all tracked brands' domains 150 times → **Citation Share = 20%**. This is the source-side equivalent of Share of Voice: it shows who owns the underlying evidence AI answers are built on.
+
+## Quality metrics
+
+### Sentiment
+
+**How positively AI models describe your brand, scored 0–100.**
+
+Finseo analyzes the language around each mention — words like "reliable", "market leader" or "excellent support" score positive; "expensive", "complicated" or "mixed reviews" score negative. Scores roughly read as:
+
+| Score | Reading |
+| --- | --- |
+| 80–100 | Strongly positive framing |
+| 60–79 | Positive |
+| 40–59 | Neutral / mixed |
+| 0–39 | Critical framing — investigate the [Sentiment page](/sentiment) for the exact phrases |
+
+Sentiment is tracked per aspect (price, quality, support, …) and per competitor, so you can see not just *that* perception dipped but *which* aspect drove it.
+
+## Reading the metrics together
+
+The metrics form a funnel — each answers a different question:
+
+| Question | Metric |
+| --- | --- |
+| Am I part of the answer at all? | Visibility |
+| How much of the total conversation is mine? | Share of Voice |
+| When I appear, do I lead? | Avg Position, #1 Share, Top-3 Share |
+| Who wins when we appear together? | Head-to-Head |
+| How early in the text am I named? | Mention Depth |
+| Does AI use my content as evidence? | Citations, Citation Share |
+| How am I talked about? | Sentiment |
+
+<Tip>
+A common pattern: Visibility is fine but Share of Voice is falling. That means the market conversation is growing faster than your presence in it — competitors are being added to answers you used to dominate. Check the [competitor gap analysis](/mcp/overview) to see which prompts drive the shift.
+</Tip>
+
+## Accessing metrics programmatically
+
+- **REST API** — [`GET /v1/projects/{projectId}/metrics/daily`](/api-reference/metrics/daily) and [`/metrics/timeseries`](/api-reference/metrics/timeseries)
+- **MCP server** — `get_visibility_metrics`, `get_visibility_timeseries`, `get_competitor_ranking`, `get_competitor_h2h`, `get_sentiment_overview` and more; see the [MCP overview](/mcp/overview)

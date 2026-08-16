@@ -71,6 +71,35 @@ components:
         maximum: 500
 
 paths:
+  /me:
+    get:
+      operationId: getCurrentAccount
+      summary: Get the account behind the API key
+      description: Returns the authenticated account plus the key's scopes. Answers independently of whether the account owns any projects, which makes it the right endpoint for verifying a key and labelling a connection.
+      tags: [Account]
+      responses:
+        "200":
+          description: Account identity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id: { type: string }
+                      email: { type: string, format: email }
+                      accountName: { type: string }
+                      tier: { type: string }
+                      projectCount: { type: integer }
+                      scopes:
+                        type: array
+                        items: { type: string, enum: [read, write, export] }
+                      environment: { type: string, enum: [live, test] }
+        "401":
+          description: Missing, invalid or revoked API key
+
   /projects:
     get:
       operationId: listProjects

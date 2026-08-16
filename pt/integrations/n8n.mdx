@@ -18,7 +18,7 @@ Ligue o n8n para construir workflows de atribuição personalizados. O n8n é um
 1. No n8n, crie um novo workflow com o **trigger** da sua preferência (submissão de formulário, evento de CRM, webhook, agendamento, …).
 2. Adicione um nó **HTTP Request**:
    - **Method**: `POST`
-   - **URL**: `https://app.finseo.ai/api/v1/projects/YOUR_PROJECT_ID/attribution`
+   - **URL**: `https://api.finseo.ai/v1/projects/YOUR_PROJECT_ID/attribution`
    - **Authentication**: Generic → Header Auth com `Authorization: Bearer YOUR_API_KEY`
    - **Body Content Type**: JSON
 3. Mapeie os campos:

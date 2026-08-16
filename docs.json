@@ -10,7 +10,21 @@
   "favicon": "/favicon.svg",
   "logo": {
     "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "dark": "/logo/dark.svg",
+    "href": "https://finseo.ai"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "finseo.ai",
+        "href": "https://finseo.ai"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Open Dashboard",
+      "href": "https://app.finseo.ai"
+    }
   },
   "fonts": {
     "body": {

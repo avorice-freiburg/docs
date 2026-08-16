@@ -42,6 +42,33 @@ const response = await fetch("https://api.finseo.ai/v1/projects", {
 
 </CodeGroup>
 
+## Verificare una chiave
+
+`GET /v1/me` restituisce l'account a cui appartiene una chiave. Usalo per verificare che una chiave sia
+valida, mostrare agli utenti quale account hanno collegato e leggere gli scope della chiave: risponde
+indipendentemente dal fatto che l'account abbia già dei progetti, il che lo rende l'endpoint giusto per
+le integrazioni e i test di connessione.
+
+```bash
+curl -H "Authorization: Bearer YOUR_API_KEY" https://api.finseo.ai/v1/me
+```
+
+```json
+{
+  "data": {
+    "id": "6a81e088f8ef06e062c40633",
+    "email": "you@example.com",
+    "accountName": "Your Company",
+    "tier": "Business",
+    "projectCount": 1,
+    "scopes": ["read", "write"],
+    "environment": "live"
+  }
+}
+```
+
+Una chiave non valida o revocata restituisce `401` con il codice di errore `UNAUTHORIZED`.
+
 ## Scope
 
 Le API key possono avere uno o più scope:

@@ -1,0 +1,144 @@
+---
+title: "Enviar logs do servidor para a Finseo (API personalizada)"
+sidebarTitle: "Server Logs / API"
+description: Envie visitas de crawlers de IA do nginx, Apache ou do seu tracking server-side para a Finseo em NDJSON — sem CDN.
+---
+
+# Ingestão Server Logs / API
+
+Se o seu site não roda atrás de Cloudflare ou Akamai — por exemplo, porque o seu próprio nginx é o edge — você pode enviar visitas de crawlers de IA diretamente para a Finseo. Qualquer sistema capaz de enviar um POST HTTP funciona: uma pipeline de tracking server-side, um access log do nginx filtrado com um cron, ou um script próprio.
+
+A conexão fica em **Bot Analytics → Sync → Server Logs / API → Connect**. O diálogo cria o seu token de ingestão vinculado ao projeto (`fslg_…`) e mostra o endpoint, um exemplo NDJSON e modelos de nginx e cron prontos para copiar.
+
+<Note>
+Crawlers de IA como GPTBot, ClaudeBot e PerplexityBot não executam JavaScript — um snippet no lado do cliente não consegue vê-los. O Bot Traffic trabalha exclusivamente com dados do lado do servidor, por isso os dados precisam vir dos seus logs de edge ou servidor.
+</Note>
+
+## Endpoint
+
+```
+POST https://app.finseo.ai/api/webhooks/server-logs
+Authorization: Bearer fslg_<seu-token-de-projeto>
+Content-Type: application/x-ndjson
+```
+
+O corpo é NDJSON: um objeto JSON por linha, uma linha por requisição. Texto simples e gzip são ambos aceitos — a Finseo detecta gzip automaticamente pelos magic bytes, sem cabeçalho adicional.
+
+## Formato das linhas de log
+
+```json
+{"ClientIP":"20.171.206.42","ClientRequestHost":"www.example.com","ClientRequestMethod":"GET","ClientRequestPath":"/pricing","ClientRequestURI":"/pricing?ref=x","ClientRequestUserAgent":"Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.2; +https://openai.com/gptbot","ClientRequestReferer":"","ClientRequestScheme":"https","EdgeResponseStatus":200,"EdgeResponseBytes":48213,"EdgeStartTimestamp":"2026-08-17T04:12:33Z"}
+```
+
+| Campo | Obrigatório | Descrição |
+| --- | --- | --- |
+| `ClientIP` | Sim | IP real do cliente. Atrás de um load balancer, use a primeira entrada de `X-Forwarded-For` — a Finseo verifica os crawlers pelos intervalos de IP publicados pelos provedores; o IP do LB falharia na verificação. |
+| `ClientRequestUserAgent` | Sim | String User-Agent completa. |
+| `ClientRequestPath` | Sim | Caminho da requisição sem query string. |
+| `EdgeStartTimestamp` | Sim | Timestamp da requisição — string RFC 3339 ou segundos/milis/nanos unix. |
+| `ClientRequestHost` | Não | Hostname; habilita URLs de página completas em Crawled Pages. |
+| `ClientRequestMethod` | Não | Método HTTP. |
+| `ClientRequestURI` | Não | Caminho incluindo a query string. |
+| `ClientRequestReferer` | Não | Cabeçalho Referrer. |
+| `ClientRequestScheme` | Não | `https` ou `http`. |
+| `EdgeResponseStatus` | Não | Código de status HTTP — alimenta a análise por status. |
+| `EdgeResponseBytes` | Não | Tamanho da resposta em bytes. |
+| `EdgeTimeToFirstByteMs` | Não | TTFB em milissegundos — alimenta a aba Performance. |
+| `ClientCountry` / `ClientCity` / `ClientRegionCode` | Não | Dados geográficos, se disponíveis. |
+
+Os nomes dos campos são intencionalmente idênticos ao feed do Cloudflare: um único formato de exportação funciona para todas as integrações push da Finseo.
+
+## Resposta
+
+```json
+{ "success": true, "received": 842, "botVisits": 37, "saved": 37 }
+```
+
+- `received` — linhas no lote
+- `botVisits` — linhas identificadas como requisições de crawlers de IA/busca verificados
+- `saved` — linhas gravadas após a deduplicação
+
+Use esta resposta para monitorar o seu cron. O status da integração muda de **Awaiting first push** para **Connected** com a primeira entrega bem-sucedida.
+
+<Note>
+Retries são seguros: a Finseo deduplica no servidor por bot + timestamp + IP + caminho. Um lote enviado duas vezes nunca gera contagem dupla. Você também pode enviar logs não filtrados — linhas que não são de crawlers são descartadas e nunca armazenadas — mas o pré-filtro mantém seus payloads pequenos.
+</Note>
+
+## Opção A: push do seu tracking server-side
+
+Se você já tem um log central de requisições (tracking server-side, pipeline de logs), filtre-o pelos User-Agents dos crawlers e envie o lote de hora em hora ou diariamente:
+
+```bash
+gzip -c bots.ndjson | curl -sS -X POST \
+  "https://app.finseo.ai/api/webhooks/server-logs" \
+  -H "Authorization: Bearer fslg_XXXX" \
+  --data-binary @-
+```
+
+## Opção B: access log do nginx filtrado + cron
+
+Registro completo não é necessário. Um segundo log filtrado contendo apenas crawlers de IA tem tipicamente poucos milhares de linhas por dia — nenhum serviço de agregação necessário:
+
+```nginx
+map $http_user_agent $finseo_bot {
+    default 0;
+    "~*(GPTBot|OAI-SearchBot|ChatGPT-User|ClaudeBot|Claude-Web|Claude-SearchBot|anthropic-ai|PerplexityBot|Perplexity-User|Google-Extended|GoogleOther|Googlebot|Bingbot|CCBot|Bytespider|Amazonbot|Applebot|meta-externalagent|FacebookBot|DuckAssistBot|cohere|MistralAI|YandexBot|DuckDuckBot)" 1;
+}
+
+log_format finseo_ndjson escape=json
+  '{"ClientIP":"$remote_addr"'
+  ',"ClientRequestHost":"$host"'
+  ',"ClientRequestMethod":"$request_method"'
+  ',"ClientRequestPath":"$uri"'
+  ',"ClientRequestURI":"$request_uri"'
+  ',"ClientRequestReferer":"$http_referer"'
+  ',"ClientRequestUserAgent":"$http_user_agent"'
+  ',"ClientRequestScheme":"$scheme"'
+  ',"EdgeResponseStatus":$status'
+  ',"EdgeResponseBytes":$body_bytes_sent'
+  ',"EdgeStartTimestamp":"$time_iso8601"}';
+
+# dentro do seu bloco server:
+access_log /var/log/nginx/finseo-bots.log finseo_ndjson if=$finseo_bot;
+```
+
+Rotacione e envie a cada 10 minutos:
+
+```bash
+*/10 * * * * F=/var/log/nginx/finseo-bots.log; [ -s "$F" ] && mv "$F" "$F.send" && kill -USR1 $(cat /var/run/nginx.pid) && sleep 1 && gzip -c "$F.send" | curl -sS -X POST "https://app.finseo.ai/api/webhooks/server-logs" -H "Authorization: Bearer fslg_XXXX" --data-binary @- && rm -f "$F.send"
+```
+
+<Warning>
+Com servidores em autoscaling, coloque a configuração do nginx e o cron no seu AMI/user data — caso contrário, instâncias novas param de reportar. Se a sua infraestrutura tem um armazenamento central de requisições, prefira a Opção A: um único ponto de integração, sem perda de dados no scale-in.
+</Warning>
+
+## Limites
+
+- Máx. `16 MB` por corpo de requisição (`64 MB` descomprimido), máx. `20.000` linhas por push
+- Rate limits por IP e por token — envie lotes, não requisições individuais
+- Apenas requisições de crawlers de IA e busca verificados são armazenadas; todo o resto é descartado
+
+## Testar sem alterações no servidor
+
+Quer ver números reais antes de configurar qualquer coisa? **Bot Analytics → Upload Server Logs** aceita logs de texto brutos do nginx, Apache e Cloudflare de até 1 GB — exporte um dia de logs e faça o upload manualmente.
+
+## Desconectar
+
+Clique em **Manage → Disconnect** no cartão Server Logs / API. O token de ingestão é invalidado imediatamente — pushes seguintes são rejeitados com `403`. Lembre-se de remover também o seu cron job.
+
+## Solução de problemas
+
+<AccordionGroup>
+  <Accordion title="A resposta mostra botVisits: 0 embora eu tenha enviado linhas de crawlers">
+    A Finseo verifica a identidade dos crawlers pelos intervalos de IP publicados pelos provedores. Se você enviar o IP do seu load balancer em vez do IP real do cliente (primeira entrada de `X-Forwarded-For`), a verificação falha e as linhas são descartadas. Verifique também se `ClientRequestUserAgent` contém a string UA original completa.
+  </Accordion>
+  <Accordion title="Erros 401 ou 403">
+    `401` significa que o cabeçalho `Authorization: Bearer` está ausente; `403` que o token é inválido ou foi revogado via Disconnect. Copie o token atual do diálogo de conexão.
+  </Accordion>
+  <Accordion title="O status permanece em 'Awaiting first push'">
+    O status muda no primeiro POST bem-sucedido — verifique a resposta JSON na saída do seu cron. Um `413` significa que o lote excedeu os limites de tamanho; divida-o.
+  </Accordion>
+  <Accordion title="saved é menor que botVisits">
+    É a deduplicação funcionando: linhas com o mesmo bot, timestamp, IP e caminho — por exemplo, de um lote reenviado — são armazenadas apenas uma vez.
+  </Accordion>
+</AccordionGroup>

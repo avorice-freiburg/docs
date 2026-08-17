@@ -129,7 +129,8 @@
                   "integrations/google-analytics",
                   "integrations/piwik-pro",
                   "search-console",
-                  "cloudflare-bot-traffic"
+                  "cloudflare-bot-traffic",
+                  "server-logs-ingest"
                 ]
               },
               {
@@ -348,7 +349,8 @@
                   "de/integrations/google-analytics",
                   "de/integrations/piwik-pro",
                   "de/search-console",
-                  "de/cloudflare-bot-traffic"
+                  "de/cloudflare-bot-traffic",
+                  "de/server-logs-ingest"
                 ]
               },
               {
@@ -567,7 +569,8 @@
                   "fr/integrations/google-analytics",
                   "fr/integrations/piwik-pro",
                   "fr/search-console",
-                  "fr/cloudflare-bot-traffic"
+                  "fr/cloudflare-bot-traffic",
+                  "fr/server-logs-ingest"
                 ]
               },
               {
@@ -786,7 +789,8 @@
                   "it/integrations/google-analytics",
                   "it/integrations/piwik-pro",
                   "it/search-console",
-                  "it/cloudflare-bot-traffic"
+                  "it/cloudflare-bot-traffic",
+                  "it/server-logs-ingest"
                 ]
               },
               {
@@ -1005,7 +1009,8 @@
                   "es/integrations/google-analytics",
                   "es/integrations/piwik-pro",
                   "es/search-console",
-                  "es/cloudflare-bot-traffic"
+                  "es/cloudflare-bot-traffic",
+                  "es/server-logs-ingest"
                 ]
               },
               {
@@ -1224,7 +1229,8 @@
                   "pt/integrations/google-analytics",
                   "pt/integrations/piwik-pro",
                   "pt/search-console",
-                  "pt/cloudflare-bot-traffic"
+                  "pt/cloudflare-bot-traffic",
+                  "pt/server-logs-ingest"
                 ]
               },
               {

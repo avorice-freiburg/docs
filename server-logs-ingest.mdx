@@ -1,0 +1,144 @@
+---
+title: "Push Server Logs to Finseo (Custom API)"
+sidebarTitle: "Server Logs / API"
+description: Send AI crawler visits from nginx, Apache or your own server-side tracking to Finseo as NDJSON — no CDN required.
+---
+
+# Server Logs / API Ingest
+
+If your site does not run behind Cloudflare or Akamai — for example your own nginx is the edge — you can push AI crawler visits to Finseo directly. Any system that can send an HTTP POST works: a server-side tracking pipeline, a filtered nginx access log with a cron job, or a custom script.
+
+The connection lives in **Bot Analytics → Sync → Server Logs / API → Connect**. The dialog creates your project-bound ingest token (`fslg_…`) and shows the endpoint, an NDJSON example, and ready-to-copy nginx and cron templates.
+
+<Note>
+AI crawlers like GPTBot, ClaudeBot and PerplexityBot do not execute JavaScript — a client-side snippet cannot see them. Bot Traffic works exclusively with server-side data, which is why the data has to come from your edge or server logs.
+</Note>
+
+## Endpoint
+
+```
+POST https://app.finseo.ai/api/webhooks/server-logs
+Authorization: Bearer fslg_<your-project-token>
+Content-Type: application/x-ndjson
+```
+
+The body is NDJSON: one JSON object per line, one line per request. Plaintext and gzip are both accepted — Finseo detects gzip automatically from the magic bytes, no extra header needed.
+
+## Log line format
+
+```json
+{"ClientIP":"20.171.206.42","ClientRequestHost":"www.example.com","ClientRequestMethod":"GET","ClientRequestPath":"/pricing","ClientRequestURI":"/pricing?ref=x","ClientRequestUserAgent":"Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.2; +https://openai.com/gptbot","ClientRequestReferer":"","ClientRequestScheme":"https","EdgeResponseStatus":200,"EdgeResponseBytes":48213,"EdgeStartTimestamp":"2026-08-17T04:12:33Z"}
+```
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `ClientIP` | Yes | Real client IP. Behind a load balancer, use the first entry of `X-Forwarded-For` — Finseo verifies crawlers against the providers' published IP ranges, so the LB IP would fail verification. |
+| `ClientRequestUserAgent` | Yes | Full User-Agent string. |
+| `ClientRequestPath` | Yes | Request path without query string. |
+| `EdgeStartTimestamp` | Yes | Request timestamp — RFC 3339 string or unix seconds/millis/nanos. |
+| `ClientRequestHost` | No | Hostname; enables full page URLs in Crawled Pages. |
+| `ClientRequestMethod` | No | HTTP method. |
+| `ClientRequestURI` | No | Path including query string. |
+| `ClientRequestReferer` | No | Referrer header. |
+| `ClientRequestScheme` | No | `https` or `http`. |
+| `EdgeResponseStatus` | No | HTTP status code — powers the status breakdown. |
+| `EdgeResponseBytes` | No | Response size in bytes. |
+| `EdgeTimeToFirstByteMs` | No | TTFB in milliseconds — powers the Performance tab. |
+| `ClientCountry` / `ClientCity` / `ClientRegionCode` | No | Geo data if you have it. |
+
+The field names are intentionally identical to the Cloudflare feed, so one export format works across every Finseo push integration.
+
+## Response
+
+```json
+{ "success": true, "received": 842, "botVisits": 37, "saved": 37 }
+```
+
+- `received` — lines in the batch
+- `botVisits` — lines identified as verified AI/search crawler requests
+- `saved` — rows written after deduplication
+
+Use this to monitor your cron. The integration status switches from **Awaiting first push** to **Connected** with the first successful delivery.
+
+<Note>
+Retries are safe: Finseo deduplicates server-side on bot + timestamp + IP + path. A batch sent twice never produces double counts. You can also send unfiltered logs — non-crawler lines are discarded and never stored — but pre-filtering keeps your payloads small.
+</Note>
+
+## Option A: push from your server-side tracking
+
+If you already have a central request log (server-side tracking, log pipeline), filter it to the crawler User-Agents and POST the batch hourly or daily:
+
+```bash
+gzip -c bots.ndjson | curl -sS -X POST \
+  "https://app.finseo.ai/api/webhooks/server-logs" \
+  -H "Authorization: Bearer fslg_XXXX" \
+  --data-binary @-
+```
+
+## Option B: filtered nginx access log + cron
+
+Full access logging is not required. A second, filtered log that only contains AI crawlers is typically a few thousand lines per day — no aggregation service needed:
+
+```nginx
+map $http_user_agent $finseo_bot {
+    default 0;
+    "~*(GPTBot|OAI-SearchBot|ChatGPT-User|ClaudeBot|Claude-Web|Claude-SearchBot|anthropic-ai|PerplexityBot|Perplexity-User|Google-Extended|GoogleOther|Googlebot|Bingbot|CCBot|Bytespider|Amazonbot|Applebot|meta-externalagent|FacebookBot|DuckAssistBot|cohere|MistralAI|YandexBot|DuckDuckBot)" 1;
+}
+
+log_format finseo_ndjson escape=json
+  '{"ClientIP":"$remote_addr"'
+  ',"ClientRequestHost":"$host"'
+  ',"ClientRequestMethod":"$request_method"'
+  ',"ClientRequestPath":"$uri"'
+  ',"ClientRequestURI":"$request_uri"'
+  ',"ClientRequestReferer":"$http_referer"'
+  ',"ClientRequestUserAgent":"$http_user_agent"'
+  ',"ClientRequestScheme":"$scheme"'
+  ',"EdgeResponseStatus":$status'
+  ',"EdgeResponseBytes":$body_bytes_sent'
+  ',"EdgeStartTimestamp":"$time_iso8601"}';
+
+# inside your server block:
+access_log /var/log/nginx/finseo-bots.log finseo_ndjson if=$finseo_bot;
+```
+
+Rotate and push every 10 minutes:
+
+```bash
+*/10 * * * * F=/var/log/nginx/finseo-bots.log; [ -s "$F" ] && mv "$F" "$F.send" && kill -USR1 $(cat /var/run/nginx.pid) && sleep 1 && gzip -c "$F.send" | curl -sS -X POST "https://app.finseo.ai/api/webhooks/server-logs" -H "Authorization: Bearer fslg_XXXX" --data-binary @- && rm -f "$F.send"
+```
+
+<Warning>
+With autoscaling servers, put the nginx config and cron into your AMI/user data — otherwise fresh instances stop reporting. If your infrastructure has a central request store, prefer Option A: one integration point, no data loss on scale-in.
+</Warning>
+
+## Limits
+
+- Max `16 MB` per request body (`64 MB` decompressed), max `20,000` lines per push
+- Rate limits per IP and per token — send batches, not single requests
+- Only requests from verified AI and search crawlers are stored; everything else is discarded
+
+## Testing without any server changes
+
+Want to see real numbers before wiring anything up? **Bot Analytics → Upload Server Logs** accepts raw nginx, Apache and Cloudflare text logs up to 1 GB — export a day of logs and upload them manually.
+
+## Disconnect
+
+Click **Manage → Disconnect** on the Server Logs / API card. This invalidates the ingest token immediately — further pushes are rejected with `403`. Remember to also remove your cron job.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Response shows botVisits: 0 although I sent crawler lines">
+    Finseo verifies crawler identity via the providers' published IP ranges. If you send your load balancer's IP instead of the real client IP (first entry of `X-Forwarded-For`), verification fails and the lines are discarded. Also check that `ClientRequestUserAgent` contains the full original UA string.
+  </Accordion>
+  <Accordion title="401 or 403 errors">
+    `401` means the `Authorization: Bearer` header is missing; `403` means the token is invalid or was revoked via Disconnect. Copy the current token from the connect dialog.
+  </Accordion>
+  <Accordion title="Status stays on 'Awaiting first push'">
+    The status switches on the first successful POST — check your cron output for the JSON response. A `413` means the batch exceeded the size limits; split it up.
+  </Accordion>
+  <Accordion title="saved is lower than botVisits">
+    That is deduplication working: lines with the same bot, timestamp, IP and path — e.g. from a retried batch — are only stored once.
+  </Accordion>
+</AccordionGroup>

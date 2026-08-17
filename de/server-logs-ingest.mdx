@@ -1,0 +1,144 @@
+---
+title: "Server-Logs an Finseo pushen (Custom API)"
+sidebarTitle: "Server Logs / API"
+description: AI-Crawler-Besuche aus nginx, Apache oder eigenem Server-Side-Tracking als NDJSON an Finseo senden — ganz ohne CDN.
+---
+
+# Server Logs / API Ingest
+
+Wenn deine Website nicht hinter Cloudflare oder Akamai läuft — z. B. weil dein eigenes nginx die Edge ist — kannst du AI-Crawler-Besuche direkt an Finseo pushen. Jedes System, das einen HTTP-POST senden kann, funktioniert: eine Server-Side-Tracking-Pipeline, ein gefiltertes nginx-Access-Log mit Cron-Job oder ein eigenes Skript.
+
+Die Verbindung findest du unter **Bot Analytics → Sync → Server Logs / API → Connect**. Der Dialog erzeugt dein projektgebundenes Ingest-Token (`fslg_…`) und zeigt Endpoint, ein NDJSON-Beispiel sowie fertige nginx- und Cron-Vorlagen zum Kopieren.
+
+<Note>
+AI-Crawler wie GPTBot, ClaudeBot und PerplexityBot führen kein JavaScript aus — ein Client-Snippet kann sie nicht sehen. Bot Traffic arbeitet ausschließlich mit serverseitigen Daten, deshalb müssen die Daten aus deinen Edge- oder Server-Logs kommen.
+</Note>
+
+## Endpoint
+
+```
+POST https://app.finseo.ai/api/webhooks/server-logs
+Authorization: Bearer fslg_<dein-projekt-token>
+Content-Type: application/x-ndjson
+```
+
+Der Body ist NDJSON: ein JSON-Objekt pro Zeile, eine Zeile pro Request. Plaintext und gzip werden beide akzeptiert — Finseo erkennt gzip automatisch an den Magic Bytes, kein zusätzlicher Header nötig.
+
+## Log-Zeilen-Format
+
+```json
+{"ClientIP":"20.171.206.42","ClientRequestHost":"www.example.com","ClientRequestMethod":"GET","ClientRequestPath":"/pricing","ClientRequestURI":"/pricing?ref=x","ClientRequestUserAgent":"Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.2; +https://openai.com/gptbot","ClientRequestReferer":"","ClientRequestScheme":"https","EdgeResponseStatus":200,"EdgeResponseBytes":48213,"EdgeStartTimestamp":"2026-08-17T04:12:33Z"}
+```
+
+| Feld | Pflicht | Beschreibung |
+| --- | --- | --- |
+| `ClientIP` | Ja | Echte Client-IP. Hinter einem Load Balancer den ersten Eintrag aus `X-Forwarded-For` verwenden — Finseo verifiziert Crawler über die publizierten IP-Ranges der Anbieter, die LB-IP würde die Verifizierung nicht bestehen. |
+| `ClientRequestUserAgent` | Ja | Vollständiger User-Agent-String. |
+| `ClientRequestPath` | Ja | Request-Pfad ohne Query-String. |
+| `EdgeStartTimestamp` | Ja | Request-Zeitstempel — RFC-3339-String oder Unix-Sekunden/-Millis/-Nanos. |
+| `ClientRequestHost` | Nein | Hostname; ermöglicht vollständige Seiten-URLs in Crawled Pages. |
+| `ClientRequestMethod` | Nein | HTTP-Methode. |
+| `ClientRequestURI` | Nein | Pfad inklusive Query-String. |
+| `ClientRequestReferer` | Nein | Referrer-Header. |
+| `ClientRequestScheme` | Nein | `https` oder `http`. |
+| `EdgeResponseStatus` | Nein | HTTP-Statuscode — speist die Status-Auswertung. |
+| `EdgeResponseBytes` | Nein | Antwortgröße in Bytes. |
+| `EdgeTimeToFirstByteMs` | Nein | TTFB in Millisekunden — speist den Performance-Tab. |
+| `ClientCountry` / `ClientCity` / `ClientRegionCode` | Nein | Geo-Daten, falls vorhanden. |
+
+Die Feldnamen sind absichtlich identisch mit dem Cloudflare-Feed — ein Exportformat funktioniert für alle Finseo-Push-Integrationen.
+
+## Antwort
+
+```json
+{ "success": true, "received": 842, "botVisits": 37, "saved": 37 }
+```
+
+- `received` — Zeilen im Batch
+- `botVisits` — als verifizierte AI-/Search-Crawler-Requests erkannte Zeilen
+- `saved` — nach Deduplizierung geschriebene Zeilen
+
+Damit kannst du deinen Cron selbst überwachen. Der Integrationsstatus springt mit der ersten erfolgreichen Lieferung von **Awaiting first push** auf **Connected**.
+
+<Note>
+Retries sind unkritisch: Finseo dedupliziert serverseitig über Bot + Zeitstempel + IP + Pfad. Ein doppelt gesendeter Batch erzeugt nie Doppelzählungen. Du kannst auch ungefilterte Logs senden — Nicht-Crawler-Zeilen werden verworfen und nie gespeichert — Vorfiltern hält deine Payloads aber klein.
+</Note>
+
+## Option A: Push aus deinem Server-Side-Tracking
+
+Wenn du bereits ein zentrales Request-Log hast (Server-Side-Tracking, Log-Pipeline), filtere es auf die Crawler-User-Agents und poste den Batch stündlich oder täglich:
+
+```bash
+gzip -c bots.ndjson | curl -sS -X POST \
+  "https://app.finseo.ai/api/webhooks/server-logs" \
+  -H "Authorization: Bearer fslg_XXXX" \
+  --data-binary @-
+```
+
+## Option B: gefiltertes nginx-Access-Log + Cron
+
+Vollprotokollierung ist nicht nötig. Ein zweites, gefiltertes Log nur mit AI-Crawlern umfasst typischerweise wenige tausend Zeilen pro Tag — kein Aggregationsservice erforderlich:
+
+```nginx
+map $http_user_agent $finseo_bot {
+    default 0;
+    "~*(GPTBot|OAI-SearchBot|ChatGPT-User|ClaudeBot|Claude-Web|Claude-SearchBot|anthropic-ai|PerplexityBot|Perplexity-User|Google-Extended|GoogleOther|Googlebot|Bingbot|CCBot|Bytespider|Amazonbot|Applebot|meta-externalagent|FacebookBot|DuckAssistBot|cohere|MistralAI|YandexBot|DuckDuckBot)" 1;
+}
+
+log_format finseo_ndjson escape=json
+  '{"ClientIP":"$remote_addr"'
+  ',"ClientRequestHost":"$host"'
+  ',"ClientRequestMethod":"$request_method"'
+  ',"ClientRequestPath":"$uri"'
+  ',"ClientRequestURI":"$request_uri"'
+  ',"ClientRequestReferer":"$http_referer"'
+  ',"ClientRequestUserAgent":"$http_user_agent"'
+  ',"ClientRequestScheme":"$scheme"'
+  ',"EdgeResponseStatus":$status'
+  ',"EdgeResponseBytes":$body_bytes_sent'
+  ',"EdgeStartTimestamp":"$time_iso8601"}';
+
+# im server-Block:
+access_log /var/log/nginx/finseo-bots.log finseo_ndjson if=$finseo_bot;
+```
+
+Alle 10 Minuten rotieren und pushen:
+
+```bash
+*/10 * * * * F=/var/log/nginx/finseo-bots.log; [ -s "$F" ] && mv "$F" "$F.send" && kill -USR1 $(cat /var/run/nginx.pid) && sleep 1 && gzip -c "$F.send" | curl -sS -X POST "https://app.finseo.ai/api/webhooks/server-logs" -H "Authorization: Bearer fslg_XXXX" --data-binary @- && rm -f "$F.send"
+```
+
+<Warning>
+Bei autoskalierenden Servern gehören nginx-Config und Cron ins AMI/User-Data — sonst melden frische Instanzen nichts. Wenn deine Infrastruktur einen zentralen Request-Store hat, ist Option A die bessere Wahl: eine Integrationsstelle, kein Datenverlust beim Scale-in.
+</Warning>
+
+## Limits
+
+- Max. `16 MB` pro Request-Body (`64 MB` dekomprimiert), max. `20.000` Zeilen pro Push
+- Rate-Limits pro IP und pro Token — Batches senden, keine Einzel-Requests
+- Nur Requests verifizierter AI- und Search-Crawler werden gespeichert; alles andere wird verworfen
+
+## Testen ohne Server-Änderungen
+
+Du willst echte Zahlen sehen, bevor irgendetwas umgebaut wird? **Bot Analytics → Upload Server Logs** akzeptiert rohe nginx-, Apache- und Cloudflare-Text-Logs bis 1 GB — einfach einen Tag Logs exportieren und manuell hochladen.
+
+## Trennen
+
+Klicke auf der Server-Logs-/API-Karte auf **Manage → Disconnect**. Das Ingest-Token wird sofort ungültig — weitere Pushes werden mit `403` abgelehnt. Denk daran, auch deinen Cron-Job zu entfernen.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Antwort zeigt botVisits: 0, obwohl ich Crawler-Zeilen gesendet habe">
+    Finseo verifiziert die Crawler-Identität über die publizierten IP-Ranges der Anbieter. Wenn du die IP deines Load Balancers statt der echten Client-IP (erster Eintrag aus `X-Forwarded-For`) sendest, schlägt die Verifizierung fehl und die Zeilen werden verworfen. Prüfe außerdem, ob `ClientRequestUserAgent` den vollständigen Original-UA-String enthält.
+  </Accordion>
+  <Accordion title="401- oder 403-Fehler">
+    `401` bedeutet, dass der `Authorization: Bearer`-Header fehlt; `403` bedeutet, dass das Token ungültig ist oder über Disconnect widerrufen wurde. Kopiere das aktuelle Token aus dem Connect-Dialog.
+  </Accordion>
+  <Accordion title="Status bleibt auf 'Awaiting first push'">
+    Der Status springt beim ersten erfolgreichen POST um — prüfe die JSON-Antwort in deinem Cron-Output. Ein `413` bedeutet, dass der Batch die Größenlimits überschritten hat; teile ihn auf.
+  </Accordion>
+  <Accordion title="saved ist niedriger als botVisits">
+    Das ist die Deduplizierung: Zeilen mit gleichem Bot, Zeitstempel, IP und Pfad — z. B. aus einem wiederholten Batch — werden nur einmal gespeichert.
+  </Accordion>
+</AccordionGroup>

@@ -3,7 +3,12 @@ title: List Competitors
 api: GET /v1/projects/{projectId}/competitors
 ---
 
-Returns ranked competitors for AI visibility: mentions, visibility, average position, and sentiment. Use this to see how Finseo stacks up against other brands in ChatGPT, Claude, and Perplexity answers.
+Returns ranked competitors for AI visibility: mentions, visibility, Share of Voice, position, and sentiment. Use this to see how Finseo stacks up against other brands in ChatGPT, Claude, and Perplexity answers.
+
+Two position metrics are returned per competitor (see [KPIs explained](/getting-started/kpis)):
+
+- `avgMentionOrder` — the ordinal **Position** KPI: average rank among all brands named in an answer (1 = named first, lower is better). This is the `#2.3`-style value shown on the dashboard competitors page.
+- `averagePosition` — **Mention Depth**: how deep in the answer *text* the mention appears (0% = very top). Not a ranking position; kept under this name for backwards compatibility.
 
 <ParamField path="projectId" type="string" required>
   Project identifier.
@@ -91,6 +96,12 @@ print([c["name"] for c in competitors if c["isUserBrand"]])
         "isUserBrand": true,
         "totalMentions": 412,
         "visibleResults": 186,
+        "avgMentionOrder": 2.3,
+        "avgMentionOrderChange": -0.2,
+        "firstMentionSharePercent": 44,
+        "top3MentionSharePercent": 65,
+        "shareOfVoicePercent": 8.2,
+        "shareOfVoiceChange": 0.6,
         "averagePosition": 17.3,
         "sentimentScore": 0.77,
         "promptCount": 42
@@ -104,6 +115,12 @@ print([c["name"] for c in competitors if c["isUserBrand"]])
         "isUserBrand": false,
         "totalMentions": 389,
         "visibleResults": 172,
+        "avgMentionOrder": 3.1,
+        "avgMentionOrderChange": 0.4,
+        "firstMentionSharePercent": 23,
+        "top3MentionSharePercent": 53,
+        "shareOfVoicePercent": 4.2,
+        "shareOfVoiceChange": -0.3,
         "averagePosition": 21.4,
         "sentimentScore": 0.62,
         "promptCount": 42

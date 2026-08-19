@@ -5,6 +5,8 @@ api: GET /v1/projects/{projectId}/prompts
 
 Lists tracked prompts for a project with visibility, mention counts, and sentiment for the selected timeframe. Finseo evaluates these prompts against ChatGPT, Claude, Perplexity, and other models.
 
+`avgPosition` in the response is the **Mention Depth**: how deep in the answer text the brand mention appears (0% = very top). It is not a ranking position — for the ordinal Position KPI see the [competitors endpoint](/api-reference/competitors/ranking) (`avgMentionOrder`) and [KPIs explained](/getting-started/kpis).
+
 <ParamField path="projectId" type="string" required>
   Project identifier.
 </ParamField>
@@ -79,7 +81,7 @@ print(body["pagination"], body["prompts"][0]["prompt"])
         "searchIntents": ["compare", "evaluate"],
         "isVisible": true,
         "mentions": 14,
-        "averagePosition": 18.2,
+        "avgPosition": 18.2,
         "sentimentScore": 0.76,
         "sentimentCategory": "positive",
         "competitorCount": 6,

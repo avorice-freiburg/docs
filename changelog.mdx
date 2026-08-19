@@ -7,6 +7,12 @@ description: Latest changes to the Finseo API.
 
 ## August 2026
 
+### Clear position semantics + full competitor KPI set
+
+- **MCP `get_competitor_ranking`** now returns the full dashboard KPI set per competitor: `avgMentionOrder` (ordinal Position KPI, 1 = named first), `mentionDepthPercent`, `shareOfVoicePercent`, `firstMentionSharePercent`, `top3MentionSharePercent`, head-to-head (`h2hYouFirstPercent`) and citation share — with a `note` explaining each metric
+- **MCP field renames for clarity**: the text-depth metric formerly reported as `avgPositionPercent`/`avgPosition` is now `mentionDepthPercent` across `get_visibility_metrics`, `get_visibility_timeseries`, `list_prompts` and `get_prompt_details`; `get_visibility_timeseries` additionally returns the per-day ordinal `avgMentionOrder`
+- **REST `/competitors`** now additionally returns `avgMentionOrder` (+change), `shareOfVoicePercent` (+change), `firstMentionSharePercent` and `top3MentionSharePercent`; `averagePosition` (mention depth) is unchanged for backwards compatibility
+
 ### Custom date ranges
 
 - **`startDate`/`endDate` query parameters** (YYYY-MM-DD, always together) on `/metrics`, `/metrics/timeseries`, `/competitors`, `/sources` and `/export` — absolute ranges that override the relative `timeframe`

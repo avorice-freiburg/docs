@@ -10,7 +10,15 @@ Exports prompts with nested tracking results for the selected timeframe. Intende
 </ParamField>
 
 <ParamField query="timeframe" type="string" default="30d">
-  Rolling window of results to include (max 1000 prompts; results bounded by date range).
+  Rolling window of results to include (max 1000 prompts; results bounded by date range). Ignored when `startDate`/`endDate` are set.
+</ParamField>
+
+<ParamField query="startDate" type="string">
+  Custom range start (`YYYY-MM-DD`). Must be combined with `endDate`; overrides `timeframe`.
+</ParamField>
+
+<ParamField query="endDate" type="string">
+  Custom range end (`YYYY-MM-DD`). Must be combined with `startDate`.
 </ParamField>
 
 <ParamField query="model" type="string">

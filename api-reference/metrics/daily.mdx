@@ -10,7 +10,15 @@ Returns aggregate AI visibility metrics for the current period vs the previous p
 </ParamField>
 
 <ParamField query="timeframe" type="string" default="30d">
-  Rolling window, e.g. `7d`, `30d`, `90d`.
+  Rolling window, e.g. `7d`, `30d`, `90d`. Ignored when `startDate`/`endDate` are set.
+</ParamField>
+
+<ParamField query="startDate" type="string">
+  Custom range start (`YYYY-MM-DD`). Must be combined with `endDate`; overrides `timeframe`. The comparison period is the same number of days immediately before the custom range.
+</ParamField>
+
+<ParamField query="endDate" type="string">
+  Custom range end (`YYYY-MM-DD`). Must be combined with `startDate`.
 </ParamField>
 
 <ParamField query="model" type="string">

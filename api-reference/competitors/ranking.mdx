@@ -10,7 +10,15 @@ Returns ranked competitors for AI visibility: mentions, visibility, average posi
 </ParamField>
 
 <ParamField query="timeframe" type="string" default="30d">
-  Analysis window, e.g. `7d`, `30d`.
+  Analysis window, e.g. `7d`, `30d`. Ignored when `startDate`/`endDate` are set.
+</ParamField>
+
+<ParamField query="startDate" type="string">
+  Custom range start (`YYYY-MM-DD`). Must be combined with `endDate`; overrides `timeframe`.
+</ParamField>
+
+<ParamField query="endDate" type="string">
+  Custom range end (`YYYY-MM-DD`). Must be combined with `startDate`.
 </ParamField>
 
 <ParamField query="model" type="string">

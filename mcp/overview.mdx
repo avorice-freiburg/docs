@@ -57,6 +57,17 @@ All tools are **read-only** — they retrieve data and never modify it.
 
 The analytics tools accept optional `model` (e.g. `chatgpt`, `perplexity`, `ai_overview`, `copilot`, `gemini`, `grok`) and `tags` filters — the same filters as the dashboard.
 
+### Timeframes
+
+Every analytics tool defaults to a relative window (`timeframeDays`, default 30, ending yesterday). For an exact period, pass an absolute range instead:
+
+- `startDate` + `endDate` (both `YYYY-MM-DD`, always together) — overrides `timeframeDays`.
+- Supported on `get_visibility_metrics`, `get_visibility_timeseries` (max 90 days), `get_competitor_ranking`, `get_top_sources`, `get_query_fanouts`, `get_competitor_gap_analysis`, `get_competitor_h2h` and `get_sentiment_overview`.
+- `get_visibility_metrics` compares the custom range against the same number of days immediately before it.
+- `list_prompts` only supports relative windows.
+
+Example: *"Compare my visibility for July 1–31 against the previous month"* → the assistant calls `get_visibility_metrics` with `startDate: "2026-07-01"`, `endDate: "2026-07-31"`.
+
 ### Drill-down workflow
 
 Go from overview to detail — the tools chain from broad to a single AI answer:

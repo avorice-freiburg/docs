@@ -35,7 +35,21 @@ components:
       schema:
         type: string
         default: "30d"
-        description: "Time window (e.g. 7d, 30d, 90d)"
+        description: "Relative time window ending yesterday (e.g. 7d, 30d, 90d). Ignored when startDate/endDate are set."
+    startDate:
+      name: startDate
+      in: query
+      schema:
+        type: string
+        format: date
+        description: "Custom range start (YYYY-MM-DD). Must be combined with endDate; overrides the relative timeframe."
+    endDate:
+      name: endDate
+      in: query
+      schema:
+        type: string
+        format: date
+        description: "Custom range end (YYYY-MM-DD). Must be combined with startDate; overrides the relative timeframe."
     model:
       name: model
       in: query
@@ -218,11 +232,13 @@ paths:
     get:
       operationId: getDailyMetrics
       summary: Get daily visibility KPIs
-      description: Returns current vs previous period metrics including visibility rate, mentions, position, and sentiment.
+      description: Returns current vs previous period metrics including visibility rate, mentions, position, and sentiment. Accepts either a relative timeframe or an absolute startDate/endDate range; the comparison period is always the same number of days immediately before the current period.
       tags: [Metrics]
       parameters:
         - $ref: "#/components/parameters/projectId"
         - $ref: "#/components/parameters/timeframe"
+        - $ref: "#/components/parameters/startDate"
+        - $ref: "#/components/parameters/endDate"
         - $ref: "#/components/parameters/model"
         - $ref: "#/components/parameters/language"
         - $ref: "#/components/parameters/tags"
@@ -242,12 +258,8 @@ paths:
         - $ref: "#/components/parameters/model"
         - $ref: "#/components/parameters/language"
         - $ref: "#/components/parameters/tags"
-        - name: startDate
-          in: query
-          schema: { type: string, format: date }
-        - name: endDate
-          in: query
-          schema: { type: string, format: date }
+        - $ref: "#/components/parameters/startDate"
+        - $ref: "#/components/parameters/endDate"
       responses:
         "200":
           description: Array of daily data points
@@ -260,6 +272,8 @@ paths:
       parameters:
         - $ref: "#/components/parameters/projectId"
         - $ref: "#/components/parameters/timeframe"
+        - $ref: "#/components/parameters/startDate"
+        - $ref: "#/components/parameters/endDate"
         - $ref: "#/components/parameters/model"
         - $ref: "#/components/parameters/language"
         - $ref: "#/components/parameters/tags"
@@ -283,6 +297,8 @@ paths:
       parameters:
         - $ref: "#/components/parameters/projectId"
         - $ref: "#/components/parameters/timeframe"
+        - $ref: "#/components/parameters/startDate"
+        - $ref: "#/components/parameters/endDate"
         - $ref: "#/components/parameters/model"
         - $ref: "#/components/parameters/language"
         - $ref: "#/components/parameters/tags"
@@ -334,6 +350,8 @@ paths:
       parameters:
         - $ref: "#/components/parameters/projectId"
         - $ref: "#/components/parameters/timeframe"
+        - $ref: "#/components/parameters/startDate"
+        - $ref: "#/components/parameters/endDate"
       responses:
         "200":
           description: Full export with prompts and results

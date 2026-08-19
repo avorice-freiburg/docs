@@ -10,7 +10,7 @@ Lists tracked prompts for a project with visibility, mention counts, and sentime
 </ParamField>
 
 <ParamField query="timeframe" type="string" default="30d">
-  Rolling window length, e.g. `7d`, `30d`, `90d`.
+  Rolling window length, e.g. `7d`, `30d`, `90d`. This endpoint only supports relative windows — custom `startDate`/`endDate` ranges are not available here and are rejected with a `400`.
 </ParamField>
 
 <ParamField query="model" type="string">

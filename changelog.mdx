@@ -5,6 +5,14 @@ description: Latest changes to the Finseo API.
 
 # Changelog
 
+## August 2026
+
+### Custom date ranges
+
+- **`startDate`/`endDate` query parameters** (YYYY-MM-DD, always together) on `/metrics`, `/metrics/timeseries`, `/competitors`, `/sources` and `/export` — absolute ranges that override the relative `timeframe`
+- **MCP tools accept `startDate`/`endDate`** on all analytics tools (`get_visibility_metrics`, `get_visibility_timeseries`, `get_competitor_ranking`, `get_top_sources`, `get_query_fanouts`, `get_competitor_gap_analysis`, `get_competitor_h2h`, `get_sentiment_overview`)
+- `/metrics` compares a custom range against the equally long period immediately before it
+
 ## March 2026
 
 ### v1.0.0 - Initial Release

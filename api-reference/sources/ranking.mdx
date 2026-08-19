@@ -10,7 +10,15 @@ Lists domains and URLs cited in AI answers for your tracked prompts—useful for
 </ParamField>
 
 <ParamField query="timeframe" type="string" default="30d">
-  Rolling window for citations.
+  Rolling window for citations. Ignored when `startDate`/`endDate` are set.
+</ParamField>
+
+<ParamField query="startDate" type="string">
+  Custom range start (`YYYY-MM-DD`). Must be combined with `endDate`; overrides `timeframe`.
+</ParamField>
+
+<ParamField query="endDate" type="string">
+  Custom range end (`YYYY-MM-DD`). Must be combined with `startDate`.
 </ParamField>
 
 <ParamField query="model" type="string">

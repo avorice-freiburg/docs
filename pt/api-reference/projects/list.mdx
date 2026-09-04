@@ -5,6 +5,8 @@ api: GET /v1/projects
 
 Retorna a lista de projetos que sua API Key pode acessar. Projetos representam marcas ou domínios monitorados na Finseo para visibilidade em IA no ChatGPT, Claude, Perplexity e outros modelos.
 
+Todos os projetos incluem `isPitch`. Projetos de pitch também incluem `pitchDurationDays` (1, 7 ou 14) e `pitchExpiredAt` (`null` enquanto a janela estiver aberta), para que um agente saiba por quanto tempo o pitch continuará sem precisar estimar.
+
 
 <RequestExample>
 
@@ -41,17 +43,21 @@ for p in projects:
       "description": "AI visibility tracking for modern brands",
       "isDefault": true,
       "tags": ["product", "b2b"],
+      "isPitch": false,
       "createdAt": "2025-11-12T10:15:00.000Z",
       "updatedAt": "2026-03-28T14:22:00.000Z"
     },
     {
       "id": "67b2d3e4f5061728394a5c",
-      "name": "Acme Corp",
+      "name": "Acme Corp (Pitch)",
       "domain": "acme.com",
       "websiteUrl": "https://www.acme.com",
       "description": "",
       "isDefault": false,
       "tags": [],
+      "isPitch": true,
+      "pitchDurationDays": 7,
+      "pitchExpiredAt": null,
       "createdAt": "2026-01-08T09:00:00.000Z",
       "updatedAt": "2026-03-15T11:45:00.000Z"
     }

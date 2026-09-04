@@ -5,6 +5,15 @@ description: Latest changes to the Finseo API.
 
 # Changelog
 
+## September 2026
+
+### Pitch projects + required language
+
+- **Pitch projects via API**: `POST /v1/projects` accepts `isPitch` and `pitchDurationDays` (`1`, `7` or `14`, default 14) — no project fee, capped at 50 prompts, auto-paused when the pitch window closes. Pitch slots are capped per agency package (250 on Agency Starter, 500 on Agency Studio)
+- **Convert won pitches**: `PUT /v1/projects/{projectId}` with `{"convertFromPitch": true}` turns a pitch into a full client project (checks a free client slot and the plan's answer budget, then reactivates paused prompts)
+- **`language` is now required** on `POST /v1/projects` — one of 22 supported codes (`en`, `de`, `fr`, `es`, `it`, `nl`, `pt`, `pl`, `sv`, `da`, `tr`, `ja`, `no`, `fi`, `cs`, `ru`, `zh`, `zh-tw`, `ko`, `hi`, `ar`, `he`). Previously the language was inferred from a site crawl, which often defaulted to English for non-English markets
+- **`GET /v1/projects`** now returns `isPitch` on every project, plus `pitchDurationDays` and `pitchExpiredAt` on pitch projects
+
 ## August 2026
 
 ### Clear position semantics + full competitor KPI set

@@ -15,16 +15,20 @@ Aggiunge un nuovo Prompt di Tracking a un progetto. Finseo eseguirà questo Prom
 </ParamField>
 
 <ParamField body="models" type="array">
-  Identificatori dei modelli; default `["chatgpt", "claude", "perplexity"]`.
+  Identificatori dei modelli; default `["chatgpt", "perplexity", "ai_overview"]`.
 </ParamField>
 
 <ParamField body="language" type="string" default="en">
-  Codice lingua del Prompt.
+  Il valore predefinito è `en`. La lingua **non** viene ereditata dal progetto; specificala esplicitamente per i progetti non in inglese.
 </ParamField>
 
 <ParamField body="tags" type="array">
   Tag facoltativi (stringhe) per filtrare nelle analytics.
 </ParamField>
+
+<Note>
+  I progetti pitch (`isPitch: true`) sono limitati a **50 prompt**. L'aggiunta di prompt a un pitch scaduto viene rifiutata; convertilo prima in progetto cliente tramite [Aggiorna progetto](/api-reference/projects/update).
+</Note>
 
 <RequestExample>
 

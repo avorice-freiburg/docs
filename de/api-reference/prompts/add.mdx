@@ -15,16 +15,20 @@ Fügt einem Projekt einen neuen Tracking-Prompt hinzu. Finseo führt diesen Prom
 </ParamField>
 
 <ParamField body="models" type="array">
-  Modell-IDs; Standard ist `["chatgpt", "claude", "perplexity"]`.
+  Modell-IDs; Standard ist `["chatgpt", "perplexity", "ai_overview"]`.
 </ParamField>
 
 <ParamField body="language" type="string" default="en">
-  Sprachcode für den Prompt.
+  Standard ist `en`. Die Sprache wird **nicht** vom Projekt übernommen; gib sie deshalb für nicht-englische Projekte ausdrücklich an.
 </ParamField>
 
 <ParamField body="tags" type="array">
   Optionale String-Tags zum Filtern in den Analysen.
 </ParamField>
+
+<Note>
+  Pitch-Projekte (`isPitch: true`) sind auf **50 Prompts** begrenzt. Bei einem abgelaufenen Pitch werden neue Prompts abgelehnt. Wandle ihn zuerst über [Projekt aktualisieren](/api-reference/projects/update) in ein Kundenprojekt um.
+</Note>
 
 <RequestExample>
 

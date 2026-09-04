@@ -137,6 +137,16 @@ paths:
                         domain: { type: string }
                         websiteUrl: { type: string }
                         isDefault: { type: boolean }
+                        isPitch: { type: boolean }
+                        pitchDurationDays:
+                          type: integer
+                          enum: [1, 7, 14]
+                          description: Only present on pitch projects.
+                        pitchExpiredAt:
+                          type: string
+                          format: date-time
+                          nullable: true
+                          description: Only present on pitch projects; null while the pitch window is open.
     post:
       operationId: createProject
       summary: Create a project
@@ -147,12 +157,24 @@ paths:
           application/json:
             schema:
               type: object
-              required: [name]
+              required: [name, language]
               properties:
                 name: { type: string }
                 websiteUrl: { type: string, format: uri }
                 domain: { type: string }
                 description: { type: string }
+                language:
+                  type: string
+                  description: Language for the brand analysis and generated prompts (case-insensitive).
+                  enum: [en, de, fr, es, it, nl, pt, pl, sv, da, tr, ja, "no", fi, cs, ru, zh, zh-tw, ko, hi, ar, he]
+                isPitch:
+                  type: boolean
+                  description: Create a pitch project (no project fee, max 50 prompts, auto-paused when the pitch window closes). Pitch slots are capped per agency package.
+                pitchDurationDays:
+                  type: integer
+                  enum: [1, 7, 14]
+                  default: 14
+                  description: Pitch window in days. Ignored unless isPitch is true.
       responses:
         "200":
           description: Created project
@@ -183,6 +205,9 @@ paths:
                 websiteUrl: { type: string }
                 domain: { type: string }
                 description: { type: string }
+                convertFromPitch:
+                  type: boolean
+                  description: Set to true to convert a pitch project into a full client project. Checks a free client slot and the plan's answer budget, then reactivates paused prompts.
       responses:
         "200":
           description: Updated
@@ -221,8 +246,8 @@ paths:
               required: [prompt]
               properties:
                 prompt: { type: string, description: "The AI prompt to track" }
-                models: { type: array, items: { type: string }, default: ["chatgpt", "claude", "perplexity"] }
-                language: { type: string, default: "en" }
+                models: { type: array, items: { type: string }, default: ["chatgpt", "perplexity", "ai_overview"] }
+                language: { type: string, default: "en", description: "Does not inherit the project language; pass explicitly for non-English projects." }
                 tags: { type: array, items: { type: string } }
       responses:
         "200":

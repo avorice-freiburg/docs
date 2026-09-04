@@ -22,6 +22,10 @@ Aktualisiert ein bestehendes Projekt. Sende nur die Felder, die du ändern wills
   Aktualisierte Root-Domain.
 </ParamField>
 
+<ParamField body="convertFromPitch" type="boolean">
+  Auf `true` setzen, um ein Pitch-Projekt in ein vollständiges Kundenprojekt umzuwandeln – zum Beispiel nach einem erfolgreichen Abschluss. Die Umwandlung prüft einen freien Kundenprojekt-Slot und das Antwortbudget des Tarifs und aktiviert anschließend pausierte Prompts. Schlägt fehl, wenn das Projekt kein Pitch-Projekt ist.
+</ParamField>
+
 <ParamField body="description" type="string">
   Aktualisierte Beschreibung (max. 500 Zeichen).
 </ParamField>
@@ -57,6 +61,16 @@ print(r.json()["data"])
   "data": {
     "id": "67a1c2d3e4f5061728394a5b",
     "updated": true
+  }
+}
+```
+
+```json Aus Pitch umgewandelt
+{
+  "data": {
+    "id": "67a1c2d3e4f5061728394a5b",
+    "updated": true,
+    "convertedFromPitch": true
   }
 }
 ```

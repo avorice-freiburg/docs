@@ -22,6 +22,10 @@ Met à jour un projet existant. N'envoyez que les champs que vous souhaitez modi
   Domaine racine mis à jour.
 </ParamField>
 
+<ParamField body="convertFromPitch" type="boolean">
+  Définissez ce champ sur `true` pour convertir un projet pitch en projet client complet, par exemple après avoir remporté le prospect. La conversion vérifie qu'un slot client est disponible et que le budget de réponses couvre les prompts, puis réactive les prompts suspendus. Elle échoue si le projet n'est pas un pitch.
+</ParamField>
+
 <ParamField body="description" type="string">
   Description mise à jour (500 caractères max).
 </ParamField>
@@ -57,6 +61,16 @@ print(r.json()["data"])
   "data": {
     "id": "67a1c2d3e4f5061728394a5b",
     "updated": true
+  }
+}
+```
+
+```json Converti depuis un pitch
+{
+  "data": {
+    "id": "67a1c2d3e4f5061728394a5b",
+    "updated": true,
+    "convertedFromPitch": true
   }
 }
 ```

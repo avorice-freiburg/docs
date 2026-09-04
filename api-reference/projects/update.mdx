@@ -26,6 +26,14 @@ Updates an existing project. Send only the fields you want to change.
   Updated description (max 500 characters).
 </ParamField>
 
+<ParamField body="convertFromPitch" type="boolean">
+  Set to `true` to convert a pitch project into a full client project — for
+  example after winning the prospect. The conversion checks that a client
+  project slot is free and that the answer budget of your plan covers the
+  project's prompts, then reactivates any paused prompts. Fails if the
+  project is not a pitch project.
+</ParamField>
+
 <RequestExample>
 
 ```bash cURL
@@ -57,6 +65,16 @@ print(r.json()["data"])
   "data": {
     "id": "67a1c2d3e4f5061728394a5b",
     "updated": true
+  }
+}
+```
+
+```json Converted from pitch
+{
+  "data": {
+    "id": "67a1c2d3e4f5061728394a5b",
+    "updated": true,
+    "convertedFromPitch": true
   }
 }
 ```

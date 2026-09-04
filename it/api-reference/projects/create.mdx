@@ -10,6 +10,12 @@ Crea un nuovo progetto. Finseo traccerà la visibilità AI del brand associato a
   Nome visualizzato (1–200 caratteri).
 </ParamField>
 
+<ParamField body="language" type="string" required>
+  Lingua dell'analisi del brand e dei prompt generati (senza distinzione tra maiuscole).
+  Valori ammessi: `en`, `de`, `fr`, `es`, `it`, `nl`, `pt`, `pl`, `sv`, `da`, `tr`, `ja`,
+  `no`, `fi`, `cs`, `ru`, `zh`, `zh-tw`, `ko`, `hi`, `ar`, `he`.
+</ParamField>
+
 <ParamField body="websiteUrl" type="string">
   URL canonico del sito; usato per dedurre `domain` quando questo viene omesso.
 </ParamField>
@@ -22,6 +28,19 @@ Crea un nuovo progetto. Finseo traccerà la visibilità AI del brand associato a
   Note facoltative (max 500 caratteri).
 </ParamField>
 
+<ParamField body="isPitch" type="boolean">
+  Crea un **progetto pitch** senza costo di progetto, limitato a 50 prompt e
+  sospeso automaticamente alla chiusura della finestra. Ideale per analisi
+  una tantum dei prospect da parte degli agenti commerciali. Gli slot dipendono
+  dal piano agenzia (250 con Agency Starter, 500 con Agency Studio).
+</ParamField>
+
+<ParamField body="pitchDurationDays" type="number" default="14">
+  Finestra del pitch in giorni: `1` (esecuzione unica), `7` o `14`. Ignorato se
+  `isPitch` non è `true`. Converti un pitch vinto con
+  [Aggiorna progetto](/api-reference/projects/update) e `convertFromPitch`.
+</ParamField>
+
 <RequestExample>
 
 ```bash cURL
@@ -32,6 +51,7 @@ curl --request POST \
   --data '{
     "name": "Finseo Labs",
     "websiteUrl": "https://labs.finseo.ai",
+    "language": "en",
     "description": "Experimental prompts and benchmarks"
   }'
 ```
@@ -42,6 +62,7 @@ import requests
 payload = {
     "name": "Finseo Labs",
     "websiteUrl": "https://labs.finseo.ai",
+    "language": "en",
     "description": "Experimental prompts and benchmarks",
 }
 r = requests.post(
@@ -67,8 +88,28 @@ print(created["id"])
     "description": "Experimental prompts and benchmarks",
     "isDefault": false,
     "tags": [],
+    "language": "en",
     "createdAt": "2026-03-29T08:30:00.000Z",
     "updatedAt": "2026-03-29T08:30:00.000Z"
+  }
+}
+```
+
+```json Progetto pitch
+{
+  "data": {
+    "id": "67f8a1b2c3d4e5f60718293a4",
+    "name": "Prospect GmbH",
+    "websiteUrl": "https://prospect.example",
+    "domain": "prospect.example",
+    "description": "",
+    "isDefault": false,
+    "tags": [],
+    "isPitch": true,
+    "pitchDurationDays": 1,
+    "language": "de",
+    "createdAt": "2026-09-04T21:12:55.798Z",
+    "updatedAt": "2026-09-04T21:12:55.798Z"
   }
 }
 ```

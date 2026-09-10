@@ -5,6 +5,8 @@ api: POST /v1/projects/{projectId}/prompts
 
 Fügt einem Projekt einen neuen Tracking-Prompt hinzu. Finseo führt diesen Prompt auf den angegebenen Modellen aus und erfasst die Sichtbarkeit deiner Brand im Vergleich zu Wettbewerbern in ChatGPT, Claude und Perplexity.
 
+Der Prompt wird sofort zur Verarbeitung eingereiht (`enqueued: true` in der Antwort); erste Antworten liegen in der Regel nach wenigen Minuten vor. Der Prompt erbt Domain, Markenname, Synonyme, Domain-Aliase und Tracking-Frequenz des Projekts — das Projekt braucht daher eine `websiteUrl`, sonst wird die Anfrage mit `400` abgelehnt.
+
 <ParamField path="projectId" type="string" required>
   Projekt-ID.
 </ParamField>
@@ -18,8 +20,8 @@ Fügt einem Projekt einen neuen Tracking-Prompt hinzu. Finseo führt diesen Prom
   Modell-IDs; Standard ist `["chatgpt", "perplexity", "ai_overview"]`.
 </ParamField>
 
-<ParamField body="language" type="string" default="en">
-  Standard ist `en`. Die Sprache wird **nicht** vom Projekt übernommen; gib sie deshalb für nicht-englische Projekte ausdrücklich an.
+<ParamField body="language" type="string">
+  Sprach-/Marktcode für den Prompt (z. B. `de`, `en`). Standard ist die `language` des Projekts. Der Wert wird auf die Schreibweise des Dashboards normalisiert (`de` → `DE`), damit der Länderfilter greift.
 </ParamField>
 
 <ParamField body="tags" type="array">
@@ -71,12 +73,16 @@ print(r.json()["data"])
   "data": {
     "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
     "prompt": "How does Finseo compare to traditional SEO suites?",
-    "domain": "finseo.ai",
-    "brandName": "finseo",
-    "language": "en",
+    "domain": "https://www.finseo.ai",
+    "brand_name": "Finseo",
+    "language": "EN",
     "models": ["chatgpt", "claude", "perplexity"],
     "tags": ["comparison", "Finseo"],
-    "created": true
+    "project_id": "67a1c2d3e4f5061728394a5b",
+    "active": true,
+    "processing_complete": false,
+    "created_at": "2026-09-10T09:41:12.481Z",
+    "enqueued": true
   }
 }
 ```

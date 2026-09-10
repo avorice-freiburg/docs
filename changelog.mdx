@@ -7,6 +7,27 @@ description: Latest changes to the Finseo API.
 
 ## September 2026
 
+### Visibility = named OR cited; new Mention Rate and Citation Rate
+
+Finseo now separates the two ways a brand appears in an AI answer — **named in the answer text** and **cited as a source** — and reports them as distinct KPIs. See [KPIs explained](/getting-started/kpis).
+
+- **Visibility redefined**: an answer counts as visible when the brand is named in the text **or** its own domain (or a configured domain alias) is cited as a source. Previously only text mentions counted, so Visibility can be slightly higher than before for brands whose sites are cited without being named
+- **New KPIs**: **Mention Rate** (share of answers naming the brand) and **Citation Rate** (share of answers citing the own domain), both on the same denominator as Visibility. They overlap, so Visibility ≤ Mention Rate + Citation Rate
+- **REST `/metrics`** returns `mentionRate`, `citationRate`, `cited` per period plus `mentionRateChange`, `citationRateChange`, `citedChange`; `responseVisibilityRate` now uses the named-or-cited definition
+- **REST `/metrics/timeseries`** adds `cited` per day (`null` for days served from rollups without citations)
+- **REST `/competitors`** adds `mentionRate`, `mentionRateChange`, `totalCitations`, `citationRate`, `citationRateChange` and `visibilityIsMentionOnly`; `visibilityRate`/`visibleResults` now use the named-or-cited definition. Default `sortBy` is `visibility`
+- **REST `/prompts`** adds `mentionRate` and `citationRate` per prompt; `isVisible` uses the named-or-cited definition
+- **MCP**: `get_visibility_metrics` and `get_visibility_timeseries` return `mentionRatePercent`, `citationRatePercent` and `ownDomainCitedAnswers`; `get_competitor_ranking` returns `mentionRatePercent`, `citationRatePercent` and `visibilityIsMentionOnly`; `list_prompts` returns `mentionRatePercent` and `citationRatePercent`. `visibilityRatePercent` everywhere follows the named-or-cited definition and the tool notes explain the split
+- **Domain aliases**: additional domains for citation matching (e.g. country TLDs, shop subdomains) can be configured per project in the dashboard settings; they apply to all prompts of the project
+
+### Fix: prompts created via `POST /prompts` are processed immediately
+
+Prompts added through the REST API were saved but not queued for the workers, so they only got picked up by the nightly sweep — and on a fresh project they were stored without the project's domain and brand name, which meant the brand could never be recognised in answers.
+
+- Prompts are now queued right away (`enqueued: true` in the response); first answers typically arrive within minutes
+- The prompt inherits the project's domain, brand name (project `name`), synonyms, domain aliases and tracking frequency. Projects without a `websiteUrl` are rejected with `400`
+- `language` now defaults to the project language and is normalised to the dashboard spelling (`de` → `DE`), so the country filter matches prompts added via the API
+
 ### Pitch projects + required language
 
 - **Pitch projects via API**: `POST /v1/projects` accepts `isPitch` and `pitchDurationDays` (`1`, `7` or `14`, default 14) — no project fee, capped at 50 prompts, auto-paused when the pitch window closes. Pitch slots are capped per agency package (250 on Agency Starter, 500 on Agency Studio)

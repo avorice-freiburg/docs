@@ -40,12 +40,12 @@ All tools are **read-only** — they retrieve data and never modify it.
 | Tool | Description |
 |------|-------------|
 | `list_projects` | List all your projects |
-| `get_visibility_metrics` | Visibility KPIs incl. the dashboard "Visibility" rate and own-domain "Citations" KPI, with previous-period comparison |
-| `get_visibility_timeseries` | Per-day visibility, mentions, ordinal position (`avgMentionOrder`), mention depth and sentiment (same values as the dashboard chart) |
-| `list_prompts` | Tracked prompts with metrics, top competitors and per-prompt citations (paginated via `offset`/`hasMore`) — returns the prompt `id` used by the prompt drill-down tools |
+| `get_visibility_metrics` | Visibility KPIs — the dashboard "Visibility" rate (named OR cited), Mention Rate, Citation Rate and the own-domain "Citations" count, with previous-period comparison |
+| `get_visibility_timeseries` | Per-day visibility, mention rate, citation rate, mentions, ordinal position (`avgMentionOrder`), mention depth and sentiment (same values as the dashboard chart) |
+| `list_prompts` | Tracked prompts with metrics (visible, mention rate, citation rate), top competitors and per-prompt citations (paginated via `offset`/`hasMore`) — returns the prompt `id` used by the prompt drill-down tools |
 | `get_prompt_details` | Drill into one prompt: per-model metrics and the full answer history (one row per AI answer with mention, depth, sentiment and brands named) |
 | `get_answer_content` | Read the actual AI answers for one prompt on one day: full answer text, brands with sentiment, and every cited source (`concise`/`detailed` format) |
-| `get_competitor_ranking` | Competitor ranking with the full dashboard KPI set: visibility, mentions, Share of Voice, ordinal position (`avgMentionOrder`), mention depth, #1/Top-3 share, head-to-head and citations — returns the competitor `id` used by the drill-down tools |
+| `get_competitor_ranking` | Competitor ranking with the full dashboard KPI set: visibility (named OR cited), mention rate, citation rate, mentions, Share of Voice, ordinal position (`avgMentionOrder`), mention depth, #1/Top-3 share, head-to-head and citations — returns the competitor `id` used by the drill-down tools |
 | `get_competitor_gap_analysis` | Gap analysis vs one competitor: answers where only they appear (your losses), head-to-head, and your wins — with the concrete prompts behind them |
 | `get_competitor_h2h` | Head-to-head vs one competitor: who is named first, average mention order, and LLM-judged comparative claims |
 | `get_sentiment_overview` | Sentiment & Share of Voice: uncapped SoV with explicit denominators, per-brand sentiment leaderboard with win rates and aspect scores, and the most negative LLM-judged statements |
@@ -56,6 +56,16 @@ All tools are **read-only** — they retrieve data and never modify it.
 | `get_task_details` | One task in full: description, step-by-step plan, the evidence that triggered it, and the structured content plan for content tasks |
 
 The analytics tools accept optional `model` (e.g. `chatgpt`, `perplexity`, `ai_overview`, `copilot`, `gemini`, `grok`) and `tags` filters — the same filters as the dashboard.
+
+### Visibility, Mention Rate and Citation Rate
+
+A brand is **visible** in an AI answer when it is named in the answer text *or* one of its domains is cited as a source. The tools report all three rates with the same denominator (all analyzed answers), so they can be compared directly (see [KPIs explained](/getting-started/kpis)):
+
+- `visibilityRatePercent` — named **or** cited (the dashboard "Visibility" KPI)
+- `mentionRatePercent` — named in the answer text
+- `citationRatePercent` — own domain (or a configured domain alias) cited as a source
+
+One answer can count in both Mention Rate and Citation Rate, so Visibility ≤ Mention Rate + Citation Rate. Example: *"Visibility 50%, Mention Rate 45%, Citation Rate 20%"* means 15% of answers name and cite the brand, 30% only name it and 5% only link to it.
 
 ### Position vs. mention depth
 
@@ -89,6 +99,7 @@ Go from overview to detail — the tools chain from broad to a single AI answer:
 Try asking your AI assistant:
 
 - *"How visible is my brand in AI search this month, and how did it change vs. the previous period?"*
+- *"How much of my visibility comes from being named vs. being cited as a source? Which prompts are cited-only?"*
 - *"Rank my competitors by AI visibility and run a gap analysis against the strongest one — where do they appear when we don't?"*
 - *"Which sources do AI models cite most for my tracked prompts, filtered to ChatGPT only?"*
 - *"Compare me head-to-head with competitor X: who gets named first, and what do AI models claim about each of us?"*
@@ -100,9 +111,13 @@ Try asking your AI assistant:
 
 The tools return the same numbers as the Finseo dashboard and label them explicitly:
 
-- **`visibilityRatePercent`** — share of analyzed AI answers mentioning your brand (the dashboard "Visibility" KPI)
-- **`promptCoveragePercent`** — share of tracked prompts with at least one mention (a different, usually higher number)
+- **`visibilityRatePercent`** — share of analyzed AI answers where your brand is visible: named in the answer text OR your own domain cited as a source (the dashboard "Visibility" KPI)
+- **`mentionRatePercent`** — share of answers naming your brand in the text (the dashboard "Mention Rate" KPI)
+- **`citationRatePercent`** — share of answers citing your own domain or a domain alias as a source (the dashboard "Citation Rate" KPI)
+- **`promptCoveragePercent`** — share of tracked prompts with at least one visible answer (a different, usually higher number)
+- **`brandMentions`** / **`ownDomainCitedAnswers`** — the absolute counts behind Mention Rate and Citation Rate
 - **`ownDomainCitations.total`** — AI answers citing your own domain as a source (the dashboard "Citations" KPI)
+- **`visibilityIsMentionOnly`** (competitor ranking) — `true` when the citation leg could not be resolved for that brand and `visibilityRatePercent` equals the mention-based rate
 
 ## Endpoint
 

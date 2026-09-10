@@ -1,7 +1,7 @@
 ---
 title: "KPIs & Metriken erklärt — AI-Visibility-Messung"
 sidebarTitle: "KPIs & Metriken"
-description: Alle Finseo-Metriken verständlich erklärt, mit Formeln und Rechenbeispielen — Visibility, Mentions, Share of Voice, Position, Mention Depth, Citations, Sentiment und mehr.
+description: Alle Finseo-Metriken verständlich erklärt, mit Formeln und Rechenbeispielen — Visibility, Mention Rate, Citation Rate, Share of Voice, Position, Mention Depth, Citations, Sentiment und mehr.
 ---
 
 # KPIs & Metriken
@@ -12,33 +12,68 @@ Alle Metriken sind im Dashboard, in der [REST API](/de/api-reference/metrics/dai
 
 ## Das durchgehende Beispiel
 
-Die Formeln unten nutzen alle dieses Beispiel: Du trackst **20 Prompts** über **2 Modelle**, ein Tag erzeugt also **40 AI-Antworten**. Deine Marke heißt **Acme**.
+Die Formeln unten nutzen alle dieses Beispiel: Du trackst **20 Prompts** über **2 Modelle**, ein Tag erzeugt also **40 AI-Antworten**. Deine Marke heißt **Acme**, deine Domain ist `acme.com`.
 
-- Acme erscheint in **18** der 40 Antworten.
+- Acme wird **im Text** von **18** der 40 Antworten **genannt**.
+- `acme.com` wird in **8** Antworten **als Quelle zitiert** — 6 davon nennen auch Acme, 2 verlinken nur darauf.
+- Acme ist damit in **20** Antworten sichtbar (18 genannt + 2 nur zitiert).
 - Über alle 40 Antworten nennen die AI-Modelle insgesamt **120 Mal** eine Marke (alle Marken zusammen).
-- Acme wird **24 Mal** genannt (eine einzelne Antwort kann dich mehrfach erwähnen).
 
 ## Präsenz-Metriken
 
+Eine Marke kann auf zwei Arten in einer AI-Antwort auftauchen: Das Modell **nennt** sie im Antworttext, oder es **zitiert** eine der Domains der Marke als Quelle. Finseo trackt beides und weist es getrennt aus — und kombiniert beides zur Visibility.
+
 ### Visibility
 
-**Der Anteil der AI-Antworten, in denen deine Marke überhaupt vorkommt.**
+**Der Anteil der AI-Antworten, in denen deine Marke überhaupt sichtbar ist — im Text genannt ODER als Quelle zitiert.**
 
 ```text
-Visibility = (Antworten mit deiner Marke ÷ alle getrackten Antworten) × 100
+Visibility = (Antworten, die deine Marke nennen ODER deine Domain zitieren ÷ alle getrackten Antworten) × 100
 ```
 
-Beispiel: Acme erscheint in 18 von 40 Antworten → **Visibility = 45 %**.
+Beispiel: Acme wird in 18 Antworten genannt und in 2 weiteren nur zitiert → sichtbar in 20 von 40 → **Visibility = 50 %**.
 
-Visibility ist die Kernmetrik: Sie beantwortet die Frage "Wenn jemand die AI zu meiner Kategorie fragt, wie oft bin ich Teil der Antwort?" Jede Antwort zählt genau einmal — egal, wie oft du darin erwähnt wirst.
+Visibility ist die Kernmetrik: Sie beantwortet die Frage "Wenn jemand die AI zu meiner Kategorie fragt, wie oft bin ich Teil der Antwort?" Jede Antwort zählt genau einmal — egal, wie oft du darin genannt oder verlinkt wirst. Weil Visibility eine Vereinigungsmenge ist, liegt sie nie unter Mention Rate oder Citation Rate — und nie über deren Summe.
+
+### Mention Rate
+
+**Der Anteil der AI-Antworten, die deine Marke im Antworttext nennen.**
+
+```text
+Mention Rate = (Antworten, die deine Marke nennen ÷ alle getrackten Antworten) × 100
+```
+
+Beispiel: 18 von 40 Antworten → **Mention Rate = 45 %**. Mention Rate ist die klassische "Spricht die AI über mich?"-Metrik — sie ignoriert, ob deine Website als Quelle genutzt wurde.
+
+### Citation Rate
+
+**Der Anteil der AI-Antworten, die eine deiner Domains als Quelle zitieren.**
+
+```text
+Citation Rate = (Antworten, die deine Domain zitieren ÷ alle getrackten Antworten) × 100
+```
+
+Beispiel: 8 von 40 Antworten → **Citation Rate = 20 %**. Deine Domain wird gegen die Projekt-Domain plus alle **Domain-Aliase** abgeglichen, die in den Projekteinstellungen konfiguriert sind (z. B. `acme.de`, `shop.acme.com`).
+
+Mention Rate und Citation Rate sind nicht additiv: 45 % + 20 % = 65 %, die Visibility liegt aber bei 50 %, weil 6 Antworten in beiden zählen.
+
+### Visibility Mix
+
+Die *Breakdown*-Ansicht im Dashboard teilt die Visibility in drei überschneidungsfreie Segmente auf, die sich exakt zur Visibility addieren:
+
+| Segment | Bedeutung | Beispiel |
+| --- | --- | --- |
+| **Mentioned + Cited** | Im Text genannt und deine Domain zitiert | 6 Antworten → 15 % |
+| **Mentioned only** | Genannt, aber deine Website wurde nicht als Quelle genutzt | 12 Antworten → 30 % |
+| **Cited only** | Deine Website wurde als Quelle genutzt, aber die Marke wird nicht genannt | 2 Antworten → 5 % |
+
+"Cited only" ist das Segment mit dem größten Hebel: Das Modell vertraut deinem Content bereits, schreibt ihn dir aber nicht zu — meist ein Zeichen dafür, dass Marken- und Produktnamen auf den zitierten Seiten fehlen.
 
 ### Mentions
 
-**Die Gesamtzahl der Nennungen deiner Marke im gewählten Zeitraum.**
+**Die Anzahl der AI-Antworten, die deine Marke im gewählten Zeitraum nennen.**
 
-Anders als Visibility zählt Mentions jedes Vorkommen: Nennt eine Antwort Acme dreimal, ist das 1 für die Visibility, aber 3 Mentions. Beispiel: **24 Mentions** in 18 Antworten.
-
-Nutze Mentions, um zu sehen, wie prominent du innerhalb der Antworten auftauchst — und Visibility, um zu sehen, wie oft du überhaupt auftauchst.
+Jede Antwort zählt einmal — egal, wie oft sie deinen Namen wiederholt. Mentions ist die absolute Zahl hinter der Mention Rate: **18 Mentions** in unserem Beispiel, also Mention Rate = 18 ÷ 40 = 45 %. Nutze Mentions, wenn du Volumina brauchst (z. B. fürs Reporting), und Mention Rate, wenn du Zeiträume oder Modelle mit unterschiedlich vielen Antworten vergleichst.
 
 ### Model Visibility
 
@@ -125,9 +160,9 @@ Beispiel: Deine Erwähnung beginnt bei Zeichen 300 einer 1.200 Zeichen langen An
 
 ### Citations
 
-**Die Anzahl der AI-Antworten, die eine deiner Domains als Quelle zitiert haben.** Jede Antwort zählt einmal, auch wenn sie deine Domain mehrfach verlinkt.
+**Die Anzahl der AI-Antworten, die eine deiner Domains als Quelle zitiert haben.** Jede Antwort zählt einmal, auch wenn sie deine Domain mehrfach verlinkt. Citations ist die absolute Zahl hinter der [Citation Rate](#citation-rate): **8 Citations** in unserem Beispiel → 8 ÷ 40 = 20 %.
 
-Citations messen etwas anderes als Mentions: Eine Mention bedeutet, die AI *spricht über* dich — eine Citation bedeutet, die AI *belegt mit* dir. Du kannst erwähnt werden, ohne zitiert zu werden (das Modell kennt dich aus den Trainingsdaten), und zitiert werden, ohne erwähnt zu werden (dein Content speist eine Antwort über jemand anderen).
+Citations messen etwas anderes als Mentions: Eine Mention bedeutet, die AI *spricht über* dich — eine Citation bedeutet, die AI *belegt mit* dir. Du kannst erwähnt werden, ohne zitiert zu werden (das Modell kennt dich aus den Trainingsdaten), und zitiert werden, ohne erwähnt zu werden (dein Content speist eine Antwort über jemand anderen). Beides zählt zur [Visibility](#visibility).
 
 ### Citation Share
 
@@ -162,12 +197,15 @@ Die Metriken bilden einen Trichter — jede beantwortet eine andere Frage:
 
 | Frage | Metrik |
 | --- | --- |
-| Bin ich überhaupt Teil der Antwort? | Visibility |
+| Bin ich überhaupt Teil der Antwort (genannt oder zitiert)? | Visibility |
+| Spricht die AI über mich? | Mention Rate, Mentions |
+| Belegt die AI mit mir? | Citation Rate, Citations |
+| Genannt, zitiert oder beides? | Visibility Mix |
 | Wie viel des Gesamt-Gesprächs gehört mir? | Share of Voice |
 | Führe ich an, wenn ich vorkomme? | Avg Position, #1 Share, Top-3 Share |
 | Wer gewinnt, wenn wir zusammen auftauchen? | Head-to-Head |
 | Wie früh im Text werde ich genannt? | Mention Depth |
-| Nutzt die AI meinen Content als Beleg? | Citations, Citation Share |
+| Wem gehört die Beleg-Basis, auf der AI-Antworten aufbauen? | Citation Share |
 | Wie wird über mich gesprochen? | Sentiment |
 
 <Tip>
@@ -176,5 +214,5 @@ Ein häufiges Muster: Die Visibility ist stabil, aber der Share of Voice fällt.
 
 ## Metriken programmatisch abrufen
 
-- **REST API** — [`GET /v1/projects/{projectId}/metrics/daily`](/de/api-reference/metrics/daily) und [`/metrics/timeseries`](/de/api-reference/metrics/timeseries)
+- **REST API** — [`GET /v1/projects/{projectId}/metrics`](/de/api-reference/metrics/daily) (`visibilityRate`, `mentionRate`, `citationRate`, …), [`/metrics/timeseries`](/de/api-reference/metrics/timeseries) und [`/competitors`](/de/api-reference/competitors/ranking)
 - **MCP-Server** — `get_visibility_metrics`, `get_visibility_timeseries`, `get_competitor_ranking`, `get_competitor_h2h`, `get_sentiment_overview` und mehr; siehe die [MCP-Übersicht](/de/mcp/overview)

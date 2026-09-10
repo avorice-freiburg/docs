@@ -1,7 +1,7 @@
 ---
 title: "KPIs & Metrics Explained — AI Visibility Measurement"
 sidebarTitle: "KPIs & metrics"
-description: Every Finseo metric explained in plain language, with formulas and worked examples — Visibility, Mentions, Share of Voice, Position, Mention Depth, Citations, Sentiment and more.
+description: Every Finseo metric explained in plain language, with formulas and worked examples — Visibility, Mention Rate, Citation Rate, Share of Voice, Position, Mention Depth, Citations, Sentiment and more.
 ---
 
 # KPIs & metrics
@@ -12,33 +12,68 @@ All metrics are available in the dashboard, the [REST API](/api-reference/metric
 
 ## The running example
 
-The formulas below all use this example: you track **20 prompts** across **2 models**, so one day produces **40 AI answers**. Your brand is **Acme**.
+The formulas below all use this example: you track **20 prompts** across **2 models**, so one day produces **40 AI answers**. Your brand is **Acme**, your domain is `acme.com`.
 
-- Acme appears in **18** of the 40 answers.
+- Acme is **named in the text** of **18** of the 40 answers.
+- `acme.com` is **cited as a source** in **8** answers — 6 of those also name Acme, 2 only link to it.
+- Acme is therefore visible in **20** answers (18 named + 2 cited-only).
 - Across all 40 answers, AI models name brands **120 times** in total (all brands combined).
-- Acme is named **24 times** (a single answer can mention you more than once).
 
 ## Presence metrics
 
+A brand can show up in an AI answer in two ways: the model **names** it in the answer text, or it **cites** one of the brand's domains as a source. Finseo tracks both and reports them separately — and combines them into Visibility.
+
 ### Visibility
 
-**The share of AI answers in which your brand appears at all.**
+**The share of AI answers in which your brand is visible at all — named in the text OR cited as a source.**
 
 ```text
-Visibility = (answers mentioning your brand ÷ all tracked answers) × 100
+Visibility = (answers naming your brand OR citing your domain ÷ all tracked answers) × 100
 ```
 
-Example: Acme appears in 18 of 40 answers → **Visibility = 45%**.
+Example: Acme is named in 18 answers and cited-only in 2 more → visible in 20 of 40 → **Visibility = 50%**.
 
-Visibility is the headline metric: it answers "when someone asks AI about my category, how often am I part of the answer?" It counts each answer once, no matter how often you are mentioned inside it.
+Visibility is the headline metric: it answers "when someone asks AI about my category, how often am I part of the answer?" It counts each answer once, no matter how often you are named or linked inside it. Because it is a union, Visibility is never lower than Mention Rate or Citation Rate, and never higher than their sum.
+
+### Mention Rate
+
+**The share of AI answers that name your brand in the answer text.**
+
+```text
+Mention Rate = (answers naming your brand ÷ all tracked answers) × 100
+```
+
+Example: 18 of 40 answers → **Mention Rate = 45%**. Mention Rate is the classic "does the AI talk about me?" metric — it ignores whether your site was used as a source.
+
+### Citation Rate
+
+**The share of AI answers that cite one of your domains as a source.**
+
+```text
+Citation Rate = (answers citing your domain ÷ all tracked answers) × 100
+```
+
+Example: 8 of 40 answers → **Citation Rate = 20%**. Your domain is matched against the project domain plus any **domain aliases** configured in the project settings (e.g. `acme.de`, `shop.acme.com`).
+
+Mention Rate and Citation Rate are not additive: 45% + 20% = 65%, but Visibility is 50%, because 6 answers count in both.
+
+### Visibility Mix
+
+The dashboard's *Breakdown* view splits Visibility into three non-overlapping segments that add up exactly to Visibility:
+
+| Segment | Meaning | Example |
+| --- | --- | --- |
+| **Mentioned + Cited** | Named in the text and your domain cited | 6 answers → 15% |
+| **Mentioned only** | Named, but your site was not used as a source | 12 answers → 30% |
+| **Cited only** | Your site was used as a source, but the brand is not named | 2 answers → 5% |
+
+"Cited only" is the most actionable segment: the model already trusts your content but does not attribute it to you — usually a sign that brand and product names are missing from the cited pages.
 
 ### Mentions
 
-**The total number of times your brand is named in the selected timeframe.**
+**The number of AI answers that name your brand in the selected timeframe.**
 
-Unlike Visibility, Mentions counts every occurrence — if one answer names Acme three times, that is 1 toward Visibility but 3 Mentions. Example: **24 mentions** across 18 answers.
-
-Use Mentions to gauge how prominently you feature inside answers; use Visibility to gauge how often you feature at all.
+Each answer counts once, no matter how often it repeats your name. Mentions is the absolute count behind Mention Rate: **18 mentions** in our example, so Mention Rate = 18 ÷ 40 = 45%. Use Mentions when you need volumes (e.g. for reporting), Mention Rate when you compare periods or models with different answer counts.
 
 ### Model Visibility
 
@@ -125,9 +160,9 @@ Example: your mention starts at character 300 of a 1,200-character answer → de
 
 ### Citations
 
-**The number of AI answers that cited one of your domains as a source.** Each answer counts once, even if it links your domain several times.
+**The number of AI answers that cited one of your domains as a source.** Each answer counts once, even if it links your domain several times. Citations is the absolute count behind [Citation Rate](#citation-rate): **8 citations** in our example → 8 ÷ 40 = 20%.
 
-Citations measure something different from Mentions: a mention is the AI *talking about* you, a citation is the AI *sourcing from* you. You can be mentioned without being cited (the model knows you from training data) and cited without being mentioned (your content informs an answer about someone else).
+Citations measure something different from Mentions: a mention is the AI *talking about* you, a citation is the AI *sourcing from* you. You can be mentioned without being cited (the model knows you from training data) and cited without being mentioned (your content informs an answer about someone else). Both count toward [Visibility](#visibility).
 
 ### Citation Share
 
@@ -162,12 +197,15 @@ The metrics form a funnel — each answers a different question:
 
 | Question | Metric |
 | --- | --- |
-| Am I part of the answer at all? | Visibility |
+| Am I part of the answer at all (named or cited)? | Visibility |
+| Does the AI talk about me? | Mention Rate, Mentions |
+| Does the AI source from me? | Citation Rate, Citations |
+| Named, cited, or both? | Visibility Mix |
 | How much of the total conversation is mine? | Share of Voice |
 | When I appear, do I lead? | Avg Position, #1 Share, Top-3 Share |
 | Who wins when we appear together? | Head-to-Head |
 | How early in the text am I named? | Mention Depth |
-| Does AI use my content as evidence? | Citations, Citation Share |
+| Who owns the evidence AI answers are built on? | Citation Share |
 | How am I talked about? | Sentiment |
 
 <Tip>
@@ -176,5 +214,5 @@ A common pattern: Visibility is fine but Share of Voice is falling. That means t
 
 ## Accessing metrics programmatically
 
-- **REST API** — [`GET /v1/projects/{projectId}/metrics/daily`](/api-reference/metrics/daily) and [`/metrics/timeseries`](/api-reference/metrics/timeseries)
+- **REST API** — [`GET /v1/projects/{projectId}/metrics`](/api-reference/metrics/daily) (`visibilityRate`, `mentionRate`, `citationRate`, …), [`/metrics/timeseries`](/api-reference/metrics/timeseries) and [`/competitors`](/api-reference/competitors/ranking)
 - **MCP server** — `get_visibility_metrics`, `get_visibility_timeseries`, `get_competitor_ranking`, `get_competitor_h2h`, `get_sentiment_overview` and more; see the [MCP overview](/mcp/overview)

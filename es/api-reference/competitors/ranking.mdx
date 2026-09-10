@@ -3,7 +3,15 @@ title: Listar competidores
 api: GET /v1/projects/{projectId}/competitors
 ---
 
-Devuelve el ranking de competidores por visibilidad en IA: Mentions, visibilidad, posición media y Sentiment. Úsalo para ver cómo se posiciona Finseo frente a otras marcas en las respuestas de ChatGPT, Claude y Perplexity.
+Devuelve el ranking de competidores por visibilidad en IA: visibilidad, Mention Rate, Citation Rate, Mentions, Share of Voice, posición y Sentiment. Úsalo para ver cómo se posiciona Finseo frente a otras marcas en las respuestas de ChatGPT, Claude y Perplexity.
+
+Se devuelven tres tasas de presencia por competidor, todas como proporción de `totalResults` (consulta [KPIs explicados](/es/getting-started/kpis)):
+
+- `visibilityRate` — **Visibility**: % de respuestas en las que la marca es visible, es decir, nombrada en el texto de la respuesta O su dominio citado como fuente (la columna "Visibility" del dashboard; `visibleResults` es el recuento). `visibilityIsMentionOnly: true` marca las filas en las que no se pudo resolver la parte de citaciones y el valor equivale a la tasa basada solo en menciones.
+- `mentionRate` — **Mention Rate**: % de respuestas que nombran la marca en el texto (`totalMentions` es el recuento).
+- `citationRate` — **Citation Rate**: % de respuestas que citan el dominio de la marca como fuente (`totalCitations` es el recuento); `null` cuando no se pudieron resolver las citaciones de la marca.
+
+Una misma respuesta puede contar tanto en `mentionRate` como en `citationRate`, por lo que `visibilityRate ≤ mentionRate + citationRate`.
 
 <ParamField path="projectId" type="string" required>
   Identificador del proyecto.
@@ -29,8 +37,8 @@ Devuelve el ranking de competidores por visibilidad en IA: Mentions, visibilidad
   Filtra por subcadena del nombre o dominio del competidor.
 </ParamField>
 
-<ParamField query="sortBy" type="string" default="mentions">
-  Uno de `visibility`, `mentions`, `position`, `sentiment`, `name`.
+<ParamField query="sortBy" type="string" default="visibility">
+  Uno de `visibility` (nombrada O citada), `mentions`, `position`, `sentiment`, `name`.
 </ParamField>
 
 <ParamField query="sortDir" type="string" default="desc">
@@ -81,8 +89,17 @@ print([c["name"] for c in competitors if c["isUserBrand"]])
         "baseDomain": "finseo.ai",
         "isStarred": true,
         "isUserBrand": true,
-        "totalMentions": 412,
-        "visibleResults": 186,
+        "totalMentions": 186,
+        "visibleResults": 214,
+        "totalResults": 420,
+        "visibilityRate": 51.0,
+        "visibilityChange": 4.2,
+        "visibilityIsMentionOnly": false,
+        "mentionRate": 44.3,
+        "mentionRateChange": 2.1,
+        "totalCitations": 98,
+        "citationRate": 23.3,
+        "citationRateChange": 3.8,
         "averagePosition": 17.3,
         "sentimentScore": 0.77,
         "promptCount": 42
@@ -94,8 +111,17 @@ print([c["name"] for c in competitors if c["isUserBrand"]])
         "baseDomain": "competitor-a.com",
         "isStarred": false,
         "isUserBrand": false,
-        "totalMentions": 389,
-        "visibleResults": 172,
+        "totalMentions": 172,
+        "visibleResults": 181,
+        "totalResults": 420,
+        "visibilityRate": 43.1,
+        "visibilityChange": -1.4,
+        "visibilityIsMentionOnly": false,
+        "mentionRate": 41.0,
+        "mentionRateChange": -0.9,
+        "totalCitations": 24,
+        "citationRate": 5.7,
+        "citationRateChange": -0.5,
         "averagePosition": 21.4,
         "sentimentScore": 0.62,
         "promptCount": 42

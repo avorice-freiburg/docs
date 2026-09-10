@@ -3,7 +3,13 @@ title: Prompts auflisten
 api: GET /v1/projects/{projectId}/prompts
 ---
 
-Listet die getrackten Prompts eines Projekts auf — mit Sichtbarkeit, Mention-Zahlen und Sentiment für den gewählten Zeitraum. Finseo wertet diese Prompts gegen ChatGPT, Claude, Perplexity und weitere Modelle aus.
+Listet die getrackten Prompts eines Projekts auf — mit Sichtbarkeit, Mention-Zahlen, Citations und Sentiment für den gewählten Zeitraum. Finseo wertet diese Prompts gegen ChatGPT, Claude, Perplexity und weitere Modelle aus.
+
+Pro Prompt beziehen sich alle Zahlen auf die KI-Antworten des gewählten Zeitraums (`resultCount`; siehe [KPIs erklärt](/de/getting-started/kpis)):
+
+- `isVisible` — die Marke war in mindestens einer Antwort sichtbar: im Antworttext genannt ODER die eigene Domain als Quelle zitiert
+- `totalMentions` / `mentionRate` — Antworten, die die Marke im Text nennen, und diese Anzahl in % von `resultCount` (**Mention Rate**)
+- `ownDomainCitations` / `citationRate` — Antworten, die die eigene Domain (oder einen konfigurierten Domain-Alias) als Quelle zitieren, und diese Anzahl in % von `resultCount` (**Citation Rate**)
 
 <ParamField path="projectId" type="string" required>
   Projekt-ID.
@@ -56,7 +62,8 @@ r = requests.get(
     params=params,
 )
 body = r.json()["data"]
-print(body["pagination"], body["prompts"][0]["prompt"])
+first = body["prompts"][0]
+print(body["totalCount"], first["prompt"], first["mentionRate"], first["citationRate"])
 ```
 
 </RequestExample>
@@ -75,24 +82,33 @@ print(body["pagination"], body["prompts"][0]["prompt"])
         "language": "en",
         "tags": ["branded", "comparison"],
         "models": ["chatgpt", "claude", "perplexity"],
-        "intentScores": { "commercial": 0.82, "informational": 0.64 },
-        "searchIntents": ["compare", "evaluate"],
+        "createdAt": "2026-02-10T12:00:00.000Z",
+        "updatedAt": "2026-09-01T08:00:00.000Z",
+        "lastCheckedAt": "2026-09-08T06:12:00.000Z",
         "isVisible": true,
-        "mentions": 14,
-        "averagePosition": 18.2,
-        "sentimentScore": 0.76,
-        "sentimentCategory": "positive",
+        "totalMentions": 14,
+        "mentionRate": 46.7,
+        "avgPosition": 18.2,
+        "sentimentScore": 76,
+        "resultCount": 30,
         "competitorCount": 6,
         "sourceCount": 22,
-        "createdAt": "2026-02-10T12:00:00.000Z"
+        "ownDomainCitations": 9,
+        "ownDomainCitationsChange": 3,
+        "citationRate": 30.0,
+        "mentionsChange": 2,
+        "sentimentChange": 4,
+        "positionChange": -1.5,
+        "visibilityChange": 6,
+        "topCompetitors": [
+          { "brandName": "Competitor A", "domain": "competitor-a.com", "mentions": 11, "isUserBrand": false }
+        ]
       }
     ],
-    "pagination": {
-      "page": 1,
-      "limit": 10,
-      "total": 48,
-      "hasMore": true
-    }
+    "totalCount": 48,
+    "currentPage": 1,
+    "totalPages": 5,
+    "hasMore": true
   }
 }
 ```

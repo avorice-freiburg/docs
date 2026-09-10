@@ -84,6 +84,72 @@ components:
         minimum: 1
         maximum: 500
 
+  schemas:
+    PeriodMetrics:
+      type: object
+      description: Aggregates for one period. All rates share the denominator totalResponses; an answer can count toward both mentionRate and citationRate, so responseVisibilityRate <= mentionRate + citationRate.
+      properties:
+        date: { type: string, format: date, description: "End date of the period" }
+        totalResponses: { type: integer, description: "Analyzed AI answers in the period" }
+        responseVisibilityRate: { type: number, description: "Visibility — % of answers where the brand is visible: named in the answer text OR its own domain cited as a source (dashboard Visibility KPI)" }
+        mentionRate: { type: number, description: "Mention Rate — % of answers naming the brand in the answer text" }
+        citationRate: { type: number, description: "Citation Rate — % of answers citing the own domain or a configured domain alias as a source" }
+        mentions: { type: integer, description: "Answers naming the brand in the text (count behind mentionRate)" }
+        cited: { type: integer, description: "Answers citing the own domain as a source (count behind citationRate)" }
+        visibilityRate: { type: number, description: "Prompt coverage — % of tracked prompts with at least one visible answer" }
+        visible: { type: integer, description: "Prompts with at least one visible answer" }
+        notVisible: { type: integer, description: "Prompts without a visible answer" }
+        position: { type: number, nullable: true, description: "Mention depth — how deep in the answer text the mention appears (0 = top); not a ranking" }
+        sentiment: { type: number, nullable: true, description: "Average sentiment score 0–100 across visible answers" }
+    TimeseriesDay:
+      type: object
+      description: One calendar day. All counts are AI answers of that day.
+      properties:
+        date: { type: string, format: date }
+        totalResults: { type: integer, description: "Analyzed AI answers" }
+        visible: { type: integer, description: "Answers where the brand is visible (named in the text OR own domain cited); visible / totalResults = Visibility" }
+        notVisible: { type: integer }
+        mentions: { type: integer, description: "Answers naming the brand in the text; mentions / totalResults = Mention Rate" }
+        cited: { type: integer, nullable: true, description: "Answers citing the own domain as a source; cited / totalResults = Citation Rate. Null when the day was served from a rollup without citations" }
+        mentionOrder: { type: number, nullable: true, description: "Average ordinal position among brands named (1 = named first; dashboard Position KPI)" }
+        position: { type: number, nullable: true, description: "Mention depth (0 = top of the answer text)" }
+        sentiment: { type: number, nullable: true, description: "Average sentiment score 0–100" }
+        uniquePrompts: { type: integer, description: "Distinct prompts with at least one answer that day" }
+    CompetitorRow:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        rawName: { type: string }
+        globalRank: { type: integer, nullable: true }
+        domain: { type: string }
+        baseDomain: { type: string }
+        isStarred: { type: boolean }
+        isUserBrand: { type: boolean }
+        totalResults: { type: integer, description: "Analyzed AI answers in the window (denominator of all rates)" }
+        visibleResults: { type: integer, description: "Answers where the brand is visible: named in the text OR its domain cited as a source" }
+        visibilityRate: { type: number, description: "Visibility — visibleResults / totalResults × 100 (dashboard Visibility column)" }
+        visibilityChange: { type: number, nullable: true, description: "Visibility change vs. previous period, percentage points" }
+        visibilityIsMentionOnly: { type: boolean, description: "True when the citation leg could not be resolved for this brand and visibilityRate equals the mention-based rate" }
+        totalMentions: { type: integer, description: "Answers naming the brand in the text" }
+        mentionRate: { type: number, description: "Mention Rate — totalMentions / totalResults × 100" }
+        mentionRateChange: { type: number, nullable: true }
+        mentionsChange: { type: integer, nullable: true }
+        totalCitations: { type: integer, nullable: true, description: "Answers citing the brand's domain as a source; null when unresolved" }
+        citationRate: { type: number, nullable: true, description: "Citation Rate — totalCitations / totalResults × 100; null when unresolved" }
+        citationRateChange: { type: number, nullable: true }
+        avgMentionOrder: { type: number, nullable: true, description: "Ordinal Position KPI — average rank among brands named (1 = named first)" }
+        avgMentionOrderChange: { type: number, nullable: true }
+        firstMentionSharePercent: { type: number, nullable: true }
+        top3MentionSharePercent: { type: number, nullable: true }
+        shareOfVoicePercent: { type: number, nullable: true }
+        shareOfVoiceChange: { type: number, nullable: true }
+        averagePosition: { type: number, nullable: true, description: "Mention depth (0 = top of the answer text); not a ranking" }
+        positionChange: { type: number, nullable: true }
+        sentimentScore: { type: number, nullable: true }
+        sentimentChange: { type: number, nullable: true }
+        promptCount: { type: integer }
+
 paths:
   /me:
     get:
@@ -230,10 +296,11 @@ paths:
           schema: { type: string }
       responses:
         "200":
-          description: Paginated prompt list with visibility metrics
+          description: Paginated prompt list with visibility metrics. Per prompt, isVisible = the brand was named in the answer text OR its own domain was cited in at least one answer; totalMentions/mentionRate = answers naming the brand (count / % of resultCount); ownDomainCitations/citationRate = answers citing the own domain or a domain alias (count / % of resultCount).
     post:
       operationId: addPrompt
       summary: Add a prompt to track
+      description: Saves the prompt and queues it for processing immediately (enqueued=true in the response). The prompt inherits the project's domain, brand name, synonyms, domain aliases and tracking frequency; the project needs a websiteUrl, otherwise 400.
       tags: [Prompts]
       parameters:
         - $ref: "#/components/parameters/projectId"
@@ -247,7 +314,7 @@ paths:
               properties:
                 prompt: { type: string, description: "The AI prompt to track" }
                 models: { type: array, items: { type: string }, default: ["chatgpt", "perplexity", "ai_overview"] }
-                language: { type: string, default: "en", description: "Does not inherit the project language; pass explicitly for non-English projects." }
+                language: { type: string, description: "Language / market code (e.g. de, en). Defaults to the project language; normalised to the dashboard spelling (de -> DE)." }
                 tags: { type: array, items: { type: string } }
       responses:
         "200":
@@ -257,7 +324,7 @@ paths:
     get:
       operationId: getDailyMetrics
       summary: Get daily visibility KPIs
-      description: Returns current vs previous period metrics including visibility rate, mentions, position, and sentiment. Accepts either a relative timeframe or an absolute startDate/endDate range; the comparison period is always the same number of days immediately before the current period.
+      description: Returns current vs previous period metrics — Visibility (answers where the brand is named in the text OR its own domain is cited as a source), Mention Rate (answers naming the brand), Citation Rate (answers citing the own domain), mentions, citations, position, and sentiment. Accepts either a relative timeframe or an absolute startDate/endDate range; the comparison period is always the same number of days immediately before the current period.
       tags: [Metrics]
       parameters:
         - $ref: "#/components/parameters/projectId"
@@ -269,13 +336,38 @@ paths:
         - $ref: "#/components/parameters/tags"
       responses:
         "200":
-          description: Current and previous period metrics with changes
+          description: Current period (`today`) and previous period (`yesterday`) aggregates with changes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      today:
+                        $ref: "#/components/schemas/PeriodMetrics"
+                      yesterday:
+                        $ref: "#/components/schemas/PeriodMetrics"
+                      changes:
+                        type: object
+                        description: Current minus previous period, in the unit of the respective metric (percentage points for rates)
+                        properties:
+                          visibleChange: { type: integer }
+                          visibilityRateChange: { type: number }
+                          responseVisibilityRateChange: { type: number, description: "Visibility change in percentage points" }
+                          mentionsChange: { type: integer }
+                          citedChange: { type: integer }
+                          mentionRateChange: { type: number }
+                          citationRateChange: { type: number }
+                          positionChange: { type: number }
+                          sentimentChange: { type: number }
 
   /projects/{projectId}/metrics/timeseries:
     get:
       operationId: getTimeseries
       summary: Get time series chart data
-      description: Returns daily data points for visibility, mentions, position, and sentiment.
+      description: Returns daily data points for visibility (named OR cited), mentions, citations, ordinal position, mention depth, and sentiment.
       tags: [Metrics]
       parameters:
         - $ref: "#/components/parameters/projectId"
@@ -287,12 +379,25 @@ paths:
         - $ref: "#/components/parameters/endDate"
       responses:
         "200":
-          description: Array of daily data points
+          description: Daily data points under `data.chartData`
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      chartData:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/TimeseriesDay"
 
   /projects/{projectId}/competitors:
     get:
       operationId: getCompetitorRanking
       summary: Get competitor visibility ranking
+      description: Ranked competitors with Visibility (named OR cited), Mention Rate, Citation Rate, mentions, Share of Voice, ordinal position, mention depth, and sentiment.
       tags: [Competitors]
       parameters:
         - $ref: "#/components/parameters/projectId"
@@ -309,10 +414,29 @@ paths:
           schema: { type: string }
         - name: sortBy
           in: query
-          schema: { type: string, enum: [visibility, mentions, position, sentiment, name], default: mentions }
+          schema: { type: string, enum: [visibility, mentions, position, sentiment, name], default: visibility }
       responses:
         "200":
           description: Paginated competitor ranking
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      competitors:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/CompetitorRow"
+                      pagination:
+                        type: object
+                        properties:
+                          page: { type: integer }
+                          limit: { type: integer }
+                          total: { type: integer }
+                          hasMore: { type: boolean }
 
   /projects/{projectId}/sources:
     get:

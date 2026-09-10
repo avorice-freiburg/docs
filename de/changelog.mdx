@@ -7,6 +7,27 @@ description: Die neuesten Änderungen an der Finseo API.
 
 ## September 2026
 
+### Visibility = genannt ODER zitiert; neue Mention Rate und Citation Rate
+
+Finseo trennt jetzt die beiden Arten, wie eine Marke in einer KI-Antwort auftaucht — **im Antworttext genannt** und **als Quelle zitiert** — und weist sie als eigene KPIs aus. Siehe [KPIs erklärt](/de/getting-started/kpis).
+
+- **Visibility neu definiert**: Eine Antwort zählt als sichtbar, wenn die Marke im Text genannt wird **oder** ihre eigene Domain (bzw. ein konfigurierter Domain-Alias) als Quelle zitiert wird. Bisher zählten nur Text-Nennungen; die Visibility kann daher für Marken, deren Websites ohne Namensnennung zitiert werden, leicht höher liegen als zuvor
+- **Neue KPIs**: **Mention Rate** (Anteil der Antworten, die die Marke nennen) und **Citation Rate** (Anteil der Antworten, die die eigene Domain zitieren), beide mit demselben Nenner wie die Visibility. Sie überlappen sich, daher gilt Visibility ≤ Mention Rate + Citation Rate
+- **REST `/metrics`** liefert `mentionRate`, `citationRate`, `cited` pro Zeitraum sowie `mentionRateChange`, `citationRateChange`, `citedChange`; `responseVisibilityRate` folgt jetzt der Definition „genannt oder zitiert"
+- **REST `/metrics/timeseries`** ergänzt `cited` pro Tag (`null` für Tage aus Rollups ohne Citations)
+- **REST `/competitors`** ergänzt `mentionRate`, `mentionRateChange`, `totalCitations`, `citationRate`, `citationRateChange` und `visibilityIsMentionOnly`; `visibilityRate`/`visibleResults` folgen jetzt der Definition „genannt oder zitiert". Standard-`sortBy` ist `visibility`
+- **REST `/prompts`** ergänzt `mentionRate` und `citationRate` pro Prompt; `isVisible` folgt der Definition „genannt oder zitiert"
+- **MCP**: `get_visibility_metrics` und `get_visibility_timeseries` liefern `mentionRatePercent`, `citationRatePercent` und `ownDomainCitedAnswers`; `get_competitor_ranking` liefert `mentionRatePercent`, `citationRatePercent` und `visibilityIsMentionOnly`; `list_prompts` liefert `mentionRatePercent` und `citationRatePercent`. `visibilityRatePercent` folgt überall der Definition „genannt oder zitiert", und die Tool-Hinweise erklären die Aufteilung
+- **Domain-Aliase**: Zusätzliche Domains für den Citation-Abgleich (z. B. Länder-TLDs, Shop-Subdomains) lassen sich pro Projekt in den Dashboard-Einstellungen hinterlegen; sie gelten für alle Prompts des Projekts
+
+### Fix: Prompts aus `POST /prompts` werden sofort verarbeitet
+
+Über die REST-API angelegte Prompts wurden zwar gespeichert, aber nicht für die Worker eingereiht und deshalb erst vom nächtlichen Lauf abgeholt — bei einem frischen Projekt zudem ohne Domain und Markenname des Projekts, sodass die Marke in den Antworten nie erkannt werden konnte.
+
+- Prompts werden jetzt sofort eingereiht (`enqueued: true` in der Antwort); erste Antworten liegen in der Regel nach wenigen Minuten vor
+- Der Prompt erbt Domain, Markenname (Projekt-`name`), Synonyme, Domain-Aliase und Tracking-Frequenz des Projekts. Projekte ohne `websiteUrl` werden mit `400` abgelehnt
+- `language` übernimmt jetzt standardmäßig die Projektsprache und wird auf die Dashboard-Schreibweise normalisiert (`de` → `DE`), damit der Länderfilter auch API-Prompts findet
+
 ### Pitch-Projekte + Pflichtsprache
 
 - **Pitch-Projekte über die API**: `POST /v1/projects` akzeptiert `isPitch` und `pitchDurationDays` (`1`, `7` oder `14`, Standard 14) – ohne Projektgebühr, auf 50 Prompts begrenzt und nach Ablauf des Pitch-Fensters automatisch pausiert. Pitch-Slots sind je Agenturpaket begrenzt (250 bei Agency Starter, 500 bei Agency Studio)

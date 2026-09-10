@@ -40,12 +40,12 @@ Tutti i tool sono **read-only**: recuperano dati e non li modificano mai.
 | Tool | Descrizione |
 |------|-------------|
 | `list_projects` | Elenca tutti i tuoi progetti |
-| `get_visibility_metrics` | KPI di visibilità inclusi il tasso "Visibility" della dashboard e il KPI "Citations" per il dominio proprio, con confronto rispetto al periodo precedente |
-| `get_visibility_timeseries` | Visibilità, menzioni, posizione e sentiment per giorno (gli stessi valori del grafico della dashboard) |
-| `list_prompts` | Prompt monitorati con metriche, principali competitor e citazioni per prompt |
+| `get_visibility_metrics` | KPI di visibilità — il tasso "Visibility" della dashboard (nominato O citato), Mention Rate, Citation Rate e il conteggio "Citations" per il dominio proprio, con confronto rispetto al periodo precedente |
+| `get_visibility_timeseries` | Visibilità, mention rate, citation rate, menzioni, posizione ordinale (`avgMentionOrder`), profondità di menzione e sentiment per giorno (gli stessi valori del grafico della dashboard) |
+| `list_prompts` | Prompt monitorati con metriche (visibile, mention rate, citation rate), principali competitor e citazioni per prompt (paginati tramite `offset`/`hasMore`) — restituisce l'`id` del prompt usato dagli strumenti di analisi dettagliata dei prompt |
 | `get_prompt_details` | Approfondisci un prompt: metriche per modello e cronologia completa delle risposte (una riga per risposta IA con menzione, profondità, sentiment e brand citati) |
 | `get_answer_content` | Leggi le risposte IA reali di un prompt in un giorno: testo completo, brand con sentiment e tutte le fonti citate |
-| `get_competitor_ranking` | Ranking di visibilità dei competitor sui modelli AI — restituisce l'`id` del competitor per gli strumenti di analisi dettagliata |
+| `get_competitor_ranking` | Ranking dei competitor con il set completo di KPI della dashboard: visibilità (nominato O citato), mention rate, citation rate, menzioni, Share of Voice, posizione ordinale (`avgMentionOrder`), profondità di menzione, quota #1/Top-3, head-to-head e citazioni — restituisce l'`id` del competitor usato dagli strumenti di analisi dettagliata |
 | `get_competitor_gap_analysis` | Gap analysis contro un competitor: risposte in cui appare solo lui (le tue perdite), head-to-head e le tue vittorie — con i prompt concreti dietro |
 | `get_competitor_h2h` | Confronto head-to-head con un competitor: chi viene nominato per primo, ordine medio di menzione e claim comparativi valutati da LLM |
 | `get_sentiment_overview` | Sentiment e Share of Voice: SoV senza limiti con denominatori espliciti, classifica del sentiment per brand con win rate e le affermazioni più negative valutate da LLM |
@@ -57,13 +57,40 @@ Tutti i tool sono **read-only**: recuperano dati e non li modificano mai.
 
 I tool di analytics accettano i filtri opzionali `model` (es. `chatgpt`, `perplexity`, `ai_overview`, `gemini`, `grok`) e `tags` — gli stessi filtri della dashboard.
 
+### Visibility, Mention Rate e Citation Rate
+
+Un brand è **visibile** in una risposta AI quando viene nominato nel testo della risposta *oppure* uno dei suoi domini viene citato come fonte. I tool riportano tutti e tre i tassi con lo stesso denominatore (tutte le risposte analizzate), quindi sono direttamente confrontabili (vedi [KPI e metriche](/it/getting-started/kpis)):
+
+- `visibilityRatePercent` — nominato **o** citato (il KPI "Visibility" della dashboard)
+- `mentionRatePercent` — nominato nel testo della risposta
+- `citationRatePercent` — dominio proprio (o un alias di dominio configurato) citato come fonte
+
+Una risposta può contare sia nel Mention Rate sia nel Citation Rate, quindi Visibility ≤ Mention Rate + Citation Rate. Esempio: *"Visibility 50%, Mention Rate 45%, Citation Rate 20%"* significa che il 15% delle risposte nomina e cita il brand, il 30% lo nomina soltanto e il 5% si limita a linkarlo.
+
+## Prompt di esempio
+
+Prova a chiedere al tuo assistente AI:
+
+- *"Quanto è visibile il mio brand nella ricerca AI questo mese, e come è cambiato rispetto al periodo precedente?"*
+- *"Quanta della mia visibilità deriva dall'essere nominato rispetto all'essere citato come fonte? Quali prompt sono solo citati?"*
+- *"Classifica i miei competitor per visibilità AI ed esegui una gap analysis contro il più forte — dove compaiono loro quando noi no?"*
+- *"Quali fonti citano di più i modelli AI per i miei prompt monitorati, filtrando solo su ChatGPT?"*
+- *"Confrontami head-to-head con il competitor X: chi viene nominato per primo e cosa affermano i modelli AI su ciascuno di noi?"*
+- *"Mostrami cosa ha risposto davvero ChatGPT ieri al mio prompt 'miglior CRM per startup' — testo completo e fonti citate."*
+- *"Qual è il mio Share of Voice e quali affermazioni negative fanno i modelli AI sul mio brand?"*
+- *"Quali sono le mie task di ottimizzazione aperte più importanti, e cosa dovrei fare esattamente per la prima?"*
+
 ### Definizioni delle metriche
 
 I tool restituiscono gli stessi numeri della dashboard di Finseo e li etichettano esplicitamente:
 
-- **`visibilityRatePercent`** — quota di risposte AI analizzate che menzionano il tuo brand (il KPI "Visibility" della dashboard)
-- **`promptCoveragePercent`** — quota di prompt monitorati con almeno una menzione (un numero diverso, di solito più alto)
+- **`visibilityRatePercent`** — quota di risposte AI analizzate in cui il tuo brand è visibile: nominato nel testo della risposta O il tuo dominio citato come fonte (il KPI "Visibility" della dashboard)
+- **`mentionRatePercent`** — quota di risposte che nominano il tuo brand nel testo (il KPI "Mention Rate" della dashboard)
+- **`citationRatePercent`** — quota di risposte che citano il tuo dominio o un alias di dominio come fonte (il KPI "Citation Rate" della dashboard)
+- **`promptCoveragePercent`** — quota di prompt monitorati con almeno una risposta visibile (un numero diverso, di solito più alto)
+- **`brandMentions`** / **`ownDomainCitedAnswers`** — i conteggi assoluti dietro Mention Rate e Citation Rate
 - **`ownDomainCitations.total`** — risposte AI che citano il tuo dominio come fonte (il KPI "Citations" della dashboard)
+- **`visibilityIsMentionOnly`** (ranking dei competitor) — `true` quando la componente citazioni non è stata risolta per quel brand e `visibilityRatePercent` coincide con il tasso basato sulle sole menzioni
 
 ## Endpoint
 

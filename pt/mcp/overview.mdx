@@ -40,12 +40,12 @@ Todas as ferramentas são **read-only** — obtêm dados e nunca os modificam.
 | Ferramenta | Descrição |
 |------|-------------|
 | `list_projects` | Listar todos os seus projetos |
-| `get_visibility_metrics` | KPIs de visibilidade, incl. a taxa "Visibility" do dashboard e o KPI "Citations" do domínio próprio, com comparação com o período anterior |
-| `get_visibility_timeseries` | Visibilidade, menções, posição e sentiment por dia (os mesmos valores que o gráfico do dashboard) |
-| `list_prompts` | Prompts rastreados com métricas, principais concorrentes e citações por prompt |
+| `get_visibility_metrics` | KPIs de visibilidade — a taxa "Visibility" do dashboard (mencionada OU citada), Mention Rate, Citation Rate e a contagem "Citations" do domínio próprio, com comparação com o período anterior |
+| `get_visibility_timeseries` | Visibilidade, mention rate, citation rate, menções, posição ordinal (`avgMentionOrder`), profundidade da menção e sentiment por dia (os mesmos valores que o gráfico do dashboard) |
+| `list_prompts` | Prompts rastreados com métricas (visível, mention rate, citation rate), principais concorrentes e citações por prompt (paginado via `offset`/`hasMore`) — devolve o `id` do prompt usado pelas ferramentas de análise detalhada de prompts |
 | `get_prompt_details` | Aprofunde num prompt: métricas por modelo e histórico completo de respostas (uma linha por resposta de IA com menção, profundidade, sentimento e marcas citadas) |
 | `get_answer_content` | Leia as respostas reais da IA para um prompt num dia: texto completo, marcas com sentimento e todas as fontes citadas |
-| `get_competitor_ranking` | Ranking de visibilidade dos concorrentes nos vários modelos de IA — devolve o `id` do concorrente para as ferramentas de análise detalhada |
+| `get_competitor_ranking` | Ranking de concorrentes com o conjunto completo de KPIs do dashboard: visibilidade (mencionada OU citada), mention rate, citation rate, menções, Share of Voice, posição ordinal (`avgMentionOrder`), profundidade da menção, quota #1/Top-3, head-to-head e citações — devolve o `id` do concorrente para as ferramentas de análise detalhada |
 | `get_competitor_gap_analysis` | Análise de gaps contra um concorrente: respostas onde só ele aparece (as tuas perdas), head-to-head e as tuas vitórias — com os prompts concretos por trás |
 | `get_competitor_h2h` | Comparação head-to-head com um concorrente: quem é mencionado primeiro, ordem média de menção e afirmações comparativas avaliadas por LLM |
 | `get_sentiment_overview` | Sentimento e Share of Voice: SoV sem limite com denominadores explícitos, ranking de sentimento por marca com win rates e as afirmações mais negativas avaliadas por LLM |
@@ -57,13 +57,40 @@ Todas as ferramentas são **read-only** — obtêm dados e nunca os modificam.
 
 As ferramentas de analytics aceitam filtros opcionais de `model` (por exemplo `chatgpt`, `perplexity`, `ai_overview`, `gemini`, `grok`) e `tags` — os mesmos filtros que o dashboard.
 
+### Visibility, Mention Rate e Citation Rate
+
+Uma marca está **visível** numa resposta de IA quando é mencionada pelo nome no texto da resposta *ou* quando um dos seus domínios é citado como fonte. As ferramentas devolvem as três taxas com o mesmo denominador (todas as respostas analisadas), pelo que podem ser comparadas diretamente (ver [KPIs explicados](/pt/getting-started/kpis)):
+
+- `visibilityRatePercent` — mencionada **ou** citada (o KPI "Visibility" do dashboard)
+- `mentionRatePercent` — mencionada pelo nome no texto da resposta
+- `citationRatePercent` — domínio próprio (ou um alias de domínio configurado) citado como fonte
+
+Uma resposta pode contar tanto para a Mention Rate como para a Citation Rate, pelo que Visibility ≤ Mention Rate + Citation Rate. Exemplo: *"Visibility 50%, Mention Rate 45%, Citation Rate 20%"* significa que 15% das respostas mencionam e citam a marca, 30% apenas a mencionam e 5% apenas ligam para ela.
+
 ### Definições das métricas
 
 As ferramentas devolvem os mesmos números que o dashboard da Finseo e identificam-nos explicitamente:
 
-- **`visibilityRatePercent`** — quota das respostas de IA analisadas que mencionam a sua marca (o KPI "Visibility" do dashboard)
-- **`promptCoveragePercent`** — quota dos prompts rastreados com pelo menos uma menção (um número diferente, normalmente mais alto)
+- **`visibilityRatePercent`** — quota das respostas de IA analisadas em que a sua marca está visível: mencionada pelo nome no texto da resposta OU o seu próprio domínio citado como fonte (o KPI "Visibility" do dashboard)
+- **`mentionRatePercent`** — quota das respostas que mencionam a sua marca pelo nome no texto (o KPI "Mention Rate" do dashboard)
+- **`citationRatePercent`** — quota das respostas que citam o seu próprio domínio ou um alias de domínio como fonte (o KPI "Citation Rate" do dashboard)
+- **`promptCoveragePercent`** — quota dos prompts rastreados com pelo menos uma resposta visível (um número diferente, normalmente mais alto)
+- **`brandMentions`** / **`ownDomainCitedAnswers`** — as contagens absolutas por trás da Mention Rate e da Citation Rate
 - **`ownDomainCitations.total`** — respostas de IA que citam o seu próprio domínio como fonte (o KPI "Citations" do dashboard)
+- **`visibilityIsMentionOnly`** (ranking de concorrentes) — `true` quando a componente de citações não pôde ser resolvida para essa marca e `visibilityRatePercent` é igual à taxa baseada apenas em menções
+
+## Exemplos de prompts
+
+Experimente perguntar ao seu assistente de IA:
+
+- *"Quão visível é a minha marca na pesquisa por IA este mês, e como mudou em relação ao período anterior?"*
+- *"Quanto da minha visibilidade vem de ser mencionada pelo nome vs. ser citada como fonte? Que prompts são apenas citados?"*
+- *"Ordena os meus concorrentes por visibilidade em IA e faz uma análise de gaps contra o mais forte — onde aparecem eles quando nós não aparecemos?"*
+- *"Que fontes os modelos de IA citam mais para os meus prompts rastreados, filtrando só para o ChatGPT?"*
+- *"Compara-me head-to-head com o concorrente X: quem é mencionado primeiro e o que afirmam os modelos de IA sobre cada um de nós?"*
+- *"Mostra-me o que o ChatGPT respondeu ontem ao meu prompt 'melhor CRM para startups' — texto completo e as fontes que citou."*
+- *"Qual é o meu Share of Voice e que afirmações negativas fazem os modelos de IA sobre a minha marca?"*
+- *"Quais são as minhas tasks de otimização em aberto mais importantes, e o que devo fazer exatamente na primeira?"*
 
 ## Endpoint
 

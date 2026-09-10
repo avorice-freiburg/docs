@@ -5,6 +5,20 @@ api: GET /v1/projects/{projectId}/metrics
 
 Devuelve métricas agregadas de visibilidad en IA para el periodo actual comparado con el periodo anterior de igual duración. Úsalo para dashboards y KPIs de la visibilidad de Finseo en ChatGPT, Claude, Perplexity y el resto de modelos con Tracking.
 
+La respuesta incluye el periodo actual en `today` y el periodo anterior en `yesterday` (nombres heredados — cada bloque agrega el periodo completo y `date` es la fecha de fin del periodo). Todas las tasas comparten el mismo denominador, `totalResponses` (consulta [KPIs explicados](/es/getting-started/kpis)):
+
+| Campo | Significado |
+| --- | --- |
+| `responseVisibilityRate` | **Visibility** — % de respuestas en las que la marca es visible: nombrada en el texto O propio dominio citado como fuente (el KPI "Visibility" del dashboard) |
+| `mentionRate` | **Mention Rate** — % de respuestas que nombran la marca en el texto de la respuesta |
+| `citationRate` | **Citation Rate** — % de respuestas que citan el propio dominio (o un alias de dominio configurado) como fuente |
+| `mentions` / `cited` | Recuentos absolutos detrás de Mention Rate y Citation Rate (respuestas, cada una contada una vez) |
+| `visibilityRate` | Cobertura de Prompts — % de Prompts con Tracking con al menos una respuesta visible (un número distinto, normalmente mayor) |
+| `visible` / `notVisible` | Número de Prompts con / sin una respuesta visible |
+| `position` | Profundidad de mención — a qué profundidad del texto de la respuesta aparece la mención (0 = al principio), no es un ranking |
+
+Una respuesta puede contar tanto en `mentionRate` como en `citationRate`, por lo que `responseVisibilityRate ≤ mentionRate + citationRate`.
+
 <ParamField path="projectId" type="string" required>
   Identificador del proyecto.
 </ParamField>
@@ -51,7 +65,8 @@ r = requests.get(
     params={"timeframe": "30d", "language": "en"},
 )
 metrics = r.json()["data"]
-print(metrics["current"]["visibilityRate"], metrics["changes"]["visibilityRateChange"])
+cur, chg = metrics["today"], metrics["changes"]
+print(cur["responseVisibilityRate"], cur["mentionRate"], cur["citationRate"], chg["responseVisibilityRateChange"])
 ```
 
 </RequestExample>
@@ -61,37 +76,44 @@ print(metrics["current"]["visibilityRate"], metrics["changes"]["visibilityRateCh
 ```json
 {
   "data": {
-    "current": {
+    "today": {
+      "date": "2026-09-08",
       "visible": 28,
       "notVisible": 14,
-      "mentions": 156,
+      "mentions": 44,
+      "cited": 22,
       "totalResponses": 84,
-      "visibilityRate": 66.67,
-      "responseVisibilityRate": 52.38,
       "position": 22.4,
-      "sentiment": 0.78,
-      "periodStart": "2026-02-27",
-      "periodEnd": "2026-03-28"
+      "sentiment": 78,
+      "visibilityRate": 66.67,
+      "responseVisibilityRate": 59.52,
+      "mentionRate": 52.38,
+      "citationRate": 26.19
     },
-    "previous": {
+    "yesterday": {
+      "date": "2026-08-09",
       "visible": 22,
       "notVisible": 20,
-      "mentions": 118,
+      "mentions": 34,
+      "cited": 15,
       "totalResponses": 76,
-      "visibilityRate": 52.38,
-      "responseVisibilityRate": 45.2,
       "position": 28.1,
-      "sentiment": 0.71,
-      "periodStart": "2026-01-28",
-      "periodEnd": "2026-02-26"
+      "sentiment": 71,
+      "visibilityRate": 52.38,
+      "responseVisibilityRate": 50.0,
+      "mentionRate": 44.74,
+      "citationRate": 19.74
     },
     "changes": {
       "visibleChange": 6,
       "visibilityRateChange": 14.29,
-      "responseVisibilityRateChange": 7.18,
-      "mentionsChange": 38,
+      "responseVisibilityRateChange": 9.52,
+      "mentionsChange": 10,
+      "citedChange": 7,
+      "mentionRateChange": 7.64,
+      "citationRateChange": 6.45,
       "positionChange": -5.7,
-      "sentimentChange": 0.07
+      "sentimentChange": 7
     }
   }
 }

@@ -3,7 +3,20 @@ title: Elenca i concorrenti
 api: GET /v1/projects/{projectId}/competitors
 ---
 
-Restituisce i concorrenti in classifica per visibilità AI: Mentions, visibilità, posizione media e Sentiment. Usa questo Endpoint per vedere come Finseo si posiziona rispetto agli altri brand nelle risposte di ChatGPT, Claude e Perplexity.
+Restituisce i concorrenti in classifica per visibilità AI: visibilità, mention rate, citation rate, Mentions, Share of Voice, posizione e Sentiment. Usa questo Endpoint per vedere come Finseo si posiziona rispetto agli altri brand nelle risposte di ChatGPT, Claude e Perplexity.
+
+Per ogni concorrente vengono restituiti tre tassi di presenza, tutti come quota di `totalResults` (vedi [KPI e metriche](/it/getting-started/kpis)):
+
+- `visibilityRate` — **Visibility**: % di risposte in cui il brand è visibile, cioè nominato nel testo della risposta O con il proprio dominio citato come fonte (la colonna "Visibility" della dashboard; `visibleResults` è il conteggio). `visibilityIsMentionOnly: true` segnala le righe in cui la componente citazioni non è stata risolta e il valore coincide con il tasso basato sulle sole menzioni.
+- `mentionRate` — **Mention Rate**: % di risposte che nominano il brand nel testo (`totalMentions` è il conteggio).
+- `citationRate` — **Citation Rate**: % di risposte che citano il dominio del brand come fonte (`totalCitations` è il conteggio); `null` quando le citazioni non sono state risolte per il brand.
+
+Una risposta può contare sia in `mentionRate` sia in `citationRate`, quindi `visibilityRate ≤ mentionRate + citationRate`.
+
+Per ogni concorrente vengono restituite due metriche di posizione:
+
+- `avgMentionOrder` — il KPI ordinale **Position**: rango medio tra tutti i brand nominati in una risposta (1 = nominato per primo, più basso è meglio). È il valore in stile `#2.3` mostrato nella pagina concorrenti della dashboard.
+- `averagePosition` — **Mention Depth**: quanto in profondità nel *testo* della risposta compare la menzione (0% = all'inizio). Non è una posizione in classifica; mantiene questo nome per retrocompatibilità.
 
 <ParamField path="projectId" type="string" required>
   Identificatore del progetto.
@@ -29,8 +42,8 @@ Restituisce i concorrenti in classifica per visibilità AI: Mentions, visibilit�
   Filtra per sottostringa del nome o del dominio del concorrente.
 </ParamField>
 
-<ParamField query="sortBy" type="string" default="mentions">
-  Uno tra `visibility`, `mentions`, `position`, `sentiment`, `name`.
+<ParamField query="sortBy" type="string" default="visibility">
+  Uno tra `visibility` (nominato O citato), `mentions`, `position`, `sentiment`, `name`.
 </ParamField>
 
 <ParamField query="sortDir" type="string" default="desc">
@@ -81,8 +94,23 @@ print([c["name"] for c in competitors if c["isUserBrand"]])
         "baseDomain": "finseo.ai",
         "isStarred": true,
         "isUserBrand": true,
-        "totalMentions": 412,
-        "visibleResults": 186,
+        "totalMentions": 186,
+        "visibleResults": 214,
+        "totalResults": 420,
+        "visibilityRate": 51.0,
+        "visibilityChange": 4.2,
+        "visibilityIsMentionOnly": false,
+        "mentionRate": 44.3,
+        "mentionRateChange": 2.1,
+        "totalCitations": 98,
+        "citationRate": 23.3,
+        "citationRateChange": 3.8,
+        "avgMentionOrder": 2.3,
+        "avgMentionOrderChange": -0.2,
+        "firstMentionSharePercent": 44,
+        "top3MentionSharePercent": 65,
+        "shareOfVoicePercent": 8.2,
+        "shareOfVoiceChange": 0.6,
         "averagePosition": 17.3,
         "sentimentScore": 0.77,
         "promptCount": 42
@@ -94,8 +122,23 @@ print([c["name"] for c in competitors if c["isUserBrand"]])
         "baseDomain": "competitor-a.com",
         "isStarred": false,
         "isUserBrand": false,
-        "totalMentions": 389,
-        "visibleResults": 172,
+        "totalMentions": 172,
+        "visibleResults": 181,
+        "totalResults": 420,
+        "visibilityRate": 43.1,
+        "visibilityChange": -1.4,
+        "visibilityIsMentionOnly": false,
+        "mentionRate": 41.0,
+        "mentionRateChange": -0.9,
+        "totalCitations": 24,
+        "citationRate": 5.7,
+        "citationRateChange": -0.5,
+        "avgMentionOrder": 3.1,
+        "avgMentionOrderChange": 0.4,
+        "firstMentionSharePercent": 23,
+        "top3MentionSharePercent": 53,
+        "shareOfVoicePercent": 4.2,
+        "shareOfVoiceChange": -0.3,
         "averagePosition": 21.4,
         "sentimentScore": 0.62,
         "promptCount": 42

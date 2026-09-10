@@ -3,7 +3,20 @@ title: Serie temporal de métricas
 api: GET /v1/projects/{projectId}/metrics/timeseries
 ---
 
-Devuelve métricas diarias de visibilidad en IA para tus gráficas. Cada fila corresponde a un día natural dentro del periodo derivado de `timeframe`, o dentro de `startDate` / `endDate` cuando envías ambos. Ideal para líneas de tendencia de Finseo en ChatGPT, Claude y Perplexity.
+Devuelve métricas diarias de visibilidad en IA para tus gráficas. Cada fila de `data.chartData` corresponde a un día natural dentro del periodo derivado de `timeframe`, o dentro de `startDate` / `endDate` cuando envías ambos. Ideal para líneas de tendencia de Finseo en ChatGPT, Claude y Perplexity.
+
+Campos por día (todos los recuentos son respuestas de IA de ese día; consulta [KPIs explicados](/es/getting-started/kpis)):
+
+| Campo | Significado |
+| --- | --- |
+| `totalResults` | Respuestas de IA analizadas ese día |
+| `visible` / `notVisible` | Respuestas en las que la marca es visible (nombrada en el texto O propio dominio citado) / no visible — `visible ÷ totalResults` es la **Visibility** del dashboard |
+| `mentions` | Respuestas que nombran la marca en el texto — `mentions ÷ totalResults` es la **Mention Rate** |
+| `cited` | Respuestas que citan el propio dominio (o un alias de dominio) como fuente — `cited ÷ totalResults` es la **Citation Rate**. `null` cuando el día se sirvió desde un rollup que no incluye citaciones |
+| `mentionOrder` | Posición ordinal media entre las marcas nombradas (1 = nombrada primero; el KPI **Position** del dashboard), `null` cuando la marca no fue nombrada |
+| `position` | Profundidad de mención — a qué profundidad del texto de la respuesta aparece la mención (0 = al principio) |
+| `sentiment` | Puntuación media de sentimiento (0–100) en las respuestas visibles |
+| `uniquePrompts` | Prompts distintos con al menos una respuesta ese día |
 
 <ParamField path="projectId" type="string" required>
   Identificador del proyecto.
@@ -50,8 +63,9 @@ r = requests.get(
     headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
     params={"timeframe": "14d", "model": "chatgpt"},
 )
-series = r.json()["data"]
-print(series[-1]["mentions"], series[-1]["date"])
+series = r.json()["data"]["chartData"]
+last = series[-1]
+print(last["date"], last["visible"] / last["totalResults"], last["mentions"], last["cited"])
 ```
 
 </RequestExample>
@@ -60,38 +74,47 @@ print(series[-1]["mentions"], series[-1]["date"])
 
 ```json
 {
-  "data": [
-    {
-      "date": "2026-03-15",
-      "visible": 9,
-      "notVisible": 3,
-      "totalResults": 12,
-      "mentions": 24,
-      "position": 19.2,
-      "sentiment": 0.74,
-      "uniquePrompts": 12
-    },
-    {
-      "date": "2026-03-16",
-      "visible": 10,
-      "notVisible": 2,
-      "totalResults": 12,
-      "mentions": 31,
-      "position": 17.8,
-      "sentiment": 0.79,
-      "uniquePrompts": 12
-    },
-    {
-      "date": "2026-03-17",
-      "visible": 11,
-      "notVisible": 1,
-      "totalResults": 12,
-      "mentions": 28,
-      "position": 16.5,
-      "sentiment": 0.81,
-      "uniquePrompts": 12
-    }
-  ]
+  "data": {
+    "chartData": [
+      {
+        "date": "2026-09-06",
+        "visible": 9,
+        "notVisible": 3,
+        "totalResults": 12,
+        "mentions": 8,
+        "cited": 4,
+        "position": 19.2,
+        "mentionOrder": 2.4,
+        "sentiment": 74,
+        "uniquePrompts": 12
+      },
+      {
+        "date": "2026-09-07",
+        "visible": 10,
+        "notVisible": 2,
+        "totalResults": 12,
+        "mentions": 9,
+        "cited": 5,
+        "position": 17.8,
+        "mentionOrder": 2.1,
+        "sentiment": 79,
+        "uniquePrompts": 12
+      },
+      {
+        "date": "2026-09-08",
+        "visible": 11,
+        "notVisible": 1,
+        "totalResults": 12,
+        "mentions": 10,
+        "cited": 5,
+        "position": 16.5,
+        "mentionOrder": 1.9,
+        "sentiment": 81,
+        "uniquePrompts": 12
+      }
+    ],
+    "anchoredWindow": null
+  }
 }
 ```
 

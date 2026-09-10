@@ -3,9 +3,17 @@ title: List Competitors
 api: GET /v1/projects/{projectId}/competitors
 ---
 
-Returns ranked competitors for AI visibility: mentions, visibility, Share of Voice, position, and sentiment. Use this to see how Finseo stacks up against other brands in ChatGPT, Claude, and Perplexity answers.
+Returns ranked competitors for AI visibility: visibility, mention rate, citation rate, mentions, Share of Voice, position, and sentiment. Use this to see how Finseo stacks up against other brands in ChatGPT, Claude, and Perplexity answers.
 
-Two position metrics are returned per competitor (see [KPIs explained](/getting-started/kpis)):
+Three presence rates are returned per competitor, all as a share of `totalResults` (see [KPIs explained](/getting-started/kpis)):
+
+- `visibilityRate` — **Visibility**: % of answers where the brand is visible, i.e. named in the answer text OR its domain cited as a source (the dashboard "Visibility" column; `visibleResults` is the count). `visibilityIsMentionOnly: true` flags rows where the citation leg could not be resolved and the value equals the mention-based rate.
+- `mentionRate` — **Mention Rate**: % of answers naming the brand in the text (`totalMentions` is the count).
+- `citationRate` — **Citation Rate**: % of answers citing the brand's domain as a source (`totalCitations` is the count); `null` when citations could not be resolved for the brand.
+
+One answer can count toward both `mentionRate` and `citationRate`, so `visibilityRate ≤ mentionRate + citationRate`.
+
+Two position metrics are returned per competitor:
 
 - `avgMentionOrder` — the ordinal **Position** KPI: average rank among all brands named in an answer (1 = named first, lower is better). This is the `#2.3`-style value shown on the dashboard competitors page.
 - `averagePosition` — **Mention Depth**: how deep in the answer *text* the mention appears (0% = very top). Not a ranking position; kept under this name for backwards compatibility.
@@ -42,8 +50,8 @@ Two position metrics are returned per competitor (see [KPIs explained](/getting-
   Filter by competitor name or domain substring.
 </ParamField>
 
-<ParamField query="sortBy" type="string" default="mentions">
-  One of `visibility`, `mentions`, `position`, `sentiment`, `name`.
+<ParamField query="sortBy" type="string" default="visibility">
+  One of `visibility` (named OR cited), `mentions`, `position`, `sentiment`, `name`.
 </ParamField>
 
 <ParamField query="sortDir" type="string" default="desc">
@@ -94,8 +102,17 @@ print([c["name"] for c in competitors if c["isUserBrand"]])
         "baseDomain": "finseo.ai",
         "isStarred": true,
         "isUserBrand": true,
-        "totalMentions": 412,
-        "visibleResults": 186,
+        "totalMentions": 186,
+        "visibleResults": 214,
+        "totalResults": 420,
+        "visibilityRate": 51.0,
+        "visibilityChange": 4.2,
+        "visibilityIsMentionOnly": false,
+        "mentionRate": 44.3,
+        "mentionRateChange": 2.1,
+        "totalCitations": 98,
+        "citationRate": 23.3,
+        "citationRateChange": 3.8,
         "avgMentionOrder": 2.3,
         "avgMentionOrderChange": -0.2,
         "firstMentionSharePercent": 44,
@@ -113,8 +130,17 @@ print([c["name"] for c in competitors if c["isUserBrand"]])
         "baseDomain": "competitor-a.com",
         "isStarred": false,
         "isUserBrand": false,
-        "totalMentions": 389,
-        "visibleResults": 172,
+        "totalMentions": 172,
+        "visibleResults": 181,
+        "totalResults": 420,
+        "visibilityRate": 43.1,
+        "visibilityChange": -1.4,
+        "visibilityIsMentionOnly": false,
+        "mentionRate": 41.0,
+        "mentionRateChange": -0.9,
+        "totalCitations": 24,
+        "citationRate": 5.7,
+        "citationRateChange": -0.5,
         "avgMentionOrder": 3.1,
         "avgMentionOrderChange": 0.4,
         "firstMentionSharePercent": 23,

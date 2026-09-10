@@ -5,6 +5,8 @@ api: POST /v1/projects/{projectId}/prompts
 
 Adiciona um novo Prompt de Tracking a um projeto. A Finseo executará este Prompt nos modelos especificados e registrará a visibilidade da sua marca em comparação com os concorrentes no ChatGPT, Claude e Perplexity.
 
+O Prompt é colocado na fila de processamento imediatamente (`enqueued: true` na resposta); as primeiras respostas costumam chegar em poucos minutos. O Prompt herda o domínio, o nome da marca, os sinônimos, os aliases de domínio e a frequência de Tracking do projeto — por isso o projeto precisa de uma `websiteUrl`, caso contrário a solicitação é rejeitada com `400`.
+
 <ParamField path="projectId" type="string" required>
   Identificador do projeto.
 </ParamField>
@@ -18,8 +20,8 @@ Adiciona um novo Prompt de Tracking a um projeto. A Finseo executará este Promp
   Identificadores de modelos; padrão `["chatgpt", "perplexity", "ai_overview"]`.
 </ParamField>
 
-<ParamField body="language" type="string" default="en">
-  O padrão é `en`. O idioma **não** é herdado do projeto; informe-o explicitamente em projetos que não estejam em inglês.
+<ParamField body="language" type="string">
+  Código de idioma/mercado do Prompt (ex.: `de`, `en`). O padrão é o `language` do projeto. O valor é normalizado para a grafia do dashboard (`de` → `DE`) para que o filtro de país corresponda.
 </ParamField>
 
 <ParamField body="tags" type="array">
@@ -71,12 +73,16 @@ print(r.json()["data"])
   "data": {
     "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
     "prompt": "How does Finseo compare to traditional SEO suites?",
-    "domain": "finseo.ai",
-    "brandName": "finseo",
-    "language": "en",
+    "domain": "https://www.finseo.ai",
+    "brand_name": "Finseo",
+    "language": "EN",
     "models": ["chatgpt", "claude", "perplexity"],
     "tags": ["comparison", "Finseo"],
-    "created": true
+    "project_id": "67a1c2d3e4f5061728394a5b",
+    "active": true,
+    "processing_complete": false,
+    "created_at": "2026-09-10T09:41:12.481Z",
+    "enqueued": true
   }
 }
 ```

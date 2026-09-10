@@ -40,12 +40,12 @@ Tous les tools sont en **read-only** — ils récupèrent des données et ne les
 | Tool | Description |
 |------|-------------|
 | `list_projects` | Lister tous tes projets |
-| `get_visibility_metrics` | KPIs de visibilité, dont le taux « Visibility » du dashboard et le KPI « Citations » du domaine propre, avec comparaison à la période précédente |
-| `get_visibility_timeseries` | Visibilité, mentions, position et sentiment par jour (mêmes valeurs que le graphique du dashboard) |
-| `list_prompts` | Prompts suivis avec métriques, top concurrents et citations par prompt |
+| `get_visibility_metrics` | KPIs de visibilité — le taux « Visibility » du dashboard (nommée OU citée), Mention Rate, Citation Rate et le décompte « Citations » du domaine propre, avec comparaison à la période précédente |
+| `get_visibility_timeseries` | Visibilité, mention rate, citation rate, mentions, position ordinale (`avgMentionOrder`), profondeur de mention et sentiment par jour (mêmes valeurs que le graphique du dashboard) |
+| `list_prompts` | Prompts suivis avec métriques (visible, mention rate, citation rate), top concurrents et citations par prompt (paginé via `offset`/`hasMore`) — renvoie l'`id` du prompt utilisé par les outils d'analyse détaillée des prompts |
 | `get_prompt_details` | Explorez un prompt : métriques par modèle et historique complet des réponses (une ligne par réponse IA avec mention, profondeur, sentiment et marques citées) |
 | `get_answer_content` | Lisez les réponses IA réelles d'un prompt pour un jour donné : texte complet, marques avec sentiment et toutes les sources citées |
-| `get_competitor_ranking` | Ranking de visibilité des concurrents à travers les modèles IA — renvoie l'`id` du concurrent pour les outils d'analyse détaillée |
+| `get_competitor_ranking` | Ranking des concurrents avec l'ensemble des KPIs du dashboard : visibilité (nommée OU citée), mention rate, citation rate, mentions, Share of Voice, position ordinale (`avgMentionOrder`), profondeur de mention, part #1/Top-3, head-to-head et citations — renvoie l'`id` du concurrent pour les outils d'analyse détaillée |
 | `get_competitor_gap_analysis` | Analyse des écarts face à un concurrent : réponses où lui seul apparaît (vos pertes), head-to-head et vos victoires — avec les prompts concrets derrière |
 | `get_competitor_h2h` | Comparaison head-to-head avec un concurrent : qui est cité en premier, ordre moyen de mention et affirmations comparatives évaluées par LLM |
 | `get_sentiment_overview` | Sentiment et Share of Voice : SoV non plafonné avec dénominateurs explicites, classement de sentiment par marque avec win rates et les affirmations les plus négatives évaluées par LLM |
@@ -57,13 +57,27 @@ Tous les tools sont en **read-only** — ils récupèrent des données et ne les
 
 Les tools analytics acceptent des filtres optionnels `model` (p. ex. `chatgpt`, `perplexity`, `ai_overview`, `gemini`, `grok`) et `tags` — les mêmes filtres que le dashboard.
 
+### Visibility, Mention Rate et Citation Rate
+
+Une marque est **visible** dans une réponse IA lorsqu'elle est nommée dans le texte de la réponse *ou* que l'un de ses domaines est cité comme source. Les tools rapportent les trois taux avec le même dénominateur (toutes les réponses analysées), ce qui permet de les comparer directement (voir [KPIs expliqués](/fr/getting-started/kpis)) :
+
+- `visibilityRatePercent` — nommée **ou** citée (le KPI « Visibility » du dashboard)
+- `mentionRatePercent` — nommée dans le texte de la réponse
+- `citationRatePercent` — domaine propre (ou un alias de domaine configuré) cité comme source
+
+Une même réponse peut compter à la fois dans le Mention Rate et le Citation Rate, donc Visibility ≤ Mention Rate + Citation Rate. Exemple : *« Visibility 50 %, Mention Rate 45 %, Citation Rate 20 % »* signifie que 15 % des réponses nomment et citent la marque, 30 % la nomment seulement et 5 % ne font que renvoyer vers son site.
+
 ### Définitions des métriques
 
 Les tools renvoient les mêmes chiffres que le dashboard Finseo et les nomment explicitement :
 
-- **`visibilityRatePercent`** — part des réponses IA analysées qui mentionnent ta marque (le KPI « Visibility » du dashboard)
-- **`promptCoveragePercent`** — part des prompts suivis avec au moins une mention (un chiffre différent, généralement plus élevé)
+- **`visibilityRatePercent`** — part des réponses IA analysées dans lesquelles ta marque est visible : nommée dans le texte de la réponse OU ton propre domaine cité comme source (le KPI « Visibility » du dashboard)
+- **`mentionRatePercent`** — part des réponses qui nomment ta marque dans le texte (le KPI « Mention Rate » du dashboard)
+- **`citationRatePercent`** — part des réponses qui citent ton propre domaine ou un alias de domaine comme source (le KPI « Citation Rate » du dashboard)
+- **`promptCoveragePercent`** — part des prompts suivis avec au moins une réponse visible (un chiffre différent, généralement plus élevé)
+- **`brandMentions`** / **`ownDomainCitedAnswers`** — les décomptes absolus derrière le Mention Rate et le Citation Rate
 - **`ownDomainCitations.total`** — réponses IA citant ton propre domaine comme source (le KPI « Citations » du dashboard)
+- **`visibilityIsMentionOnly`** (ranking des concurrents) — `true` lorsque le volet citations n'a pas pu être résolu pour cette marque et que `visibilityRatePercent` est égal au taux basé sur les mentions
 
 ## Endpoint
 

@@ -1,7 +1,7 @@
 ---
 title: "KPIs y métricas explicadas — Medición de visibilidad en IA"
 sidebarTitle: "KPIs y métricas"
-description: Todas las métricas de Finseo explicadas en lenguaje sencillo, con fórmulas y ejemplos — Visibility, Mentions, Share of Voice, Position, Mention Depth, Citations, Sentiment y más.
+description: Todas las métricas de Finseo explicadas en lenguaje sencillo, con fórmulas y ejemplos — Visibility, Mention Rate, Citation Rate, Share of Voice, Position, Mention Depth, Citations, Sentiment y más.
 ---
 
 # KPIs y métricas
@@ -12,33 +12,68 @@ Todas las métricas están disponibles en el dashboard, en la [API REST](/es/api
 
 ## El ejemplo de referencia
 
-Todas las fórmulas siguientes usan este ejemplo: rastreas **20 prompts** en **2 modelos**, así que un día genera **40 respuestas de IA**. Tu marca es **Acme**.
+Todas las fórmulas siguientes usan este ejemplo: rastreas **20 prompts** en **2 modelos**, así que un día genera **40 respuestas de IA**. Tu marca es **Acme** y tu dominio es `acme.com`.
 
-- Acme aparece en **18** de las 40 respuestas.
+- Acme es **nombrada en el texto** de **18** de las 40 respuestas.
+- `acme.com` es **citado como fuente** en **8** respuestas — 6 de ellas también nombran a Acme, 2 solo lo enlazan.
+- Por tanto, Acme es visible en **20** respuestas (18 nombradas + 2 solo citadas).
 - En las 40 respuestas, los modelos de IA nombran marcas **120 veces** en total (todas las marcas combinadas).
-- Acme es nombrada **24 veces** (una misma respuesta puede mencionarte más de una vez).
 
 ## Métricas de presencia
 
+Una marca puede aparecer en una respuesta de IA de dos formas: el modelo la **nombra** en el texto de la respuesta o **cita** uno de los dominios de la marca como fuente. Finseo rastrea ambas y las reporta por separado — y las combina en Visibility.
+
 ### Visibility
 
-**El porcentaje de respuestas de IA en las que tu marca aparece.**
+**El porcentaje de respuestas de IA en las que tu marca es visible — nombrada en el texto O citada como fuente.**
 
 ```text
-Visibility = (respuestas que mencionan tu marca ÷ todas las respuestas rastreadas) × 100
+Visibility = (respuestas que nombran tu marca O citan tu dominio ÷ todas las respuestas rastreadas) × 100
 ```
 
-Ejemplo: Acme aparece en 18 de 40 respuestas → **Visibility = 45 %**.
+Ejemplo: Acme es nombrada en 18 respuestas y solo citada en otras 2 → visible en 20 de 40 → **Visibility = 50 %**.
 
-Visibility es la métrica principal: responde a "cuando alguien pregunta a la IA sobre mi categoría, ¿con qué frecuencia formo parte de la respuesta?". Cada respuesta cuenta una sola vez, sin importar cuántas veces se te mencione dentro.
+Visibility es la métrica principal: responde a "cuando alguien pregunta a la IA sobre mi categoría, ¿con qué frecuencia formo parte de la respuesta?". Cada respuesta cuenta una sola vez, sin importar cuántas veces se te nombre o enlace dentro. Como es una unión, Visibility nunca es menor que Mention Rate o Citation Rate, y nunca mayor que su suma.
+
+### Mention Rate
+
+**El porcentaje de respuestas de IA que nombran tu marca en el texto de la respuesta.**
+
+```text
+Mention Rate = (respuestas que nombran tu marca ÷ todas las respuestas rastreadas) × 100
+```
+
+Ejemplo: 18 de 40 respuestas → **Mention Rate = 45 %**. Mention Rate es la métrica clásica de "¿habla la IA de mí?" — ignora si tu sitio se usó como fuente.
+
+### Citation Rate
+
+**El porcentaje de respuestas de IA que citan uno de tus dominios como fuente.**
+
+```text
+Citation Rate = (respuestas que citan tu dominio ÷ todas las respuestas rastreadas) × 100
+```
+
+Ejemplo: 8 de 40 respuestas → **Citation Rate = 20 %**. Tu dominio se compara con el dominio del proyecto más los **alias de dominio** configurados en los ajustes del proyecto (p. ej. `acme.de`, `shop.acme.com`).
+
+Mention Rate y Citation Rate no son aditivas: 45 % + 20 % = 65 %, pero Visibility es 50 %, porque 6 respuestas cuentan en ambas.
+
+### Visibility Mix
+
+La vista *Breakdown* del dashboard divide Visibility en tres segmentos sin solapamiento que suman exactamente Visibility:
+
+| Segmento | Significado | Ejemplo |
+| --- | --- | --- |
+| **Mentioned + Cited** (nombrada + citada) | Nombrada en el texto y tu dominio citado | 6 respuestas → 15 % |
+| **Mentioned only** (solo nombrada) | Nombrada, pero tu sitio no se usó como fuente | 12 respuestas → 30 % |
+| **Cited only** (solo citada) | Tu sitio se usó como fuente, pero la marca no se nombra | 2 respuestas → 5 % |
+
+"Cited only" es el segmento más accionable: el modelo ya confía en tu contenido pero no te lo atribuye — normalmente una señal de que faltan los nombres de marca y de producto en las páginas citadas.
 
 ### Mentions
 
-**El número total de veces que se nombra tu marca en el periodo seleccionado.**
+**El número de respuestas de IA que nombran tu marca en el periodo seleccionado.**
 
-A diferencia de Visibility, Mentions cuenta cada aparición: si una respuesta nombra a Acme tres veces, eso suma 1 a Visibility pero 3 a Mentions. Ejemplo: **24 menciones** en 18 respuestas.
-
-Usa Mentions para medir la prominencia dentro de las respuestas; usa Visibility para medir la frecuencia de aparición.
+Cada respuesta cuenta una vez, sin importar cuántas veces repita tu nombre. Mentions es el recuento absoluto detrás de Mention Rate: **18 menciones** en nuestro ejemplo, así que Mention Rate = 18 ÷ 40 = 45 %. Usa Mentions cuando necesites volúmenes (p. ej. para informes) y Mention Rate cuando compares periodos o modelos con distinto número de respuestas.
 
 ### Model Visibility
 
@@ -125,9 +160,9 @@ Ejemplo: tu mención empieza en el carácter 300 de una respuesta de 1.200 carac
 
 ### Citations
 
-**El número de respuestas de IA que citaron uno de tus dominios como fuente.** Cada respuesta cuenta una vez, aunque enlace tu dominio varias veces.
+**El número de respuestas de IA que citaron uno de tus dominios como fuente.** Cada respuesta cuenta una vez, aunque enlace tu dominio varias veces. Citations es el recuento absoluto detrás de [Citation Rate](#citation-rate): **8 citaciones** en nuestro ejemplo → 8 ÷ 40 = 20 %.
 
-Citations mide algo distinto a Mentions: una mención es la IA *hablando de* ti; una citación es la IA *usándote como fuente*. Puedes ser mencionado sin ser citado (el modelo te conoce por sus datos de entrenamiento) y citado sin ser mencionado (tu contenido alimenta una respuesta sobre otro).
+Citations mide algo distinto a Mentions: una mención es la IA *hablando de* ti; una citación es la IA *usándote como fuente*. Puedes ser mencionado sin ser citado (el modelo te conoce por sus datos de entrenamiento) y citado sin ser mencionado (tu contenido alimenta una respuesta sobre otro). Ambas cuentan para [Visibility](#visibility).
 
 ### Citation Share
 
@@ -162,12 +197,15 @@ Las métricas forman un embudo — cada una responde a una pregunta distinta:
 
 | Pregunta | Métrica |
 | --- | --- |
-| ¿Formo parte de la respuesta? | Visibility |
+| ¿Formo parte de la respuesta (nombrado o citado)? | Visibility |
+| ¿Habla la IA de mí? | Mention Rate, Mentions |
+| ¿Me usa la IA como fuente? | Citation Rate, Citations |
+| ¿Nombrado, citado o ambos? | Visibility Mix |
 | ¿Cuánto de la conversación total es mío? | Share of Voice |
 | Cuando aparezco, ¿lidero? | Avg Position, #1 Share, Top-3 Share |
 | ¿Quién gana cuando aparecemos juntos? | Head-to-Head |
 | ¿Qué tan pronto en el texto me nombran? | Mention Depth |
-| ¿Usa la IA mi contenido como evidencia? | Citations, Citation Share |
+| ¿Quién posee la evidencia sobre la que se construyen las respuestas de IA? | Citation Share |
 | ¿Cómo hablan de mí? | Sentiment |
 
 <Tip>
@@ -176,5 +214,5 @@ Un patrón común: la Visibility se mantiene pero el Share of Voice cae. Signifi
 
 ## Acceso programático a las métricas
 
-- **API REST** — [`GET /v1/projects/{projectId}/metrics/daily`](/es/api-reference/metrics/daily) y [`/metrics/timeseries`](/es/api-reference/metrics/timeseries)
+- **API REST** — [`GET /v1/projects/{projectId}/metrics`](/es/api-reference/metrics/daily) (`visibilityRate`, `mentionRate`, `citationRate`, …), [`/metrics/timeseries`](/es/api-reference/metrics/timeseries) y [`/competitors`](/es/api-reference/competitors/ranking)
 - **Servidor MCP** — `get_visibility_metrics`, `get_visibility_timeseries`, `get_competitor_ranking`, `get_competitor_h2h`, `get_sentiment_overview` y más; consulta la [visión general de MCP](/es/mcp/overview)

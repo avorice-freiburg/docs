@@ -5,6 +5,8 @@ api: POST /v1/projects/{projectId}/prompts
 
 Ajoute un nouveau prompt de Tracking à un projet. Finseo exécutera ce prompt sur les modèles spécifiés et enregistrera la visibilité de votre marque par rapport aux concurrents sur ChatGPT, Claude et Perplexity.
 
+Le prompt est mis en file d'attente immédiatement (`enqueued: true` dans la réponse) ; les premières réponses arrivent généralement en quelques minutes. Le prompt hérite du domaine, du nom de marque, des synonymes, des alias de domaine et de la fréquence de Tracking du projet — le projet doit donc avoir une `websiteUrl`, sinon la requête est rejetée avec `400`.
+
 <ParamField path="projectId" type="string" required>
   Identifiant du projet.
 </ParamField>
@@ -18,8 +20,8 @@ Ajoute un nouveau prompt de Tracking à un projet. Finseo exécutera ce prompt s
   Identifiants de modèles ; valeur par défaut `["chatgpt", "perplexity", "ai_overview"]`.
 </ParamField>
 
-<ParamField body="language" type="string" default="en">
-  La valeur par défaut est `en`. La langue n'est **pas** héritée du projet ; indiquez-la explicitement pour les projets non anglophones.
+<ParamField body="language" type="string">
+  Code de langue/marché du prompt (p. ex. `de`, `en`). Par défaut, la `language` du projet. La valeur est normalisée selon la notation du dashboard (`de` → `DE`) afin de correspondre au filtre pays.
 </ParamField>
 
 <ParamField body="tags" type="array">
@@ -71,12 +73,16 @@ print(r.json()["data"])
   "data": {
     "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
     "prompt": "How does Finseo compare to traditional SEO suites?",
-    "domain": "finseo.ai",
-    "brandName": "finseo",
-    "language": "en",
+    "domain": "https://www.finseo.ai",
+    "brand_name": "Finseo",
+    "language": "EN",
     "models": ["chatgpt", "claude", "perplexity"],
     "tags": ["comparison", "Finseo"],
-    "created": true
+    "project_id": "67a1c2d3e4f5061728394a5b",
+    "active": true,
+    "processing_complete": false,
+    "created_at": "2026-09-10T09:41:12.481Z",
+    "enqueued": true
   }
 }
 ```

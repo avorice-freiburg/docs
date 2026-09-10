@@ -1,0 +1,144 @@
+---
+title: "Automatizar um pitch"
+sidebarTitle: "Automatizar um pitch"
+description: Crie um projeto de pitch, defina seus modelos, adicione prompts, leia os resultados e converta um pitch ganho — o fluxo completo de agência em cinco chamadas à API.
+---
+
+# Automatizar um pitch
+
+As agências repetem a mesma sequência para cada prospect: criar um projeto de
+pitch, escolher os modelos de IA, adicionar os prompts, ler os resultados alguns
+dias depois e — se o prospect fechar — converter o pitch em um projeto de
+cliente. Cada etapa está disponível pela API REST, com exatamente os mesmos
+limites e códigos de erro do dashboard, de modo que um pitch pode ser iniciado a
+partir de um CRM, de um formulário ou de um script sem que ninguém precise abrir
+a interface.
+
+<Info>
+  Projetos de pitch exigem uma conta **Agency**. Eles não têm taxa de projeto,
+  são limitados a **50 prompts** e pausam automaticamente quando a janela do
+  pitch (1, 7 ou 14 dias) se encerra. O número de projetos de pitch simultâneos
+  é limitado por pacote.
+</Info>
+
+## 1. Criar o projeto de pitch
+
+`language` é obrigatório e define o idioma dos prompts e o filtro de país.
+Um novo projeto começa com os modelos padrão da sua conta.
+
+```bash
+curl --request POST \
+  --url https://api.finseo.ai/v1/projects \
+  --header "Authorization: Bearer $FINSEO_API_KEY" \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "name": "Prospect GmbH",
+    "websiteUrl": "https://www.prospect.example",
+    "language": "de",
+    "isPitch": true,
+    "pitchDurationDays": 7
+  }'
+```
+
+A resposta contém o `id` de que você precisa em todas as chamadas seguintes e os
+`models` atuais. Um `403` com `details.reason = "pitch_project_limit"` significa
+que todos os slots de pitch do seu pacote estão em uso — converta ou exclua um
+pitch primeiro.
+
+## 2. Definir os modelos
+
+Os prompts sempre são executados nos modelos do projeto, portanto defina-os
+**antes** de adicionar prompts. Isso substitui o conjunto completo, da mesma
+forma que a página de Configurações de modelos.
+
+```bash
+curl --request PUT \
+  --url https://api.finseo.ai/v1/projects/{projectId} \
+  --header "Authorization: Bearer $FINSEO_API_KEY" \
+  --header 'Content-Type: application/json' \
+  --data '{"models": ["chatgpt", "perplexity", "ai_overview", "claude"]}'
+```
+
+Um `403` com `details.reason = "agency_limit"` significa que as respostas de IA
+mensais projetadas excedem a faixa incluída no seu pacote (`details.nextPackage`
+indica o upgrade). No pacote mais alto, a chamada é bem-sucedida e retorna um
+`meteredNotice` em vez disso; o excedente é cobrado como consumo adicional.
+
+## 3. Adicionar os prompts
+
+Omita `models` para usar os modelos do projeto. `language` usa por padrão o
+idioma do projeto. Cada prompt entra na fila imediatamente (`enqueued: true`).
+
+```python
+import requests
+
+API = "https://api.finseo.ai/v1"
+H = {"Authorization": "Bearer sk_live_xxxxxxxx"}
+project_id = "67f8a1b2c3d4e5f60718293a4"
+
+prompts = [
+    "Welche Agentur für AI-Sichtbarkeit ist in Deutschland empfehlenswert?",
+    "Beste Tools um die Sichtbarkeit einer Marke in ChatGPT zu messen",
+    "Prospect GmbH vs. Wettbewerber – wer ist besser?",
+]
+for text in prompts:
+    r = requests.post(f"{API}/projects/{project_id}/prompts", headers=H,
+                      json={"prompt": text, "tags": ["pitch"]})
+    if r.status_code == 403:
+        print("stopped:", r.json()["error"]["details"]["reason"])
+        break
+    r.raise_for_status()
+```
+
+Motivos possíveis de `403`: `pitch_prompt_limit` (50 prompts atingidos),
+`pitch_expired`, `agency_limit`. Informar um modelo que não está habilitado no
+projeto retorna `400 model_not_enabled` — volte à etapa 2.
+
+## 4. Ler os resultados
+
+Dê alguns minutos aos workers para as primeiras respostas; um pitch completo
+normalmente tem uma execução por dia. Em seguida, leia os KPIs, o ranking de
+concorrentes e o detalhamento por prompt referentes à janela do pitch:
+
+```bash
+curl --url 'https://api.finseo.ai/v1/projects/{projectId}/metrics?timeframe=7d' \
+  --header "Authorization: Bearer $FINSEO_API_KEY"
+
+curl --url 'https://api.finseo.ai/v1/projects/{projectId}/competitors?timeframe=7d' \
+  --header "Authorization: Bearer $FINSEO_API_KEY"
+
+curl --url 'https://api.finseo.ai/v1/projects/{projectId}/prompts?timeframe=7d' \
+  --header "Authorization: Bearer $FINSEO_API_KEY"
+```
+
+`visibilityRate`, `mentionRate` e `citationRate` são explicados em
+[KPIs explicados](/pt/getting-started/kpis). Filtre por um único engine com
+`model=<id>`, usando um dos `models` do projeto.
+
+## 5. Converter um pitch ganho
+
+Transforme o pitch em um projeto de cliente faturável: remove o limite de
+prompts, interrompe a pausa automática e reativa tudo o que a expiração pausou.
+
+```bash
+curl --request PUT \
+  --url https://api.finseo.ai/v1/projects/{projectId} \
+  --header "Authorization: Bearer $FINSEO_API_KEY" \
+  --header 'Content-Type: application/json' \
+  --data '{"convertFromPitch": true}'
+```
+
+Um `403` com `details.reason = "agency_limit"` e `details.limit = "projects"`
+significa que nenhum slot de cliente está livre; com `details.limit = "answers"`,
+os prompts do projeto excederiam a faixa de respostas incluída no preço de mês
+completo.
+
+## Endpoints utilizados
+
+| Etapa | Endpoint |
+| --- | --- |
+| Criar pitch | [POST /v1/projects](/pt/api-reference/projects/create) |
+| Definir modelos | [PUT /v1/projects/\{projectId\}](/pt/api-reference/projects/update) |
+| Adicionar prompts | [POST /v1/projects/\{projectId\}/prompts](/pt/api-reference/prompts/add) |
+| Ler resultados | [GET /metrics](/pt/api-reference/metrics/daily), [GET /competitors](/pt/api-reference/competitors/ranking), [GET /prompts](/pt/api-reference/prompts/list) |
+| Converter | [PUT /v1/projects/\{projectId\}](/pt/api-reference/projects/update) com `convertFromPitch` |

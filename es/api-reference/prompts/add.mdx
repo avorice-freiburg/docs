@@ -3,7 +3,7 @@ title: Crear Prompt
 api: POST /v1/projects/{projectId}/prompts
 ---
 
-Añade un nuevo Prompt de Tracking a un proyecto. Finseo ejecutará este Prompt en los modelos indicados y registrará la visibilidad de tu marca frente a competidores en ChatGPT, Claude y Perplexity.
+Añade un nuevo Prompt de Tracking a un proyecto. Finseo ejecutará este Prompt en los modelos de IA del proyecto y registrará la visibilidad de tu marca frente a competidores en ChatGPT, Claude, Perplexity y los demás modelos habilitados.
 
 El Prompt se pone en cola para su procesamiento de inmediato (`enqueued: true` en la respuesta); las primeras respuestas suelen llegar en pocos minutos. El Prompt hereda el dominio, el nombre de marca, los sinónimos, los alias de dominio y la frecuencia de Tracking del proyecto, por lo que el proyecto necesita una `websiteUrl`; de lo contrario, la solicitud se rechaza con `400`.
 
@@ -17,7 +17,15 @@ El Prompt se pone en cola para su procesamiento de inmediato (`enqueued: true` e
 </ParamField>
 
 <ParamField body="models" type="array">
-  Identificadores de modelos; por defecto `["chatgpt", "perplexity", "ai_overview"]`.
+  Opcional. Por defecto usa los modelos habilitados del proyecto (los **Model
+  Settings** del dashboard, devueltos como `models` por [Obtener proyecto](/api-reference/projects/get)).
+  Si se indica, debe ser un **subconjunto** de ellos — un prompt no puede
+  ejecutarse en un modelo que el proyecto no tenga habilitado; de lo contrario,
+  los filtros del dashboard y los datos del prompt no coincidirían. Habilita
+  primero los modelos del proyecto mediante
+  [Actualizar proyecto](/api-reference/projects/update). Un modelo fuera del
+  conjunto habilitado se rechaza con `400` y un mensaje que empieza por
+  `model_not_enabled`.
 </ParamField>
 
 <ParamField body="language" type="string">
@@ -32,6 +40,19 @@ El Prompt se pone en cola para su procesamiento de inmediato (`enqueued: true` e
   Los proyectos pitch (`isPitch: true`) están limitados a **50 prompts**. No se pueden añadir prompts a un pitch caducado; conviértelo primero en proyecto de cliente mediante [Actualizar proyecto](/api-reference/projects/update).
 </Note>
 
+## Errores
+
+Se aplican los mismos límites que al añadir un prompt en el dashboard. Las
+infracciones devuelven `403` con `error.code = "FORBIDDEN"` y `error.details.reason`:
+
+| `details.reason` | Significado |
+| --- | --- |
+| `prompt_limit` | Se ha alcanzado el máximo de prompts de tu plan (`promptsUsed`, `promptLimit`). |
+| `prompt_budget_exceeded` | Plan Brand: este prompt en estos modelos superaría el presupuesto de prompts (`promptLimit`, `slotsUsed`, `projectedSlots`). |
+| `agency_limit` | Agency: las respuestas mensuales proyectadas superan la franja incluida y existe un paquete superior (`package`, `nextPackage`, `includedResults`, `projectedMonthlyAnswers`). El paquete superior nunca se bloquea; el exceso se factura como consumo adicional. |
+| `pitch_prompt_limit` | El proyecto pitch ya tiene 50 prompts (`current`, `limit`). |
+| `pitch_expired` | La ventana del pitch se ha cerrado; convierte primero el proyecto. |
+
 <RequestExample>
 
 ```bash cURL
@@ -41,7 +62,6 @@ curl --request POST \
   --header 'Content-Type: application/json' \
   --data '{
     "prompt": "How does Finseo compare to traditional SEO suites?",
-    "models": ["chatgpt", "claude", "perplexity"],
     "language": "en",
     "tags": ["comparison", "Finseo"]
   }'
@@ -52,7 +72,6 @@ import requests
 
 payload = {
     "prompt": "How does Finseo compare to traditional SEO suites?",
-    "models": ["chatgpt", "claude", "perplexity"],
     "language": "en",
     "tags": ["comparison", "Finseo"],
 }
@@ -76,13 +95,22 @@ print(r.json()["data"])
     "domain": "https://www.finseo.ai",
     "brand_name": "Finseo",
     "language": "EN",
-    "models": ["chatgpt", "claude", "perplexity"],
+    "models": ["chatgpt", "perplexity", "ai_overview"],
     "tags": ["comparison", "Finseo"],
     "project_id": "67a1c2d3e4f5061728394a5b",
     "active": true,
     "processing_complete": false,
     "created_at": "2026-09-10T09:41:12.481Z",
     "enqueued": true
+  }
+}
+```
+
+```json 400 model_not_enabled
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "model_not_enabled: mistral is not enabled for this project (enabled: chatgpt, perplexity, ai_overview). Enable it via PUT /v1/projects/{projectId} with \"models\", or omit \"models\" to use the project settings."
   }
 }
 ```

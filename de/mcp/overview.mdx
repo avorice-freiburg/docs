@@ -39,7 +39,7 @@ Alle Tools sind **read-only** — sie rufen Daten ab und ändern nie etwas.
 
 | Tool | Beschreibung |
 |------|-------------|
-| `list_projects` | Alle deine Projekte auflisten |
+| `list_projects` | Alle deine Projekte auflisten, mit `language`, `isPitch` und `models` (die KI-Modelle, auf denen die Prompts des Projekts laufen — die gültigen Werte für den `model`-Filter der anderen Tools) |
 | `get_visibility_metrics` | Sichtbarkeits-KPIs — die Dashboard-„Visibility"-Rate (genannt ODER zitiert), Mention Rate, Citation Rate und die „Citations"-Anzahl für die eigene Domain, mit Vergleich zur Vorperiode |
 | `get_visibility_timeseries` | Visibility, Mention Rate, Citation Rate, Mentions, ordinale Position (`avgMentionOrder`), Mention Depth und Sentiment pro Tag (dieselben Werte wie im Dashboard-Chart) |
 | `list_prompts` | Getrackte Prompts mit Metriken (sichtbar, Mention Rate, Citation Rate), Top-Wettbewerbern und Citations pro Prompt (paginiert via `offset`/`hasMore`) — liefert die Prompt-`id` für die Prompt-Drill-down-Tools |

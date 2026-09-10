@@ -3,7 +3,7 @@ title: Create Prompt
 api: POST /v1/projects/{projectId}/prompts
 ---
 
-Adds a new tracking prompt to a project. Finseo will run this prompt on the specified models and record visibility for your brand vs competitors across ChatGPT, Claude, and Perplexity.
+Adds a new tracking prompt to a project. Finseo will run this prompt on the project's AI models and record visibility for your brand vs competitors across ChatGPT, Claude, Perplexity and the other enabled models.
 
 The prompt is queued for processing immediately (`enqueued: true` in the response); first answers typically arrive within a few minutes. The prompt inherits the project's domain, brand name, synonyms, domain aliases and tracking frequency — the project therefore needs a `websiteUrl`, otherwise the request is rejected with `400`.
 
@@ -17,7 +17,14 @@ The prompt is queued for processing immediately (`enqueued: true` in the respons
 </ParamField>
 
 <ParamField body="models" type="array">
-  Model identifiers; default `["chatgpt", "perplexity", "ai_overview"]`.
+  Optional. Defaults to the project's enabled models (the dashboard's **Model
+  Settings**, returned as `models` by [Get Project](/api-reference/projects/get)).
+  When given, it must be a **subset** of those — a prompt cannot run on a model
+  the project has not enabled, otherwise the dashboard filters and the prompt
+  data would disagree. Enable models for the project first via
+  [Update Project](/api-reference/projects/update). A model outside the
+  enabled set is rejected with `400` and a message starting with
+  `model_not_enabled`.
 </ParamField>
 
 <ParamField body="language" type="string">
@@ -36,6 +43,19 @@ The prompt is queued for processing immediately (`enqueued: true` in the respons
   project first via [Update Project](/api-reference/projects/update).
 </Note>
 
+## Errors
+
+The same limits apply as when adding a prompt in the dashboard. Violations
+return `403` with `error.code = "FORBIDDEN"` and `error.details.reason`:
+
+| `details.reason` | Meaning |
+| --- | --- |
+| `prompt_limit` | Prompt cap of your plan reached (`promptsUsed`, `promptLimit`). |
+| `prompt_budget_exceeded` | Brand plan: this prompt on these models would exceed the prompt budget (`promptLimit`, `slotsUsed`, `projectedSlots`). |
+| `agency_limit` | Agency: projected monthly answers exceed the included band and a higher package exists (`package`, `nextPackage`, `includedResults`, `projectedMonthlyAnswers`). The top package is never blocked; the excess is billed as overage. |
+| `pitch_prompt_limit` | Pitch project already has 50 prompts (`current`, `limit`). |
+| `pitch_expired` | The pitch window has closed; convert the project first. |
+
 <RequestExample>
 
 ```bash cURL
@@ -45,7 +65,6 @@ curl --request POST \
   --header 'Content-Type: application/json' \
   --data '{
     "prompt": "How does Finseo compare to traditional SEO suites?",
-    "models": ["chatgpt", "claude", "perplexity"],
     "language": "en",
     "tags": ["comparison", "Finseo"]
   }'
@@ -56,7 +75,6 @@ import requests
 
 payload = {
     "prompt": "How does Finseo compare to traditional SEO suites?",
-    "models": ["chatgpt", "claude", "perplexity"],
     "language": "en",
     "tags": ["comparison", "Finseo"],
 }
@@ -80,13 +98,22 @@ print(r.json()["data"])
     "domain": "https://www.finseo.ai",
     "brand_name": "Finseo",
     "language": "EN",
-    "models": ["chatgpt", "claude", "perplexity"],
+    "models": ["chatgpt", "perplexity", "ai_overview"],
     "tags": ["comparison", "Finseo"],
     "project_id": "67a1c2d3e4f5061728394a5b",
     "active": true,
     "processing_complete": false,
     "created_at": "2026-09-10T09:41:12.481Z",
     "enqueued": true
+  }
+}
+```
+
+```json 400 model_not_enabled
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "model_not_enabled: mistral is not enabled for this project (enabled: chatgpt, perplexity, ai_overview). Enable it via PUT /v1/projects/{projectId} with \"models\", or omit \"models\" to use the project settings."
   }
 }
 ```

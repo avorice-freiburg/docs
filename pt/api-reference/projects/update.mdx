@@ -30,6 +30,34 @@ Atualiza um projeto existente. Envie apenas os campos que você deseja alterar.
   Descrição atualizada (máx. 500 caracteres).
 </ParamField>
 
+<ParamField body="models" type="array">
+  Modelos de IA nos quais os prompts do projeto são executados — o equivalente
+  na API das **Configurações de modelos** do dashboard. Substitui o conjunto
+  completo e ressincroniza todos os prompts do projeto (`syncedPromptCount` na
+  resposta); a próxima execução agendada usa o novo conjunto. Valores aceitos:
+  `chatgpt`, `perplexity`, `ai_overview`, `google_ai_mode`, `copilot`, `claude`,
+  `gemini`, `grok`, `mistral`, `deepseek`.
+
+  Aplicam-se os mesmos limites do dashboard: o limite de modelos do seu plano
+  (3 nos planos Brand, salvo se ampliado), o orçamento de prompts nos planos
+  Brand e a faixa de respostas de IA incluída nos pacotes Agency. No pacote
+  Agency mais alto, a chamada é bem-sucedida e retorna um `meteredNotice` quando
+  a projeção excede as respostas incluídas — o excedente é cobrado como
+  consumo adicional, exatamente como na interface.
+</ParamField>
+
+## Erros
+
+Violações de limite retornam `403` com `error.code = "FORBIDDEN"` e um
+`error.details.reason` legível por máquina:
+
+| `details.reason` | Significado |
+| --- | --- |
+| `model_limit` | Mais modelos do que o seu plano permite (`details.limit`). |
+| `model_not_available` | Engine não disponível no seu plano (`details.models`). |
+| `prompt_budget_exceeded` | Plano Brand: o novo conjunto de modelos excederia o orçamento de prompts (`promptLimit`, `slotsUsed`, `projectedSlots`). |
+| `agency_limit` | Agency: as respostas mensais projetadas excedem a faixa incluída e existe um pacote superior (`package`, `nextPackage`, `includedResults`, `projectedMonthlyAnswers`) — ou, para `convertFromPitch`, nenhum slot de cliente está livre (`details.limit = "projects"`). |
+
 <RequestExample>
 
 ```bash cURL
@@ -40,6 +68,14 @@ curl --request PUT \
   --data '{"name": "Finseo — Growth", "description": "Primary Finseo GTM project"}'
 ```
 
+```bash Definir modelos
+curl --request PUT \
+  --url https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b \
+  --header "Authorization: Bearer $FINSEO_API_KEY" \
+  --header 'Content-Type: application/json' \
+  --data '{"models": ["chatgpt", "perplexity", "ai_overview", "claude"]}'
+```
+
 ```python Python
 import requests
 
@@ -47,9 +83,12 @@ project_id = "67a1c2d3e4f5061728394a5b"
 r = requests.put(
     f"https://api.finseo.ai/v1/projects/{project_id}",
     headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
-    json={"name": "Finseo — Growth", "description": "Primary Finseo GTM project"},
+    json={"models": ["chatgpt", "perplexity", "ai_overview", "claude"]},
 )
-print(r.json()["data"])
+if r.status_code == 403:
+    print("blocked:", r.json()["error"]["details"]["reason"])
+else:
+    print(r.json()["data"]["models"])
 ```
 
 </RequestExample>
@@ -61,6 +100,33 @@ print(r.json()["data"])
   "data": {
     "id": "67a1c2d3e4f5061728394a5b",
     "updated": true
+  }
+}
+```
+
+```json Modelos atualizados
+{
+  "data": {
+    "id": "67a1c2d3e4f5061728394a5b",
+    "updated": true,
+    "models": ["chatgpt", "perplexity", "ai_overview", "claude"],
+    "syncedPromptCount": 15
+  }
+}
+```
+
+```json 403 agency_limit
+{
+  "error": {
+    "code": "FORBIDDEN",
+    "message": "Running 4 models would need 58,400 AI answers per month, above the 40,000 included in your solo package.",
+    "details": {
+      "reason": "agency_limit",
+      "package": "solo",
+      "nextPackage": "starter",
+      "includedResults": 40000,
+      "projectedMonthlyAnswers": 58400
+    }
   }
 }
 ```

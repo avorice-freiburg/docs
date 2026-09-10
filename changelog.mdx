@@ -7,6 +7,17 @@ description: Latest changes to the Finseo API.
 
 ## September 2026
 
+### Model settings and account limits are now identical in the API and the dashboard
+
+Prompts created via the API could run on models that were not enabled in the project's Model Settings, so the dashboard filters showed fewer models than the prompts actually tracked. The API now uses the project's model settings as its source of truth and applies every limit the dashboard applies, with the same error codes. See [Automate a pitch](/api-reference/guides/automate-pitch) for the end-to-end agency flow.
+
+- **`PUT /projects/{projectId}`** accepts `models` — the API counterpart of the Model Settings page. Replaces the set, re-syncs every prompt of the project (`syncedPromptCount`) and enforces the plan model cap, the Brand prompt budget and the Agency answer projection (`meteredNotice` on the top package)
+- **`GET /projects`**, **`GET /projects/{projectId}`** and **`POST /projects`** return `models` (project setting → account default) and `language`
+- **`POST /projects/{projectId}/prompts`**: `models` is optional and defaults to the project's models; an explicit list must be a subset of them, otherwise `400 model_not_enabled`. New Agency answer-projection guard, same as the dashboard
+- **`POST /projects`** applies the dashboard's project gates: pitch projects require an Agency account and a free pitch slot, client projects a free slot on Agency packages (`agency_limit`), and the plan project cap on Brand plans
+- **Errors**: limit violations now return `403 FORBIDDEN` with a machine-readable `error.details.reason` (`agency_limit`, `prompt_budget_exceeded`, `prompt_limit`, `model_limit`, `model_not_available`, `pitch_prompt_limit`, `pitch_expired`, `pitch_project_limit`) instead of a generic `500`
+- **MCP** `list_projects` returns `language`, `isPitch` and `models` per project
+
 ### Visibility = named OR cited; new Mention Rate and Citation Rate
 
 Finseo now separates the two ways a brand appears in an AI answer — **named in the answer text** and **cited as a source** — and reports them as distinct KPIs. See [KPIs explained](/getting-started/kpis).

@@ -7,6 +7,8 @@ Restituisce l'elenco dei progetti a cui la tua API Key può accedere. I progetti
 
 Ogni progetto include `isPitch`. I progetti pitch includono anche `pitchDurationDays` (1, 7 o 14) e `pitchExpiredAt` (`null` finché la finestra è aperta), così un agente può sapere per quanto tempo continuerà senza fare supposizioni.
 
+Ogni progetto restituisce inoltre `language` (la lingua dei prompt impostata alla creazione, `null` sui progetti più vecchi) e `models` — i modelli AI su cui vengono eseguiti i suoi prompt, ossia le Impostazioni modelli della dashboard. Usa questi valori per il filtro `model` degli endpoint delle metriche e modificali con [Aggiorna progetto](/api-reference/projects/update).
+
 
 <RequestExample>
 
@@ -43,6 +45,8 @@ for p in projects:
       "description": "AI visibility tracking for modern brands",
       "isDefault": true,
       "tags": ["product", "b2b"],
+      "language": "en",
+      "models": ["chatgpt", "perplexity", "ai_overview"],
       "isPitch": false,
       "createdAt": "2025-11-12T10:15:00.000Z",
       "updatedAt": "2026-03-28T14:22:00.000Z"
@@ -55,6 +59,8 @@ for p in projects:
       "description": "",
       "isDefault": false,
       "tags": [],
+      "language": "de",
+      "models": ["chatgpt", "perplexity", "ai_overview", "claude"],
       "isPitch": true,
       "pitchDurationDays": 7,
       "pitchExpiredAt": null,

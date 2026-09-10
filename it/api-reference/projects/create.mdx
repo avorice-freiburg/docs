@@ -5,6 +5,18 @@ api: POST /v1/projects
 
 Crea un nuovo progetto. Finseo traccerà la visibilità AI del brand associato a questo progetto su ChatGPT, Claude, Perplexity e i modelli configurati.
 
+Un nuovo progetto parte con i modelli AI predefiniti del tuo account (restituiti
+come `models`). Imposta i modelli di questo progetto con
+[Aggiorna progetto](/api-reference/projects/update) prima di aggiungere prompt —
+i prompt vengono sempre eseguiti sui modelli del progetto.
+
+Si applicano gli stessi limiti della finestra di creazione della dashboard: sui
+piani Brand il numero massimo di progetti del piano, sui pacchetti Agency gli
+slot per progetti cliente inclusi (i progetti pitch sono slot gratuiti) e gli
+slot per progetti pitch inclusi. Una violazione dei limiti restituisce `403` con
+`error.details.reason` = `agency_limit` (`details.limit = "projects"`) oppure
+`pitch_project_limit`.
+
 
 <ParamField body="name" type="string" required>
   Nome visualizzato (1–200 caratteri).
@@ -89,6 +101,7 @@ print(created["id"])
     "isDefault": false,
     "tags": [],
     "language": "en",
+    "models": ["chatgpt", "perplexity", "ai_overview"],
     "createdAt": "2026-03-29T08:30:00.000Z",
     "updatedAt": "2026-03-29T08:30:00.000Z"
   }
@@ -108,6 +121,7 @@ print(created["id"])
     "isPitch": true,
     "pitchDurationDays": 1,
     "language": "de",
+    "models": ["chatgpt", "perplexity", "ai_overview"],
     "createdAt": "2026-09-04T21:12:55.798Z",
     "updatedAt": "2026-09-04T21:12:55.798Z"
   }

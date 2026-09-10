@@ -7,6 +7,17 @@ description: Los últimos cambios en la API de Finseo.
 
 ## Septiembre de 2026
 
+### Los ajustes de modelos y los límites de cuenta ahora son idénticos en la API y en el dashboard
+
+Los prompts creados a través de la API podían ejecutarse en modelos que no estaban habilitados en los Model Settings del proyecto, por lo que los filtros del dashboard mostraban menos modelos de los que realmente trackeaban los prompts. La API ahora usa los ajustes de modelos del proyecto como fuente de verdad y aplica todos los límites que aplica el dashboard, con los mismos códigos de error. Consulta [Automatizar un pitch](/es/api-reference/guides/automate-pitch) para el flujo completo de agencia.
+
+- **`PUT /projects/{projectId}`** acepta `models` — el equivalente en la API de la página Model Settings. Reemplaza el conjunto, vuelve a sincronizar todos los prompts del proyecto (`syncedPromptCount`) y aplica el máximo de modelos del plan, el presupuesto de prompts de Brand y la proyección de respuestas de Agency (`meteredNotice` en el paquete superior)
+- **`GET /projects`**, **`GET /projects/{projectId}`** y **`POST /projects`** devuelven `models` (ajuste del proyecto → valor predeterminado de la cuenta) y `language`
+- **`POST /projects/{projectId}/prompts`**: `models` es opcional y usa por defecto los modelos del proyecto; una lista explícita debe ser un subconjunto de ellos; de lo contrario, `400 model_not_enabled`. Nueva comprobación de proyección de respuestas de Agency, igual que en el dashboard
+- **`POST /projects`** aplica las mismas puertas de proyecto que el dashboard: los proyectos pitch requieren una cuenta Agency y un slot de pitch libre, los proyectos de cliente un slot libre en los paquetes Agency (`agency_limit`) y el máximo de proyectos del plan en los planes Brand
+- **Errores**: las infracciones de límites ahora devuelven `403 FORBIDDEN` con un `error.details.reason` legible por máquina (`agency_limit`, `prompt_budget_exceeded`, `prompt_limit`, `model_limit`, `model_not_available`, `pitch_prompt_limit`, `pitch_expired`, `pitch_project_limit`) en lugar de un `500` genérico
+- **MCP** `list_projects` devuelve `language`, `isPitch` y `models` por proyecto
+
 ### Visibility = nombrada O citada; nuevas Mention Rate y Citation Rate
 
 Finseo ahora separa las dos formas en que una marca aparece en una respuesta de IA — **nombrada en el texto de la respuesta** y **citada como fuente** — y las reporta como KPIs distintos. Consulta [KPIs explicados](/es/getting-started/kpis).

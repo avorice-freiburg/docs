@@ -39,7 +39,7 @@ Tous les tools sont en **read-only** — ils récupèrent des données et ne les
 
 | Tool | Description |
 |------|-------------|
-| `list_projects` | Lister tous tes projets |
+| `list_projects` | Lister tous tes projets avec `language`, `isPitch` et `models` (les modèles IA sur lesquels les prompts du projet s'exécutent — les valeurs valides pour le filtre `model` des autres tools) |
 | `get_visibility_metrics` | KPIs de visibilité — le taux « Visibility » du dashboard (nommée OU citée), Mention Rate, Citation Rate et le décompte « Citations » du domaine propre, avec comparaison à la période précédente |
 | `get_visibility_timeseries` | Visibilité, mention rate, citation rate, mentions, position ordinale (`avgMentionOrder`), profondeur de mention et sentiment par jour (mêmes valeurs que le graphique du dashboard) |
 | `list_prompts` | Prompts suivis avec métriques (visible, mention rate, citation rate), top concurrents et citations par prompt (paginé via `offset`/`hasMore`) — renvoie l'`id` du prompt utilisé par les outils d'analyse détaillée des prompts |

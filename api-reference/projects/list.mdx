@@ -10,6 +10,12 @@ Every project includes `isPitch`. Pitch projects additionally carry
 window is still open), so an agent can see how long a pitch keeps running
 without guessing.
 
+Every project also returns `language` (the prompt language set at creation,
+`null` on older projects) and `models` — the AI models its prompts run on,
+i.e. the dashboard's Model Settings. Use these values for the `model` filter
+on the metrics endpoints, and change them with
+[Update Project](/api-reference/projects/update).
+
 
 <RequestExample>
 
@@ -46,6 +52,8 @@ for p in projects:
       "description": "AI visibility tracking for modern brands",
       "isDefault": true,
       "tags": ["product", "b2b"],
+      "language": "en",
+      "models": ["chatgpt", "perplexity", "ai_overview"],
       "isPitch": false,
       "createdAt": "2025-11-12T10:15:00.000Z",
       "updatedAt": "2026-03-28T14:22:00.000Z"
@@ -58,6 +66,8 @@ for p in projects:
       "description": "",
       "isDefault": false,
       "tags": [],
+      "language": "de",
+      "models": ["chatgpt", "perplexity", "ai_overview", "claude"],
       "isPitch": true,
       "pitchDurationDays": 7,
       "pitchExpiredAt": null,

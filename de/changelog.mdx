@@ -7,6 +7,17 @@ description: Die neuesten Änderungen an der Finseo API.
 
 ## September 2026
 
+### Modell-Einstellungen und Account-Limits sind jetzt in API und Dashboard identisch
+
+Über die API angelegte Prompts konnten auf Modellen laufen, die in den Modell-Einstellungen des Projekts nicht aktiviert waren — die Dashboard-Filter zeigten deshalb weniger Modelle, als die Prompts tatsächlich trackten. Die API nutzt jetzt die Modell-Einstellungen des Projekts als Source of Truth und wendet jedes Limit an, das auch das Dashboard anwendet, mit denselben Fehlercodes. Den kompletten Agentur-Ablauf zeigt [Einen Pitch automatisieren](/de/api-reference/guides/automate-pitch).
+
+- **`PUT /projects/{projectId}`** akzeptiert `models` — das API-Gegenstück zur Seite Modell-Einstellungen. Ersetzt das Set, synchronisiert jeden Prompt des Projekts neu (`syncedPromptCount`) und setzt das Modell-Limit des Tarifs, das Brand-Prompt-Budget und die Agentur-Antwortprognose durch (`meteredNotice` im höchsten Paket)
+- **`GET /projects`**, **`GET /projects/{projectId}`** und **`POST /projects`** liefern `models` (Projekteinstellung → Account-Standard) und `language`
+- **`POST /projects/{projectId}/prompts`**: `models` ist optional und nutzt standardmäßig die Modelle des Projekts; eine explizite Liste muss eine Teilmenge davon sein, sonst `400 model_not_enabled`. Neue Agentur-Prüfung der Antwortprognose, wie im Dashboard
+- **`POST /projects`** wendet die Projekt-Gates des Dashboards an: Pitch-Projekte erfordern einen Agentur-Account und einen freien Pitch-Slot, Kundenprojekte einen freien Slot bei Agenturpaketen (`agency_limit`), und bei Brand-Tarifen gilt das Projekt-Limit des Tarifs
+- **Fehler**: Limit-Verletzungen liefern jetzt `403 FORBIDDEN` mit einem maschinenlesbaren `error.details.reason` (`agency_limit`, `prompt_budget_exceeded`, `prompt_limit`, `model_limit`, `model_not_available`, `pitch_prompt_limit`, `pitch_expired`, `pitch_project_limit`) statt eines generischen `500`
+- **MCP** `list_projects` liefert `language`, `isPitch` und `models` pro Projekt
+
 ### Visibility = genannt ODER zitiert; neue Mention Rate und Citation Rate
 
 Finseo trennt jetzt die beiden Arten, wie eine Marke in einer KI-Antwort auftaucht — **im Antworttext genannt** und **als Quelle zitiert** — und weist sie als eigene KPIs aus. Siehe [KPIs erklärt](/de/getting-started/kpis).

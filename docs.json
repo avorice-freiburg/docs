@@ -200,6 +200,12 @@
             "tab": "API",
             "groups": [
               {
+                "group": "Guides",
+                "pages": [
+                  "api-reference/guides/automate-pitch"
+                ]
+              },
+              {
                 "group": "Projects",
                 "pages": [
                   "api-reference/projects/list",
@@ -419,6 +425,12 @@
           {
             "tab": "API",
             "groups": [
+              {
+                "group": "Guides",
+                "pages": [
+                  "de/api-reference/guides/automate-pitch"
+                ]
+              },
               {
                 "group": "Projekte",
                 "pages": [
@@ -640,6 +652,12 @@
             "tab": "API",
             "groups": [
               {
+                "group": "Guides",
+                "pages": [
+                  "fr/api-reference/guides/automate-pitch"
+                ]
+              },
+              {
                 "group": "Projects",
                 "pages": [
                   "fr/api-reference/projects/list",
@@ -859,6 +877,12 @@
           {
             "tab": "API",
             "groups": [
+              {
+                "group": "Guides",
+                "pages": [
+                  "it/api-reference/guides/automate-pitch"
+                ]
+              },
               {
                 "group": "Projects",
                 "pages": [
@@ -1080,6 +1104,12 @@
             "tab": "API",
             "groups": [
               {
+                "group": "Guides",
+                "pages": [
+                  "es/api-reference/guides/automate-pitch"
+                ]
+              },
+              {
                 "group": "Projects",
                 "pages": [
                   "es/api-reference/projects/list",
@@ -1299,6 +1329,12 @@
           {
             "tab": "API",
             "groups": [
+              {
+                "group": "Guides",
+                "pages": [
+                  "pt/api-reference/guides/automate-pitch"
+                ]
+              },
               {
                 "group": "Projects",
                 "pages": [

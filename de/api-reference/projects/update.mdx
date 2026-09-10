@@ -30,6 +30,34 @@ Aktualisiert ein bestehendes Projekt. Sende nur die Felder, die du ändern wills
   Aktualisierte Beschreibung (max. 500 Zeichen).
 </ParamField>
 
+<ParamField body="models" type="array">
+  KI-Modelle, auf denen die Prompts des Projekts laufen — das API-Gegenstück zu
+  den **Modell-Einstellungen** im Dashboard. Ersetzt das komplette Set und
+  synchronisiert jeden Prompt des Projekts neu (`syncedPromptCount` in der
+  Antwort); der nächste geplante Lauf verwendet das neue Set. Zulässige Werte:
+  `chatgpt`, `perplexity`, `ai_overview`, `google_ai_mode`, `copilot`, `claude`,
+  `gemini`, `grok`, `mistral`, `deepseek`.
+
+  Es gelten dieselben Limits wie im Dashboard: das Modell-Limit deines Tarifs
+  (3 bei Brand-Tarifen, sofern nicht erhöht), das Prompt-Budget bei
+  Brand-Tarifen und das inkludierte KI-Antwort-Kontingent bei Agenturpaketen.
+  Im höchsten Agenturpaket ist der Aufruf erfolgreich und liefert eine
+  `meteredNotice`, wenn die Prognose die inkludierten Antworten übersteigt —
+  der Überschuss wird als Overage abgerechnet, genau wie in der UI.
+</ParamField>
+
+## Fehler
+
+Limit-Verletzungen liefern `403` mit `error.code = "FORBIDDEN"` und einem
+maschinenlesbaren `error.details.reason`:
+
+| `details.reason` | Bedeutung |
+| --- | --- |
+| `model_limit` | Mehr Modelle, als dein Tarif erlaubt (`details.limit`). |
+| `model_not_available` | Engine in deinem Tarif nicht verfügbar (`details.models`). |
+| `prompt_budget_exceeded` | Brand-Tarif: Das neue Modell-Set würde das Prompt-Budget überschreiten (`promptLimit`, `slotsUsed`, `projectedSlots`). |
+| `agency_limit` | Agentur: Die prognostizierten monatlichen Antworten übersteigen das inkludierte Kontingent und es gibt ein höheres Paket (`package`, `nextPackage`, `includedResults`, `projectedMonthlyAnswers`) — oder bei `convertFromPitch` ist kein Kunden-Slot frei (`details.limit = "projects"`). |
+
 <RequestExample>
 
 ```bash cURL
@@ -40,6 +68,14 @@ curl --request PUT \
   --data '{"name": "Finseo — Growth", "description": "Primary Finseo GTM project"}'
 ```
 
+```bash Modelle setzen
+curl --request PUT \
+  --url https://api.finseo.ai/v1/projects/67a1c2d3e4f5061728394a5b \
+  --header "Authorization: Bearer $FINSEO_API_KEY" \
+  --header 'Content-Type: application/json' \
+  --data '{"models": ["chatgpt", "perplexity", "ai_overview", "claude"]}'
+```
+
 ```python Python
 import requests
 
@@ -47,9 +83,12 @@ project_id = "67a1c2d3e4f5061728394a5b"
 r = requests.put(
     f"https://api.finseo.ai/v1/projects/{project_id}",
     headers={"Authorization": "Bearer sk_live_xxxxxxxx"},
-    json={"name": "Finseo — Growth", "description": "Primary Finseo GTM project"},
+    json={"models": ["chatgpt", "perplexity", "ai_overview", "claude"]},
 )
-print(r.json()["data"])
+if r.status_code == 403:
+    print("blocked:", r.json()["error"]["details"]["reason"])
+else:
+    print(r.json()["data"]["models"])
 ```
 
 </RequestExample>
@@ -61,6 +100,33 @@ print(r.json()["data"])
   "data": {
     "id": "67a1c2d3e4f5061728394a5b",
     "updated": true
+  }
+}
+```
+
+```json Modelle aktualisiert
+{
+  "data": {
+    "id": "67a1c2d3e4f5061728394a5b",
+    "updated": true,
+    "models": ["chatgpt", "perplexity", "ai_overview", "claude"],
+    "syncedPromptCount": 15
+  }
+}
+```
+
+```json 403 agency_limit
+{
+  "error": {
+    "code": "FORBIDDEN",
+    "message": "Running 4 models would need 58,400 AI answers per month, above the 40,000 included in your solo package.",
+    "details": {
+      "reason": "agency_limit",
+      "package": "solo",
+      "nextPackage": "starter",
+      "includedResults": 40000,
+      "projectedMonthlyAnswers": 58400
+    }
   }
 }
 ```

@@ -203,6 +203,11 @@ paths:
                         domain: { type: string }
                         websiteUrl: { type: string }
                         isDefault: { type: boolean }
+                        language: { type: string, nullable: true, description: "Prompt language set at creation; null on older projects." }
+                        models:
+                          type: array
+                          items: { type: string }
+                          description: AI models the project's prompts run on (the dashboard's Model Settings; project setting, else account default). Valid values for the model filter.
                         isPitch: { type: boolean }
                         pitchDurationDays:
                           type: integer
@@ -243,7 +248,9 @@ paths:
                   description: Pitch window in days. Ignored unless isPitch is true.
       responses:
         "200":
-          description: Created project
+          description: Created project, including models (the account default until set via PUT /projects/{projectId}).
+        "403":
+          description: "Same gates as the dashboard: error.details.reason = agency_limit (details.limit = projects, no free client slot) or pitch_project_limit (all pitch slots in use). Pitch projects require an Agency account."
 
   /projects/{projectId}:
     get:
@@ -274,9 +281,18 @@ paths:
                 convertFromPitch:
                   type: boolean
                   description: Set to true to convert a pitch project into a full client project. Checks a free client slot and the plan's answer budget, then reactivates paused prompts.
+                models:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: string
+                    enum: [chatgpt, perplexity, ai_overview, google_ai_mode, copilot, claude, gemini, grok, mistral, deepseek]
+                  description: "AI models the project's prompts run on (API counterpart of the dashboard's Model Settings). Replaces the full set and re-syncs every prompt of the project (syncedPromptCount). Same guards as the dashboard: plan model cap, Brand prompt budget, Agency answer projection (meteredNotice on the top package)."
       responses:
         "200":
-          description: Updated
+          description: "Updated. With models: models, syncedPromptCount and optionally meteredNotice."
+        "403":
+          description: "Limit violation; error.details.reason = model_limit | model_not_available | prompt_budget_exceeded | agency_limit."
 
   /projects/{projectId}/prompts:
     get:
@@ -313,12 +329,22 @@ paths:
               required: [prompt]
               properties:
                 prompt: { type: string, description: "The AI prompt to track" }
-                models: { type: array, items: { type: string }, default: ["chatgpt", "perplexity", "ai_overview"] }
+                models:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: string
+                    enum: [chatgpt, perplexity, ai_overview, google_ai_mode, copilot, claude, gemini, grok, mistral, deepseek]
+                  description: Optional. Defaults to the project's enabled models (Model Settings). Must be a subset of them, otherwise 400 with a message starting model_not_enabled. Enable models via PUT /projects/{projectId}.
                 language: { type: string, description: "Language / market code (e.g. de, en). Defaults to the project language; normalised to the dashboard spelling (de -> DE)." }
                 tags: { type: array, items: { type: string } }
       responses:
         "200":
           description: Created prompt
+        "400":
+          description: Validation error, e.g. model_not_enabled or project without websiteUrl.
+        "403":
+          description: "Same limits as the dashboard; error.details.reason = prompt_limit | prompt_budget_exceeded | agency_limit | pitch_prompt_limit | pitch_expired."
 
   /projects/{projectId}/metrics:
     get:

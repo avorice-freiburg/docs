@@ -20,6 +20,9 @@ Todos os pedidos à API requerem uma API key válida no cabeçalho `Authorizatio
 <CodeGroup>
 
 ```bash cURL
+# Mantenha a chave fora do histórico do shell: exporte-a uma vez e depois referencie-a
+export FINSEO_API_KEY="<your key from Settings > API>"
+
 curl -H "Authorization: Bearer $FINSEO_API_KEY" \
   https://api.finseo.ai/v1/projects
 ```

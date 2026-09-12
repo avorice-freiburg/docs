@@ -20,6 +20,9 @@ Toutes les requêtes API nécessitent une clé API valide dans le header `Author
 <CodeGroup>
 
 ```bash cURL
+# Gardez la clé hors de l'historique du shell : exportez-la une fois, puis référencez-la
+export FINSEO_API_KEY="<your key from Settings > API>"
+
 curl -H "Authorization: Bearer $FINSEO_API_KEY" \
   https://api.finseo.ai/v1/projects
 ```

@@ -1,0 +1,6 @@
+{
+  "name": "finseo-docs",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Finseo documentation (Mintlify). No runtime dependencies; lockfile present for supply-chain scanners."
+}
